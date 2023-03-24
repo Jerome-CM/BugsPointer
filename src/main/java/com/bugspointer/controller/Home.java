@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("app")
 public class Home {
 
     @GetMapping("/")
@@ -13,5 +12,13 @@ public class Home {
         return "index";
     }
 
+    @GetMapping("features")
+    String getFeatures(){
+        return "public/features";
+    }
 
+    @GetMapping("documentations")
+    String getDocumentations(){
+        return "public/documentations";
+    }
 }

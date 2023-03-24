@@ -11,10 +11,6 @@ public class Authentication {
         return "authentication";
     }
 
-    @GetMapping("/private")
-    String getAdminHome(){
-        return "private/dashboard";
-    }
 
 
 }
