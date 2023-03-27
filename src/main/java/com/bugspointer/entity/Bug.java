@@ -1,2 +1,44 @@
-package com.bugspointer.entity;public class Bug {
+package com.bugspointer.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.NonNull;
+
+import java.util.Date;
+
+@Entity
+@Data
+public class Bug {
+
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
+    private String url;
+
+    @NotNull
+    private String description;
+
+    private String codeLocation;
+
+    @NotNull
+    private String os;
+
+    @NotNull
+    private String browser;
+
+    @NotNull
+    private String screenSize;
+
+    @NotNull
+    @Column(updatable = false)
+    private Date dateCreation;
+
+    private Date dateView;
+
+    private Date dateSolved;
+
 }

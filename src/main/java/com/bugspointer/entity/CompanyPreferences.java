@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class CompagnyPreferences {
+public class CompanyPreferences {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +14,7 @@ public class CompagnyPreferences {
 
     @OneToOne
     @NotNull
-    private Compagny compagny;
+    private Company company;
 
     private boolean mailNewBug;
 

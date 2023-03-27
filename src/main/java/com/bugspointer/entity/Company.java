@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Entity
 @Data
-public class Compagny {
+public class Company {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -23,6 +23,8 @@ public class Compagny {
 
     @NotBlank(message = "Le password est obligatoire")
     private String password;
+
+    private String phoneNumber;
 
     private EnumPlan plan = EnumPlan.FREE;
 
