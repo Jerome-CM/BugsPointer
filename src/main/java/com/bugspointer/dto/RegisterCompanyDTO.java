@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class RegisterCompagnyDTO {
+public class RegisterCompanyDTO {
 
     @NotBlank(message = "Le nom de l'entreprise est obligatoire")
     private String compagnyName;
