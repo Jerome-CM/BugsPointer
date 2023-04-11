@@ -1,10 +1,10 @@
 package com.bugspointer.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class RegisterCompanyDTO {
+public class AuthCompanyDTO {
 
     @NotBlank(message = "Le nom de l'entreprise est obligatoire")
     private String compagnyName;

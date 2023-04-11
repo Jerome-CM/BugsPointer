@@ -1,7 +1,7 @@
 package com.bugspointer.controller;
 
-import com.bugspointer.dto.RegisterCompanyDTO;
-import jakarta.validation.Valid;
+import com.bugspointer.dto.AuthCompanyDTO;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,13 +12,13 @@ import org.springframework.ui.Model;
 public class Authentication {
 
     @GetMapping("/authentication")
-    String getAuthenticationPage(Model model, RegisterCompanyDTO dto){
-        model.addAttribute("compagny", dto);
+    String getAuthenticationPage(Model model, AuthCompanyDTO dto){
+        model.addAttribute("company", dto);
         return "public/authentication";
     }
 
     @PostMapping("/register")
-    String register(@Valid RegisterCompanyDTO dto, BindingResult result, Model model){
+    String register(@Valid AuthCompanyDTO dto, BindingResult result, Model model){
         if(!result.hasErrors()){
             return "private/dashboard";
         }
@@ -26,7 +26,7 @@ public class Authentication {
     }
 
     @PostMapping("/login")
-    String login(@Valid RegisterCompanyDTO dto, BindingResult result, Model model){
+    String login(@Valid AuthCompanyDTO dto, BindingResult result, Model model){
         if(!result.hasErrors()){
             return "private/dashboard";
         }
