@@ -1,6 +1,8 @@
 package com.bugspointer.service;
 
-public interface Company {
+import com.bugspointer.entity.Company;
+
+public interface ICompany {
 
     public Company getCompanyByMail(String mail);
 }

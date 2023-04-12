@@ -1,6 +1,7 @@
 package com.bugspointer.entity;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -16,7 +17,7 @@ public class Company {
     private Long id;
 
     @NotBlank(message = "Le nom de l'entreprise est obligatoire")
-    private String compagnyName;
+    private String companyName;
 
     @NotBlank(message = "L'email doit être unique")
     private String mail;
@@ -24,23 +25,21 @@ public class Company {
     @NotBlank(message = "Le password est obligatoire")
     private String password;
 
-    private String phoneNumber;
+    private String phoneNumber = null;
+
 
     private EnumPlan plan = EnumPlan.FREE;
 
-    private String publicKey;
+    private String publicKey = null;
 
     @NotNull
     @Column(updatable = false)
     private Date dateCreation = new Date();
 
-    private Date lastVisit;
+    private Date lastVisit = new Date();
 
     private boolean isEnable = true;
 
     private String role = "ROLE_USER";
-
-
-
 
 }

@@ -1,11 +1,12 @@
 package com.bugspointer.service.implementation;
 
-import com.bugspointer.service.Company;
+import com.bugspointer.entity.Company;
+import com.bugspointer.service.ICompany;
 import com.bugspointer.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CompanyService implements Company {
+public class CompanyService implements ICompany {
 
     private final CompanyRepository companyRepository;
 
@@ -14,7 +15,7 @@ public class CompanyService implements Company {
     }
 
     public Company getCompanyByMail(String mail){
-        return (Company) companyRepository.findByMail(mail);
+        return  companyRepository.findByMail(mail);
     }
 
 }

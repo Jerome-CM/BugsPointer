@@ -14,22 +14,24 @@
 
 <div>
     <h2>Register</h2>
-    <form action="#" th:action="@{/register}" th:object="${company}" method="post">
-        <input type="text" th:field="*{compagnyName}" id="companyName" placeholder="Compagny Name">
+    <form action="#" th:action="@{/register}" th:object="${companyRegister}" method="post">
+        <input type="text" th:field="*{compagnyName}" id="companyName" placeholder="Nom de l'entreprise">
         <input type="text" th:field="*{mail}" id="registerMail" placeholder="Mail">
-        <input type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirm Mail">
-        <input type="text" th:field="*{password}" id="registerPassword" placeholder="Password">
-        <input type="text" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirm Password">
+        <input type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmation de l'e-mail">
+        <input type="text" th:field="*{password}" id="registerPassword" placeholder="Mot de passe">
+        <input type="text" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmation du mot de passe">
+        <input type="submit" value="Debug maintenant !">
     </form>
 </div>
 
 
 <div>
     <h2>Login</h2>
-    <form action="#" th:action="@{/login}" th:object="${company}" method="post">
-        <input type="text" th:field="*{mail}" id="mail" placeholder="E-mail">
-        <input type="text" th:field="*{password}" id="password" placeholder="Password">
-        <p><input type="checkbox" th:field="*{rememberMe}" id="rememberMe"> Remember Me</p>
+    <form action="#" th:action="@{/login}" th:object="${companyLogin}" method="post">
+        <input type="text" th:field="*{mail}" id="mail" placeholder="E-mail" th:value="${companyLogin.getMail()}" >
+        <input type="password" th:field="*{password}" id="password" placeholder="Password" th:value="${companyLogin.getPassword()}">
+        <p><input type="checkbox" name="rememberMe" id="rememberMe"> Remember Me</p>
+        <input type="submit" value="Connexion">
     </form>
 </div>
 

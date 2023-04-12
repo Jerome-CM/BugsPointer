@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class AuthCompanyDTO {
+public class AuthRegisterCompanyDTO {
 
     @NotBlank(message = "Le nom de l'entreprise est obligatoire")
     private String compagnyName;
@@ -20,6 +20,4 @@ public class AuthCompanyDTO {
 
     @NotBlank(message = "La confirmation est obligatoire")
     private String confirmPassword;
-
-    private boolean rememberMe;
 }

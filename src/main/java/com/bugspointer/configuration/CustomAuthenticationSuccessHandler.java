@@ -34,6 +34,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         HttpSession session = request.getSession();
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
         String mail = userDetails.getUsername();
         Company company = (Company) companyService.getCompanyByMail(mail);
 
@@ -41,20 +42,22 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             log.info("Create a new token because is null in the session");
             String token = null;
             try {
-                token = jwtTest.createAuthenticationToken(mail);
+                token = jwtTest.createAuthenticationToken(mail, authentication);
             } catch (Exception e) {
                 log.info("Impossible to create a token : {}", e.getMessage());
                 throw new RuntimeException(e);
             }
             session.setAttribute("token", token);
             session.setAttribute("role", company.getRole());
+
+
         }
         log.info("Token in session : {}", session.getAttribute("token"));
 
         if(company.getRole().equals("ROLE_ADMIN")){
             response.sendRedirect("app/admin/dashboard");
         }else{
-            response.sendRedirect("/");
+            response.sendRedirect("app/private/dashboard");
         }
     }
 }

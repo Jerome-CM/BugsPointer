@@ -5,12 +5,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -39,6 +39,7 @@ public class JwtTokenUtil implements Serializable {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
+
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
@@ -55,8 +56,14 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //generate token for user
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, Authentication auth) {
         Map<String, Object> claims = new HashMap<>();
+        List<String> roleList = userDetailsService.getRoleList(userDetails);
+        roleList.forEach(r -> {
+            claims.put("role", r);
+        });
+        // Take after other information in the token
+
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -80,12 +87,12 @@ public class JwtTokenUtil implements Serializable {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    public String createAuthenticationToken(String username) throws Exception {
+    public String createAuthenticationToken(String username, Authentication auth) throws Exception {
         log.info("--- Method createAuthenticationToken JWTUtil ---");
 
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(username);
-        return "Bearer " + generateToken(userDetails);
+        return "Bearer " + generateToken(userDetails, auth);
     }
 
 }
