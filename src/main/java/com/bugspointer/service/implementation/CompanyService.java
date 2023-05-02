@@ -18,6 +18,7 @@ public class CompanyService implements ICompany {
         return  companyRepository.findByMail(mail);
     }
 
+    //Création de la méthode createPublicKey
     public String createPublicKey() {
         return utility.createPublicKey();
     }
