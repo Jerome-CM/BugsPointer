@@ -30,6 +30,7 @@ public class Company {
 
     private EnumPlan plan = EnumPlan.FREE;
 
+    @Column(unique = true)
     private String publicKey = null;
 
     @NotNull
