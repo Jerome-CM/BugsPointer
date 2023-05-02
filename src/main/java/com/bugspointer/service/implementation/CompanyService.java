@@ -18,4 +18,8 @@ public class CompanyService implements ICompany {
         return  companyRepository.findByMail(mail);
     }
 
+    public String createPublicKey() {
+        return utility.createPublicKey();
+    }
+
 }
