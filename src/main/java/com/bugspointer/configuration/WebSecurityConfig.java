@@ -48,6 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // restricted url
                 .antMatchers("app/admin/**").hasRole("ADMIN")
                 // public url
+                .antMatchers("/css/**").permitAll()
+                .antMatchers("/js/**").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/authentication").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
