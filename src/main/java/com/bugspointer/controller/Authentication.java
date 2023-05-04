@@ -28,14 +28,5 @@ public class Authentication {
         }
         return "public/authentication";
     }
-
-    /*@PostMapping("/login")
-    String login(@Valid AuthLoginCompanyDTO dto, BindingResult result, Model model){
-
-
-        if(!result.hasErrors()){
-            return "private/dashboard";
-        }
-        return "public/authentication";
-    }*/
+    
 }

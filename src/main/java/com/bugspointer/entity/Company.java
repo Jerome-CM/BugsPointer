@@ -16,13 +16,10 @@ public class Company {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Le nom de l'entreprise est obligatoire")
     private String companyName;
 
-    @NotBlank(message = "L'email doit être unique")
     private String mail;
 
-    @NotBlank(message = "Le password est obligatoire")
     private String password;
 
     private String phoneNumber = null;

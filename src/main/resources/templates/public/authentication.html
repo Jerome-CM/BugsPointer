@@ -29,7 +29,7 @@
     <h2>Login</h2>
     <form action="#" th:action="@{/login}" th:object="${companyLogin}" method="post">
         <input type="text" th:field="*{mail}" id="mail" placeholder="E-mail" th:value="${companyLogin.getMail()}" >
-        <input type="password" th:field="*{password}" id="password" placeholder="Password" th:value="${companyLogin.getPassword()}">
+        <input type="text" th:field="*{password}" id="password" placeholder="Password" th:value="${companyLogin.getPassword()}">
         <p><input type="checkbox" name="rememberMe" id="rememberMe"> Remember Me</p>
         <input type="submit" value="Connexion">
     </form>
