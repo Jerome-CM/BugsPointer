@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class AuthRegisterCompanyDTO {
 
-    private String compagnyName;
+    private String companyName;
 
     private String mail;
 

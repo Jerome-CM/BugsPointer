@@ -34,13 +34,17 @@ public class UserDetailServiceJwt implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
 
-        Company company = companyRepository.findByMail(mail);
+        Optional<Company> company = companyRepository.findByMail(mail);
+        Company companyGet = null;
 
         if (company == null) {
             throw new UsernameNotFoundException(mail);
         }
+        if (company.isPresent()){
+            companyGet = company.get();
+        }
         /* load username, password and Authorities in a User Spring */
-        UserDetails userAuth = org.springframework.security.core.userdetails.User.withUsername(company.getMail()).password(company.getPassword()).authorities(company.getRole().toString()).build();
+        UserDetails userAuth = org.springframework.security.core.userdetails.User.withUsername(companyGet.getMail()).password(companyGet.getPassword()).authorities(companyGet.getRole().toString()).build();
         //log.info("Connexion User : {}", userAuth);
         return userAuth;
     }
