@@ -9,13 +9,18 @@ import com.bugspointer.service.ICompany;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
+@Profile("test")
 @SpringBootTest
+@Sql(value = "/data.sql",executionPhase = BEFORE_TEST_METHOD)
 public class companyCrudTest {
 
     @Autowired
