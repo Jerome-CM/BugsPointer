@@ -8,6 +8,11 @@
 
 name: Java CI with Maven
 
+env:
+      DB_DATABASE: bugspointer
+      DB_USER: root
+      DB_PASSWORD: Java-Mysql3306
+
 on:
   push:
     branches: [ "develop" ]
@@ -19,11 +24,13 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    env:
-      DB_DATABASE: bugspointer
-      DB_USER: root
-      DB_PASSWORD: Java-Mysql3306
-      
+    services:
+      mysql:
+        image: mysql:8.0.3
+        
+        ports:
+        - 3306
+    
     steps:
       
       - uses: actions/checkout@v3
