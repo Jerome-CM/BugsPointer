@@ -13,5 +13,5 @@ public interface CompanyRepository extends CrudRepository<Company, Long> {
 
     Optional<Company> findByCompanyName(String companyMail);
 
-
+    Optional<Company> findByPublicKey(String publicKey);
 }
