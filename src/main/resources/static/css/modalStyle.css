@@ -1,0 +1,133 @@
+/*Colors*/
+:root {
+    --btn-logo-color: #00E676;
+    --btn-text-logo-color: white;
+    --modal-color: #FFA903;
+    --modal-title-color: white;
+    --modal-text-submit-color: white;
+    --background-modal-color: #F0F1F3;
+}
+
+/*CSS Logo*/
+.bugspointer-logo{
+    background: none;
+    border: none;
+    padding: 0;
+}
+.bugspointer-logo:hover{
+    cursor: pointer;
+}
+
+.bugspointer-objet-logo{
+    display: flex;
+    justify-content:center;
+    flex-direction:column;
+    width:100px;
+    height:100px;
+}
+
+.bugspointer-objet-ellispe{
+    margin:0 auto;
+    width: 50px;
+    min-height: 50px;
+    border-radius:100%;
+    border: 10px solid var(--btn-logo-color);
+    background-image: url(img/chercher.gif);
+    background-size: contain;
+}
+
+.bugspointer-objet-report{
+    color:var(--btn-text-logo-color);
+    background-color: var(--btn-logo-color);
+    border-radius:3px;
+    padding:2px 3px;
+    font-size:15px;
+}
+
+
+
+
+/*CSS modal*/
+.bugspointer-open-popup:hover{
+    cursor: pointer;
+}
+
+.bugspointer-popup-btn-submit{
+    background-color: var(--modal-color);
+    color : var(--modal-text-submit-color);
+    padding: 14px 20px;
+    margin: auto;
+    border: none;
+    width: 200px;
+    display: block
+}
+
+.bugspointer-popup{
+    position: fixed;
+    z-index: 99;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.2);
+    padding-top: 60px;
+    display: none;
+}
+
+.bugspointer-popup-container{
+    background-color: var(--background-modal-color);
+    border: 3px solid var(--modal-color);
+    margin: 5% auto 10% auto;
+    width: 50%;
+    height: 50%;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.bugspointer-popup-header{
+    text-align: center;
+    top: 0px;
+    background-color : var(--modal-color);
+    border-radius: 0;
+    position: relative;
+    color : var(--modal-title-color);
+}
+.bugspointer-popup-titre{
+    font-size: 28px;
+    font-weight: 700;
+}
+.bugspointer-close-popup{
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    color: var(--modal-title-color);
+    font-size: 30px;
+    font-weight: 700;
+}
+.bugspointer-close-popup:hover{
+    cursor: pointer;
+}
+.bugspointer-popup-content{
+    padding: 15px 30px 0px;
+    text-align: center;
+    height: 80%;
+}
+.bugspointer-popup-content-texturl{
+    width : 100%;
+    padding : 5px 0;
+    box-sizing: border-box;
+}
+.bugspointer-popup-content-textdescription{
+    width: 100%;
+    block-size: auto;
+    display: inline-block;
+    box-sizing: border-box;
+    height: 70%;
+}
+.bugspointer-popup-content-inputbot{
+    visibility: hidden;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    margin: 0;
+}

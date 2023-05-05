@@ -20,4 +20,14 @@ public class Home {
     String getDocumentations(){
         return "public/documentations";
     }
+
+    @GetMapping("modal")
+    String getModal(){
+        return "download/modal";
+    }
+
+    @GetMapping("logo")
+    String getLogo(){
+        return "download/logo";
+    }
 }
