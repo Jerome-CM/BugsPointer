@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
        httpSecurity.csrf().disable()
                 .authorizeRequests()
                 // restricted url
-                .antMatchers("app/admin/**").hasRole("ADMIN")
+                .antMatchers("/app/admin/**").hasRole("ADMIN")
                 // public url
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()

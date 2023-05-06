@@ -26,8 +26,4 @@ public class Home {
         return "download/modal";
     }
 
-    @GetMapping("logo")
-    String getLogo(){
-        return "download/logo";
-    }
 }

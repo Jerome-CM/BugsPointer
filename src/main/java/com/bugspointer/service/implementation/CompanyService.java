@@ -36,10 +36,9 @@ public class CompanyService implements ICompany {
             companyGet = company.get();
         }
 
-        return  companyGet;
+        return companyGet;
     }
 
-    //Création de la méthode createPublicKey
     public String createPublicKey() {
         return utility.createPublicKey();
     }
