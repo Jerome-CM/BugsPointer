@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Téléchargement</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/CSS/style.css}" />
+</head>
+<body class="black">
+
+    <div th:replace="~{include/nav.html}"></div>
+
+    <div class="container">
+        <h1 class="h-in-black">Téléchargement</h1>
+
+        <p class="space">Obtener les fichiers permettant de mettre sur votre site le logo et le formulaire de Bugspointer</p>
+
+
+        <div class="btn-download">
+            <a th:href="@{/downloadableZip/Bugspointer_0.0.1.zip}" download="Bugspointer_0.0.1.zip"><img alt="bouton de téléchargement" th:src="@{/css/img/telecharger.gif}"/><span class="center" >Télécharger les fichiers</span></a>
+        </div>
+
+        <p class="space">Pour que l'intégration de l'outil à votre site se face plus facilement, consulter la documentation en ligne</p>
+
+        <a th:href="@{/documentations}" class="btn-action">Voir la documentation</a>
+    </div>
+    <div th:replace="~{include/footer.html}"></div>
+</body>
+</html>
