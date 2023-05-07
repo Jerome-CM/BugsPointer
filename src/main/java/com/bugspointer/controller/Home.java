@@ -11,6 +11,11 @@ public class Home {
         return "index";
     }
 
+    @GetMapping("download")
+    String getDownloadPage(){
+        return "public/download";
+    }
+
     @GetMapping("features")
     String getFeatures(){
         return "public/features";
