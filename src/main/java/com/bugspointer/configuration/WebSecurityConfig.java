@@ -56,9 +56,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
                 .antMatchers("/features").permitAll()
                 .antMatchers("/documentations").permitAll()
-                .antMatchers("/modal").permitAll()
+                .antMatchers("/modal").permitAll() // TODO A retirer en production
                 .antMatchers("/logo").permitAll()
-                .anyRequest().authenticated()
+                //.anyRequest().authenticated() TODO décommenter la ligne pour demander l'authentification
                 .and()
                 .formLogin().loginPage("/login")
                 .usernameParameter("mail")

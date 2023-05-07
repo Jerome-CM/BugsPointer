@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/css/modalStyle.css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/modalControl.js" async></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+<a class="bugspointer-open-popup" id="bugspointer_open_popup">Signaler un bug</a>
+<button class="bugspointer-logo" id="bugspointer_logo">
+    <div class="bugspointer-objet-logo">
+        <div class="bugspointer-objet-ellispe"></div>
+        <span class="bugspointer-objet-report">Signaler un bug</span>
+    </div>
+</button>
+    <div class="bugspointer-popup" id="bugspointer_popup">
+      <form class="bugspointer-popup-container" method="post" action="">
+          <div class="bugspointer-popup-header">
+              <span class="bugspointer-popup-titre">Signaler un nouveau bug</span>
+              <span class="bugspointer-close-popup" id="bugspointer_close_popup">&times;</span>
+          </div>
+          <div class="bugspointer-popup-content">
+              <label for="urlPointed">Url avec ce bug</label>
+              <input type="text" class="bugspointer-popup-content-texturl" id="urlPointed" value="" disabled>
+
+              <label>Description du bug</label>
+              <textarea class="bugspointer-popup-content-textdescription"></textarea>
+              <input type="text" class="bugspointer-popup-content-inputbot">
+              <input type="hidden" name="key" value="MF9KHGaw9ID3FhcPmboOasb2c">
+              <!--TODO : changer la value par la variable récupérant cette valeur-->
+
+              <button class="bugspointer-popup-btn-submit" type="submit">Envoyer mon rapport</button>
+          </div>
+      </form>
+  </div>
+</body>
+</html>
