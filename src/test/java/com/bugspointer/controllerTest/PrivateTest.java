@@ -40,7 +40,7 @@ public class PrivateTest {
     /* Logged page */
 
     @Test
-    public void getDashboardUserWithLoginTest() throws Exception {
+    public void getDashboardCompanyWithLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/dashboard").with(userValue()))
                 .andExpect(status().isOk());
     }
@@ -102,19 +102,19 @@ public class PrivateTest {
     /* Unlogged page */
 
     @Test
-    public void getDashboardUserWithoutLoginTest() throws Exception {
+    public void getDashboardCompanyWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/dashboard"))
                 .andExpect(status().isOk());
     }
 
     /*@Test
-    public void getAccountUserWithoutLoginTest() throws Exception {
+    public void getAccountCompanyWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/account"))
                 .andExpect(status().isOk());
     }*/
 
     /*@Test
-    public void getNotificationUserWithoutLoginTest() throws Exception {
+    public void getNotificationCompanyWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/notifications"))
                 .andExpect(status().isOk());
     }*/
