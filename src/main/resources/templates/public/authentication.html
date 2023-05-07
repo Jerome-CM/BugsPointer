@@ -15,7 +15,7 @@
 <div>
     <h2>Register</h2>
     <form action="#" th:action="@{/register}" th:object="${companyRegister}" method="post">
-        <input type="text" th:field="*{compagnyName}" id="companyName" placeholder="Nom de l'entreprise">
+        <input type="text" th:field="*{companyName}" id="companyName" placeholder="Nom de l'entreprise">
         <input type="text" th:field="*{mail}" id="registerMail" placeholder="Mail">
         <input type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmation de l'e-mail">
         <input type="text" th:field="*{password}" id="registerPassword" placeholder="Mot de passe">
