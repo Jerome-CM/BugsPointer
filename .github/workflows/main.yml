@@ -9,7 +9,7 @@
 name: Java CI with Maven
 
 env:
-      DB_DATABASE: bugspointer
+      DB_DATABASE: test
       DB_USER: root
       DB_PASSWORD: Java-Mysql3306
 
@@ -23,14 +23,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:8.0
-        
-        ports:
-        - 8888:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     
     steps:
       
@@ -42,8 +34,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
  
-      - uses: actions/checkout@v1
-      - run: mysql -h 127.0.0.1 --port 8888 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS test;'
+      - name: Set up MySQL
+        run: sudo /etc/init.d/mysql start
+         mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
       
       - name: Build with Maven
         run: mvn clean install
