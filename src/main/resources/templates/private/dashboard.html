@@ -6,10 +6,86 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link th:href="@{/../css/style.css}" rel="stylesheet" />
-</head>
-<title>Bugs Pointer</title>
+    <title>Bugs Pointer</title>
+
 </head>
 <body>
-<h2>Bienvenue dans le dashboard compagnie!</h2>
+
+    <div th:replace="~{include/navCompany.html}"></div>
+
+    <h1>My Dashboard</h1>
+
+    <div class="container">
+        <section>
+            <h2 style="text-align: center">Report section</h2>
+            <hr>
+            <div class="container-row">
+                <a th:href="@{/newBugList}" class="cards">
+                    <span class="number_cards new">2</span>
+                    <h3>New bug</h3>
+                </a>
+                <a th:href="@{/pendingBugList}" class="cards">
+                    <span class="number_cards pending">2</span>
+                    <h3>Pending bug</h3>
+                </a>
+                <a th:href="@{/solvedBugList}" class="cards">
+                    <span class="number_cards solved">18</span>
+                    <h3>Solved bug</h3>
+                </a>
+                <a th:href="@{/solvedBugList}" class="cards">
+                    <span class="number_cards ignored">1</span>
+                    <h3>Ignored bug</h3>
+                </a>
+            </div>
+            
+        </section>
+        
+        <section>
+            <h2 style="text-align: center">Parameters</h2>
+            <hr>
+            <div class="container-row">
+                <a th:href="@{/invoices}" class="cards"><h3>Invoices</h3></a>
+                <a th:href="@{/notifications}" class="cards"><h3>Notifications</h3></a>
+                <a th:href="@{/account}" class="cards"><h3>Account</h3></a>
+            </div>
+        </section>
+        
+        <section>
+            <div class="container-row">
+                <div class="cards cards_promo">
+                    <h2>Change Plan</h2>
+                    <div th:replace="~{include/targetPlanContent.html}"></div>
+                    <a th:href="@{/features}">Details</a>
+                    <span>Without engagement</span>
+                </div>
+
+                <div class="slider adjustPlan">
+                    <div class="slides">
+                        <div id="slide-1">
+                            <img th:src="@{/css/img/sliderPlan/dashboard.png}" alt="Preview of HTML content">
+                        </div>
+                        <div id="slide-2">
+                            <img th:src="@{/css/img/sliderPlan/newBug.png}" alt="New bug">
+                        </div>
+                        <div id="slide-3">
+                            <img th:src="@{/css/img/sliderPlan/userEnv.png}" alt="User Environment">
+                        </div>
+                        <div id="slide-4">
+                            <img th:src="@{/css/img/sliderPlan/invoice.png}" alt="Invoice">
+                        </div>
+                    </div>
+                    <div class="content-dotlink">
+                        <a href="#slide-1">1</a>
+                        <a href="#slide-2">2</a>
+                        <a href="#slide-3">3</a>
+                        <a href="#slide-4">4</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </div>
+
+    <div th:replace="~{include/footer.html}"></div>
 </body>
 </html>

@@ -11,6 +11,11 @@ public class Home {
         return "index";
     }
 
+    @GetMapping("download")
+    String getDownloadPage(){
+        return "public/download";
+    }
+
     @GetMapping("features")
     String getFeatures(){
         return "public/features";
@@ -21,4 +26,8 @@ public class Home {
         return "public/documentations";
     }
 
+    @GetMapping("modal")
+    String getModal(){
+        return "download/modal";
+    }
 }

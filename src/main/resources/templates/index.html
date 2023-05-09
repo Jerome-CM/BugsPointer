@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link th:href="@{/css/style.css}" rel="stylesheet" />
     <script type="text/javascript" th:src="@{/js/actions.js}"></script>
-</head>
     <title>Bugs Pointer</title>
 </head>
 <body>
@@ -15,5 +14,24 @@
     <div th:replace="~{include/nav.html}"></div>
 
 <button type="button" th:onclick="showAlert()">Show Alert</button>
+
+<div class="sliderIndex">
+    <div class="slides">
+        <div id="slide-1">
+            <img th:src="@{/css/img/sliderIndex/Orthographe.jpg}" alt="Preview of HTML content">
+        </div>
+        <div id="slide-2">
+            <img th:src="@{/css/img/sliderIndex/Indeed - Bugs synthaxe.jpg}" alt="Preview of HTML content">
+        </div>
+        <div id="slide-3">
+            <img th:src="@{/css/img/sliderIndex/CAF - Bug btn connexion.jpg}" alt="Preview of HTML content">
+        </div>
+    </div>
+    <div class="content-dotlink">
+        <a href="#slide-1">1</a>
+        <a href="#slide-2">2</a>
+        <a href="#slide-3">3</a>
+    </div>
+</div>
 </body>
 </html>

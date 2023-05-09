@@ -13,11 +13,9 @@ public class UtilityTest {
     @Autowired
     private Utility utility;
 
-
     @Test
     public void createPublicKeyTest(){
         String key = utility.createPublicKey();
-        System.out.println(key);
         assertTrue("", key.length()==25);
 
     }

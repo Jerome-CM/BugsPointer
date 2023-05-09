@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
        httpSecurity.csrf().disable()
                 .authorizeRequests()
                 // restricted url
-                .antMatchers("app/admin/**").hasRole("ADMIN")
+                .antMatchers("/app/admin/**").hasRole("ADMIN")
                 // public url
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
@@ -57,7 +57,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/features").permitAll()
                 .antMatchers("/documentations").permitAll()
                 .antMatchers(HttpMethod.GET,"/modal").permitAll()
-                //.anyRequest().authenticated()
+                 // TODO A retirer en production
+                .antMatchers("/logo").permitAll()
+                //.anyRequest().authenticated() TODO décommenter la ligne pour demander l'authentification
                 .and()
                 .formLogin().loginPage("/login")
                 .usernameParameter("mail")
