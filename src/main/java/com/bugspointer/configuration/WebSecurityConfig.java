@@ -57,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/features").permitAll()
                 .antMatchers("/documentations").permitAll()
                 .antMatchers(HttpMethod.GET,"/modal").permitAll()
-                .anyRequest().authenticated()
+                //.anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")
                 .usernameParameter("mail")

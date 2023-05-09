@@ -15,19 +15,19 @@
     </div>
 </button>
     <div class="bugspointer-popup" id="bugspointer_popup">
-      <form class="bugspointer-popup-container" method="post" action="/modal">
+      <form class="bugspointer-popup-container" method="post" action="/modalControl">
           <div class="bugspointer-popup-header">
               <span class="bugspointer-popup-titre">REPORT A NEW BUG</span>
               <span class="bugspointer-close-popup" id="bugspointer_close_popup">&times;</span>
           </div>
           <div class="bugspointer-popup-content">
               <label for="urlPointed">URL WITH A BUG</label>
-              <input type="text" class="bugspointer-popup-content-texturl" id="urlPointed" value="" disabled>
+              <input type="text" name="url" class="bugspointer-popup-content-texturl" id="urlPointed" value="" readonly>
 
               <label>BUG DESCRIPTION</label>
-              <textarea class="bugspointer-popup-content-textdescription"></textarea>
-              <input type="text" class="bugspointer-popup-content-inputbot">
-              <input type="hidden" name="key" value="MF9KHGaw9ID3FhcPmboOasb2c">
+              <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="10"></textarea>
+              <input type="text" name="bot" class="bugspointer-popup-content-inputbot">
+              <input type="hidden" name="key" value="NMYij1d8zKkHIUdBCvDb1b01L">
               <!--TODO : changer la value par la variable récupérant cette valeur-->
 
               <button class="bugspointer-popup-btn-submit" type="submit">SEND MY REPORT</button>

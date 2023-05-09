@@ -11,15 +11,21 @@ import com.bugspointer.service.IModal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
 public class ModalService implements IModal {
 
-    private BugRepository bugRepository;
-    private CompanyRepository companyRepository;
+    private final BugRepository bugRepository;
+    private final CompanyRepository companyRepository;
+
+    public ModalService(BugRepository bugRepository, CompanyRepository companyRepository) {
+        this.bugRepository = bugRepository;
+        this.companyRepository = companyRepository;
+    }
 
 
     public Response saveModalFree(ModalDTO dto){
@@ -34,6 +40,7 @@ public class ModalService implements IModal {
         {
             bot = true;
         } else {
+            log.info("bot completed");
             return new Response(EnumStatus.ERROR, null, "Form completed by robot");
         }
 
@@ -41,9 +48,9 @@ public class ModalService implements IModal {
         {
             description = true;
         } else {
+            log.info("description incomplete");
             return new Response(EnumStatus.ERROR, null, "Description incomplete");
         }
-
         Optional<Company> companyOptional = companyRepository.findByPublicKey(dto.getKey());
         if (companyOptional.isPresent()){
             log.info("Company exist : {}", companyOptional);

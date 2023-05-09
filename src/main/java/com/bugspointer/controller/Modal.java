@@ -1,11 +1,15 @@
 package com.bugspointer.controller;
 
+import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.ModalDTO;
+import com.bugspointer.dto.Response;
 import com.bugspointer.service.implementation.ModalService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 
@@ -19,13 +23,17 @@ public class Modal {
     }
 
     @GetMapping("modal")
-        String getModal(){
+    String getModal(){
         return "download/modal";
     }
 
     @PostMapping("/modalControl")
-    String modal(@Valid ModalDTO dto){
+    RedirectView modal(@Valid ModalDTO dto, BindingResult result){
 
-        return "download/modal";
+        if (!result.hasErrors()){
+            modalService.saveModalFree(dto);
+        }
+
+        return new RedirectView(dto.getUrl());
     }
 }
