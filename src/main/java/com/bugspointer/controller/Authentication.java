@@ -2,6 +2,9 @@ package com.bugspointer.controller;
 
 import com.bugspointer.dto.AuthLoginCompanyDTO;
 import com.bugspointer.dto.AuthRegisterCompanyDTO;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import com.bugspointer.dto.EnumStatus;
@@ -41,6 +44,14 @@ public class Authentication {
             }
         }
         return "public/authentication";
+    }
+
+    @GetMapping("/logout")
+    String logout(HttpServletRequest request){
+
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return "index";
     }
     
 }
