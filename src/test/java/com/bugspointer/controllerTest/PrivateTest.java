@@ -45,11 +45,11 @@ public class PrivateTest {
                 .andExpect(status().isOk());
     }
 
-    /*@Test
+    @Test
     public void getAccountUserWithLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/account").with(userValue()))
                 .andExpect(status().isOk());
-    }*/
+    }
 
     /*@Test
     public void getNotificationUserWithLoginTest() throws Exception {
@@ -104,61 +104,61 @@ public class PrivateTest {
     @Test
     public void getDashboardCompanyWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/dashboard"))
-                .andExpect(status().isOk());
+                .andExpect(status().isUnauthorized());
     }
 
-    /*@Test
+    @Test
     public void getAccountCompanyWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/account"))
-                .andExpect(status().isOk());
-    }*/
+                .andExpect(status().isUnauthorized());
+    }
 
     /*@Test
     public void getNotificationCompanyWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/notifications"))
-                .andExpect(status().isOk());
+                .andExpect(status().isUnauthorized());
     }*/
 
     /*@Test
     public void getInvoicesWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/invoices"))
-                .andExpect(status().isOk());
+                .andExpect(status().isUnauthorized());
     }*/
 
     /*@Test
     public void getNewBugListWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/newBugList"))
-                .andExpect(status().isOk());
+                .andExpect(status().isUnauthorized());
     }*/
 
     /*@Test
     public void getNewBugReportWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/newBugReport"))
-                .andExpect(status().isOk());
+                .andExpect(status().isUnauthorized());
     }*/
 
    /* @Test
     public void getPendingBugListWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/pendingBugList"))
-                .andExpect(status().isOk());
+                .andExpect(status().isUnauthorized());
     }*/
 
     /*@Test
     public void getPendingBugReportWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/pendingBugReport"))
-                .andExpect(status().isOk());
+                .andExpect(status().isUnauthorized());
     }*/
 
     /*@Test
     public void getSolvedBugListWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/solvedBugList"))
-                .andExpect(status().isOk());
+                .andExpect(status().isUnauthorized());
     }*/
 
     /*@Test
     public void getSolvedBugReportWithoutLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/solvedBugReport"))
-                .andExpect(status().isOk());
+                .andExpect(status().isUnauthorized());
     }*/
 
 
