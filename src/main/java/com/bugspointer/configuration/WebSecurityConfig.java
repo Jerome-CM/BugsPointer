@@ -47,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // restricted url
                 .antMatchers("/app/admin/**").hasRole("ADMIN")
+                .antMatchers("/app/private/**").hasAnyRole("ADMIN","USER")
                 // public url
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
@@ -59,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/modal").permitAll()
                  // TODO A retirer en production
                 .antMatchers("/logo").permitAll()
-                //.anyRequest().authenticated() TODO décommenter la ligne pour demander l'authentification
+                .anyRequest().authenticated() // TODO décommenter la ligne pour demander l'authentification
                 .and()
                 .formLogin().loginPage("/login")
                 .usernameParameter("mail")
@@ -71,7 +72,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.and()
                .rememberMe()
                .and()
-               .logout()
+               .logout().logoutUrl("/logout")
+               .logoutSuccessUrl("/")
                .deleteCookies("JSESSIONID", "remember-me")
                .and()
                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
