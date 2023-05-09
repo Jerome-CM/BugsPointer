@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 @SpringBootTest
@@ -16,5 +17,6 @@ public class UtilityTest {
     public void createPublicKeyTest(){
         String key = utility.createPublicKey();
         assertTrue("", key.length()==25);
+
     }
 }

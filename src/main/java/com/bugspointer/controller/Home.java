@@ -30,5 +30,4 @@ public class Home {
     String getModal(){
         return "download/modal";
     }
-
 }

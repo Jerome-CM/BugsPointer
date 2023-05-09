@@ -16,6 +16,10 @@ public class Bug {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @NotNull
+    private Company company;
+
     @NotNull
     private String url;
 
