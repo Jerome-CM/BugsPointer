@@ -49,11 +49,11 @@ public class HomeTest {
                 .andExpect(status().isOk());
     }
 
-    /*@Test
+    @Test
     public void getDocumentationsTest() throws Exception {
         mockMvc.perform(get("/documentations"))
                 .andExpect(status().isOk());
-    }*/
+    }
 
     @Test
     public void getModalTest() throws Exception {

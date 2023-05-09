@@ -1,0 +1,73 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+    <title>Documentations</title>
+</head>
+<body>
+
+    <div th:replace="~{include/navCompany.html}"></div>
+
+
+    <div class="container-documentation">
+        <div class="menu">
+            <h4><a href="#integration">Intégration</a></h4>
+            <ul>
+                <li><a href="#download">Télécharger le projet</a></li>
+                <li><a href="#implement">Implémenter les fichiers sur votre site</a></li>
+            </ul>
+            <h4><a href="#configuration">Configuration</a></h4>
+            <ul>
+                <li><a href="#key">Renseigner votre clé de sécurité</a></li>
+
+            </ul>
+        </div>
+
+        <div class="container anti-margin">
+            <h1>Documentations</h1>
+
+            <div class="text_align_left">
+                <h2 id="integration">Intégration</h2>
+                <h3 id="download" class="h3_documentation">Télécharger le projet</h3>
+                <div class="card_doc"><p>Pour télécharger le projet rendez-vous sur l’url : ... <br>
+                    Vous devez avoir un compte valide pour obtenir les différents fichiers</p>
+                </div>
+                <h3 id="implement" class="h3_documentation">Implémenter les fichiers sur votre site</h3>
+                <div class="card_doc">
+                    <p>
+                    Pour profiter de BugsPointer sur votre site, il vous suffit de copier/coller les fichiers que vous avez téléchargé. <br>
+                    Placer les dans votre arborescence : <br><br>
+
+                    modalCss.css à placer dans votre dossier de style<br>
+                    modalControl.js à placer dans votre dossier js<br>
+                    modal.html à placer à la racine de votre site
+                    </p>
+                </div>
+
+                <div class="warning border-orange">
+                    <img th:src="@{/css/img/alerte.gif}" alt="Gyrophare">
+                    <span>Il vous faudra ensuite récuperer ces fichiers en indiquant le chemin dans vos fichiers. <br>
+                    Le lien ou le logo (modal.html) sont à inclure dans toutes les pages que vous voulez debugger.</span>
+                </div>
+
+                <h2 id="configuration">Configuration</h2>
+
+                <h3 id="key" class="h3_documentation">Renseigner votre clé de sécurité</h3>
+                <div class="card_doc">
+                    <p>
+                        Rendez-vous dans votre page Account pour trouver votre clé. Copier-la puis coller la dans le fichier modal.html dans le champ suivant, à la place de YOUR_KEY_HERE :<br><br>
+                        <code>&lt;input type=”hidden” name=”key” value=”YOUR_KEY_HERE”&gt;</code> <br>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{include/footer.html}"></div>
+</body>
+</html>
