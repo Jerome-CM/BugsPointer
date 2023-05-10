@@ -59,9 +59,9 @@ public class CompanyService implements ICompany {
     public Response saveCompany(AuthRegisterCompanyDTO dto) {
         log.info("SaveCompany");
         log.info("in dto :  {}", dto);
-        boolean mail = false;
-        boolean pw = false;
-        boolean name = false;
+        boolean mail;
+        boolean pw;
+        boolean name;
 
         if (dto.getPassword().equals(dto.getConfirmPassword())){
             pw = true;
@@ -127,8 +127,10 @@ public class CompanyService implements ICompany {
 
     public AccountDTO getAccountDto(Company company) {
         log.info("AccountDTO : company : {}", company);
-        AccountDTO dto = new AccountDTO();
+        String indicatif = company.getIndicatif().getValeur();
+        AccountDTO dto;
         dto = modelMapper.map(company, AccountDTO.class);
+        dto.setIndicatif(indicatif);
         log.info("AccountDTO : dto : {}", dto);
 
         return dto;
@@ -169,20 +171,10 @@ public class CompanyService implements ICompany {
 
         if (pw && mail) {
             log.info("mail at modify : {}", dto.getMail());
-            Company companyModified = company;
-            companyModified.setMail(dto.getMail());
-            log.info("Company mail update : {}", companyModified);
+            company.setMail(dto.getMail());
+            log.info("Company mail update : {}", company);
 
-            try {
-                Company savedCompany = companyRepository.save(companyModified);
-                log.info("Company update :  {}", savedCompany);
-
-                return new Response(EnumStatus.OK, null, "Update ok");
-            }
-            catch (Exception e){
-                log.error("Error :  {}", e.getMessage());
-                return new Response(EnumStatus.ERROR, null, "Error in update");
-            }
+            return companyTryRegistration(company);
         }
 
         return new Response(EnumStatus.ERROR, null, "Error in the process");
@@ -193,7 +185,7 @@ public class CompanyService implements ICompany {
         log.info("dto : {}", dto);
 
         Optional<Company> companyOptional = companyRepository.findByPublicKey(dto.getPublicKey());
-        Company company = new Company();
+        Company company;
         if (companyOptional.isPresent()) {
             company = companyOptional.get();
             log.info("Company : {}", company);
@@ -205,15 +197,7 @@ public class CompanyService implements ICompany {
                     if (dto.getNewPassword().equals(dto.getConfirmPassword())){
                         company.setPassword(passwordEncoder.encode(dto.getNewPassword()));
                         log.info("company modified :  {}", company);
-                        try {
-                            Company savedCompany = companyRepository.save(company);
-                            log.info("Company update :  {}", savedCompany);
-                            return new Response(EnumStatus.OK, null, "Password update");
-                        }
-                        catch (Exception e){
-                            log.error("Error :  {}", e.getMessage());
-                            return new Response(EnumStatus.ERROR, null, "Error in the process");
-                        }
+                        return companyTryRegistration(company);
                     } else {
                         return new Response(EnumStatus.ERROR, null, "Password not identical");
                     }
@@ -231,7 +215,7 @@ public class CompanyService implements ICompany {
         log.info("dto : {}", dto);
 
         Optional<Company> companyOptional = companyRepository.findByPublicKey(dto.getPublicKey());
-        Company company = new Company();
+        Company company;
         if (companyOptional.isPresent()) {
             company = companyOptional.get();
             log.info("Company : {}", company);
@@ -240,21 +224,13 @@ public class CompanyService implements ICompany {
                 return new Response(EnumStatus.ERROR, null, "PhoneNumber empty");
             } else {
                 if (dto.getPhoneNumber().length()==10 && (dto.getPhoneNumber().startsWith("06") || dto.getPhoneNumber().startsWith("07"))) {
-                    for (EnumIndicatif enumIndicatif : EnumIndicatif.values()){
-                        if(enumIndicatif.equals(dto.getIndicatif())){
-                            company.setIndicatif(dto.getIndicatif());
-                        }
+                    EnumIndicatif indicatif = EnumIndicatif.getByValeur(dto.getIndicatif());
+                    if (indicatif != null) {
+                        company.setIndicatif(indicatif);
                     }
+
                     company.setPhoneNumber(dto.getPhoneNumber());
-                    try {
-                        Company savedCompany = companyRepository.save(company);
-                        log.info("Company update :  {}", savedCompany);
-                        return new Response(EnumStatus.OK, null, "Password update");
-                    }
-                    catch (Exception e){
-                        log.error("Error :  {}", e.getMessage());
-                        return new Response(EnumStatus.ERROR, null, "Error in the process");
-                    }
+                    return companyTryRegistration(company);
                 } else {
                     return new Response(EnumStatus.ERROR, null, "It's not a phone number");
                 }
@@ -262,5 +238,17 @@ public class CompanyService implements ICompany {
         }
 
         return new Response(EnumStatus.ERROR, null, "Error in the process");
+    }
+
+    private Response companyTryRegistration(Company company) {
+        try {
+            Company savedCompany = companyRepository.save(company);
+            log.info("Company update :  {}", savedCompany);
+            return new Response(EnumStatus.OK, null, "Update ok");
+        }
+        catch (Exception e){
+            log.error("Error :  {}", e.getMessage());
+            return new Response(EnumStatus.ERROR, null, "Error in update");
+        }
     }
 }

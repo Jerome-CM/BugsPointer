@@ -15,4 +15,6 @@ public interface ICompany {
     public Company getCompanyWithToken(HttpServletRequest request);
     public AccountDTO getAccountDto(Company company);
     public Response mailUpdate(AccountDTO dto);
+    public Response passwordUpdate(AccountDTO dto);
+    public Response smsUpdate(AccountDTO dto);
 }
