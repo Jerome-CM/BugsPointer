@@ -1,0 +1,62 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link th:href="@{/../css/style.css}" rel="stylesheet" />
+    <title>Bugs Pointer - Account</title>
+
+</head>
+<body>
+
+    <div th:replace="~{include/navCompany.html}"></div>
+
+    <h1>Account</h1>
+
+    <div class="container">
+        <section>
+            <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
+                <h3>E-mail</h3>
+                <input type="text" th:field="*{mail}" id="mail" name="mail" th:value="${company.getMail()}">
+                <input type="password" th:field="*{password}" id="password" name="password" placeholder="Password">
+                <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
+                <button type="submit" class="submit" name="action" value="updateMail">Update</button>
+            </form>
+        </section>
+
+        <section>
+            <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
+                <h3>Mot de passe</h3>
+                <input type="password" th:field="*{password}" id="actualPassword" placeholder="Mot de passe actuel">
+                <input type="password" th:field="*{newPassword}" id="newPassword" placeholder="Nouveau mot de passe">
+                <input type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmation du nouveau mot de passe">
+                <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
+                <button type="submit" class="submit" name="action" value="updatePw">Update</button>
+            </form>
+        </section>
+
+        <section>
+            <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
+                <h3>SMS</h3>
+                <div class="container-phone">
+                    <input type="text" th:field="*{indicatif}" id="indicatif" th:value="${company.getIndicatif()}">
+                    <input type="tel" th:field="*{phoneNumber}" id="phoneNumber" th:value="${company.getPhoneNumber()}" placeholder="Format : 06xxxxxxxx" pattern="[0-9]{10}">
+                </div>
+                <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
+                <button type="submit" class="submit" name="action" value="updateSms">Update</button>
+            </form>
+        </section>
+
+        <section>
+            <form class="cards account" th:object="${company}" method="get">
+                <h3>Security Key</h3>
+                <input type="text" th:field="*{publicKey}" id="publicKey" th:value="${company.getPublicKey()}" readonly>
+            </form>
+        </section>
+        <br>
+        <button class="delete" type="submit">Supprimer le compte</button>
+    </div>
+</body>
+</html>

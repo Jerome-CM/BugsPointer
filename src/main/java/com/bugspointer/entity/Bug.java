@@ -37,6 +37,8 @@ public class Bug {
     @NotNull
     private String screenSize;
 
+    private EnumEtatBug etatBug = EnumEtatBug.NEW;
+
     @NotNull
     @Column(updatable = false)
     private Date dateCreation;

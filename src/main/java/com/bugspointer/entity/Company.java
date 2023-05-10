@@ -22,7 +22,9 @@ public class Company {
 
     private String password;
 
-    private String phoneNumber = null;
+    private EnumIndicatif indicatif = EnumIndicatif.FRANCE;
+
+    private String phoneNumber;
 
 
     private EnumPlan plan = EnumPlan.FREE;

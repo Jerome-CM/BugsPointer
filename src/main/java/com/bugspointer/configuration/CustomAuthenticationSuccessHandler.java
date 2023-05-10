@@ -49,6 +49,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             }
             session.setAttribute("token", token);
             session.setAttribute("role", company.getRole());
+            session.setAttribute("mail", mail);
 
 
         }
@@ -57,7 +58,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         if(company.getRole().equals("ROLE_ADMIN")){
             response.sendRedirect("app/admin/dashboard");
         }else{
-            response.sendRedirect("app/private/dashboard");
+            response.sendRedirect("app/private/account");
         }
     }
 }
