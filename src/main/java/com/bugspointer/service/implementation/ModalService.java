@@ -64,6 +64,7 @@ public class ModalService implements IModal {
             }
 
         } else {
+            log.info("Key is not match with a company");
             return new Response(EnumStatus.ERROR, null, "company not exist");
         }
 
