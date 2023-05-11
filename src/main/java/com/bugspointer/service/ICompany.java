@@ -1,6 +1,7 @@
 package com.bugspointer.service;
 
 import com.bugspointer.dto.AccountDTO;
+import com.bugspointer.dto.AccountDeleteDTO;
 import com.bugspointer.dto.AuthRegisterCompanyDTO;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Company;
@@ -17,4 +18,5 @@ public interface ICompany {
     public Response mailUpdate(AccountDTO dto);
     public Response passwordUpdate(AccountDTO dto);
     public Response smsUpdate(AccountDTO dto);
+    public Response delete(AccountDeleteDTO dto);
 }

@@ -1,6 +1,7 @@
 package com.bugspointer.controller;
 
 import com.bugspointer.dto.AccountDTO;
+import com.bugspointer.dto.AccountDeleteDTO;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.service.implementation.CompanyService;
@@ -37,10 +38,48 @@ public class Private {
         return "private/notifications";
     }
 
+    @GetMapping("account/delete")
+    String getDelete(Model model, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        log.info("session mail : {}", session.getAttribute("mail"));
+        model.addAttribute("company", companyService.getAccountDeleteDto(companyService.getCompanyWithToken(request)));
+        return "private/deleteAccount";
+    }
+
+    @PostMapping("account/delete/confirm")
+    String deleteAccount(@Valid AccountDeleteDTO dto, BindingResult result, Model model, HttpServletRequest request){
+        if (!result.hasErrors()) {
+            Response response = companyService.delete(dto);
+            if (response.getStatus().equals(EnumStatus.OK)) {
+                model.addAttribute("notification", response.getMessage());
+                HttpSession session = request.getSession();
+                session.invalidate();
+                return "redirect:/authentication";
+            } else {
+                model.addAttribute("notification", response.getMessage());
+            }
+        }
+        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
+        return "private/account";
+    }
+
     @GetMapping("account")
     String getAccount(Model model, HttpServletRequest request){
         HttpSession session = request.getSession();
         log.info("session mail : {}", session.getAttribute("mail"));
+        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
+        return "private/account";
+    }
+
+    @PostMapping("account/delete")
+    String delete(@Valid AccountDTO dto,
+                  BindingResult result,
+                  Model model,
+                  HttpServletRequest request) {
+        if (!result.hasErrors()) {
+            model.addAttribute("company", companyService.getAccountDeleteDto(companyService.getCompanyWithToken(request)));
+            return "private/deleteAccount";
+        }
         model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
         return "private/account";
     }

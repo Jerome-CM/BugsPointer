@@ -61,7 +61,10 @@
             </form>
         </section>
         <br>
-        <button class="delete" type="submit">Supprimer le compte</button>
+        <form class="account" action="#" th:action="@{/app/private/account/delete}" th:object="${company}" method="post">
+            <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
+            <button class="delete" type="submit">Supprimer le compte</button>
+        </form>
     </div>
 </body>
 </html>
