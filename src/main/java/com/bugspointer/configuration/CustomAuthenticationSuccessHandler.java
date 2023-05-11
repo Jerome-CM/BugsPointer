@@ -49,6 +49,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             }
             session.setAttribute("token", token);
             session.setAttribute("role", company.getRole());
+            session.setAttribute("mail", mail);
 
 
         }

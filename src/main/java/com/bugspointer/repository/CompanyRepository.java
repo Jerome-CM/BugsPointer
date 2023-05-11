@@ -13,7 +13,7 @@ public interface CompanyRepository extends CrudRepository<Company, Long> {
 
     Optional<Company> findByMail(String mail);
 
-    Optional<Company> findByCompanyName(String companyMail);
+    Optional<Company> findByCompanyName(String companyName);
 
     /*@Query(value="select * from company where public_key=:key",nativeQuery = true)
     Optional<Company> findByPublicKey(@Param("key") String publicKey);*/

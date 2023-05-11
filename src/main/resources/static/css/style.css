@@ -509,6 +509,75 @@ code{
     margin-bottom: 15px;
 }
 
+/* Account */
+.account {
+    width: 50%;
+}
+
+.account >h3 {
+    margin-bottom: 10px;
+}
+
+.account >input {
+    width: 90%;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.container-phone {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 92.5%;
+}
+
+.container-phone >input {
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#indicatif {
+    width: 15%;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#phoneNumber {
+    width: 80%;
+}
+
+.submit{
+    background-color: var(--color-orange);
+    color: var(--color-white);
+    width: 40%;
+    padding: 5px 10px;
+    margin: 15px auto;
+    border: none;
+    border-radius: 20px;
+    display: block;
+    text-transform: uppercase;
+    font-size: 18px;
+    box-shadow: 0 3px 8px #80808075;
+}
+
+.delete {
+    width: 30%;
+    background-color: var(--color-new-bug);
+    color: var(--color-white);
+    padding: 5px 10px;
+    margin: 15px auto;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
 /* Footer */
 
 
