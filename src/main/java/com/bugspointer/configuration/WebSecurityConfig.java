@@ -76,11 +76,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                .logoutSuccessUrl("/")
                .deleteCookies("JSESSIONID", "remember-me")
                .and()
-               .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-               .and()
-               .sessionManagement()
+               .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
+               //.and()
+               //.sessionManagement()
                // make sure we use stateless session; session won't be used to store user's state.
-               .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+               //.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Add a filter to validate the tokens with every request
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
