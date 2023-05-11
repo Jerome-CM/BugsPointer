@@ -1,5 +1,6 @@
 package com.bugspointer.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.ToString;
 
@@ -28,6 +29,9 @@ public class Company {
 
 
     private EnumPlan plan = EnumPlan.FREE;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date dateLineFacturePlan;
 
     @Column(unique = true)
     private String publicKey = null;

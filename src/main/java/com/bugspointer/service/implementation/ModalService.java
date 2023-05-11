@@ -5,6 +5,7 @@ import com.bugspointer.dto.ModalDTO;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.Company;
+import com.bugspointer.entity.EnumEtatBug;
 import com.bugspointer.repository.BugRepository;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.service.IModal;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,6 +74,8 @@ public class ModalService implements IModal {
             Bug bug = new Bug();
             bug.setUrl(dto.getUrl());
             bug.setDescription(dto.getDescription());
+            bug.setDateCreation(new Date());
+            bug.setEtatBug(EnumEtatBug.NEW);
             bug.setCompany(company);
             log.info("bug :  {}", bug);
             try {

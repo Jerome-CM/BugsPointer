@@ -41,7 +41,7 @@ public class Bug {
 
     @NotNull
     @Column(updatable = false)
-    private Date dateCreation;
+    private Date dateCreation = new Date();
 
     private Date dateView;
 
