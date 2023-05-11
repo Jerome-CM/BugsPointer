@@ -56,6 +56,14 @@ public class Private {
             Response response;
             if ("updateMail".equals(action)){
                 response = companyService.mailUpdate(dto);
+                if (response.getStatus().equals(EnumStatus.OK)) {
+                    model.addAttribute("notification", response.getMessage());
+                    HttpSession session = request.getSession();
+                    session.invalidate();
+                    return "redirect:/authentication";
+                } else {
+                    model.addAttribute("notification", response.getMessage());
+                }
             } else if ("updatePw".equals(action)){
                 response = companyService.passwordUpdate(dto);
             } else if ("updateSms".equals(action)){
@@ -65,12 +73,11 @@ public class Private {
             }
 
             if (response.getStatus().equals(EnumStatus.OK)) {
-                model.addAttribute("successMessage", "Votre e-mail a été mis à jour");
-                HttpSession session = request.getSession();
-                session.invalidate();
-                return "redirect:/authentication";
+                model.addAttribute("notification", response.getMessage());
+                model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
+                return "private/account";
             } else {
-                model.addAttribute("errorMessage", "Erreur lors de la mise à jour du mail");
+                model.addAttribute("notification", response.getMessage());
             }
         }
 

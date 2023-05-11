@@ -1,5 +1,6 @@
 package com.bugspointer.dto;
 
+import com.bugspointer.entity.EnumIndicatif;
 import lombok.Data;
 
 @Data
@@ -15,7 +16,7 @@ public class AccountDTO {
 
     private String confirmPassword;
 
-    private String indicatif;
+    private EnumIndicatif indicatif;
 
     private String phoneNumber;
 

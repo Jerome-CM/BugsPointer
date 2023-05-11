@@ -127,10 +127,8 @@ public class CompanyService implements ICompany {
 
     public AccountDTO getAccountDto(Company company) {
         log.info("AccountDTO : company : {}", company);
-        String indicatif = company.getIndicatif().getValeur();
         AccountDTO dto;
         dto = modelMapper.map(company, AccountDTO.class);
-        dto.setIndicatif(indicatif);
         log.info("AccountDTO : dto : {}", dto);
 
         return dto;
@@ -224,9 +222,11 @@ public class CompanyService implements ICompany {
                 return new Response(EnumStatus.ERROR, null, "PhoneNumber empty");
             } else {
                 if (dto.getPhoneNumber().length()==10 && (dto.getPhoneNumber().startsWith("06") || dto.getPhoneNumber().startsWith("07"))) {
-                    EnumIndicatif indicatif = EnumIndicatif.getByValeur(dto.getIndicatif());
+                    EnumIndicatif indicatif = dto.getIndicatif();
                     if (indicatif != null) {
                         company.setIndicatif(indicatif);
+                    } else {
+                        return new Response(EnumStatus.ERROR, null, "the code doesn't exist");
                     }
 
                     company.setPhoneNumber(dto.getPhoneNumber());

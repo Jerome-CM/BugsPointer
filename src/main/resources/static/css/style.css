@@ -543,6 +543,10 @@ code{
 
 #indicatif {
     width: 15%;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
 
 #phoneNumber {

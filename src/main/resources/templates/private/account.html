@@ -6,7 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link th:href="@{/../css/style.css}" rel="stylesheet" />
-    <title>Bugs Pointer - Account</title>
+    <title>Account</title>
 
 </head>
 <body>
@@ -41,7 +41,12 @@
             <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
                 <h3>SMS</h3>
                 <div class="container-phone">
-                    <input type="text" th:field="*{indicatif}" id="indicatif" th:value="${company.getIndicatif()}">
+                    <select th:field="*{indicatif}" id="indicatif">
+                        <option th:each="indicatif : ${T(com.bugspointer.entity.EnumIndicatif).values()}"
+                                th:value="${indicatif}"
+                                th:text="${indicatif.getValeur()}"
+                                th:selected="${indicatif == company.getIndicatif()}"></option>
+                    </select>
                     <input type="tel" th:field="*{phoneNumber}" id="phoneNumber" th:value="${company.getPhoneNumber()}" placeholder="Format : 06xxxxxxxx" pattern="[0-9]{10}">
                 </div>
                 <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
