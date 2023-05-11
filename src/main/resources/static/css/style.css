@@ -509,13 +509,13 @@ code{
     margin-bottom: 15px;
 }
 
-/* Account */
+/* Account*/
 .account {
     width: 50%;
     text-align: center;
 }
 
-.account >h3 {
+.account > h3 {
     margin-bottom: 10px;
 }
 
@@ -525,6 +525,9 @@ code{
     padding: 5px;
     margin-bottom: 5px;
     margin-top: 5px;
+    border:none;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
 }
 
 .container-phone {
@@ -533,13 +536,16 @@ code{
     justify-content: space-between;
     align-items: center;
     width: 92.5%;
+
 }
 
-.container-phone >input {
+.container-phone > input,select {
     text-align: center;
     padding: 5px;
-    margin-bottom: 5px;
-    margin-top: 5px;
+    margin: 5px auto;
+    border:none;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
 }
 
 #indicatif {
@@ -557,27 +563,40 @@ code{
 .submit{
     background-color: var(--color-orange);
     color: var(--color-white);
-    width: 40%;
+    width: fit-content;
     padding: 5px 10px;
-    margin: 15px auto;
+    margin-top: 15px;
     border: none;
-    border-radius: 20px;
+    border-radius: var(--radius);
     display: block;
     text-transform: uppercase;
     font-size: 18px;
-    box-shadow: 0 3px 8px #80808075;
+    box-shadow: var(--shadow);
+}
+
+.align_in_container_row{
+    position: relative;
+    top: -6px;
+}
+
+.submit img{
+    width: 30px;
+    height: 30px;
+    position: relative;
+    top: 2px;
 }
 
 .delete {
-    width: 60%;
-    align-items: center;
+
+    width: fit-content;
     background-color: var(--color-new-bug);
     color: var(--color-white);
     padding: 5px 10px;
     margin: 15px auto;
     border: none;
-    border-radius: 5px;
+    border-radius: var(--radius);
     font-size: 18px;
+    align-items: center;
 }
 
 .cancel {

@@ -19,19 +19,22 @@
         <section>
             <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
                 <h3>E-mail</h3>
-                <input type="text" th:field="*{mail}" id="mail" name="mail" th:value="${company.getMail()}">
+                <input type="text" th:field="*{mail}" id="mail" name="mail" th:value="${company.getMail()}" placeholder="E-mail">
                 <input type="password" th:field="*{password}" id="password" name="password" placeholder="Password">
                 <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
-                <button type="submit" class="submit" name="action" value="updateMail">Update</button>
+                <div class="container-row">
+                    <button type="submit" class="submit" name="action" value="updateMail">Update</button> <span>&nbsp; | &nbsp;</span>
+                    <a class="submit align_in_container_row" th:href="@{/app/private/notifications}"><img th:src="@{/css/img/notification.png}" alt="Notification"></a>
+                </div>
             </form>
         </section>
 
         <section>
             <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
-                <h3>Mot de passe</h3>
-                <input type="password" th:field="*{password}" id="actualPassword" placeholder="Mot de passe actuel">
-                <input type="password" th:field="*{newPassword}" id="newPassword" placeholder="Nouveau mot de passe">
-                <input type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmation du nouveau mot de passe">
+                <h3>Password</h3>
+                <input type="password" th:field="*{password}" id="actualPassword" placeholder="Actual password">
+                <input type="password" th:field="*{newPassword}" id="newPassword" placeholder="New password">
+                <input type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirme new password">
                 <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
                 <button type="submit" class="submit" name="action" value="updatePw">Update</button>
             </form>
@@ -50,8 +53,19 @@
                     <input type="tel" th:field="*{phoneNumber}" id="phoneNumber" th:value="${company.getPhoneNumber()}" placeholder="Format : 06xxxxxxxx" pattern="[0-9]{10}">
                 </div>
                 <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
-                <button type="submit" class="submit" name="action" value="updateSms">Update</button>
+                <div class="container-row">
+                    <button type="submit" class="submit" name="action" value="updateSms">Update</button><span>&nbsp; | &nbsp;</span>
+                    <a class="submit align_in_container_row" th:href="@{/app/private/notifications}"><img th:src="@{/css/img/notification.png}" alt="Notification"></a>
+                </div>
             </form>
+        </section>
+
+        <section>
+            <div class="cards account">
+                <h3>Type of plan</h3>
+                <span>Free</span>
+                <a class="submit" th:href="@{/features}">Change</a>
+            </div>
         </section>
 
         <section>
@@ -66,5 +80,7 @@
             <button class="delete" type="submit">Supprimer le compte</button>
         </form>
     </div>
+
+    <div th:replace="~{include/footer.html}"></div>
 </body>
 </html>
