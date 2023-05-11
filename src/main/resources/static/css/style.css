@@ -573,6 +573,18 @@ code{
     box-shadow: var(--shadow);
 }
 
+.align_in_container_row{
+    position: relative;
+    top: -6px;
+}
+
+.submit img{
+    width: 30px;
+    height: 30px;
+    position: relative;
+    top: 2px;
+}
+
 .delete {
     width: fit-content;
     background-color: var(--color-new-bug);

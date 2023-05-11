@@ -22,7 +22,10 @@
                 <input type="text" th:field="*{mail}" id="mail" name="mail" th:value="${company.getMail()}" placeholder="E-mail">
                 <input type="password" th:field="*{password}" id="password" name="password" placeholder="Password">
                 <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
-                <button type="submit" class="submit" name="action" value="updateMail">Update</button>
+                <div class="container-row">
+                    <button type="submit" class="submit" name="action" value="updateMail">Update</button> <span>&nbsp; | &nbsp;</span>
+                    <a class="submit align_in_container_row" th:href="@{/app/private/notifications}"><img th:src="@{/css/img/notification.png}" alt="Notification"></a>
+                </div>
             </form>
         </section>
 
@@ -50,7 +53,10 @@
                     <input type="tel" th:field="*{phoneNumber}" id="phoneNumber" th:value="${company.getPhoneNumber()}" placeholder="Format : 06xxxxxxxx" pattern="[0-9]{10}">
                 </div>
                 <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
-                <button type="submit" class="submit" name="action" value="updateSms">Update</button>
+                <div class="container-row">
+                    <button type="submit" class="submit" name="action" value="updateSms">Update</button><span>&nbsp; | &nbsp;</span>
+                    <a class="submit align_in_container_row" th:href="@{/app/private/notifications}"><img th:src="@{/css/img/notification.png}" alt="Notification"></a>
+                </div>
             </form>
         </section>
 
