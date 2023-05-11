@@ -197,6 +197,7 @@ public class CompanyService implements ICompany {
                         log.info("company modified :  {}", company);
                         return companyTryRegistration(company);
                     } else {
+                        log.info("Password not identical");
                         return new Response(EnumStatus.ERROR, null, "Password not identical");
                     }
                 } else {

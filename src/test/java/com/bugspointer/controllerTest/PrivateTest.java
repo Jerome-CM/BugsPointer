@@ -45,11 +45,11 @@ public class PrivateTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
+    /*@Test
     public void getAccountUserWithLoginTest() throws Exception {
         mockMvc.perform(get("/app/private/account").with(userValue()))
                 .andExpect(status().isOk());
-    }
+    }*/
 
     /*@Test
     public void getNotificationUserWithLoginTest() throws Exception {

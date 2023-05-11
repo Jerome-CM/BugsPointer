@@ -26,4 +26,9 @@ public class Home {
         return "public/documentations";
     }
 
+    @GetMapping("modal")
+    String getModalForTest(){
+        return "download/modal";
+    }
+
 }
