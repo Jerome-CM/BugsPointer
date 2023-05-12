@@ -600,7 +600,7 @@ code{
 }
 
 .cancel {
-    width: 60%;
+    width: fit-content;
     align-items: center;
     background-color: var(--color-grey-footer);
     color: var(--color-white);
