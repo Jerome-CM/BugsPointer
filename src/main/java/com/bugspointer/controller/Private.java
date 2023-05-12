@@ -1,9 +1,7 @@
 package com.bugspointer.controller;
 
-import com.bugspointer.dto.AccountDTO;
-import com.bugspointer.dto.AccountDeleteDTO;
-import com.bugspointer.dto.EnumStatus;
-import com.bugspointer.dto.Response;
+import com.bugspointer.dto.*;
+import com.bugspointer.service.implementation.CompanyPreferencesService;
 import com.bugspointer.service.implementation.CompanyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -24,8 +22,11 @@ public class Private {
 
     private final CompanyService companyService;
 
-    public Private(CompanyService companyService) {
+    private final CompanyPreferencesService preferencesService;
+
+    public Private(CompanyService companyService, CompanyPreferencesService preferencesService) {
         this.companyService = companyService;
+        this.preferencesService = preferencesService;
     }
 
     @GetMapping("invoices")
@@ -34,8 +35,28 @@ public class Private {
     }
 
     @GetMapping("notifications")
-    String getNotifications(){
+    String getNotifications(Model model, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        log.info("session mail : {}", session.getAttribute("mail"));
+        model.addAttribute("company", preferencesService.getCompanyPreferenceDTO(companyService.getCompanyWithToken(request)));
         return "private/notifications";
+    }
+
+    @PostMapping("notifications")
+    String updateNotifications(@Valid CompanyPreferenceDTO dto, BindingResult result, Model model, HttpServletRequest request){
+        String action = request.getParameter("action");
+        log.info("buttonName : {}", action);
+        if (!result.hasErrors()) {
+            Response response = preferencesService.updatePreference(dto, action);
+            if (response.getStatus().equals(EnumStatus.OK)) {
+                model.addAttribute("notification", response.getMessage());
+                return "redirect:notifications";
+            } else {
+                model.addAttribute("notification", response.getMessage());
+            }
+        }
+        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
+        return "redirect:/private/account";
     }
 
     @GetMapping("account/delete")
@@ -72,8 +93,7 @@ public class Private {
     }
 
     @PostMapping("account/delete")
-    String delete(@Valid AccountDTO dto,
-                  BindingResult result,
+    String delete(BindingResult result,
                   Model model,
                   HttpServletRequest request) {
         if (!result.hasErrors()) {

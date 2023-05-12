@@ -11,9 +11,39 @@
 </head>
 <body>
 
-<div th:replace="~{include/navCompany.html}"></div>
+  <div th:replace="~{include/navCompany.html}"></div>
 
-<h1>Notifications</h1>
+  <h1>Notifications</h1>
+
+  <div class="container">
+      <section>
+        <form class="cards account" action="#" th:action="@{/app/private/notifications}" th:object="${company}" method="post">
+            <h4>E-mail</h4>
+            <label for="mailNewBug">New bug</label>
+            <input type="checkbox" th:field="*{mailNewBug}" id="mailNewBug" th:value="${company.isMailNewBug()}">
+            <label for="mailInactivity">Inactivity</label>
+            <input type="checkbox" th:field="*{mailInactivity}" id="mailInactivity" th:value="${company.isMailInactivity()}">
+            <label for="mailNewFeature">New feature</label>
+            <input type="checkbox" th:field="*{mailNewFeature}" id="mailNewFeature" th:value="${company.isMailNewFeature()}">
+            <input type="hidden" th:field="*{companyPublicKey}" th:value="${company.getCompanyPublicKey()}" readonly>
+            <button type="submit" class="submit" name="action" value="updateMail">Update</button>
+        </form>
+      </section>
+
+      <section>
+          <form class="cards account" action="#" th:action="@{/app/private/notifications}" th:object="${company}" method="post">
+              <h4>SMS</h4>
+              <label for="smsNewBug">New bug</label>
+              <input type="checkbox" th:field="*{smsNewBug}" id="smsNewBug" th:value="${company.isSmsNewBug()}">
+              <label for="smsInactivity">Inactivity</label>
+              <input type="checkbox" th:field="*{smsInactivity}" id="smsInactivity" th:value="${company.isSmsInactivity()}">
+              <label for="smsNewFeature">New feature</label>
+              <input type="checkbox" th:field="*{smsNewFeature}" id="smsNewFeature" th:value="${company.isSmsNewFeature()}">
+              <input type="hidden" th:field="*{companyPublicKey}" th:value="${company.getCompanyPublicKey()}" readonly>
+              <button type="submit" class="submit" name="action" value="updateSms">Update</button>
+          </form>
+      </section>
+  </div>
 
 </body>
 </html>
