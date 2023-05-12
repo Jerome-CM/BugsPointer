@@ -149,6 +149,26 @@ public class CompanyService implements ICompany {
         return dto;
     }
 
+    public DashboardDTO getDashboardDto(Company company) {
+        log.info("DashboardDTO : company : {}", company);
+        DashboardDTO dto;
+        dto = modelMapper.map(company, DashboardDTO.class);
+        int nbNewBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.NEW).size();
+        int nbPendingBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.PENDING).size();
+        int nbSolvedBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.SOLVED).size();
+        int nbIgnoredBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.IGNORED).size();
+        log.info("nbNewBug : {}", nbNewBug);
+        log.info("nbPendingBug : {}", nbPendingBug);
+        log.info("nbSolvedBug : {}", nbSolvedBug);
+        log.info("nbIgnoredBug : {}", nbIgnoredBug);
+        dto.setNbNewBug(nbNewBug);
+        dto.setNbPendingBug(nbPendingBug);
+        dto.setNbSolvedBug(nbSolvedBug);
+        dto.setNbIgnoredBug(nbIgnoredBug);
+
+        return dto;
+    }
+
     public Response mailUpdate(AccountDTO dto) {
         log.info("mailUpdate");
         log.info("dto : {}", dto);
