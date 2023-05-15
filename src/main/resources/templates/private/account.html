@@ -63,7 +63,7 @@
         <section>
             <div class="cards account">
                 <h3>Type of plan</h3>
-                <span>Free</span>
+                <span th:text="${company.getPlan()}"></span>
                 <a class="submit" th:href="@{/features}">Change</a>
             </div>
         </section>

@@ -93,7 +93,8 @@ public class Private {
     }
 
     @PostMapping("account/delete")
-    String delete(BindingResult result,
+    String delete(@Valid AccountDTO dto,
+                  BindingResult result,
                   Model model,
                   HttpServletRequest request) {
         if (!result.hasErrors()) {

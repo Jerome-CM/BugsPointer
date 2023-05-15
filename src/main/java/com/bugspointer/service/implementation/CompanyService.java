@@ -1,10 +1,7 @@
 package com.bugspointer.service.implementation;
 
 import com.bugspointer.dto.*;
-import com.bugspointer.entity.Company;
-import com.bugspointer.entity.CompanyPreferences;
-import com.bugspointer.entity.EnumEtatBug;
-import com.bugspointer.entity.EnumIndicatif;
+import com.bugspointer.entity.*;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
 import com.bugspointer.repository.BugRepository;
 import com.bugspointer.repository.CompanyPreferencesRepository;
@@ -164,6 +161,9 @@ public class CompanyService implements ICompany {
         log.info("DashboardDTO : company : {}", company);
         DashboardDTO dto;
         dto = modelMapper.map(company, DashboardDTO.class);
+        if (company.getPlan().equals(EnumPlan.FREE)){
+            return dto;
+        }
         int nbNewBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.NEW).size();
         int nbPendingBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.PENDING).size();
         int nbSolvedBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.SOLVED).size();
@@ -266,7 +266,7 @@ public class CompanyService implements ICompany {
             log.info("Company : {}", company);
 
             if (dto.getPhoneNumber().isEmpty()){
-                company.setPhoneNumber("");
+                company.setPhoneNumber(null);
                 Optional<CompanyPreferences> preferencesOptional = preferencesRepository.findByCompany_PublicKey(dto.getPublicKey());
                 CompanyPreferences preferences = new CompanyPreferences();
                 if (preferencesOptional.isPresent()) {

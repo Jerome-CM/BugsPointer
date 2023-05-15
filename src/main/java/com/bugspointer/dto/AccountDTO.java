@@ -1,6 +1,7 @@
 package com.bugspointer.dto;
 
 import com.bugspointer.entity.EnumIndicatif;
+import com.bugspointer.entity.EnumPlan;
 import lombok.Data;
 
 @Data
@@ -21,4 +22,6 @@ public class AccountDTO {
     private String phoneNumber;
 
     private String publicKey;
+
+    private EnumPlan plan;
 }
