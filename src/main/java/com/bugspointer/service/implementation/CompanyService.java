@@ -1,12 +1,11 @@
 package com.bugspointer.service.implementation;
 
-import com.bugspointer.dto.AccountDTO;
-import com.bugspointer.dto.AuthRegisterCompanyDTO;
-import com.bugspointer.dto.EnumStatus;
-import com.bugspointer.dto.Response;
+import com.bugspointer.dto.*;
 import com.bugspointer.entity.Company;
+import com.bugspointer.entity.EnumEtatBug;
 import com.bugspointer.entity.EnumIndicatif;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
+import com.bugspointer.repository.BugRepository;
 import com.bugspointer.service.ICompany;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.utility.Utility;
@@ -24,6 +23,7 @@ import java.util.Optional;
 public class CompanyService implements ICompany {
 
     private final CompanyRepository companyRepository;
+    private final BugRepository bugRepository;
 
     private final Utility utility;
     private final PasswordEncoder passwordEncoder;
@@ -32,8 +32,9 @@ public class CompanyService implements ICompany {
 
     private final ModelMapper modelMapper;
 
-    public CompanyService(CompanyRepository companyRepository, Utility utility, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ModelMapper modelMapper) {
+    public CompanyService(CompanyRepository companyRepository, BugRepository bugRepository, Utility utility, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ModelMapper modelMapper) {
         this.companyRepository = companyRepository;
+        this.bugRepository = bugRepository;
         this.utility = utility;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -134,6 +135,20 @@ public class CompanyService implements ICompany {
         return dto;
     }
 
+    public AccountDeleteDTO getAccountDeleteDto(Company company) {
+        log.info("AccountDeleteDTO : company : {}", company);
+        AccountDeleteDTO dto;
+        dto = modelMapper.map(company, AccountDeleteDTO.class);
+        int nbNewBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.NEW).size();
+        int nbPendingBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.PENDING).size();
+        log.info("nbNewBug : {}", nbNewBug);
+        log.info("nbPendingBug : {}", nbNewBug);
+        dto.setNbNewBug(nbNewBug);
+        dto.setNbPendingBug(nbPendingBug);
+
+        return dto;
+    }
+
     public Response mailUpdate(AccountDTO dto) {
         log.info("mailUpdate");
         log.info("dto : {}", dto);
@@ -172,7 +187,7 @@ public class CompanyService implements ICompany {
             company.setMail(dto.getMail());
             log.info("Company mail update : {}", company);
 
-            return companyTryRegistration(company);
+            return companyTryRegistration(company, "Mail updated");
         }
 
         return new Response(EnumStatus.ERROR, null, "Error in the process");
@@ -195,7 +210,7 @@ public class CompanyService implements ICompany {
                     if (dto.getNewPassword().equals(dto.getConfirmPassword())){
                         company.setPassword(passwordEncoder.encode(dto.getNewPassword()));
                         log.info("company modified :  {}", company);
-                        return companyTryRegistration(company);
+                        return companyTryRegistration(company, "Password updated");
                     } else {
                         log.info("Password not identical");
                         return new Response(EnumStatus.ERROR, null, "Password not identical");
@@ -231,7 +246,7 @@ public class CompanyService implements ICompany {
                     }
 
                     company.setPhoneNumber(dto.getPhoneNumber());
-                    return companyTryRegistration(company);
+                    return companyTryRegistration(company, "Phone number updated");
                 } else {
                     return new Response(EnumStatus.ERROR, null, "It's not a phone number");
                 }
@@ -241,15 +256,41 @@ public class CompanyService implements ICompany {
         return new Response(EnumStatus.ERROR, null, "Error in the process");
     }
 
-    private Response companyTryRegistration(Company company) {
+    private Response companyTryRegistration(Company company, String message) {
         try {
             Company savedCompany = companyRepository.save(company);
             log.info("Company update :  {}", savedCompany);
-            return new Response(EnumStatus.OK, null, "Update ok");
+            return new Response(EnumStatus.OK, null, message);
         }
         catch (Exception e){
             log.error("Error :  {}", e.getMessage());
             return new Response(EnumStatus.ERROR, null, "Error in update");
         }
+    }
+
+    public Response delete(AccountDeleteDTO dto){
+        log.info("delete Account");
+        log.info("dto : {}", dto);
+
+        Optional<Company> companyOptional=companyRepository.findByPublicKey(dto.getPublicKey());
+        Company company;
+        if (companyOptional.isPresent()){
+            company = companyOptional.get();
+            log.info("Company : {}", company);
+
+            if (dto.getPassword().isEmpty()){
+                return new Response(EnumStatus.ERROR, null, "Password empty");
+            } else {
+                if (passwordEncoder.matches(dto.getPassword(), company.getPassword())){
+                    company.setEnable(false);
+                    log.info("company at modify");
+                    return companyTryRegistration(company, "Company disabled");
+                } else {
+                    return new Response(EnumStatus.ERROR, null, "Wrong password");
+                }
+            }
+        }
+
+        return new Response(EnumStatus.ERROR, null, "Error in the process");
     }
 }

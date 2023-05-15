@@ -512,6 +512,7 @@ code{
 /* Account*/
 .account {
     width: 50%;
+    text-align: center;
 }
 
 .account > h3 {
@@ -586,6 +587,7 @@ code{
 }
 
 .delete {
+
     width: fit-content;
     background-color: var(--color-new-bug);
     color: var(--color-white);
@@ -594,6 +596,27 @@ code{
     border: none;
     border-radius: var(--radius);
     font-size: 18px;
+    align-items: center;
+}
+
+.cancel {
+    width: 60%;
+    align-items: center;
+    background-color: var(--color-grey-footer);
+    color: var(--color-white);
+    padding: 5px 10px;
+    margin: 15px auto;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+.account_delete {
+    text-align: center;
+}
+
+.bug {
+    width: 90%;
 }
 
 /* Footer */
