@@ -16,7 +16,7 @@
     <h1>Delete Account</h1>
 
     <div class="container">
-        <section class="account_delete">
+        <section>
             <form action="#" th:action="@{/app/private/account/delete/confirm}" th:object="${company}" method="post">
                 <div class="cards account">
                     <h3>E-mail</h3>
@@ -35,7 +35,7 @@
                         <h3>Pending Bug</h3>
                     </div>
                     <br>
-                    <span th:if="*{dateLineFacturePlan != null}">
+                    <span class="account" th:if="*{dateLineFacturePlan != null}">
                         <h3>Plan valid through</h3>
                         <input type="text" th:field="*{dateLineFacturePlan}" id="dateLineFacturePlan" th:value="${company.getDateLineFacturePlan()}" readonly>
                     </span>
