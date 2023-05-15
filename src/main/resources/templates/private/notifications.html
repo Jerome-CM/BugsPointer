@@ -11,9 +11,52 @@
 </head>
 <body>
 
-<div th:replace="~{include/navCompany.html}"></div>
+  <div th:replace="~{include/navCompany.html}"></div>
 
-<h1>Notifications</h1>
+  <h1>Notifications</h1>
+
+  <div class="container">
+      <section>
+        <form class="cards account" action="#" th:action="@{/app/private/notifications}" th:object="${company}" method="post">
+            <h4>E-mail</h4>
+            <div class="container-row notifications">
+                <label for="mailNewBug" class="lab-notifications">New bug</label>
+                <input type="checkbox" class="cb-notifications" th:field="*{mailNewBug}" id="mailNewBug" th:value="${company.isMailNewBug()}">
+            </div>
+            <div class="container-row notifications">
+                <label for="mailInactivity" class="lab-notifications">Inactivity</label>
+                <input type="checkbox" class="cb-notifications" th:field="*{mailInactivity}" id="mailInactivity" th:value="${company.isMailInactivity()}">
+            </div>
+            <div class="container-row notifications">
+                <label for="mailNewFeature" class="lab-notifications">New feature</label>
+                <input type="checkbox" class="cb-notifications" th:field="*{mailNewFeature}" id="mailNewFeature" th:value="${company.isMailNewFeature()}">
+            </div>
+            <input type="hidden" th:field="*{companyPublicKey}" th:value="${company.getCompanyPublicKey()}" readonly>
+            <button type="submit" class="submit" name="action" value="updateMail">Update</button>
+        </form>
+      </section>
+
+      <section th:if="${company.getCompanyPhoneNumber() != null}">
+          <form class="cards account" action="#" th:action="@{/app/private/notifications}" th:object="${company}" method="post">
+              <h4>SMS</h4>
+              <div class="container-row notifications">
+                  <label for="smsNewBug" class="lab-notifications">New bug</label>
+                  <input type="checkbox" class="cb-notifications" th:field="*{smsNewBug}" id="smsNewBug" th:value="${company.isSmsNewBug()}">
+              </div>
+              <div class="container-row notifications">
+                  <label for="smsInactivity" class="lab-notifications">Inactivity</label>
+                  <input type="checkbox" class="cb-notifications" th:field="*{smsInactivity}" id="smsInactivity" th:value="${company.isSmsInactivity()}">
+              </div>
+              <div class="container-row notifications">
+                  <label for="smsNewFeature" class="lab-notifications">New feature</label>
+                  <input type="checkbox" class="cb-notifications" th:field="*{smsNewFeature}" id="smsNewFeature" th:value="${company.isSmsNewFeature()}">
+              </div>
+              <input type="hidden" id="phone" th:field="*{companyPhoneNumber}" th:value="${company.getCompanyPhoneNumber()}">
+              <input type="hidden" th:field="*{companyPublicKey}" th:value="${company.getCompanyPublicKey()}" readonly>
+              <button type="submit" class="submit" name="action" value="updateSms">Update</button>
+          </form>
+      </section>
+  </div>
 
 </body>
 </html>

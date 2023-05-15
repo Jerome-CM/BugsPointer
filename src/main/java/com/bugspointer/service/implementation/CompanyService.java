@@ -1,11 +1,10 @@
 package com.bugspointer.service.implementation;
 
 import com.bugspointer.dto.*;
-import com.bugspointer.entity.Company;
-import com.bugspointer.entity.EnumEtatBug;
-import com.bugspointer.entity.EnumIndicatif;
+import com.bugspointer.entity.*;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
 import com.bugspointer.repository.BugRepository;
+import com.bugspointer.repository.CompanyPreferencesRepository;
 import com.bugspointer.service.ICompany;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.utility.Utility;
@@ -24,6 +23,7 @@ public class CompanyService implements ICompany {
 
     private final CompanyRepository companyRepository;
     private final BugRepository bugRepository;
+    private final CompanyPreferencesRepository preferencesRepository;
 
     private final Utility utility;
     private final PasswordEncoder passwordEncoder;
@@ -32,9 +32,10 @@ public class CompanyService implements ICompany {
 
     private final ModelMapper modelMapper;
 
-    public CompanyService(CompanyRepository companyRepository, BugRepository bugRepository, Utility utility, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ModelMapper modelMapper) {
+    public CompanyService(CompanyRepository companyRepository, BugRepository bugRepository, CompanyPreferencesRepository preferencesRepository, Utility utility, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ModelMapper modelMapper) {
         this.companyRepository = companyRepository;
         this.bugRepository = bugRepository;
+        this.preferencesRepository = preferencesRepository;
         this.utility = utility;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -98,9 +99,16 @@ public class CompanyService implements ICompany {
             company.setPassword(passwordEncoder.encode(dto.getPassword()));
             company.setPublicKey(createPublicKey());
             log.info("company :  {}", company);
+            CompanyPreferences preferences = new CompanyPreferences();
+            preferences.setCompany(company);
+            preferences.setMailNewBug(true);
+            preferences.setMailInactivity(true);
+            log.info("company preferences : {}", preferences);
             try {
                 Company savedCompany = companyRepository.save(company);
                 log.info("Company saved :  {}", savedCompany);
+                CompanyPreferences savedPreferences = preferencesRepository.save(preferences);
+                log.info("Company preferences saved : {}", savedPreferences);
                 return new Response(EnumStatus.OK, null, "Register successfully - Please login");
             }
             catch (Exception e){
@@ -145,6 +153,29 @@ public class CompanyService implements ICompany {
         log.info("nbPendingBug : {}", nbNewBug);
         dto.setNbNewBug(nbNewBug);
         dto.setNbPendingBug(nbPendingBug);
+
+        return dto;
+    }
+
+    public DashboardDTO getDashboardDto(Company company) {
+        log.info("DashboardDTO : company : {}", company);
+        DashboardDTO dto;
+        dto = modelMapper.map(company, DashboardDTO.class);
+        if (company.getPlan().equals(EnumPlan.FREE)){
+            return dto;
+        }
+        int nbNewBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.NEW).size();
+        int nbPendingBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.PENDING).size();
+        int nbSolvedBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.SOLVED).size();
+        int nbIgnoredBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.IGNORED).size();
+        log.info("nbNewBug : {}", nbNewBug);
+        log.info("nbPendingBug : {}", nbPendingBug);
+        log.info("nbSolvedBug : {}", nbSolvedBug);
+        log.info("nbIgnoredBug : {}", nbIgnoredBug);
+        dto.setNbNewBug(nbNewBug);
+        dto.setNbPendingBug(nbPendingBug);
+        dto.setNbSolvedBug(nbSolvedBug);
+        dto.setNbIgnoredBug(nbIgnoredBug);
 
         return dto;
     }
@@ -235,7 +266,30 @@ public class CompanyService implements ICompany {
             log.info("Company : {}", company);
 
             if (dto.getPhoneNumber().isEmpty()){
-                return new Response(EnumStatus.ERROR, null, "PhoneNumber empty");
+                company.setPhoneNumber(null);
+                Optional<CompanyPreferences> preferencesOptional = preferencesRepository.findByCompany_PublicKey(dto.getPublicKey());
+                CompanyPreferences preferences = new CompanyPreferences();
+                if (preferencesOptional.isPresent()) {
+                    preferences = preferencesOptional.get();
+                } else {
+                    preferences.setCompany(company);
+                    preferences.setMailNewBug(true);
+                }
+                preferences.setSmsInactivity(false);
+                preferences.setSmsNewBug(false);
+                preferences.setSmsNewFeature(false);
+
+                try {
+                    Company savedCompany = companyRepository.save(company);
+                    log.info("Company update :  {}", savedCompany);
+                    CompanyPreferences savedPreference = preferencesRepository.save(preferences);
+                    log.info("Company preferences saved : {}", savedPreference);
+                    return new Response(EnumStatus.OK, null, "Phone number delete");
+                }
+                catch (Exception e){
+                    log.error("Error :  {}", e.getMessage());
+                    return new Response(EnumStatus.ERROR, null, "Error in update");
+                }
             } else {
                 if (dto.getPhoneNumber().length()==10 && (dto.getPhoneNumber().startsWith("06") || dto.getPhoneNumber().startsWith("07"))) {
                     EnumIndicatif indicatif = dto.getIndicatif();

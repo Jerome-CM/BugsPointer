@@ -383,6 +383,10 @@ img {
     font-family: "Inter", sans-serif;
 }
 
+.bug {
+    width: 90%;
+}
+
 .new{
     background-color: var(--color-new-bug);
 }
@@ -510,6 +514,7 @@ code{
 }
 
 /* Account*/
+
 .account {
     width: 50%;
     text-align: center;
@@ -600,7 +605,7 @@ code{
 }
 
 .cancel {
-    width: 60%;
+    width: fit-content;
     align-items: center;
     background-color: var(--color-grey-footer);
     color: var(--color-white);
@@ -615,8 +620,20 @@ code{
     text-align: center;
 }
 
-.bug {
-    width: 90%;
+/* Notifications */
+
+.notifications{
+    width: 100%;
+    align-items: center;
+}
+
+.cb-notifications {
+    width: 5%;
+}
+
+.lab-notifications {
+    width: 80%;
+    text-align: left;
 }
 
 /* Footer */

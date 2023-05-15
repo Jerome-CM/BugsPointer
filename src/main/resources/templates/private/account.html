@@ -6,7 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link th:href="@{/../css/style.css}" rel="stylesheet" />
-    <title>Account</title>
+    <title>Notifications</title>
 
 </head>
 <body>
@@ -35,7 +35,7 @@
                 <input type="password" th:field="*{password}" id="actualPassword" placeholder="Actual password">
                 <input type="password" th:field="*{newPassword}" id="newPassword" placeholder="New password">
                 <input type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirme new password">
-                <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
+                <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}" readonly>
                 <button type="submit" class="submit" name="action" value="updatePw">Update</button>
             </form>
         </section>
@@ -63,7 +63,7 @@
         <section>
             <div class="cards account">
                 <h3>Type of plan</h3>
-                <span>Free</span>
+                <span th:text="${company.getPlan()}"></span>
                 <a class="submit" th:href="@{/features}">Change</a>
             </div>
         </section>

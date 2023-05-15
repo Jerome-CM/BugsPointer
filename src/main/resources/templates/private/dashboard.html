@@ -16,24 +16,24 @@
     <h1>My Dashboard</h1>
 
     <div class="container">
-        <section>
+        <section th:name="sectionBugDashboard" th:object="${company}" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}">
             <h2 style="text-align: center">Report section</h2>
             <hr>
             <div class="container-row">
                 <a th:href="@{/app/private/newBugList}" class="cards">
-                    <span class="number_cards new">2</span>
+                    <span class="number_cards new" th:field="*{nbNewBug}" id="nbNewBug" th:text="${company.getNbNewBug()}"></span>
                     <h3>New bug</h3>
                 </a>
                 <a th:href="@{/app/private/pendingBugList}" class="cards">
-                    <span class="number_cards pending">2</span>
+                    <span class="number_cards pending" th:field="*{nbPendingBug}" id="nbPendingBug" th:text="${company.getNbPendingBug()}"></span>
                     <h3>Pending bug</h3>
                 </a>
                 <a th:href="@{/app/private/solvedBugList}" class="cards">
-                    <span class="number_cards solved">18</span>
+                    <span class="number_cards solved" th:field="*{nbSolvedBug}" id="nbSolvedBug" th:text="${company.getNbSolvedBug()}"></span>
                     <h3>Solved bug</h3>
                 </a>
                 <a th:href="@{/app/private/solvedBugList}" class="cards">
-                    <span class="number_cards ignored">1</span>
+                    <span class="number_cards ignored" th:field="*{nbIgnoredBug}" id="nbIgnoredBug" th:text="${company.getNbIgnoredBug()}">1</span>
                     <h3>Ignored bug</h3>
                 </a>
             </div>
@@ -44,7 +44,7 @@
             <h2 style="text-align: center">Parameters</h2>
             <hr>
             <div class="container-row">
-                <a th:href="@{/app/private/invoices}" class="cards"><h3>Invoices</h3></a>
+                <a th:href="@{/app/private/invoices}" class="cards" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}"><h3>Invoices</h3></a>
                 <a th:href="@{/app/private/notifications}" class="cards"><h3>Notifications</h3></a>
                 <a th:href="@{/app/private/account}" class="cards"><h3>Account</h3></a>
             </div>

@@ -1,22 +1,21 @@
 package com.bugspointer.service;
 
-import com.bugspointer.dto.AccountDTO;
-import com.bugspointer.dto.AccountDeleteDTO;
-import com.bugspointer.dto.AuthRegisterCompanyDTO;
-import com.bugspointer.dto.Response;
+import com.bugspointer.dto.*;
 import com.bugspointer.entity.Company;
 
 import javax.servlet.http.HttpServletRequest;
 
 public interface ICompany {
 
-    public Company getCompanyByMail(String mail);
-    public String createPublicKey();
-    public Response saveCompany(AuthRegisterCompanyDTO dto);
-    public Company getCompanyWithToken(HttpServletRequest request);
-    public AccountDTO getAccountDto(Company company);
-    public Response mailUpdate(AccountDTO dto);
-    public Response passwordUpdate(AccountDTO dto);
-    public Response smsUpdate(AccountDTO dto);
-    public Response delete(AccountDeleteDTO dto);
+    Company getCompanyByMail(String mail);
+    String createPublicKey();
+    Response saveCompany(AuthRegisterCompanyDTO dto);
+    Company getCompanyWithToken(HttpServletRequest request);
+    AccountDTO getAccountDto(Company company);
+    AccountDeleteDTO getAccountDeleteDto(Company company);
+    DashboardDTO getDashboardDto(Company company);
+    Response mailUpdate(AccountDTO dto);
+    Response passwordUpdate(AccountDTO dto);
+    Response smsUpdate(AccountDTO dto);
+    Response delete(AccountDeleteDTO dto);
 }
