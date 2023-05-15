@@ -56,9 +56,15 @@ public class CompanyPreferencesService implements ICompanyPreferences {
                 preferences.setMailInactivity(dto.isMailInactivity());
                 preferences.setMailNewFeature(dto.isMailNewFeature());
             } else if (action.equals("updateSms")) {
-                preferences.setSmsNewBug(dto.isSmsNewBug());
-                preferences.setSmsInactivity(dto.isSmsInactivity());
-                preferences.setSmsNewFeature(dto.isSmsNewFeature());
+                if (dto.getCompanyPhoneNumber().isEmpty()){
+                    preferences.setSmsNewBug(false);
+                    preferences.setSmsInactivity(false);
+                    preferences.setSmsNewFeature(false);
+                } else {
+                    preferences.setSmsNewBug(dto.isSmsNewBug());
+                    preferences.setSmsInactivity(dto.isSmsInactivity());
+                    preferences.setSmsNewFeature(dto.isSmsNewFeature());
+                }
             } else {
                 return new Response(EnumStatus.ERROR, null, "Error to click on button");
             }

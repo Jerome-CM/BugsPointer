@@ -56,7 +56,7 @@ public class Private {
             }
         }
         model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
-        return "redirect:/private/account";
+        return "redirect:account";
     }
 
     @GetMapping("account/delete")
