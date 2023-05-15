@@ -4,6 +4,7 @@ import com.bugspointer.dto.AccountDTO;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.service.implementation.CompanyService;
+import com.bugspointer.service.implementation.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,8 +24,11 @@ public class Private {
 
     private final CompanyService companyService;
 
-    public Private(CompanyService companyService) {
+    private final MailService mailService;
+
+    public Private(CompanyService companyService, MailService mailService) {
         this.companyService = companyService;
+        this.mailService = mailService;
     }
 
     @GetMapping("invoices")
@@ -113,6 +117,16 @@ public class Private {
     @GetMapping("solvedBugList")
     String getSolvedBugReport(){
         return "private/solvedBugList";
+    }
+
+    // TODO : Juste pour l'exemple, à supprimer après, ne pas oublier le constructeur à clean
+    @GetMapping(value="mail")
+    String sendMailRegister(){
+        Response response = mailService.sendMailRegister("monemaildetest@hotmail.fr", "HKVJHsgfir813dkfh");
+        if(response.getStatus().equals(EnumStatus.OK)){
+            return "index";
+        }
+        return "private/dashboard";
     }
 
 }
