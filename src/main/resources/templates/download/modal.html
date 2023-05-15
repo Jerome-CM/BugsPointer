@@ -10,20 +10,21 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
-<a class="bugspointer-open-popup" id="bugspointer_open_popup">Signaler un bug</a>
-<button class="bugspointer-logo" id="bugspointer_logo">
-    <div class="bugspointer-objet-logo">
-        <div class="bugspointer-objet-ellispe"></div>
-        <span class="bugspointer-objet-report">Signaler un bug</span>
-    </div>
-</button>
+    <a class="bugspointer-open-popup" id="bugspointer_open_popup">Signaler un bug</a>
+    <button class="bugspointer-logo" id="bugspointer_logo">
+        <div class="bugspointer-objet-logo">
+            <div class="bugspointer-objet-ellispe"></div>
+            <span class="bugspointer-objet-report">Signaler un bug</span>
+        </div>
+    </button>
     <div class="bugspointer-popup" id="bugspointer_popup">
       <form class="bugspointer-popup-container" method="post" action="/api/user/modalControl">
           <div class="bugspointer-popup-header">
               <span class="bugspointer-popup-titre">Signaler un nouveau bug</span>
               <span class="bugspointer-close-popup" id="bugspointer_close_popup">&times;</span>
           </div>
-          <div class="bugspointer-popup-content">
+          <div id="bugspointer-message-success"></div>
+          <div class="bugspointer-popup-content" id="bugspointer-affichage">
               <label for="urlPointed">Url avec ce bug</label>
               <input type="text" name="url" class="bugspointer-popup-content-texturl" id="urlPointed" value="" readonly>
 
@@ -33,7 +34,7 @@
               <input type="hidden" name="key" id="key">
               <!--TODO : changer la value par la variable récupérant cette valeur-->
 
-              <button class="bugspointer-popup-btn-submit" type="submit">Envoyer mon rapport</button>
+              <button class="bugspointer-popup-btn-submit" type="submit" id="bugspointer-popup-btn-submit">Envoyer mon rapport</button>
           </div>
       </form>
   </div>
