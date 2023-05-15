@@ -36,8 +36,8 @@
         </form>
       </section>
 
-      <section>
-          <form class="cards account" action="#" th:action="@{/app/private/notifications}" th:object="${company}" method="post">
+      <section id="sectionSms" style="display: none">
+          <form name="formSms" class="cards account" action="#" th:action="@{/app/private/notifications}" th:object="${company}" method="post">
               <h4>SMS</h4>
               <div class="container-row notifications">
                   <label for="smsNewBug" class="lab-notifications">New bug</label>
@@ -51,6 +51,7 @@
                   <label for="smsNewFeature" class="lab-notifications">New feature</label>
                   <input type="checkbox" class="cb-notifications" th:field="*{smsNewFeature}" id="smsNewFeature" th:value="${company.isSmsNewFeature()}">
               </div>
+              <input type="hidden" name="phone" id="phone" th:field="*{companyPhoneNumber}" th:value="${company.getCompanyPhoneNumber()}">
               <input type="hidden" th:field="*{companyPublicKey}" th:value="${company.getCompanyPublicKey()}" readonly>
               <button type="submit" class="submit" name="action" value="updateSms">Update</button>
           </form>
@@ -58,4 +59,14 @@
   </div>
 
 </body>
+<script type="text/javascript">
+    let sms = document.forms['formSms'].phone.value;
+    let section = document.getElementById("sectionSms")
+    if (sms.length === 0){
+        section.style.display = "none";
+    } else {
+        section.style.display = "block";
+    }
+
+</script>
 </html>
