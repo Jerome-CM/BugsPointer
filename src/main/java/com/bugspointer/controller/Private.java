@@ -27,11 +27,11 @@ public class Private {
 
     private final CompanyPreferencesService preferencesService;
 
-    public Private(CompanyService companyService, CompanyPreferencesService preferencesService) {
+    public Private(CompanyService companyService, MailService mailService, CompanyPreferencesService preferencesService) {
         this.companyService = companyService;
         this.mailService = mailService;
         this.preferencesService = preferencesService;
-
+    }
 
     @GetMapping("invoices")
     String getInvoices(){

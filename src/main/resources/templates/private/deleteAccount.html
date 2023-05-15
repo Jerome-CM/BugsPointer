@@ -35,8 +35,10 @@
                         <h3>Pending Bug</h3>
                     </div>
                     <br>
-                    <h3>Plan valid through</h3>
-                    <input type="text" th:field="*{dateLineFacturePlan}" id="dateLineFacturePlan" th:value="${company.getDateLineFacturePlan()}" readonly>
+                    <span th:if="*{dateLineFacturePlan != null}">
+                        <h3>Plan valid through</h3>
+                        <input type="text" th:field="*{dateLineFacturePlan}" id="dateLineFacturePlan" th:value="${company.getDateLineFacturePlan()}" readonly>
+                    </span>
                     <br>
                     <h3>Password</h3>
                     <input type="password" th:field="*{password}" id="password" placeholder="Password">

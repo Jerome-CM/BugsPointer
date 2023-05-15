@@ -625,6 +625,7 @@ code{
 .notifications{
     width: 100%;
     align-items: center;
+    text-transform: initial;
 }
 
 .cb-notifications {
