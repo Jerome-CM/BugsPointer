@@ -74,6 +74,9 @@ public class ModalService implements IModal {
             Bug bug = new Bug();
             bug.setUrl(dto.getUrl());
             bug.setDescription(dto.getDescription());
+            bug.setOs(dto.getOs());
+            bug.setBrowser(dto.getBrowser());
+            bug.setScreenSize(dto.getScreenSize());
             bug.setDateCreation(new Date());
             bug.setEtatBug(EnumEtatBug.NEW);
             bug.setCompany(company);

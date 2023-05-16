@@ -9,6 +9,12 @@ public class ModalDTO {
 
     private String description;
 
+    private String os;
+
+    private String browser;
+
+    private String screenSize;
+
     private String key;
 
     private String bot;
