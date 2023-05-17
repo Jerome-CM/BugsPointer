@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -9,29 +9,73 @@
     <script type="text/javascript" th:src="@{/js/actions.js}"></script>
     <title>Bugs Pointer</title>
 </head>
-<body>
-<h2>Bienvenue !</h2>
+<body class="index">
     <div th:replace="~{include/nav.html}"></div>
+    <h1>Pensé pour votre entreprise, pensé pour vos utilisateurs</h1>
+    <h2>Utilisez BugsPointer gratuitement pour avoir un site web parfait</h2>
+    <br>
 
-<button type="button" th:onclick="showAlert()">Show Alert</button>
+    <div class="cadre green">
+        <div class="rotation-none">
+            <h2 class="h-in-index">Signaler un bug, facilement.</h2>
+            <p>BugsPointer est un formulaire simple.</p>
+            <p>Facile à intégrer</p>
+            <p>Facile à personnaliser</p>
+            <a th:href="@{/modal}" class="btn-try">Essayer maintenant</a>
 
-<div class="sliderIndex">
-    <div class="slides">
-        <div id="slide-1">
-            <img th:src="@{/css/img/sliderIndex/Orthographe.jpg}" alt="Preview of HTML content">
-        </div>
-        <div id="slide-2">
-            <img th:src="@{/css/img/sliderIndex/Indeed - Bugs synthaxe.jpg}" alt="Preview of HTML content">
-        </div>
-        <div id="slide-3">
-            <img th:src="@{/css/img/sliderIndex/CAF - Bug btn connexion.jpg}" alt="Preview of HTML content">
         </div>
     </div>
-    <div class="content-dotlink">
-        <a href="#slide-1">1</a>
-        <a href="#slide-2">2</a>
-        <a href="#slide-3">3</a>
-    </div>
-</div>
+    <section>
+        <h2 class="h-in-index">Comment ça fonctionne ?</h2>
+        <h3 class="h-in-index">Pour votre entreprise</h3>
+        <div class="container-row">
+            <div class="cards cards_detail">
+                <h3>Ajoutez les fichiers dans votre projet</h3>
+            </div>
+            <div class="cards cards_detail">
+                <h3>Bugs reçus dans votre tableau de bord</h3>
+            </div>
+            <div class="cards cards_detail">
+                <h3>Résoudez le !</h3>
+            </div>
+        </div>
+        <h3 class="h-in-index">Pour vos utilisateurs</h3>
+        <div class="container-row">
+            <div class="cards cards_detail">
+                <h3>Signale un nouveau bug sur la page</h3>
+            </div>
+            <div class="cards cards_detail">
+                <h3>Envoyer un bug avec un formulaire simple</h3>
+            </div>
+            <div class="cards cards_detail">
+                <h3>Profiter d'un site web parfait</h3>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="h-in-index">Qu'est-ce que BugsPointer peut corriger ?</h2>
+        <div class="sliderIndex">
+            <div class="slides">
+                <div id="slide-1">
+                    <img th:src="@{/css/img/sliderIndex/Orthographe.jpg}" alt="Preview of HTML content">
+                </div>
+                <div id="slide-2">
+                    <img th:src="@{/css/img/sliderIndex/Indeed - Bugs synthaxe.jpg}" alt="Preview of HTML content">
+                </div>
+                <div id="slide-3">
+                    <img th:src="@{/css/img/sliderIndex/CAF - Bug btn connexion.jpg}" alt="Preview of HTML content">
+                </div>
+            </div>
+            <div class="content-dotlink">
+                <a href="#slide-1">1</a>
+                <a href="#slide-2">2</a>
+                <a href="#slide-3">3</a>
+            </div>
+        </div>
+    </section>
+    <section>
+        <h2 class="h-in-index">Prix</h2>
+    </section>
 </body>
 </html>
