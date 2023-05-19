@@ -12,11 +12,10 @@
 <body class="index">
     <div th:replace="~{include/nav.html}"></div>
 
-    <div class="container">
-        <h1>Pensé pour votre entreprise, pensé pour vos utilisateurs</h1>
-        <h2>Utilisez BugsPointer gratuitement pour avoir un site web parfait</h2>
-        <br>
+    <h1>Pensé pour votre entreprise, pensé pour vos utilisateurs</h1>
+    <h2>Utilisez BugsPointer gratuitement pour avoir un site web parfait</h2>
 
+    <div class="container">
         <div class="cadre rotation green">
             <div class="rotation-none">
                 <h2 class="h-in-index">Signaler un bug, facilement.</h2>
@@ -90,38 +89,45 @@
             <h2 class="h-in-index">Prix</h2>
             <div class="container-row">
                 <div class="cards cards_detail">
-                    <h3>Free</h3>
+                    <h3 class="margin-bottom">Free</h3>
                     <ul>Receive a report in a mail containing :
                         <li>The page URL</li>
                         <li>A smart description</li>
                         <li>One report per month</li>
                     </ul>
-                    <a th:href="@{/authentication}" class="btn-try">Essayer maintenant</a>
+                    <a th:href="@{/authentication}" class="btn-action">Essayer maintenant</a>
                 </div>
                 <div class="cards cards_detail">
-                    <h3>Target Plan</h3>
+                    <h3 class="margin-bottom">Target Plan</h3>
                     <ul>Receive a report containing :
                         <li>The page URL</li>
                         <li>A smart description</li>
                         <li th:replace="~{include/targetPlanContent.html}"></li>
                     </ul>
-                    <a th:href="@{/features}" class="btn-try">Details</a>
+                    <a th:href="@{/features}" class="btn-action">Details</a>
                 </div>
             </div>
         </section>
         <section>
             <h2 class="h-in-index">Testing</h2>
             <div class="container-row">
-                <div>
+                <div class="margin-top-0">
                     <h4>Un lien dans votre pied de page</h4>
-                    <div th:replace="~{download/modal.html}"></div>
+                    <br>
+                    <a th:href="@{/modal}" class="btn-action">Signaler un bug</a>
                 </div>
                 <div >
                     <h4>Un lien dans votre page</h4>
-                    <div th:replace="~{download/modal.html}"></div>
+                    <a th:href="@{/modal}" class="bugspointer-logo" id="bugspointer_logo">
+                        <div class="bugspointer-objet-logo">
+                            <div class="bugspointer-objet-ellispe"></div>
+                            <span class="bugspointer-objet-report">Signaler un bug</span>
+                        </div>
+                    </a>
                 </div>
             </div>
         </section>
     </div>
+    <div th:replace="~{include/footer.html}"></div>
 </body>
 </html>

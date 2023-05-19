@@ -7,33 +7,41 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link th:href="@{/css/style.css}" rel="stylesheet" />
     <script type="text/javascript" th:src="@{/js/actions.js}"></script>
-</head>
 <title>Bugs Pointer</title>
 </head>
-<body>
+<body class="black">
 
-<div>
-    <h2>Register</h2>
-    <form action="#" th:action="@{/register}" th:object="${companyRegister}" method="post">
-        <input type="text" th:field="*{companyName}" id="companyName" placeholder="Nom de l'entreprise">
-        <input type="text" th:field="*{mail}" id="registerMail" placeholder="Mail">
-        <input type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmation de l'e-mail">
-        <input type="text" th:field="*{password}" id="registerPassword" placeholder="Mot de passe">
-        <input type="text" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmation du mot de passe">
-        <input type="submit" value="Debug maintenant !">
-    </form>
-</div>
+    <div th:replace="~{include/nav.html}"></div>
 
+    <div class="container container-row">
+        <section>
+            <div class="cards cards_detail">
+                <h3>Register</h3>
+                <form class="form" action="#" th:action="@{/register}" th:object="${companyRegister}" method="post">
+                    <input type="text" th:field="*{companyName}" id="companyName" placeholder="Nom de l'entreprise">
+                    <input type="text" th:field="*{mail}" id="registerMail" placeholder="Mail">
+                    <input type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmation de l'e-mail">
+                    <input type="text" th:field="*{password}" id="registerPassword" placeholder="Mot de passe">
+                    <input type="text" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmation du mot de passe">
+                    <input class="btn-action" type="submit" value="Debug maintenant !">
+                </form>
+            </div>
+        </section>
+        <br>
+        <section>
+            <div class="cards cards_detail">
+                <h3>Login</h3>
+                <form class="form" action="#" th:action="@{/login}" th:object="${companyLogin}" method="post">
+                    <input type="text" th:field="*{mail}" id="mail" placeholder="E-mail" th:value="${companyLogin.getMail()}" >
+                    <input type="text" th:field="*{password}" id="password" placeholder="Password" th:value="${companyLogin.getPassword()}">
+                    <p><input type="checkbox" name="rememberMe" id="rememberMe"> Remember Me</p>
+                    <input class="btn-action" type="submit" value="Connexion">
+                </form>
+            </div>
+        </section>
+    </div>
 
-<div>
-    <h2>Login</h2>
-    <form action="#" th:action="@{/login}" th:object="${companyLogin}" method="post">
-        <input type="text" th:field="*{mail}" id="mail" placeholder="E-mail" th:value="${companyLogin.getMail()}" >
-        <input type="text" th:field="*{password}" id="password" placeholder="Password" th:value="${companyLogin.getPassword()}">
-        <p><input type="checkbox" name="rememberMe" id="rememberMe"> Remember Me</p>
-        <input type="submit" value="Connexion">
-    </form>
-</div>
+    <div th:replace="~{include/footer.html}"></div>
 
 </body>
 </html>

@@ -319,7 +319,6 @@ img {
     color: var(--background-index);
     margin: 0 5%;
     text-align: center;
-    padding-top: 0;
     align-items: center;
 }
 
@@ -327,8 +326,15 @@ img {
     color: var(--color-btn-green);
     text-transform: none;
     font-size: 30px;
-    margin-top: 15px;
     text-align: center;
+}
+
+.margin-bottom {
+    margin-bottom: 15px;
+}
+
+.margin-top-0{
+    margin-top: 0;
 }
 
 .cadre {
@@ -366,11 +372,6 @@ img {
     text-align: center;
 }
 
-.cards_detail a{
-    background-color: var(--color-btn-green);
-    color: var(--color-white);
-}
-
 ul{
     text-align: left;
 }
@@ -385,9 +386,50 @@ ul{
     color: var(--color-btn-green);
 }
 
+/*CSS Logo*/
+.bugspointer-logo{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.bugspointer-logo:hover{
+    cursor: pointer;
+}
+
+.bugspointer-objet-logo{
+    display: flex;
+    justify-content:center;
+    flex-direction:column;
+    width:112px;
+    height:100px;
+}
+
+.bugspointer-objet-ellispe{
+    margin:0 auto;
+    width: 65px;
+    min-height: 65px;
+    border-radius:100%;
+    border: 0.5em solid var(--color-btn-green);
+    background-image: url(img/chercher.gif);
+    background-size: contain;
+    box-shadow: 0 0 5px grey;
+}
+
+.bugspointer-objet-report{
+    color:var(--color-white);
+    background-color: var(--color-btn-green);
+    border-radius:3px;
+    padding:2px 3px;
+    font-size:15px;
+    box-shadow: 0 0 5px grey;
+    margin: 0;
+}
+
 /* Features */
 .cards_detail img{
     position: relative;
+    min-width: 400px;
     max-width: 500px;
 }
 
@@ -395,6 +437,30 @@ ul{
     background-color: var(--color-grey-footer);
     padding: 7% 0 6% 0;
     margin: -5% -10% -5% -10%;
+}
+.h-in-features{
+    text-transform: none;
+    color: var(--color-white);
+    margin-top: 30px;
+}
+
+/* Authentication */
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form > * {
+    margin-bottom: 20px;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    border-radius: var(--radius);
+}
+
+.form > input {
+    border-color: darkgray;
 }
 
 /* Download Page */
