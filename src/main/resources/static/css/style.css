@@ -91,7 +91,7 @@ h1{
     text-align: center;
 }
 
-.h2{
+h2{
     text-align: center;
     font-size: 25px;
     text-transform: uppercase;
@@ -180,6 +180,11 @@ nav ul li a {
     border-radius: var(--radius);
 }
 
+.sliderIndex {
+    border: none;
+    border-radius: 0;
+}
+
 .slides {
     display: flex;
     overflow-x: auto;
@@ -250,7 +255,7 @@ img {
     z-index:99;
 }
 
-.slider .content-dotlink a {
+.slide {
     font-family: "Inter", sans-serif;
     display: inline-flex;
     width: 1.5rem;
@@ -269,6 +274,193 @@ img {
 }
 .slider > a:focus {
     background: #000;
+}
+
+.index{
+    background-color: transparent;
+}
+
+.slide-index{
+    background-color: var(--color-btn-green);
+}
+
+.h-in-index{
+    text-transform: none;
+    color: var(--color-white);
+    margin-bottom: 30px;
+}
+
+.index h4{
+    text-align: left;
+}
+
+.container-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    text-align: center;
+    margin: 20px auto;
+}
+
+.cards{
+    padding: 20px 35px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    background-color: var(--color-white);
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+}
+
+.cards_detail{
+    border: 4px solid var(--color-btn-green);
+    text-transform: none;
+    color: var(--background-index);
+    margin: 0 5%;
+    text-align: center;
+    align-items: center;
+}
+
+.cards_detail h3{
+    color: var(--color-btn-green);
+    text-transform: none;
+    font-size: 30px;
+    text-align: center;
+}
+
+.margin-bottom {
+    margin-bottom: 15px;
+}
+
+.margin-top-0{
+    margin-top: 0;
+}
+
+.cadre {
+    text-align: center;
+    display: block;
+    z-index: -1;
+}
+
+.rotation {
+    transform: rotate(5deg);
+}
+
+.rotation-none{
+    transform: rotate(-5deg);
+}
+
+.rotation-none p{
+    margin: 15px 0;
+}
+
+.green{
+    background-color: var(--color-btn-green);
+    padding: 2% 0 2% 0;
+    margin: 5% -10% 0 -10%;
+}
+
+.btn-try{
+    margin-top: 30px;
+    padding: 7px 20px;
+    width: fit-content;
+    background-color: var(--color-white);
+    color: black;
+    font-size: 22px;
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+ul{
+    text-align: left;
+}
+
+.ul-index{
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.text-green {
+    color: var(--color-btn-green);
+}
+
+/*CSS Logo*/
+.bugspointer-logo{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.bugspointer-logo:hover{
+    cursor: pointer;
+}
+
+.bugspointer-objet-logo{
+    display: flex;
+    justify-content:center;
+    flex-direction:column;
+    width:112px;
+    height:100px;
+}
+
+.bugspointer-objet-ellispe{
+    margin:0 auto;
+    width: 65px;
+    min-height: 65px;
+    border-radius:100%;
+    border: 0.5em solid var(--color-btn-green);
+    background-image: url(img/chercher.gif);
+    background-size: contain;
+    box-shadow: 0 0 5px grey;
+}
+
+.bugspointer-objet-report{
+    color:var(--color-white);
+    background-color: var(--color-btn-green);
+    border-radius:3px;
+    padding:2px 3px;
+    font-size:15px;
+    box-shadow: 0 0 5px grey;
+    margin: 0;
+}
+
+/* Features */
+.cards_detail img{
+    position: relative;
+    min-width: 400px;
+    max-width: 500px;
+}
+
+.gray{
+    background-color: var(--color-grey-footer);
+    padding: 7% 0 6% 0;
+    margin: -5% -10% -5% -10%;
+}
+.h-in-features{
+    text-transform: none;
+    color: var(--color-white);
+    margin-top: 30px;
+}
+
+/* Authentication */
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form > * {
+    margin-bottom: 20px;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    border-radius: var(--radius);
+}
+
+.form > input {
+    border-color: darkgray;
 }
 
 /* Download Page */
@@ -355,24 +547,6 @@ img {
 
 
 /* Dashboard Company */
-
-.container-row{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    margin: 20px auto;
-}
-
-.cards{
-    padding: 20px 35px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    background-color: var(--color-white);
-    text-transform: uppercase;
-    display: flex;
-    flex-direction: column;
-}
 
 .number_cards{
     font-size: 25px;

@@ -14,6 +14,7 @@
     background: none;
     border: none;
     padding: 0;
+    margin: 0;
 }
 .bugspointer-logo:hover{
     cursor: pointer;
@@ -29,10 +30,10 @@
 
 .bugspointer-objet-ellispe{
     margin:0 auto;
-    width: 50px;
-    min-height: 50px;
+    width: 65px;
+    min-height: 65px;
     border-radius:100%;
-    border: 10px solid var(--btn-logo-color);
+    border: 0.5em solid var(--btn-logo-color);
     background-image: url(img/chercher.gif);
     background-size: contain;
     box-shadow: 0 0 5px grey;
@@ -45,6 +46,7 @@
     padding:2px 3px;
     font-size:15px;
     box-shadow: 0 0 5px grey;
+    margin: 0;
 }
 
 
@@ -79,6 +81,7 @@
     padding-top: 60px;
     display: none;
     font-family: var(--font);
+    color: black;
 }
 
 .bugspointer-popup-container{
@@ -92,7 +95,7 @@
 }
 .bugspointer-popup-header{
     text-align: center;
-    top: 0px;
+    top: 0;
     background-color : var(--modal-color);
     border-radius: 0;
     position: relative;
@@ -114,7 +117,7 @@
     cursor: pointer;
 }
 .bugspointer-popup-content{
-    padding: 15px 30px 0px;
+    padding: 15px 30px 0;
     height: 80%;
     display: flex;
     flex-direction: column;
