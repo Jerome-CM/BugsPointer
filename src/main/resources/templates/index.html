@@ -11,71 +11,117 @@
 </head>
 <body class="index">
     <div th:replace="~{include/nav.html}"></div>
-    <h1>Pensé pour votre entreprise, pensé pour vos utilisateurs</h1>
-    <h2>Utilisez BugsPointer gratuitement pour avoir un site web parfait</h2>
-    <br>
 
-    <div class="cadre green">
-        <div class="rotation-none">
-            <h2 class="h-in-index">Signaler un bug, facilement.</h2>
-            <p>BugsPointer est un formulaire simple.</p>
-            <p>Facile à intégrer</p>
-            <p>Facile à personnaliser</p>
-            <a th:href="@{/modal}" class="btn-try">Essayer maintenant</a>
+    <div class="container">
+        <h1>Pensé pour votre entreprise, pensé pour vos utilisateurs</h1>
+        <h2>Utilisez BugsPointer gratuitement pour avoir un site web parfait</h2>
+        <br>
 
+        <div class="cadre rotation green">
+            <div class="rotation-none">
+                <h2 class="h-in-index">Signaler un bug, facilement.</h2>
+                <p>BugsPointer est un formulaire simple.</p>
+                <p>Facile à intégrer</p>
+                <p>Facile à personnaliser</p>
+                <a th:href="@{/authentication}" class="btn-try">Essayer maintenant</a>
+            </div>
         </div>
+        <section>
+            <h2 class="h-in-index">Comment ça fonctionne ?</h2>
+            <h4 class="h-in-index">Pour votre entreprise</h4>
+            <div class="container-row">
+                <div class="cards cards_detail">
+                    <h3>Ajoutez les fichiers dans votre projet</h3>
+                </div>
+                <div class="cards cards_detail">
+                    <h3>Bugs reçus dans votre tableau de bord</h3>
+                </div>
+                <div class="cards cards_detail">
+                    <h3>Résolvez-le !</h3>
+                </div>
+            </div>
+            <h4 class="h-in-index">Pour vos utilisateurs</h4>
+            <div class="container-row">
+                <div class="cards cards_detail">
+                    <h3>Signale un nouveau bug sur la page</h3>
+                </div>
+                <div class="cards cards_detail">
+                    <h3>Envoyer un bug avec un formulaire simple</h3>
+                </div>
+                <div class="cards cards_detail">
+                    <h3>Profiter d'un site web parfait</h3>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="h-in-index">Qu'est-ce que BugsPointer peut corriger ?</h2>
+            <div class="cadre rotation-none green">
+                <div class="container-row rotation">
+                    <ul class="ul-index">
+                        <li class="h-in-index">Synthaxe</li>
+                        <li class="h-in-index">Path file</li>
+                        <li class="h-in-index">Design</li>
+                        <li class="h-in-index">Error system</li>
+                        <li class="h-in-index">Mandatory documents missing</li>
+                    </ul>
+                    <div class="slider sliderIndex">
+                        <div class="slides">
+                            <div id="slide-1">
+                                <img th:src="@{/css/img/sliderIndex/Orthographe.jpg}" alt="Preview of HTML content">
+                            </div>
+                            <div id="slide-2">
+                                <img th:src="@{/css/img/sliderIndex/Indeed - Bugs synthaxe.jpg}" alt="Preview of HTML content">
+                            </div>
+                            <div id="slide-3">
+                                <img th:src="@{/css/img/sliderIndex/CAF - Bug btn connexion.jpg}" alt="Preview of HTML content">
+                            </div>
+                        </div>
+                        <div class="content-dotlink">
+                            <a class="slide slide-index" href="#slide-1">1</a>
+                            <a class="slide slide-index" href="#slide-2">2</a>
+                            <a class="slide slide-index" href="#slide-3">3</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <h2 class="h-in-index">Prix</h2>
+            <div class="container-row">
+                <div class="cards cards_detail">
+                    <h3>Free</h3>
+                    <ul>Receive a report in a mail containing :
+                        <li>The page URL</li>
+                        <li>A smart description</li>
+                        <li>One report per month</li>
+                    </ul>
+                    <a th:href="@{/authentication}" class="btn-try">Essayer maintenant</a>
+                </div>
+                <div class="cards cards_detail">
+                    <h3>Target Plan</h3>
+                    <ul>Receive a report containing :
+                        <li>The page URL</li>
+                        <li>A smart description</li>
+                        <li th:replace="~{include/targetPlanContent.html}"></li>
+                    </ul>
+                    <a th:href="@{/features}" class="btn-try">Details</a>
+                </div>
+            </div>
+        </section>
+        <section>
+            <h2 class="h-in-index">Testing</h2>
+            <div class="container-row">
+                <div>
+                    <h4>Un lien dans votre pied de page</h4>
+                    <div th:replace="~{download/modal.html}"></div>
+                </div>
+                <div >
+                    <h4>Un lien dans votre page</h4>
+                    <div th:replace="~{download/modal.html}"></div>
+                </div>
+            </div>
+        </section>
     </div>
-    <section>
-        <h2 class="h-in-index">Comment ça fonctionne ?</h2>
-        <h3 class="h-in-index">Pour votre entreprise</h3>
-        <div class="container-row">
-            <div class="cards cards_detail">
-                <h3>Ajoutez les fichiers dans votre projet</h3>
-            </div>
-            <div class="cards cards_detail">
-                <h3>Bugs reçus dans votre tableau de bord</h3>
-            </div>
-            <div class="cards cards_detail">
-                <h3>Résoudez le !</h3>
-            </div>
-        </div>
-        <h3 class="h-in-index">Pour vos utilisateurs</h3>
-        <div class="container-row">
-            <div class="cards cards_detail">
-                <h3>Signale un nouveau bug sur la page</h3>
-            </div>
-            <div class="cards cards_detail">
-                <h3>Envoyer un bug avec un formulaire simple</h3>
-            </div>
-            <div class="cards cards_detail">
-                <h3>Profiter d'un site web parfait</h3>
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <h2 class="h-in-index">Qu'est-ce que BugsPointer peut corriger ?</h2>
-        <div class="sliderIndex">
-            <div class="slides">
-                <div id="slide-1">
-                    <img th:src="@{/css/img/sliderIndex/Orthographe.jpg}" alt="Preview of HTML content">
-                </div>
-                <div id="slide-2">
-                    <img th:src="@{/css/img/sliderIndex/Indeed - Bugs synthaxe.jpg}" alt="Preview of HTML content">
-                </div>
-                <div id="slide-3">
-                    <img th:src="@{/css/img/sliderIndex/CAF - Bug btn connexion.jpg}" alt="Preview of HTML content">
-                </div>
-            </div>
-            <div class="content-dotlink">
-                <a href="#slide-1">1</a>
-                <a href="#slide-2">2</a>
-                <a href="#slide-3">3</a>
-            </div>
-        </div>
-    </section>
-    <section>
-        <h2 class="h-in-index">Prix</h2>
-    </section>
 </body>
 </html>

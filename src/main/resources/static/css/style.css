@@ -180,6 +180,11 @@ nav ul li a {
     border-radius: var(--radius);
 }
 
+.sliderIndex {
+    border: none;
+    border-radius: 0;
+}
+
 .slides {
     display: flex;
     overflow-x: auto;
@@ -250,7 +255,7 @@ img {
     z-index:99;
 }
 
-.slider .content-dotlink a {
+.slide {
     font-family: "Inter", sans-serif;
     display: inline-flex;
     width: 1.5rem;
@@ -275,12 +280,17 @@ img {
     background-color: transparent;
 }
 
+.slide-index{
+    background-color: var(--color-btn-green);
+}
+
 .h-in-index{
     text-transform: none;
     color: var(--color-white);
+    margin-bottom: 30px;
 }
 
-.index h3{
+.index h4{
     text-align: left;
 }
 
@@ -288,7 +298,8 @@ img {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    align-items: center;
+    align-items: stretch;
+    text-align: center;
     margin: 20px auto;
 }
 
@@ -309,6 +320,7 @@ img {
     margin: 0 5%;
     text-align: center;
     padding-top: 0;
+    align-items: center;
 }
 
 .cards_detail h3{
@@ -316,25 +328,31 @@ img {
     text-transform: none;
     font-size: 30px;
     margin-top: 15px;
+    text-align: center;
 }
 
 .cadre {
     text-align: center;
     display: block;
-    padding: 7% 0 6% 0;
-    margin: -5% -10% -5% -10%;
-    transform: rotate(5deg);
     z-index: -1;
+}
+
+.rotation {
+    transform: rotate(5deg);
 }
 
 .rotation-none{
     transform: rotate(-5deg);
 }
 
+.rotation-none p{
+    margin: 15px 0;
+}
+
 .green{
     background-color: var(--color-btn-green);
-    padding: 2% 0 6% 0;
-    margin: 5% -10% 5% -10%;
+    padding: 2% 0 2% 0;
+    margin: 5% -10% 0 -10%;
 }
 
 .btn-try{
@@ -345,6 +363,26 @@ img {
     color: black;
     font-size: 22px;
     border-radius: var(--radius);
+    text-align: center;
+}
+
+.cards_detail a{
+    background-color: var(--color-btn-green);
+    color: var(--color-white);
+}
+
+ul{
+    text-align: left;
+}
+
+.ul-index{
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.text-green {
+    color: var(--color-btn-green);
 }
 
 /* Features */
@@ -355,6 +393,8 @@ img {
 
 .gray{
     background-color: var(--color-grey-footer);
+    padding: 7% 0 6% 0;
+    margin: -5% -10% -5% -10%;
 }
 
 /* Download Page */

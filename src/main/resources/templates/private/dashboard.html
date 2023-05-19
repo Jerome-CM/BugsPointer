@@ -54,7 +54,9 @@
             <div class="container-row">
                 <div class="cards cards_promo">
                     <h2>Change Plan</h2>
-                    <div th:replace="~{include/targetPlanContent.html}"></div>
+                    <ul>
+                        <li th:replace="~{include/targetPlanContent.html}"></li>
+                    </ul>
                     <a th:href="@{/features}">Details</a>
                     <span>Without engagement</span>
                 </div>
@@ -75,10 +77,10 @@
                         </div>
                     </div>
                     <div class="content-dotlink">
-                        <a href="#slide-1">1</a>
-                        <a href="#slide-2">2</a>
-                        <a href="#slide-3">3</a>
-                        <a href="#slide-4">4</a>
+                        <a class="slide" href="#slide-1">1</a>
+                        <a class="slide" href="#slide-2">2</a>
+                        <a class="slide" href="#slide-3">3</a>
+                        <a class="slide" href="#slide-4">4</a>
                     </div>
                 </div>
             </div>
