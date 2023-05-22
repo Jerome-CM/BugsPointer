@@ -151,8 +151,8 @@ public class Private {
 
     @GetMapping("dashboard")
     String getDashboard(Model model, HttpServletRequest request){
-        HttpSession session = request.getSession();
-        log.info("session mail : {}", session.getAttribute("mail"));
+        /*HttpSession session = request.getSession();
+        log.info("session mail : {}", session.getAttribute("mail"));*/
         model.addAttribute("company", companyService.getDashboardDto(companyService.getCompanyWithToken(request)));
         return "private/dashboard";
     }

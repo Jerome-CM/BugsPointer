@@ -1,0 +1,61 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+    <title>Conditions générales d'Utilisation</title>
+</head>
+<body>
+
+    <div th:replace="~{include/navCompany.html}"></div>
+
+    <div class="container-documentation">
+
+        <div class="container">
+            <h1>Conditions générales d'Utilisation (CGU)</h1>
+
+            <div class="text_align_left">
+                <h2>Introduction</h2>
+                <br>
+                <p>Les présentes Conditions Générales d'Utilisation (CGU) régissent l'utilisation du site web de BugsPointer ("le Site"). Veuillez lire attentivement ces CGU avant d'utiliser notre site. En accédant ou en utilisant le Site, vous acceptez d'être lié par ces CGU.</p>
+                <br>
+                <h2>Informations de contact</h2>
+                <br>
+                <p><a th:href="@{/mentions}">Ce reporter aux Mentions légales</a></p>
+                <br>
+                <h2>Services proposés</h2>
+                <br>
+                <p>BugsPointer offre un formualaire et tout une interface permettant à des utilisateurs de site internet à signaler un bug sur ce dernier</p>
+                <br>
+                <h2>Conditions spécifiques</h2>
+                <br>
+                <p>Les conditions spécifiques applicables à l'utilisation des services proposés par BugsPointer sont disponibles à l'adresse suivante : <a th:href="@{/cgv}">www.bugspointer.com/cgv</a>
+                </p>
+                <br>
+                <h2>Confidentialité et protection des données</h2>
+                <br>
+                <p>BugsPointer respecte votre vie privée et met en place des mesures pour protéger vos données personnelles conformément à la réglementation en vigueur. Pour en savoir plus sur notre politique de confidentialité et sur la manière dont nous traitons vos données personnelles, veuillez consulter notre politique de confidentialité à l'adresse suivante : [insérez l'URL de la politique de confidentialité].</p>
+                <br>
+                <h2>Droits de propriété</h2>
+                <br>
+                <p>Tous les droits de propriété intellectuelle liés au contenu et aux éléments du Site, tels que les textes, les graphiques, les logos, les icônes, les images, les clips audio, les téléchargements numériques, les compilations de données et le logiciel, sont la propriété exclusive de BugsPointer ou de ses concédants de licence et sont protégés par les lois sur les droits d'auteur et autres droits de propriété intellectuelle.</p>
+                <br>
+                <h2>Suspension de compte</h2>
+                <br>
+                <p>Les utilisateurs peuvent demander la suspension de leur compte en nous contactant par e-mail à l'adresse suivante : [insérez votre adresse e-mail de contact] ou en désactivant leur compte via le chemin suivant : Connexion > Dashboard > Account.</p>
+                <br>
+                <h2>Responsabilités de l'utilisateur</h2>
+                <br>
+                <p>Les utilisateurs s'engagent à n'entreprendre aucune action qui pourrait compromettre l'intégrité du site ou des formulaires fournis par BugsPointer. Toute violation de cette disposition pourra entraîner la résiliation ou la suspension du compte de l'utilisateur, sans préjudice de tout autre recours disponible en droit.</p>
+                <br>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{include/footer.html}"></div>
+</body>
+</html>

@@ -31,4 +31,18 @@ public class Home {
         return "download/modal";
     }
 
+    @GetMapping("cgu")
+    String getCgu(){
+        return "public/cgu";
+    }
+
+    @GetMapping("cgv")
+    String getCgv(){
+        return "public/cgv";
+    }
+
+    @GetMapping("mentions")
+    String getMentions(){
+        return "public/mentions";
+    }
 }

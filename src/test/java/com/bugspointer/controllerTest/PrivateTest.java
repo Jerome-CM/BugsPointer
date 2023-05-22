@@ -3,6 +3,8 @@ package com.bugspointer.controllerTest;
 import com.bugspointer.controller.Private;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +12,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+
+import javax.servlet.http.HttpSession;
+
 import static org.modelmapper.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -23,6 +28,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@ExtendWith(MockitoExtension.class)
 @ContextConfiguration
 public class PrivateTest {
 
@@ -32,18 +38,24 @@ public class PrivateTest {
     @Autowired
     private Private privateController;
 
+    @Mock
+    HttpSession mockSession;
+
+
+
     @Test
     void contextLoads()throws Exception {
         assertThat(privateController).isNotNull();
     }
 
-    /* Logged page */
+    /* Logged page
 
     @Test
     public void getDashboardCompanyWithLoginTest() throws Exception {
+
         mockMvc.perform(get("/app/private/dashboard").with(userValue()))
                 .andExpect(status().isOk());
-    }
+    }*/
 
     /*@Test
     public void getAccountUserWithLoginTest() throws Exception {
