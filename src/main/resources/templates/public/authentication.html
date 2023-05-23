@@ -12,6 +12,8 @@
 <body class="black">
 
     <div th:replace="~{include/nav.html}"></div>
+    <div class="notification" th:text="${notification}"></div>
+    <div class="alert" th:text="${alert}"></div>
 
     <div class="container container-row">
         <section>

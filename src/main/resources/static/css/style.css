@@ -7,6 +7,8 @@
     --color-body: #F0F1F3;
     --color-new-bug:#FF0000;
     --color-ignored:#6100FF;
+    --color-notification:#489d21;
+    --color-alert:#a90000;
 
     --radius:5px;
     --shadow:0 0 5px lightgrey;
@@ -167,6 +169,20 @@ nav ul li a {
 
 .nav ul li:last-child a{
     color: var(--color-btn-green);
+}
+
+/* Alerte Notification */
+.notification {
+    text-align: center;
+    background-color: var(--color-notification);
+    color: var(--color-white);
+    font-size: 25px;
+}
+.alert {
+    text-align: center;
+    background-color: var(--color-alert);
+    color: var(--color-white);
+    font-size: 25px;
 }
 
 /* Index */
