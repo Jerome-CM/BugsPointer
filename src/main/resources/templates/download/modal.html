@@ -28,8 +28,11 @@
               <label for="urlPointed">Url avec ce bug</label>
               <input type="text" name="url" class="bugspointer-popup-content-texturl" id="urlPointed" value="" readonly>
 
+              <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-pointer">Pointer un bug</button>
+              <input type="text" name="pointer" id="bugspointer-popup-pointer-bug" readonly>
+
               <label>Description du bug</label>
-              <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="10"></textarea>
+              <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="10" required></textarea>
               <input type="text" name="bot" class="bugspointer-popup-content-inputbot">
 
               <input type="hidden" name="os" id="bugspointer-popup-os" readonly>
