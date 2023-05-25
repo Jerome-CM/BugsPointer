@@ -14,8 +14,10 @@ let os = document.getElementById('bugspointer-popup-os');
 let browser = document.getElementById('bugspointer-popup-browser');
 let screen = document.getElementById('bugspointer-popup-screen');
 let pointerSelected = document.getElementById('bugspointer-popup-pointer-bug');
-const balisePointer = document.querySelectorAll('*:not(body):not(html)');
-const backgroundPointer = "rgba(128,197,234,0.5)";
+let validated = document.getElementById('bugspointer-popup-btn-validated');
+let textPointed = document.getElementById('bugspointer-popup-pointer-bug-text')
+const textValid = "Visée validée";
+const textRepointer = "Repointer le bug";
 const publicKey = document.getElementById("key");
 
 publicKey.value = key;
@@ -33,6 +35,9 @@ document.getElementById("urlPointed").value = urlPointed;
 
 function afficher(){
     document.querySelector('#bugspointer_popup').style.display = "flex";
+    if (validated.innerHTML == textRepointer) {
+        validated.addEventListener("click", pointer);
+    }
 }
 
 function masquer(){
@@ -97,114 +102,123 @@ function get_browser() {
 
 /* Point a bug */
 
-let pointerActive = false;
 let iteration = 0;
 
 function pointer(){
-    /*pointerActive = true;
 
     masquer();
 
-    for(let i = 0; i < balisePointer.length; i++){
-        let balise = balisePointer[i];
-        let originalBackgroundColor = getComputedStyle(balise).backgroundColor;
-        balise.addEventListener('mouseover', handleMouseOver);
-        balise.addEventListener('mouseout', handleMouseOut);
-        if (document.querySelector('#bugspointer_popup').style.display === "flex") {
-                    break;
-                }
-
-        function handleMouseOver(){
-            if(pointerActive) {
-                modifBackground(balise, backgroundPointer);
-                balise.addEventListener('click', () => {
-                    pointerSelected.value = handleClick();
-                });
-            }
-        }
-
-        function handleMouseOut() {
-            if (pointerActive) {
-                modifBackground(balise, originalBackgroundColor);
-            }
-        }
-
-        function handleClick() {
-            pointerActive = false;
-            modifBackground(balise, originalBackgroundColor);
-
-            pointerSelected.value = balise.textContent;
-            afficher();
-            iteration++;
-            console.log(iteration);
-            return balise.textContent;
-        }
-
-
-
-    }
-
-    if (!pointerActive){
+    if (document.querySelector('#bugspointer_popup').style.display !== "none") {
+        console.log("display flex");
         return;
-    }*/
+    } else {
 
-    masquer();
+        let styleInitial;
 
-    let styleInitial;
-    let pointerActive;
-
-    document.addEventListener('mouseover', handleMouseOver);
-    document.addEventListener('mouseout', handleMouseOut);
-
-    function handleMouseOver(event) {
-        let balise = event.target.closest("*:not(body):not(html)");
-        if (balise != null) {
-            styleInitial = getComputedStyle(balise).border;
-            balise.style.border = '3px solid #FF0000';
-            balise.addEventListener('click', handleClick);
-        }
-        /*console.log("Balise survolée : ", balise)*/
+        document.addEventListener('mouseover', handleMouseOver);
+        document.addEventListener('mouseout', handleMouseOut);
 
 
-    }
-    function handleMouseOut(event) {
-        let balise = event.target.closest("*:not(body):not(html)");
-        if (balise != null) {
-            balise.style.border = styleInitial;
-        }
-    }
-    function handleClick(event){
-        /*event.preventDefault();*/
-        event.stopPropagation();
-        let balise = event.target.closest("*:not(body):not(html)");
-        if (balise != null) {
-            pointerSelected.value = balise.textContent;
-            console.log(balise);
-            document.removeEventListener('mouseover', handleMouseOver);
-            document.removeEventListener('mouseout', handleMouseOut);
-            balise.removeEventListener('click', handleClick);
-            /*btnpointer.removeEventListener("click", pointer);*/
-            balise.style.border = styleInitial;
-            afficher();
+        function handleMouseOver(event) {
+            let balise = event.target.closest("*:not(body):not(html)");
+            if (balise != null) {
+                styleInitial = getComputedStyle(balise).border;
+                balise.style.border = '3px solid #FF0000';
+                balise.addEventListener('click', handleClick);
+            }
+
+
         }
 
+        function handleMouseOut(event) {
+            let balise = event.target.closest("*:not(body):not(html)");
+            if (balise != null) {
+                balise.style.border = styleInitial;
+            }
+        }
+
+        function handleClick(event) {
+            event.preventDefault();
+
+            //Peut rester coincer dans handleClick et ne s'arrête pas
+
+            if (document.querySelector('#bugspointer_popup').style.display != "none") {
+                return;
+            } else {
+                event.stopPropagation();
+
+                let balise = event.target.closest("*:not(body):not(html)");
+                if (balise != null) {
+                    balise.style.border = styleInitial;
+                    pointerSelected.innerHTML = balise.outerHTML;
+                    console.log(balise);
+                    let parentAffichage = balise;
+
+                    for (let i = 0; i < 2; i++) {
+                        let parent = parentAffichage;
+
+                        if (parent.tagName == "SECTION" || parent.tagName == "ARTICLE" || parent.tagName == "ASIDE"
+                                || parent.tagName == "FOOTER" || parent.tagName == "HEADER" || parent.tagName == "NAV" || parent.tagName == "FROM") {
+                            break;
+                        }
+                        parent = parentAffichage.parentElement;
+                        if (parent === null || parent.tagName == "BODY"){
+                            break;
+                        } else {
+                            parentAffichage = parent;
+                        }
+                    }
+
+                    let baliseType = balise.tagName.toLowerCase();
+                    let baliseLu = balise.outerHTML;
+                    let baliseModif;
+                    if (baliseLu.includes('class="')){
+                        baliseModif = baliseLu.replace('class="', 'class="bugspointer-text-balise ');
+                    } else {
+                        baliseModif = baliseLu.replace('<' + baliseType, '<' + baliseType + ' class="bugspointer-text-balise"');
+                    }
+                    let parentLu = parentAffichage.outerHTML;
+                    let parentModif = parentLu.replace(baliseLu, baliseModif);
+                    let parentWithoutStyle = parentModif.replace(/ style="[^"]*"/g, "");
+                    console.log(parentWithoutStyle);
+                    pointerSelected.innerHTML = parentWithoutStyle;
+
+                    document.removeEventListener('mouseover', handleMouseOver);
+                    document.removeEventListener('mouseout', handleMouseOut);
+                    btnpointer.removeEventListener("click", pointer);
+                    balise.removeEventListener('click', handleClick);
+                    btnpointer.removeEventListener("click", pointer);
+
+                    btnpointer.innerHTML = textValid;
+                    btnpointer.style.backgroundColor = "#00E676"
+                    validated.innerHTML = textRepointer;
+                    validated.style.display = "flex";
+                    textPointed.style.display = "none";
+
+                    afficher();
+
+                    return true;
+                }
+            }
+            document.removeEventListener('click', handleClick);
+            return true;
+        }
     }
     iteration++;
     console.log(iteration);
 
 }
 
-
-
-function modifBackground(balise, backgroundColor){
-    balise.style.backgroundColor = backgroundColor;
-}
-
 /* Events Listener */
 
 btnopen.addEventListener("click", afficher);
 btnopenlogo.addEventListener("click", afficher);
-btnclose.addEventListener("mousedown", masquer);
+btnclose.addEventListener("mousedown", () => {
+    masquer();
+    if (messageElement.innerHTML != null){
+        location.reload();
+    }
+});
 btnpointer.addEventListener("click", pointer);
 form.addEventListener("submit", function (e) {
     e.preventDefault();

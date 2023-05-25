@@ -26,6 +26,7 @@ public class Bug {
     @NotNull
     private String description;
 
+    @Column(columnDefinition = "TEXT")
     private String codeLocation;
 
     @NotNull

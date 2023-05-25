@@ -29,7 +29,10 @@
               <input type="text" name="url" class="bugspointer-popup-content-texturl" id="urlPointed" value="" readonly>
 
               <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-pointer">Pointer un bug</button>
-              <input type="text" name="pointer" id="bugspointer-popup-pointer-bug" readonly>
+              <p id="bugspointer-popup-pointer-bug-text">Merci de sélectionner la ligne contenant le bug en cliquant sur le bouton si dessus</p>
+
+              <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-validated" style="display: none"></button>
+              <textarea name="codeLocation" id="bugspointer-popup-pointer-bug" readonly hidden></textarea>
 
               <label>Description du bug</label>
               <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="10" required></textarea>

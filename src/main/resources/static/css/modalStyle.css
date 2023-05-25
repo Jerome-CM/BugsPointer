@@ -90,7 +90,7 @@
     margin: 1% auto 10% auto;
     width: 50%;
     border-radius: 20px;
-    overflow: hidden;
+    overflow: auto;
     padding-bottom: 10px;
 }
 .bugspointer-popup-header{
@@ -140,6 +140,7 @@
     block-size: auto;
     display: inline-block;
     box-sizing: border-box;
+    min-height: 50px;
     height: 70%;
     padding: 5px;
     font-family: var(--font);
@@ -151,6 +152,10 @@
     padding: 0;
     border: 0;
     margin: 0;
+}
+
+.bugspointer-text-balise {
+     color: red !important;
 }
 
 #bugspointer-message-success{
