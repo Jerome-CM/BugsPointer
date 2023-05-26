@@ -55,9 +55,11 @@ public class Private {
             Response response = preferencesService.updatePreference(dto, action);
             if (response.getStatus().equals(EnumStatus.OK)) {
                 redirectAttributes.addFlashAttribute("notification", response.getMessage());
+                redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
                 return "redirect:notifications";
             } else {
-                model.addAttribute("alert", response.getMessage());
+                model.addAttribute("status", String.valueOf(response.getStatus()));
+                model.addAttribute("notification", response.getMessage());
             }
         }
         model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
@@ -78,11 +80,13 @@ public class Private {
             Response response = companyService.delete(dto);
             if (response.getStatus().equals(EnumStatus.OK)) {
                 redirectAttributes.addFlashAttribute("notification", response.getMessage());
+                redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
                 HttpSession session = request.getSession();
                 session.invalidate();
                 return "redirect:/authentication";
             } else {
-                model.addAttribute("alert", response.getMessage());
+                model.addAttribute("status", String.valueOf(response.getStatus()));
+                model.addAttribute("notification", response.getMessage());
             }
         }
         model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
@@ -124,11 +128,13 @@ public class Private {
                 response = companyService.mailUpdate(dto);
                 if (response.getStatus().equals(EnumStatus.OK)) {
                     redirectAttributes.addFlashAttribute("notification", response.getMessage());
+                    redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
                     HttpSession session = request.getSession();
                     session.invalidate();
                     return "redirect:/authentication";
                 } else {
-                    model.addAttribute("alert", response.getMessage());
+                    model.addAttribute("status", String.valueOf(response.getStatus()));
+                    model.addAttribute("notification", response.getMessage());
                 }
             } else if ("updatePw".equals(action)){
                 response = companyService.passwordUpdate(dto);
@@ -139,11 +145,13 @@ public class Private {
             }
 
             if (response.getStatus().equals(EnumStatus.OK)) {
+                model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());
                 model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
                 return "private/account";
             } else {
-                model.addAttribute("alert", response.getMessage());
+                model.addAttribute("status", String.valueOf(response.getStatus()));
+                model.addAttribute("notification", response.getMessage());
             }
         }
 

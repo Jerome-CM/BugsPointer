@@ -173,17 +173,17 @@ nav ul li a {
 }
 
 /* Alerte Notification */
-.notification {
+.notifAlert {
     text-align: center;
-    background-color: var(--color-notification);
     color: var(--color-white);
     font-size: 25px;
 }
+
+.notification {
+    background-color: var(--color-notification);
+}
 .alert {
-    text-align: center;
     background-color: var(--color-alert);
-    color: var(--color-white);
-    font-size: 25px;
 }
 
 /* Index */
