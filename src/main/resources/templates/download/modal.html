@@ -25,18 +25,23 @@
           </div>
           <div id="bugspointer-message-success"></div>
           <div class="bugspointer-popup-content" id="bugspointer-affichage">
-              <label for="urlPointed">Url avec ce bug</label>
-              <input type="text" name="url" class="bugspointer-popup-content-texturl" id="urlPointed" value="" readonly>
+              <label for="bugspointer-urlPointed">Url avec ce bug</label>
+              <input type="text" name="url" class="bugspointer-popup-content-texturl" id="bugspointer-urlPointed" value="" readonly>
+
+              <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-pointer">Pointer un bug</button>
+              <p id="bugspointer-popup-pointer-bug-text">Merci de sélectionner la ligne contenant le bug en cliquant sur le bouton si dessus</p>
+
+              <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-validated" style="display: none"></button>
+              <textarea name="codeLocation" id="bugspointer-popup-pointer-bug" readonly hidden></textarea>
 
               <label>Description du bug</label>
-              <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="10"></textarea>
+              <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="10" required></textarea>
               <input type="text" name="bot" class="bugspointer-popup-content-inputbot">
 
               <input type="hidden" name="os" id="bugspointer-popup-os" readonly>
               <input type="hidden" name="browser" id="bugspointer-popup-browser" readonly>
               <input type="hidden" name="screenSize" id="bugspointer-popup-screen" readonly>
-              <input type="hidden" name="key" id="key">
-              <!--TODO : changer la value par la variable récupérant cette valeur-->
+              <input type="hidden" name="key" id="key" readonly>
 
               <button class="bugspointer-popup-btn-submit" type="submit" id="bugspointer-popup-btn-submit">Envoyer mon rapport</button>
           </div>

@@ -90,7 +90,7 @@
     margin: 1% auto 10% auto;
     width: 50%;
     border-radius: 20px;
-    overflow: hidden;
+    overflow: auto;
     padding-bottom: 10px;
 }
 .bugspointer-popup-header{
@@ -140,10 +140,11 @@
     block-size: auto;
     display: inline-block;
     box-sizing: border-box;
+    min-height: 50px;
     height: 70%;
     padding: 5px;
     font-family: var(--font);
-    border: 0.5px solid lightgrey;
+    border: 1px solid lightgrey;
 }
 .bugspointer-popup-content-inputbot{
     visibility: hidden;
@@ -151,6 +152,10 @@
     padding: 0;
     border: 0;
     margin: 0;
+}
+
+.bugspointer-text-balise { /* applique une couleur pour la balise sélectionnée par le pointer */
+     color: red !important;
 }
 
 #bugspointer-message-success{

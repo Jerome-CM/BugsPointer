@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -47,15 +48,17 @@ public class Private {
     }
 
     @PostMapping("notifications")
-    String updateNotifications(@Valid CompanyPreferenceDTO dto, BindingResult result, Model model, HttpServletRequest request){
+    String updateNotifications(@Valid CompanyPreferenceDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
         String action = request.getParameter("action");
         log.info("buttonName : {}", action);
         if (!result.hasErrors()) {
             Response response = preferencesService.updatePreference(dto, action);
             if (response.getStatus().equals(EnumStatus.OK)) {
-                model.addAttribute("notification", response.getMessage());
+                redirectAttributes.addFlashAttribute("notification", response.getMessage());
+                redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
                 return "redirect:notifications";
             } else {
+                model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());
             }
         }
@@ -72,15 +75,17 @@ public class Private {
     }
 
     @PostMapping("account/delete/confirm")
-    String deleteAccount(@Valid AccountDeleteDTO dto, BindingResult result, Model model, HttpServletRequest request){
+    String deleteAccount(@Valid AccountDeleteDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
         if (!result.hasErrors()) {
             Response response = companyService.delete(dto);
             if (response.getStatus().equals(EnumStatus.OK)) {
-                model.addAttribute("notification", response.getMessage());
+                redirectAttributes.addFlashAttribute("notification", response.getMessage());
+                redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
                 HttpSession session = request.getSession();
                 session.invalidate();
                 return "redirect:/authentication";
             } else {
+                model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());
             }
         }
@@ -113,6 +118,7 @@ public class Private {
     String update(@Valid AccountDTO dto,
                   BindingResult result,
                   Model model,
+                  RedirectAttributes redirectAttributes,
                   HttpServletRequest request){
         String action = request.getParameter("action");
         log.info("buttonName : {}", action);
@@ -121,11 +127,13 @@ public class Private {
             if ("updateMail".equals(action)){
                 response = companyService.mailUpdate(dto);
                 if (response.getStatus().equals(EnumStatus.OK)) {
-                    model.addAttribute("notification", response.getMessage());
+                    redirectAttributes.addFlashAttribute("notification", response.getMessage());
+                    redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
                     HttpSession session = request.getSession();
                     session.invalidate();
                     return "redirect:/authentication";
                 } else {
+                    model.addAttribute("status", String.valueOf(response.getStatus()));
                     model.addAttribute("notification", response.getMessage());
                 }
             } else if ("updatePw".equals(action)){
@@ -137,10 +145,12 @@ public class Private {
             }
 
             if (response.getStatus().equals(EnumStatus.OK)) {
+                model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());
                 model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
                 return "private/account";
             } else {
+                model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());
             }
         }

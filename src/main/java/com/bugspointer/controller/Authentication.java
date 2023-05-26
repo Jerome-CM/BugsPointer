@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.service.implementation.CompanyService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 
 @Controller
+@Slf4j
 public class Authentication {
     private final CompanyService companyService;
 
@@ -25,9 +27,11 @@ public class Authentication {
     }
 
     @GetMapping("/authentication")
-    String getAuthenticationPage(Model model, AuthRegisterCompanyDTO dtoRegister, AuthLoginCompanyDTO dtoLogin){
+    String getAuthenticationPage(Model model, AuthRegisterCompanyDTO dtoRegister, AuthLoginCompanyDTO dtoLogin, HttpServletRequest request){
         model.addAttribute("companyRegister", dtoRegister);
         model.addAttribute("companyLogin", dtoLogin);
+        model.addAttribute("status", request.getParameter("status"));
+        model.addAttribute("notification", request.getParameter("message"));
         return "public/authentication";
     }
 
@@ -41,6 +45,11 @@ public class Authentication {
                 model.addAttribute("companyRegister", dtoRegister);
                 model.addAttribute("companyLogin", dtoLogin);
                 return "public/authentication";
+            } else {
+                model.addAttribute("companyRegister", dtoRegister);
+                model.addAttribute("companyLogin", dtoLogin);
+                model.addAttribute("notification", response.getMessage());
+                model.addAttribute("status", String.valueOf(response.getStatus()));
             }
         }
         return "public/authentication";

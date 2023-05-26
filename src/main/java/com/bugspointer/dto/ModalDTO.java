@@ -9,6 +9,8 @@ public class ModalDTO {
 
     private String description;
 
+    private String codeLocation;
+
     private String os;
 
     private String browser;

@@ -38,6 +38,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         String mail = userDetails.getUsername();
         Company company = (Company) companyService.getCompanyByMail(mail);
 
+        if (!company.isEnable()) {
+            response.sendRedirect("/authentication?status=ERROR&message=Account disabled");
+            return;
+        }
+
         if(session.getAttribute("token") == null){
             log.info("Create a new token because is null in the session");
             String token = null;

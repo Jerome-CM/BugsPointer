@@ -10,6 +10,7 @@
     <title>Bugs Pointer</title>
 </head>
 <body class="index">
+    <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/nav.html}"></div>
 
     <h1>Pensé pour votre entreprise, pensé pour vos utilisateurs</h1>
@@ -114,11 +115,11 @@
                 <div class="margin-top-0">
                     <h4>Un lien dans votre pied de page</h4>
                     <br>
-                    <a th:href="@{/modal}" class="btn-action">Signaler un bug</a>
+                    <a th:href="@{/testPage}" class="btn-action">Signaler un bug</a>
                 </div>
                 <div >
                     <h4>Un lien dans votre page</h4>
-                    <a th:href="@{/modal}" class="bugspointer-logo" id="bugspointer_logo">
+                    <a th:href="@{/testPage}" class="bugspointer-logo" id="bugspointer_logo">
                         <div class="bugspointer-objet-logo">
                             <div class="bugspointer-objet-ellispe"></div>
                             <span class="bugspointer-objet-report">Signaler un bug</span>

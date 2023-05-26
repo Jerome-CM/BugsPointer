@@ -7,6 +7,8 @@
     --color-body: #F0F1F3;
     --color-new-bug:#FF0000;
     --color-ignored:#6100FF;
+    --color-notification:#489d21;
+    --color-alert:#a90000;
 
     --radius:5px;
     --shadow:0 0 5px lightgrey;
@@ -70,6 +72,7 @@ a{
     display: flex;
     justify-content: center;
     flex-direction: column;
+    z-index: 2;
 }
 
 .container *{
@@ -167,6 +170,20 @@ nav ul li a {
 
 .nav ul li:last-child a{
     color: var(--color-btn-green);
+}
+
+/* Alerte Notification */
+.notifAlert {
+    text-align: center;
+    color: var(--color-white);
+    font-size: 25px;
+}
+
+.notification {
+    background-color: var(--color-notification);
+}
+.alert {
+    background-color: var(--color-alert);
 }
 
 /* Index */

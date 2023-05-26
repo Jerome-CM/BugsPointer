@@ -65,6 +65,11 @@ public class CompanyService implements ICompany {
         boolean pw;
         boolean name;
 
+        if (dto.getCompanyName().isEmpty() || dto.getMail().isEmpty() ||
+        dto.getPassword().isEmpty()) {
+            return new Response(EnumStatus.ERROR, null, "Merci de compléter tous les champs");
+        }
+
         if (dto.getPassword().equals(dto.getConfirmPassword())){
             pw = true;
         } else {

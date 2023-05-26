@@ -12,9 +12,7 @@ import com.bugspointer.service.IModal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,10 +31,10 @@ public class ModalService implements IModal {
     public Response saveModalFree(ModalDTO dto){
         log.info("saveModalFree");
         log.info("in dto :  {}", dto);
-        boolean bot = false;
-        boolean description = false;
-        boolean key = false;
-        Company company = new Company();
+        boolean bot;
+        boolean description;
+        boolean key;
+        Company company;
 
         if (dto.getBot().isEmpty())
         {
@@ -74,6 +72,7 @@ public class ModalService implements IModal {
             Bug bug = new Bug();
             bug.setUrl(dto.getUrl());
             bug.setDescription(dto.getDescription());
+            bug.setCodeLocation(dto.getCodeLocation());
             bug.setOs(dto.getOs());
             bug.setBrowser(dto.getBrowser());
             bug.setScreenSize(dto.getScreenSize());
