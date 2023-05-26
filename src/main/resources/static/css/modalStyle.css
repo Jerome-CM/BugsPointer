@@ -144,7 +144,7 @@
     height: 70%;
     padding: 5px;
     font-family: var(--font);
-    border: 0.5px solid lightgrey;
+    border: 1px solid lightgrey;
 }
 .bugspointer-popup-content-inputbot{
     visibility: hidden;
@@ -154,7 +154,7 @@
     margin: 0;
 }
 
-.bugspointer-text-balise {
+.bugspointer-text-balise { /* applique une couleur pour la balise sélectionnée par le pointer */
      color: red !important;
 }
 
