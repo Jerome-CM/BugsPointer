@@ -1,0 +1,79 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+    <title>New User</title>
+</head>
+<body class="index">
+    <div th:replace="~{include/notifAlert.html}"></div>
+    <div th:replace="~{include/nav.html}"></div>
+
+    <h1>Mail confirmé avec succès</h1>
+
+    <div class="btn-download newUser">
+        <div class="center">
+            <span class="center">
+                Merci de nous indiquer l'url de votre site web <br>
+                <span class="small-text">(à des fin de sécurité lors de la réception des bugs)</span>
+            </span>
+        <form class="container-row" action="#" th:action="@{/newUser/{mail}}" th:object="${company}" method="post">
+            <input type="text" th:field="*{siteInternet}" placeholder="www.monsite.fr" th:value="${company.getSiteInternet()}">
+            <input type="hidden" th:field="*{mail}" th:value="${company.getMail()}">
+            <input class="btn-action" type="submit" value="Envoyer">
+        </form>
+        </div>
+        <img th:if="${company.getSiteInternet() != null}" alt="valide" th:src="@{/css/img/icones/verifie.gif}">
+    </div>
+
+    <div th:replace="~{include/btnDownload.html}"></div>
+
+    <div class="btn-download newUser">
+        <div class="center">
+            <span class="center">
+                Aller sur votre Dashboard puis dans Account
+                <br>Copier la Security Key et coller là dans le fichier modalControl.js, au début du fichier
+            </span>
+            <div class="container-row">
+                <a th:href="@{/documentations}" class="btn-action">Documentation</a>
+                <a th:href="@{/private/dashboard}" class="submit">Dashboard</a>
+            </div>
+        </div>
+        <img alt="clé" th:src="@{/css/img/icones/chiffrement.gif}"/>
+    </div>
+
+    <div th:if="${company.getPlan()==T(com.bugspointer.entity.EnumPlan).FREE}" class="btn-download newUser">
+        <div class="center">
+            <span class="center">
+                Vous avez actuellement la version gratuite <br>
+                Passer à une autre version pour suivre vos rapports
+            </span>
+            <div class="container-row">
+            <a th:href="@{/features}" class="btn-action">Voir les Avantages pour 15€/an</a>
+            </div>
+        </div>
+        <img alt="moniteur" th:src="@{/css/img/icones/moniteur.gif}"/>
+    </div>
+
+    <div class="btn-download newUser">
+        <div class="center">
+            <span class="center">
+                Intégrer vos fichiers sur toutes les pages où vous souhaiter faire afficher le formulaire de bug
+            </span>
+            <div class="container-row">
+                <a th:href="@{/documentations}" class="btn-action">Documentation</a>
+            </div>
+        </div>
+        <img alt="transfert" th:src="@{/css/img/icones/transfert.gif}"/>
+    </div>
+
+    <p class="center">Pour tous soucis, suggestions ou remarque, écrivez-nous à : <br>
+    contact@bugspointer.com</p>
+
+    <div th:replace="~{include/footer.html}"></div>
+</body>
+</html>

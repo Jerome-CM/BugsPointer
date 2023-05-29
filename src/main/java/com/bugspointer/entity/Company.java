@@ -27,6 +27,7 @@ public class Company {
 
     private String phoneNumber;
 
+    private String siteInternet;
 
     private EnumPlan plan = EnumPlan.FREE;
 
