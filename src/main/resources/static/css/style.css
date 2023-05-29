@@ -525,6 +525,12 @@ ul{
     max-height: 350px;
 }
 
+.auRevoir {
+    position: relative;
+    width: 90%;
+    max-height: max-content !important;
+}
+
 /* Dashboard Free*/
 
 .cards_promo{
