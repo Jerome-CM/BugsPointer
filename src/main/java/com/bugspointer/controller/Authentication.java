@@ -44,7 +44,7 @@ public class Authentication {
             if(response.getStatus() == EnumStatus.OK){
                 model.addAttribute("companyRegister", dtoRegister);
                 model.addAttribute("companyLogin", dtoLogin);
-                return "public/authentication";
+                return "public/registerConfirm";
             } else {
                 model.addAttribute("companyRegister", dtoRegister);
                 model.addAttribute("companyLogin", dtoLogin);
@@ -53,6 +53,15 @@ public class Authentication {
             }
         }
         return "public/authentication";
+    }
+
+    @GetMapping("/registerConfirm")
+    String getRegisterConfirm(Model model, AuthRegisterCompanyDTO dtoRegister, AuthLoginCompanyDTO dtoLogin, HttpServletRequest request){
+        model.addAttribute("companyRegister", dtoRegister);
+        model.addAttribute("companyLogin", dtoLogin);
+        model.addAttribute("status", request.getParameter("status"));
+        model.addAttribute("notification", request.getParameter("message"));
+        return "public/registerConfirm";
     }
 
     @GetMapping("/logout")

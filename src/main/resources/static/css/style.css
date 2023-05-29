@@ -512,6 +512,19 @@ ul{
     border-radius: var(--radius);
 }
 
+/* RegisterConfirm */
+
+.welcome {
+    width: 30%;
+    height: max-content;
+}
+
+.welcome img {
+    position: relative;
+    width: 90%;
+    max-height: 350px;
+}
+
 /* Dashboard Free*/
 
 .cards_promo{

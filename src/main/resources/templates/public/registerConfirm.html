@@ -1,0 +1,29 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+    <title>Register Confirm</title>
+</head>
+<body class="index">
+    <div th:replace="~{include/notifAlert.html}"></div>
+    <div th:replace="~{include/nav.html}"></div>
+
+    <div class="btn-download welcome">
+        <img alt="welcome" th:src="@{/css/img/icones/accueillir.gif}"/>
+    </div>
+    <h1>Merci de nous avoir rejoint !</h1>
+
+    <div class="btn-download">
+        <img alt="envoloppe mail" th:src="@{/css/img/icones/e-mail.gif}"/>
+        <span class="center">Un mail vient d'être envoyé. Il contient un lien d'activation
+        <br>Pensez aux spams/courriers indésirables</span>
+    </div>
+
+    <div th:replace="~{include/footer.html}"></div>
+</body>
+</html>
