@@ -79,11 +79,12 @@ public class Private {
         if (!result.hasErrors()) {
             Response response = companyService.delete(dto);
             if (response.getStatus().equals(EnumStatus.OK)) {
-                redirectAttributes.addFlashAttribute("notification", response.getMessage());
-                redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+                model.addAttribute("notification", response.getMessage());
+                model.addAttribute("status", String.valueOf(response.getStatus()));
+                model.addAttribute("page", "delete");
                 HttpSession session = request.getSession();
                 session.invalidate();
-                return "redirect:/authentication";
+                return "public/registerConfirm";
             } else {
                 model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());

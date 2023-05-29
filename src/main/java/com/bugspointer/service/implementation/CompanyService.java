@@ -79,6 +79,10 @@ public class CompanyService implements ICompany {
         if (dto.getMail().equals(dto.getConfirmMail())) {
             Optional<Company> companyOptional = companyRepository.findByMail(dto.getMail());
             if(companyOptional.isPresent()){
+                if (!companyOptional.get().isEnable()) {
+                    log.info("Company is disable");
+                    return new Response(EnumStatus.ERROR, null, "Le compte existe mais est fermé, pour le réactiver veuillez envoyer un mail à contact@bugspointer.com");
+                }
                 log.info("CompanyMail is exist :  {}", dto.getMail());
                 return new Response(EnumStatus.ERROR, null, "CompanyMail is exist already");
             }
@@ -327,6 +331,18 @@ public class CompanyService implements ICompany {
         }
     }
 
+    public Company companyTryUpdate(Company company) {
+        try {
+            Company savedCompany = companyRepository.save(company);
+            log.info("Company update :  {}", savedCompany);
+            return savedCompany;
+        }
+        catch (Exception e){
+            log.error("Error :  {}", e.getMessage());
+            return null;
+        }
+    }
+
     public Response delete(AccountDeleteDTO dto){
         log.info("delete Account");
         log.info("dto : {}", dto);
@@ -348,6 +364,23 @@ public class CompanyService implements ICompany {
                     return new Response(EnumStatus.ERROR, null, "Wrong password");
                 }
             }
+        }
+
+        return new Response(EnumStatus.ERROR, null, "Error in the process");
+    }
+
+    public Response registerSite(AccountDTO dto){
+        log.info("register site :");
+        log.info("dto: {}", dto);
+
+        Optional<Company> companyOptional=companyRepository.findByMail(dto.getMail());
+        Company company;
+        if (companyOptional.isPresent()){
+            company = companyOptional.get();
+            log.info("Company : {}", company);
+
+            company.setSiteInternet(dto.getSiteInternet());
+            return companyTryRegistration(company, "Site internet enregistré");
         }
 
         return new Response(EnumStatus.ERROR, null, "Error in the process");

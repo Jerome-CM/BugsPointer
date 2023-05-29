@@ -41,6 +41,8 @@
         </section>
     </div>
 
+    <p th:if="${notification != null && notification.contains('contact@bugspointer.com')}" class="center">Votre compte est désactivé ? Vous souhaitez le réactiver ? Veuillez envoyer votre demande à contact@bugspointer.com</p>
+
     <div th:replace="~{include/footer.html}"></div>
 
 </body>

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Date;
 
 @Component
 @Slf4j
@@ -59,6 +60,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         }
         log.info("Token in session : {}", session.getAttribute("token"));
+        company.setLastVisit(new Date());
+        Company companySaved = companyService.companyTryUpdate(company);
+        log.info("Dernière connexion company : {}", companySaved.getLastVisit());
 
         if(company.getRole().equals("ROLE_ADMIN")){
             response.sendRedirect("app/admin/dashboard");

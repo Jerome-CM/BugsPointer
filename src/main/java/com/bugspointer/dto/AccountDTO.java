@@ -24,4 +24,6 @@ public class AccountDTO {
     private String publicKey;
 
     private EnumPlan plan;
+
+    private String siteInternet;
 }

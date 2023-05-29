@@ -490,7 +490,8 @@ ul{
     color: #000;
     margin: 20px auto;
     padding: 5px 15px 5px 5px;
-    width: 35%;
+    width: 80%;
+    max-width: 600px;
     height: 125px;
     border-radius: 5px;
     border: 5px solid var(--color-btn-green);
@@ -499,7 +500,7 @@ ul{
 
 .btn-download img {
     position: relative;
-    width: 120px;
+    width: auto;/*précédemment 120px*/
 }
 
 .btn-action{
@@ -510,6 +511,56 @@ ul{
     width: fit-content;
     font-size: 22px;
     border-radius: var(--radius);
+}
+
+/* RegisterConfirm */
+
+.welcome {
+    width: 30%;
+    height: max-content;
+}
+
+.welcome img {
+    position: relative;
+    width: 90%;
+    max-height: 350px;
+}
+
+.auRevoir {
+    position: relative;
+    width: 90%;
+    max-height: max-content !important;
+}
+
+/* newUser */
+
+.newUser {
+    height: max-content;
+}
+
+.newUser img {
+    width: 120px;
+    height: auto;
+}
+
+.newUser input {
+    border-color: darkgray;
+    text-align: center;
+    border-radius: var(--radius);
+    font-size: 22px;
+    height: max-content;
+    margin-top: 1px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.small-text {
+    font-size: 50%;
+}
+
+.newUser a {
+    margin-top: 1px;
+    padding: 7px 20px;
 }
 
 /* Dashboard Free*/
