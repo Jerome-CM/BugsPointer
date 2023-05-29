@@ -327,6 +327,18 @@ public class CompanyService implements ICompany {
         }
     }
 
+    public Company companyTryUpdate(Company company) {
+        try {
+            Company savedCompany = companyRepository.save(company);
+            log.info("Company update :  {}", savedCompany);
+            return savedCompany;
+        }
+        catch (Exception e){
+            log.error("Error :  {}", e.getMessage());
+            return null;
+        }
+    }
+
     public Response delete(AccountDeleteDTO dto){
         log.info("delete Account");
         log.info("dto : {}", dto);
