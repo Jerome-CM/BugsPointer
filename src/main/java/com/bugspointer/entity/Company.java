@@ -45,6 +45,8 @@ public class Company {
 
     private EnumMotif motifEnable; //Si isEnable = true => motifEnable = VALIDATE, Sinon indiquer le motif
 
+    private Date dateCloture; //Ajoute la date quand le compte passe en inactif
+
     private String role = "ROLE_USER";
 
 }

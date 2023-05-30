@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -360,6 +361,7 @@ public class CompanyService implements ICompany {
                 if (passwordEncoder.matches(dto.getPassword(), company.getPassword())){
                     company.setEnable(false);//Mise en désactivé
                     company.setMotifEnable(EnumMotif.SUPPRESSION);//Désactivation lié à la suppression du compte par le client
+                    company.setDateCloture(new Date());// Ajoute la date du jour de la suppression du compte
                     log.info("company at modify");
                     return companyTryRegistration(company, "Company disabled");
                 } else {
@@ -371,12 +373,19 @@ public class CompanyService implements ICompany {
         return new Response(EnumStatus.ERROR, null, "Error in the process");
     }
 
-    public Response registerSite(AccountDTO dto){
+    public Response registerDomaine(AccountDTO dto){
         log.info("register site :");
         log.info("dto: {}", dto);
 
         Optional<Company> companyOptional=companyRepository.findByMail(dto.getMail());
         Company company;
+
+        boolean isValid = Utility.domaineValidate.isValid(dto.getDomaine());
+
+        if (!isValid){
+            return new Response(EnumStatus.ERROR, null, "Nom de domaine ne correspondant pas à l'expression régulière attendue");
+        }
+
         if (companyOptional.isPresent()){
             company = companyOptional.get();
             log.info("Company : {}", company);
