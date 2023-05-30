@@ -22,12 +22,12 @@
                 <span class="small-text">(à des fin de sécurité lors de la réception des bugs)</span>
             </span>
         <form class="container-row" action="#" th:action="@{/newUser/{mail}}" th:object="${company}" method="post">
-            <input type="text" th:field="*{siteInternet}" placeholder="www.monsite.fr" th:value="${company.getSiteInternet()}">
+            <input type="text" th:field="*{getDomaine}" placeholder="www.monsite.fr" th:value="${company.getDomaine()}">
             <input type="hidden" th:field="*{mail}" th:value="${company.getMail()}">
             <input class="btn-action" type="submit" value="Envoyer">
         </form>
         </div>
-        <img th:if="${company.getSiteInternet() != null}" alt="valide" th:src="@{/css/img/icones/verifie.gif}">
+        <img th:if="${company.getDomaine() != null}" alt="valide" th:src="@{/css/img/icones/verifie.gif}">
     </div>
 
     <div th:replace="~{include/btnDownload.html}"></div>

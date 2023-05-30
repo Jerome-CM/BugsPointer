@@ -357,7 +357,8 @@ public class CompanyService implements ICompany {
                 return new Response(EnumStatus.ERROR, null, "Password empty");
             } else {
                 if (passwordEncoder.matches(dto.getPassword(), company.getPassword())){
-                    company.setEnable(false);
+                    company.setEnable(false);//Mise en désactivé
+                    company.setMotifEnable(EnumMotif.SUPPRESSION);//Désactivation lié à la suppression du compte par le client
                     log.info("company at modify");
                     return companyTryRegistration(company, "Company disabled");
                 } else {
@@ -379,8 +380,8 @@ public class CompanyService implements ICompany {
             company = companyOptional.get();
             log.info("Company : {}", company);
 
-            company.setSiteInternet(dto.getSiteInternet());
-            return companyTryRegistration(company, "Site internet enregistré");
+            company.setDomaine(dto.getDomaine());
+            return companyTryRegistration(company, "Nom de domaine enregistré");
         }
 
         return new Response(EnumStatus.ERROR, null, "Error in the process");
