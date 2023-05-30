@@ -107,6 +107,7 @@ public class CompanyService implements ICompany {
             company.setMail(dto.getMail());
             company.setPassword(passwordEncoder.encode(dto.getPassword()));
             company.setPublicKey(createPublicKey());
+            company.setMotifEnable(EnumMotif.CONFIRMATION);
             log.info("company :  {}", company);
             CompanyPreferences preferences = new CompanyPreferences();
             preferences.setCompany(company);

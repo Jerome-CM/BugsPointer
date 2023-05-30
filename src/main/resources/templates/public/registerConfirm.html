@@ -13,15 +13,18 @@
     <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/nav.html}"></div>
 
-    <div th:if="${page=='register' || page=='delete'}" class="btn-download welcome">
-        <img th:class="${page=='delete'} ? 'auRevoir' : ''" alt="welcome" th:src="${page=='register'} ? @{/css/img/icones/accueillir.gif} : @{/css/img/icones/au-revoir.gif}"/>
-    </div>
-    <h1 th:if="${page == 'register'}">Merci de nous avoir rejoint !</h1>
+    <div class="container">
+        <div th:if="${page=='register' || page=='delete'}" class="btn-download welcome">
+            <img th:class="${page=='delete'} ? 'auRevoir' : ''" alt="welcome" th:src="${page=='register'} ? @{/css/img/icones/accueillir.gif} : @{/css/img/icones/au-revoir.gif}"/>
+        </div>
+        <h1 th:if="${page == 'register'}">Merci de nous avoir rejoint !</h1>
 
-    <div th:if="${page == 'register'}" class="btn-download">
-        <img alt="envoloppe mail" th:src="@{/css/img/icones/e-mail.gif}"/>
-        <span class="center">Un mail vient d'être envoyé. Il contient un lien d'activation
-        <br>Pensez aux spams/courriers indésirables</span>
+        <div th:if="${page == 'register'}" class="btn-download">
+            <img alt="envoloppe mail" th:src="@{/css/img/icones/e-mail.gif}"/>
+            <span class="center">Un mail vient d'être envoyé. Il contient un lien d'activation
+            <br>Pensez aux spams/courriers indésirables</span>
+        </div>
+
     </div>
 
     <div th:replace="~{include/footer.html}"></div>
