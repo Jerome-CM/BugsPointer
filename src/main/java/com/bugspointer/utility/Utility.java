@@ -3,6 +3,8 @@ package com.bugspointer.utility;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class Utility {
@@ -22,5 +24,16 @@ public class Utility {
         }
 
         return publicKey.toString();
+    }
+
+    public static class domaineValidate{
+        private static final String DOMAINE_PATTERN="^[w]{3}([.][0-9a-zA-Z-_]+)*[.][a-z]{2,6}$";
+
+        private static final Pattern pattern = Pattern.compile(DOMAINE_PATTERN);
+
+        public static boolean isValid(final String domaine) {
+            Matcher matcher = pattern.matcher(domaine);
+            return matcher.matches();
+        }
     }
 }

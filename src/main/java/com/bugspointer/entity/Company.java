@@ -2,10 +2,8 @@ package com.bugspointer.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -27,14 +25,14 @@ public class Company {
 
     private String phoneNumber;
 
-    private String siteInternet;
+    private String domaine;
 
     private EnumPlan plan = EnumPlan.FREE;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateLineFacturePlan;
 
-    @Column(unique = true)
+    @Column(unique = true, updatable = false)
     private String publicKey = null;
 
     @NotNull
@@ -43,7 +41,11 @@ public class Company {
 
     private Date lastVisit = new Date();
 
-    private boolean isEnable = true;
+    private boolean isEnable; //Compte actif ou non ?
+
+    private EnumMotif motifEnable; //Si isEnable = true => motifEnable = VALIDATE, Sinon indiquer le motif
+
+    private Date dateCloture; //Ajoute la date quand le compte passe en inactif
 
     private String role = "ROLE_USER";
 

@@ -1,6 +1,7 @@
 package com.bugspointer.configuration;
 
 import com.bugspointer.entity.Company;
+import com.bugspointer.entity.EnumMotif;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
 import com.bugspointer.service.implementation.CompanyService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Company company = (Company) companyService.getCompanyByMail(mail);
 
         if (!company.isEnable()) {
-            response.sendRedirect("/authentication?status=ERROR&message=Account disabled");
+            if (company.getMotifEnable() == EnumMotif.CONFIRMATION){
+                response.sendRedirect("/authentication?status=ERROR&message=Veuillez confirmer votre compte");//TODO: ajouter sur html lien pour renvoyer mail de confirmation
+            } else {
+                response.sendRedirect("/authentication?status=ERROR&message=Account disabled");
+            }
             return;
         }
 

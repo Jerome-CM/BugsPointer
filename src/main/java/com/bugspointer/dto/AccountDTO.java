@@ -25,5 +25,5 @@ public class AccountDTO {
 
     private EnumPlan plan;
 
-    private String siteInternet;
+    private String domaine;
 }

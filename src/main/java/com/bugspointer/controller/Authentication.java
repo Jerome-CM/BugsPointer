@@ -81,7 +81,7 @@ public class Authentication {
                         Model model){
         if (!result.hasErrors()) {
             companyMail = dto.getMail();
-            Response response = companyService.registerSite(dto);
+            Response response = companyService.registerDomaine(dto);
             if (response.getStatus().equals(EnumStatus.OK)) {
                 model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyByMail(companyMail)));
                 model.addAttribute("status", String.valueOf(response.getStatus()));
