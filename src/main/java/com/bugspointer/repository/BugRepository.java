@@ -12,7 +12,10 @@ import java.util.List;
 public interface BugRepository extends CrudRepository<Bug, Long> {
 
 
-
+    //Liste des bugs selon la company et l'état du bug (new, pending, solved, ignored)
     List<Bug> findAllByCompanyAndEtatBug(Company company, EnumEtatBug etatBug);
+
+    //Liste des bugs selon la company
+    List<Bug> findAllByCompany(Company company);
 
 }

@@ -23,7 +23,7 @@
                     Merci de nous indiquer l'url de votre site web <br>
                     <span class="small-text">(à des fin de sécurité lors de la réception des bugs)</span>
                 </span>
-            <form class="container-row" action="#" th:action="@{/newUser/{mail}}" th:object="${company}" method="post">
+            <form class="container-row" action="#" th:object="${company}" method="post">
                 <input type="text" th:field="*{domaine}" id="domaine" placeholder="www.monsite.fr" th:value="${company.getDomaine()}">
                 <input class="btn-action" type="button" id="btn-envoi" value="Envoyer">
             </form>
@@ -81,10 +81,10 @@
     </div>
 
     <div class="popup" id="popup">
-        <form class="form container popup-container" action="#" id="form-confirmation" th:action="@{/newUser/{mail}}" th:object="${company}" method="post">
+        <form class="form container popup-container" action="#" id="form-confirmation" th:action="@{/newUser/{publicKey}(publicKey=${publicKey})}" th:object="${company}" method="post">
             <label>Confirmez-vous que votre nom de domaine est :</label>
             <input type="text" th:field="*{domaine}" id="domaine-a-confirmer" value readonly>
-            <input type="hidden" th:field="*{mail}" th:value="${company.getMail()}">
+            <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}">
             <div class="container-row">
                 <input class="btn-action" type="button" id="btn-annulation" value="Modifier">
                 <input class="btn-action" type="submit" id="btn-confirmation" value="Confirmer">

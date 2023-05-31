@@ -5,7 +5,9 @@ window.addEventListener('DOMContentLoaded', function () {
         let popup = document.getElementById('popup');
         let domaine = document.getElementById('domaine');
         let domaineConfirme = document.getElementById('domaine-a-confirmer');
+        let form = document.getElementById('form-confirmation');
 
+        let enterPressed = false;
 
         function afficher() {
             /* Lorsque la fonction est appelée, elle ouvre la popup contenant le formulaire de bug */
@@ -18,6 +20,18 @@ window.addEventListener('DOMContentLoaded', function () {
             popup.style.display = "none";
         }
 
+        document.addEventListener("keydown", function(event) {
+            /* Vérifie si la touche pressée est Entrée */
+            if (event.key === "Enter"){
+                if (enterPressed) {
+                    form.submit();
+                } else {
+                    enterPressed = true;
+                    event.preventDefault();
+                    afficher();
+                }
+            }
+        })
         btnOpen.addEventListener("click", afficher);
         btnClose.addEventListener("click", masquer);
 

@@ -6,6 +6,7 @@ import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumEtatBug;
+import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.repository.BugRepository;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.service.IModal;
@@ -13,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -21,10 +24,12 @@ public class ModalService implements IModal {
 
     private final BugRepository bugRepository;
     private final CompanyRepository companyRepository;
+    private final MailService mailService;
 
-    public ModalService(BugRepository bugRepository, CompanyRepository companyRepository) {
+    public ModalService(BugRepository bugRepository, CompanyRepository companyRepository, MailService mailService) {
         this.bugRepository = bugRepository;
         this.companyRepository = companyRepository;
+        this.mailService = mailService;
     }
 
 
@@ -34,7 +39,9 @@ public class ModalService implements IModal {
         boolean bot;
         boolean description;
         boolean key;
+        boolean envoi = false;
         Company company;
+        Date dateDernierEnvoi = null;
 
         if (dto.getBot().isEmpty())
         {
@@ -68,6 +75,30 @@ public class ModalService implements IModal {
             return new Response(EnumStatus.ERROR, null, "company not exist");
         }
 
+        if (company.getPlan().equals(EnumPlan.FREE)){
+            //On récupère la liste des bugs reçu
+            List<Bug> bugs = bugRepository.findAllByCompany(company);
+            int i = bugs.size()-1;
+
+            //On cherche la dernière dateEnvoi
+            while (i >= 0 && dateDernierEnvoi == null ){
+                if (bugs.get(i).getDateEnvoi()!=null){
+                    dateDernierEnvoi = bugs.get(i).getDateEnvoi();
+                    log.info("dernier envoi : {}",dateDernierEnvoi);
+                }
+                i--;
+            }
+            Date dateJour = new Date();
+            long j30 = TimeUnit.MILLISECONDS.convert(30, TimeUnit.DAYS);
+            if (dateDernierEnvoi != null){
+                if (dateJour.getTime() - dateDernierEnvoi.getTime() > j30){
+                    envoi = true;
+                }
+            } else {
+                envoi = true;
+            }
+        }
+
         if (bot && description && key){
             Bug bug = new Bug();
             bug.setUrl(dto.getUrl());
@@ -79,9 +110,32 @@ public class ModalService implements IModal {
             bug.setDateCreation(new Date());
             bug.setEtatBug(EnumEtatBug.NEW);
             bug.setCompany(company);
+            if (envoi){
+                bug.setDateEnvoi(new Date());
+            }
             log.info("bug :  {}", bug);
             try {
                 Bug savedBug = bugRepository.save(bug);
+                /* Vérification du compte gratuit, si oui -> si dernier envoi date de +30jours -> envoi du mail avec détail
+                *   Si -30 jours, mail sans détail avec abonnez-vous pour le voir */
+                if (company.getPlan().equals(EnumPlan.FREE) && envoi) {
+                    log.info("mail à envoyer");
+                    //TODO: Mail à modifier par company.getMail()
+                    Response response = mailService.sendMailNewBugDetail("amandine.feronramet2022@campus-eni.fr", savedBug);
+                    if (response.getStatus().equals(EnumStatus.OK)) {
+                        log.info("mail envoyé");
+                    }
+                } else if (company.getPlan().equals(EnumPlan.FREE)){
+                    log.info("mail à envoyer sans détail");
+                    //TODO: Mail à modifier par company.getMail()
+                    Response response = mailService.sendMailNewBugNoDetail("amandine.feronramet2022@campus-eni.fr");
+                    if (response.getStatus().equals(EnumStatus.OK)) {
+                        log.info("mail envoyé");
+                    }
+                } else {
+                    //TODO: envoyer mail lié au compte payant
+                    log.info("compte payant");
+                }
                 log.info("bug saved :  {}", savedBug);
                 return new Response(EnumStatus.OK, null, "Send successfully");
             }
