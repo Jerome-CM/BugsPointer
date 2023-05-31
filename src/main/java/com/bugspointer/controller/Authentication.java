@@ -33,8 +33,10 @@ public class Authentication {
     String getAuthenticationPage(Model model, AuthRegisterCompanyDTO dtoRegister, AuthLoginCompanyDTO dtoLogin, HttpServletRequest request){
         model.addAttribute("companyRegister", dtoRegister);
         model.addAttribute("companyLogin", dtoLogin);
-        model.addAttribute("status", request.getParameter("status"));
-        model.addAttribute("notification", request.getParameter("message"));
+        if (request.getParameter("status") != null) {
+            model.addAttribute("status", request.getParameter("status"));
+            model.addAttribute("notification", request.getParameter("message"));
+        }
         log.info("status : {}", request.getParameter("status"));
         return "public/authentication";
     }
@@ -50,7 +52,12 @@ public class Authentication {
                 model.addAttribute("companyLogin", dtoLogin);
                 model.addAttribute("page", "register");
                 //TODO: modifier l'adresse mail par dto.getMail()
-                response = mailService.sendMailRegister("amandine.feronramet2022@campus-eni.fr", companyService.getCompanyByMail(dto.getMail()).getPublicKey());
+                try {
+                    response = mailService.sendMailRegister("amandine.feronramet2022@campus-eni.fr", companyService.getCompanyByMail(dto.getMail()).getPublicKey());
+                }
+                catch (Exception e){
+                    log.error("Error : {}", e.getMessage());
+                }
                 model.addAttribute("notification", response.getMessage());
                 model.addAttribute("status", String.valueOf(response.getStatus()));
                 return "public/registerConfirm";
@@ -68,8 +75,6 @@ public class Authentication {
     String getRegisterConfirm(Model model, AuthRegisterCompanyDTO dtoRegister, AuthLoginCompanyDTO dtoLogin, HttpServletRequest request){
         model.addAttribute("companyRegister", dtoRegister);
         model.addAttribute("companyLogin", dtoLogin);
-        model.addAttribute("status", request.getParameter("status"));
-        model.addAttribute("notification", request.getParameter("message"));
         return "public/registerConfirm";
     }
 
@@ -77,8 +82,6 @@ public class Authentication {
     String getNewUser(@PathVariable("publicKey") String publicKey,  Model model, HttpServletRequest request){
         Company company = companyService.getCompanyByPublicKey(publicKey);
         model.addAttribute("company", company);
-        model.addAttribute("status", request.getParameter("status"));
-        model.addAttribute("notification", request.getParameter("message"));
         return "public/newUser";
     }
 
