@@ -44,6 +44,8 @@ public class Bug {
     @Column(updatable = false)
     private Date dateCreation = new Date();
 
+    private Date dateEnvoi;
+
     private Date dateView;
 
     private Date dateSolved;
