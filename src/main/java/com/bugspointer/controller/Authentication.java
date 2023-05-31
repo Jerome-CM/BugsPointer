@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import com.bugspointer.entity.Company;
 import com.bugspointer.service.implementation.CompanyService;
+import com.bugspointer.service.implementation.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -21,8 +22,11 @@ import org.springframework.ui.Model;
 public class Authentication {
     private final CompanyService companyService;
 
-    public Authentication(CompanyService companyService) {
+    private final MailService mailService;
+
+    public Authentication(CompanyService companyService, MailService mailService) {
         this.companyService = companyService;
+        this.mailService = mailService;
     }
 
     @GetMapping("/authentication")
@@ -44,6 +48,9 @@ public class Authentication {
                 model.addAttribute("companyRegister", dtoRegister);
                 model.addAttribute("companyLogin", dtoLogin);
                 model.addAttribute("page", "register");
+                response = mailService.sendMailRegister("amandine.feronramet2022@campus-eni.fr", companyService.getCompanyByMail(dto.getMail()).getPublicKey());
+                model.addAttribute("notification", response.getMessage());
+                model.addAttribute("status", String.valueOf(response.getStatus()));
                 return "public/registerConfirm";
             } else {
                 model.addAttribute("companyRegister", dtoRegister);

@@ -21,8 +21,11 @@
 
         <div th:if="${page == 'register'}" class="btn-download">
             <img alt="envoloppe mail" th:src="@{/css/img/icones/e-mail.gif}"/>
-            <span class="center">Un mail vient d'être envoyé. Il contient un lien d'activation
+            <span th:if="${status=='OK'}" class="center">Un mail vient d'être envoyé. Il contient un lien d'activation
             <br>Pensez aux spams/courriers indésirables</span>
+            <span th:if="${status=='ERROR'}" class="center">Une erreur s'est produite lors de l'envoi du mail.
+                <br>Cliquez <a>ici</a> pour effectuer un nouvel envoi.
+            <br>Si l'erreur persiste contacter : contact@bugspointer.com</span>
         </div>
 
     </div>
