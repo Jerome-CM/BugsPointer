@@ -19,16 +19,16 @@ public class MailService {
 
     // Paramètres de connexion au serveur SMTP
     @Value("${mail.smtp}")
-    private static String host;
+    private String host;
 
     @Value("${mail.port}")
-    private static int port;
+    private int port;
 
     @Value("${mail.user}")
-    private static String user;
+    private String user;
 
     @Value("${mail.password}")
-    private static String password;
+    private String password;
 
     public Response sendMailRegister(String to, String publicKey) {
 
@@ -83,7 +83,7 @@ public class MailService {
             Transport.send(message);
 
             log.info("email register sent at : {}", to);
-            return new Response(EnumStatus.OK, null, "Vous avez un nouvel e-mail ");
+            return new Response(EnumStatus.OK, null, "Vous avez un nouvel e-mail");
         } catch (MessagingException e) {
             e.printStackTrace();
             log.info("error from mail sender : " + e.getMessage());

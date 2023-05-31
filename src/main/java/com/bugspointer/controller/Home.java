@@ -26,6 +26,7 @@ public class Home {
         return "public/documentations";
     }
 
+    // TODO a delete
     @GetMapping("modal")
     String getModalForTest(){
         return "download/modal";
@@ -44,5 +45,10 @@ public class Home {
     @GetMapping("mentions")
     String getMentions(){
         return "public/mentions";
+    }
+
+    @GetMapping("testPage")
+    String getTestPage(){
+        return "public/testPage";
     }
 }

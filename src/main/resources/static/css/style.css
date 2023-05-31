@@ -46,6 +46,7 @@ html, body{
 body{
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 .black{
@@ -60,6 +61,10 @@ body{
 
 a{
     text-decoration: none;
+}
+
+.fs20{
+    font-size: 20px;
 }
 
 .h-in-black{
@@ -90,7 +95,7 @@ a{
 
 h1{
     font-size: 50px;
-    font-family: "Raleway", sans-serif;
+    font-family: "RalewayBold", sans-serif;
     text-align: center;
 }
 
@@ -259,7 +264,7 @@ nav ul li a {
 .author-info a {
     color: white;
 }
-img {
+.slides img {
     object-fit: cover;
     position: absolute;
     top: 0;
@@ -315,7 +320,7 @@ img {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    align-items: stretch;
+    align-items: center;
     text-align: center;
     margin: 20px auto;
 }
@@ -340,10 +345,23 @@ img {
 }
 
 .cards_detail h3{
-    color: var(--color-btn-green);
     text-transform: none;
-    font-size: 30px;
-    text-align: center;
+    font-size: 25px;
+    font-family: "Raleway", sans-serif;
+}
+
+.tierce_card{
+    width: 30%;
+    align-items: stretch;
+}
+
+.demi_card{
+    width: 45%;
+    align-items: stretch;
+}
+
+.align-stretch{
+    align-items: stretch;
 }
 
 .margin-bottom {
@@ -366,6 +384,8 @@ img {
 
 .rotation-none{
     transform: rotate(-5deg);
+    font-size: 24px;
+    line-height: 35px;
 }
 
 .rotation-none p{
@@ -397,6 +417,12 @@ ul{
     margin-top: 10px;
     font-weight: bold;
     font-size: 25px;
+    position: relative;
+    top: 50px;
+}
+
+.ul-index li{
+    list-style: none;
 }
 
 .text-green {
@@ -418,7 +444,7 @@ ul{
     display: flex;
     justify-content:center;
     flex-direction:column;
-    width:112px;
+    width:116px;
     height:100px;
 }
 
@@ -427,7 +453,7 @@ ul{
     width: 65px;
     min-height: 65px;
     border-radius:100%;
-    border: 0.5em solid var(--color-btn-green);
+    border: 0.4em solid var(--color-btn-green);
     background-image: url(img/chercher.gif);
     background-size: contain;
     box-shadow: 0 0 5px grey;
@@ -443,11 +469,26 @@ ul{
     margin: 0;
 }
 
+/* Authentication */
+
+.cancel-margin-top{
+    margin-top:0;
+}
+
 /* Features */
 .cards_detail img{
     position: relative;
     min-width: 400px;
     max-width: 500px;
+}
+
+.left{
+    width: 45%;
+
+}
+
+.right{
+    width: 45%;
 }
 
 .gray{
@@ -469,15 +510,21 @@ ul{
 }
 
 .form > * {
-    margin-bottom: 20px;
     width: 100%;
-    height: 40px;
     text-align: center;
     border-radius: var(--radius);
 }
 
 .form > input {
-    border-color: darkgray;
+    width: 90%;
+    border: none;
+    box-shadow: var(--shadow);
+    margin: 15px auto;
+    padding: 15px 10px;
+}
+
+.form input[type=submit]{
+    width: 50%;
 }
 
 /* Download Page */

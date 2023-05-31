@@ -1,20 +1,39 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
+    <link th:href="@{/css/modalStyle.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+    <script type="text/javascript" th:src="@{/js/modalControl.js}"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
+    <title>Register Confirm</title>
     <title>Page de test</title>
     <style>
+        html,body{
+            padding: 0;
+            margin: 0;
+            font-family: "Raleway", sans-serif;
+        }
         *{
             box-sizing:border-box;
         }
 
-        h1{
+        h1,h2,p,ul{
             text-align:center;
+            margin:25px auto;
         }
 
         .container{
             width:95%;
             display:flex;
             justify-content: space-around;
+            align-items: center;
         }
 
         .cards{
@@ -24,33 +43,123 @@
             border-radius: 5px;
             box-shadow: 0 0 5px grey;
         }
+
+        li{
+            list-style: none;
+        }
+
+        footer{
+            width: 100%;
+            padding: 20px;
+            background-color: grey;
+            color: darkgrey;
+            text-align: center;
+        }
+
+        .container img {
+            width: 200px;
+        }
+
+        p span{
+            color: red;
+            font-family: sans-serif;
+        }
+
+        footer a{
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+
+
     </style>
 </head>
     <body>
 
     <h1>Tester Bugspointer ! </h1>
 
+    <h2>Voici une page de test avec certains bugs que vous pouvez utiliser afin de tester la puissance de Bugspointer.</h2>
+
+    <p>Mode d'emploi : </p>
+    <ul>
+        <li>Cliquez sur le logo ou sur le lien dans le bas de page</li>
+        <li>Suivez les indications du formulaire</li>
+        <li>Recevez les données de ce test par mail</li>
+    </ul>
+
+
+
     <div class="container">
         <div class="cards">
-            <h2>Carte</h2>
+            <h2>Mon titre 1</h2>
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, voluptas?</p>
         </div>
         <div class="cards">
-            <h2>Carte</h2>
+            <h2>Mon titre 20</h2>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, commodi.</p>
         </div>
     </div>
 
     <div class="container">
         <div class="cards">
-            <h2>Carte</h2>
+            <h2>Mon titre 3</h2>
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, voluptas?</p>
         </div>
         <div class="cards">
-            <h2>Carte</h2>
+            <h2>Mon titre 4</h2>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, commodi.</p>
         </div>
     </div>
+    <div class="container">
+        <div class="cards">
+            <img src="/css/img/utilisateur.gif" alt="">
+            <p>Une photo qui fonctionne comme il le faut</p>
+        </div>
+        <div class="cards">
+            <p>La réponse est dans cette photo</p>
+            <img src="/css/img/imgnotfound.jpeg" alt="">
+        </div>
+    </div>
 
+    <p>Aujourd'hui nous sommes le : <span>Error 500 : Server is timeout</span></p>
+    <button class="bugspointer-logo" id="bugspointer_logo">
+        <div class="bugspointer-objet-logo">
+            <div class="bugspointer-objet-ellispe"></div>
+            <span class="bugspointer-objet-report">Signaler un bug</span>
+        </div>
+    </button>
+    <footer>
+        <a class="bugspointer-open-popup" id="bugspointer_open_popup">Signaler un bug</a> - 2023 - Ceci est une page de test
+    </footer>
+
+    <div class="bugspointer-popup" id="bugspointer_popup">
+        <form class="bugspointer-popup-container" method="post" action="/api/user/modalControl">
+            <div class="bugspointer-popup-header">
+                <span class="bugspointer-popup-titre">Signaler un nouveau bug</span>
+                <span class="bugspointer-close-popup" id="bugspointer_close_popup">&times;</span>
+            </div>
+            <div id="bugspointer-message-success"></div>
+            <div class="bugspointer-popup-content" id="bugspointer-affichage">
+                <label for="bugspointer-urlPointed">Url avec ce bug</label>
+                <input type="text" name="url" class="bugspointer-popup-content-texturl" id="bugspointer-urlPointed" value="" readonly>
+
+                <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-pointer">Pointer un bug</button>
+                <p id="bugspointer-popup-pointer-bug-text">Merci de sélectionner la ligne contenant le bug en cliquant sur le bouton si dessus</p>
+
+                <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-validated" style="display: none"></button>
+                <textarea name="codeLocation" id="bugspointer-popup-pointer-bug" readonly hidden></textarea>
+
+                <label>Description du bug</label>
+                <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="10" required></textarea>
+                <input type="text" name="bot" class="bugspointer-popup-content-inputbot">
+
+                <input type="hidden" name="os" id="bugspointer-popup-os" readonly>
+                <input type="hidden" name="browser" id="bugspointer-popup-browser" readonly>
+                <input type="hidden" name="screenSize" id="bugspointer-popup-screen" readonly>
+                <input type="hidden" name="key" id="key" readonly>
+
+                <button class="bugspointer-popup-btn-submit" type="submit" id="bugspointer-popup-btn-submit">Envoyer mon rapport</button>
+            </div>
+        </form>
+    </div>
     </body>
     </html>

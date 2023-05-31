@@ -5,6 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
     <link th:href="@{/css/style.css}" rel="stylesheet" />
     <script type="text/javascript" th:src="@{/js/actions.js}"></script>
 
@@ -14,55 +15,58 @@
     <div th:replace="~{include/nav.html}"></div>
 
     <h1>Pensé pour votre entreprise, pensé pour vos utilisateurs</h1>
-    <h2>Profiter des avantages d'un site sans bug</h2>
 
     <div class="container">
+        <h2 class="space">Profiter des avantages d'un site sans bug</h2>
+
         <section>
             <div class="container-row">
-                <div class="cards cards_detail">
-                    <h3>URL complète</h3>
-                    <p>Le rapport contient une URL complète, permettant de savoir où se situe le bug,
+                <div class="cards cards_detail demi_card">
+                    <h3>URL complète</h3><br><br>
+                    <p>Le rapport contient l'URL complète. Cela permet de savoir sur quelle page est le bug,
                     ou sur quel produit si l'URL contient son nom</p>
                 </div>
 
-                <div class="cards cards_detail">
-                    <h3>Description</h3>
-                    <p>Une description permettant de décrire rapidement où se situe le bug, comment il s'est produit, ce qui manque sur le site...</p>
+                <div class="cards cards_detail demi_card">
+                    <h3>Description</h3><br><br>
+                    <p>Une description pour décrire rapidement où est le bug, comment il s'est produit, ce qui manque sur le site, ...</p>
                 </div>
             </div>
         </section>
             <div class="cadre rotation gray">
                 <div class="rotation-none">
-                    <a th:href="@{/modal}" class="btn-try">Essayer maintenant</a>
-                    <h1 class="h-in-features">With Target Plan</h1>
+                        <a th:href="@{/testPage}" class="btn-try"><img style="width:100px; height:100px; border-radius:20%;" th:src="@{/css/img/icones/essaie-moi.gif}" alt="Try me">Essayer maintenant</a>
                 </div>
             </div>
         <section>
+            <h1 class="h-in-features space">With Target Plan</h1>
             <div class="cards cards_detail">
                 <h3>Un aperçu de la sélection HTML</h3>
                 <p>Un extrait HTML de votre code est joint dans le rapport où le bug a été signalé</p>
                 <div class="container-row">
-                    <img alt="Nos solutions" th:src="@{/css/img/Nos solutions.png}">
-                    <img alt="Capture d'écran de ligne de code" th:src="@{/css/img/Capture écran.png}">
+                    <div class="left"><img alt="Nos solutions" th:src="@{/css/img/Nos solutions.png}"></div>
+                    <div class="right"><img alt="Capture d'écran de ligne de code" th:src="@{/css/img/Capture écran.png}"></div>
                 </div>
             </div>
             <br>
             <div class="cards cards_detail">
-                <h3>A smart Dashboard</h3>
+                <h3>Un tableau de bord simple et clair</h3>
                 <div class="container-row">
-                    <div>
-                        <p>Un tableau de bord simpl eet intuitif pour gérer efficacement vos bugs</p>
+                    <div class="left">
+                        <p>Un tableau de bord simple et intuitif pour gérer efficacement vos bugs</p>
                         <p>Gérez également votre méthode d'alerte préférée, personnalisez votre interface et les données de votre compte</p>
                     </div>
-                    <img th:src="@{/css/img/sliderPlan/dashboard.png}" alt="Preview of HTML content">
+                    <div class="right"><img th:src="@{/css/img/sliderPlan/dashboard.png}" alt="Preview of HTML content"></div>
+
                 </div>
             </div>
             <br>
             <div class="cards cards_detail">
                 <h3>Données de l'environnement utilisateur</h3>
                 <div class="container-row">
-                    <img th:src="@{/css/img/sliderPlan/userEnv.png}" alt="User Environment">
-                    <div>
+                    <div class="left"><img th:src="@{/css/img/sliderPlan/userEnv.png}" alt="User Environment"></div>
+
+                    <div class="right">
                         <p>Recevoir les variables d'environnement utilisateur.</p>
                         <p>Cela permet de savoir dans quelle condition le bug apparaît à l'utilisateur.</p>
                         <p>Son client web, la taille de son écran ainsi que la version de l'OS peuvent vous aider à corriger le bug reçu.</p>
@@ -73,24 +77,25 @@
             <div class="cadre rotation gray">
                 <div class="rotation-none">
                     <a th:href="@{#}" class="btn-action">15€ / year</a>
-                    <h1 class="h-in-features">With Ultimate Plan</h1>
                 </div>
             </div>
         <section>
+            <h1 class="h-in-features space">With Ultimate Plan</h1>
             <div class="cards cards_detail">
-                <h3>Connectez-vous à votre compte GitHub</h3>
-                <p>Lorsqu'un utilisateur signale un nouveau bug sur votre site, un ticket GitHub est créé sur votre projet pour mieux suivre les bugs.</p>
-                <p>L'état du bug est synchronisé avec l'état du problème GitHub.</p>
+                <h3>Connectez-vous à votre compte GitHub</h3><br><br>
+                <p>Lorsqu'un utilisateur signale un nouveau bug sur votre site, une issue GitHub est créé sur votre projet pour mieux suivre les bugs.</p>
+                <p>L'état du bug est synchronisé avec l'état de l'issue GitHub.</p><br><br>
+                <p>Concentrer tous vos rapports d'erreur en un seul et même endroit</p>
             </div>
             <br>
             <div class="cards cards_detail">
-                <h3>Mettre sur une liste de surveillance</h3>
-                <p>Enregistrez certains bug sur une liste de surveillance.
-                    S'il y a trop de signalement pour ue URL, vous pouvez être averti du trop grand nombre de signalements.</p>
+                <h3>Mettre sur une liste de surveillance</h3><br><br>
+                <p>Enregistrez certains bugs sur une liste de surveillance.
+                   S'il y a trop de signalement pour cette URL, vous pouvez être averti du trop grand nombre de signalements.</p>
             </div>
             <br>
-            <div style="text-align: center">
-                <a th:href="@{#}" class="btn-action">15€ / year</a>
+            <div class="center space">
+                <a th:href="@{#}" class="btn-action">50€ / year</a>
             </div>
         </section>
     </div>

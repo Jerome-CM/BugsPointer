@@ -196,7 +196,7 @@ public class Private {
     // TODO : Juste pour l'exemple, à supprimer après, ne pas oublier le constructeur à clean
     @GetMapping(value="mail")
     String sendMailRegister(){
-        Response response = mailService.sendMailRegister("monemaildetest@hotmail.fr", "HKVJHsgfir813dkfh");
+        Response response = mailService.sendMailRegister("bouteveillejerome@hotmail.fr", "HKVJHsgfir813dkfh");
         if(response.getStatus().equals(EnumStatus.OK)){
             return "index";
         }

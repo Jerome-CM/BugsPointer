@@ -5,6 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
     <link th:href="@{/css/style.css}" rel="stylesheet" />
     <script type="text/javascript" th:src="@{/js/actions.js}"></script>
     <title>Bugs Pointer</title>
@@ -14,41 +15,42 @@
     <div th:replace="~{include/nav.html}"></div>
 
     <h1>Pensé pour votre entreprise, pensé pour vos utilisateurs</h1>
-    <h2>Utilisez BugsPointer gratuitement pour avoir un site web parfait</h2>
-
     <div class="container">
+
+        <h2 class="space">Utilisez BugsPointer gratuitement pour avoir un site web parfait</h2>
+
         <div class="cadre rotation green">
             <div class="rotation-none">
-                <h2 class="h-in-index">Signaler un bug, facilement.</h2>
-                <p>BugsPointer est un formulaire simple.</p>
+                <h2 class="h-in-index">Signaler un bug, facilement</h2>
+                <p>BugsPointer est un formulaire simple</p>
                 <p>Facile à intégrer</p>
                 <p>Facile à personnaliser</p>
-                <a th:href="@{/authentication}" class="btn-try">Essayer maintenant</a>
+                <a th:href="@{/testPage}" class="btn-try"><img style="width:100px; height:100px; border-radius:20%;" th:src="@{/css/img/icones/essaie-moi.gif}" alt="Try me">Essayer maintenant</a>
             </div>
         </div>
         <section>
             <h2 class="h-in-index">Comment ça fonctionne ?</h2>
             <h4 class="h-in-index">Pour votre entreprise</h4>
-            <div class="container-row">
-                <div class="cards cards_detail">
+            <div class="container-row align-stretch">
+                <div class="cards cards_detail tierce_card">
                     <h3>Ajoutez les fichiers dans votre projet</h3>
                 </div>
-                <div class="cards cards_detail">
+                <div class="cards cards_detail tierce_card">
                     <h3>Bugs reçus dans votre tableau de bord</h3>
                 </div>
-                <div class="cards cards_detail">
+                <div class="cards cards_detail tierce_card">
                     <h3>Résolvez-le !</h3>
                 </div>
             </div>
             <h4 class="h-in-index">Pour vos utilisateurs</h4>
-            <div class="container-row">
-                <div class="cards cards_detail">
+            <div class="container-row align-stretch">
+                <div class="cards cards_detail tierce_card">
                     <h3>Signale un nouveau bug sur la page</h3>
                 </div>
-                <div class="cards cards_detail">
+                <div class="cards cards_detail tierce_card">
                     <h3>Envoyer un bug avec un formulaire simple</h3>
                 </div>
-                <div class="cards cards_detail">
+                <div class="cards cards_detail tierce_card">
                     <h3>Profiter d'un site web parfait</h3>
                 </div>
             </div>
@@ -59,11 +61,11 @@
             <div class="cadre rotation-none green">
                 <div class="container-row rotation">
                     <ul class="ul-index">
-                        <li class="h-in-index">Synthaxe</li>
-                        <li class="h-in-index">Path file</li>
+                        <li class="h-in-index">Syntaxe</li>
+                        <li class="h-in-index">Chemin de fichier</li>
                         <li class="h-in-index">Design</li>
-                        <li class="h-in-index">Error system</li>
-                        <li class="h-in-index">Mandatory documents missing</li>
+                        <li class="h-in-index">Erreur du système</li>
+                        <li class="h-in-index">Document obligatoire manquant</li>
                     </ul>
                     <div class="slider sliderIndex">
                         <div class="slides">
@@ -91,18 +93,20 @@
             <div class="container-row">
                 <div class="cards cards_detail">
                     <h3 class="margin-bottom">Free</h3>
-                    <ul>Receive a report in a mail containing :
-                        <li>The page URL</li>
-                        <li>A smart description</li>
-                        <li>One report per month</li>
+                    Recevez un rapport par mail contenant :<br><br>
+                    <ul>
+                        <li>L'Url de la page</li>
+                        <li>Une simple description</li>
+                        <li>Un rapport maximum par mois</li>
                     </ul>
                     <a th:href="@{/authentication}" class="btn-action">Essayer maintenant</a>
                 </div>
                 <div class="cards cards_detail">
                     <h3 class="margin-bottom">Target Plan</h3>
-                    <ul>Receive a report containing :
-                        <li>The page URL</li>
-                        <li>A smart description</li>
+                    Recevez un rapport sur notre dashboard avec : <br><br>
+                    <ul>
+                        <li>L'Url de la page</li>
+                        <li>Une simple description</li>
                         <li th:replace="~{include/targetPlanContent.html}"></li>
                     </ul>
                     <a th:href="@{/features}" class="btn-action">Details</a>
@@ -110,7 +114,8 @@
             </div>
         </section>
         <section>
-            <h2 class="h-in-index">Testing</h2>
+            <h2 class="h-in-index">Testez-moi</h2>
+            <p class="space center">Vous pouvez mettre sur votre site web notre logo ou simplement un lien où vous le voulez. Tout est personalisable</p>
             <div class="container-row">
                 <div class="margin-top-0">
                     <h4>Un lien dans votre pied de page</h4>
@@ -118,7 +123,7 @@
                     <a th:href="@{/testPage}" class="btn-action">Signaler un bug</a>
                 </div>
                 <div >
-                    <h4>Un lien dans votre page</h4>
+                    <h4>Notre logo</h4>
                     <a th:href="@{/testPage}" class="bugspointer-logo" id="bugspointer_logo">
                         <div class="bugspointer-objet-logo">
                             <div class="bugspointer-objet-ellispe"></div>

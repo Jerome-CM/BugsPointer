@@ -5,6 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
     <link th:href="@{/css/style.css}" rel="stylesheet" />
     <script type="text/javascript" th:src="@{/js/actions.js}"></script>
     <title>Register Confirm</title>
@@ -17,11 +18,11 @@
         <div th:if="${page=='register' || page=='delete'}" class="btn-download welcome">
             <img th:class="${page=='delete'} ? 'auRevoir' : ''" alt="welcome" th:src="${page=='register'} ? @{/css/img/icones/accueillir.gif} : @{/css/img/icones/au-revoir.gif}"/>
         </div>
-        <h1 th:if="${page == 'register'}">Merci de nous avoir rejoint !</h1>
+        <h1 class="space" th:if="${page == 'register'}">Merci de nous avoir rejoint !</h1>
 
         <div th:if="${page == 'register'}" class="btn-download">
             <img alt="envoloppe mail" th:src="@{/css/img/icones/e-mail.gif}"/>
-            <span class="center">Un mail vient d'être envoyé. Il contient un lien d'activation
+            <span class="center fs20">Un mail vient d'être envoyé. Il contient un lien d'activation
             <br>Pensez aux spams/courriers indésirables</span>
         </div>
 

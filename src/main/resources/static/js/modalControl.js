@@ -1,5 +1,5 @@
 const key = "Vw6QSo7nPHkhXk7pD2z69HJ3A"; /*Ajoutez votre clé public ici, entre les ""*/
-
+window.addEventListener("DOMContentLoaded", function(){
 
 /* Variables document */
 let btnopen = document.querySelector('#bugspointer_open_popup');
@@ -289,3 +289,5 @@ form.addEventListener("submit", function (e) {
 /* Permet de déclencher la lecture des dimensions de l'écran au moment du clic pour l'ouverture de la popup */
 btnopen.addEventListener("click", dimension);
 btnopenlogo.addEventListener("click", dimension);
+
+});
