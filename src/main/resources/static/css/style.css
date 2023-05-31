@@ -7,8 +7,8 @@
     --color-body: #F0F1F3;
     --color-new-bug:#FF0000;
     --color-ignored:#6100FF;
-    --color-notification:#489d21;
-    --color-alert:#a90000;
+    --color-notification: #4de124;
+    --color-alert: #e50000;
 
     --radius:5px;
     --shadow:0 0 5px lightgrey;
@@ -179,9 +179,11 @@ nav ul li a {
 
 /* Alerte Notification */
 .notifAlert {
+    font-family: "Raleway", sans-serif;
     text-align: center;
     color: var(--color-white);
-    font-size: 25px;
+    font-size: 20px;
+    padding: 15px 0;
 }
 
 .notification {
