@@ -54,6 +54,17 @@ public class CompanyService implements ICompany {
         return companyGet;
     }
 
+    public Company getCompanyByPublicKey(String publicKey){
+        Optional<Company> companyOptional = companyRepository.findByPublicKey(publicKey);
+        Company company = null;
+
+        if (companyOptional.isPresent()){
+            company = companyOptional.get();
+        }
+
+        return company;
+    }
+
     public String createPublicKey() {
         return utility.createPublicKey();
     }
@@ -373,12 +384,32 @@ public class CompanyService implements ICompany {
         return new Response(EnumStatus.ERROR, null, "Error in the process");
     }
 
+    public Response validateRegister(String publicKey){
+        log.info("validate register :");
+        log.info("publicKey : {}", publicKey);
+
+        Company company = getCompanyByPublicKey(publicKey);
+
+        if (company != null) {
+            if (!company.isEnable() && company.getMotifEnable() == EnumMotif.CONFIRMATION){
+                company.setEnable(true);
+                company.setMotifEnable(EnumMotif.VALIDATE);
+
+                return companyTryRegistration(company, "Compte validé");
+            }
+
+            return new Response(EnumStatus.ERROR, null, "Ce compte a déjà été validé, veuillez vous connecter");
+        }
+
+        return new Response(EnumStatus.ERROR, null, "Echec de la validation");
+    }
+
     public Response registerDomaine(AccountDTO dto){
         log.info("register site :");
         log.info("dto: {}", dto);
 
-        Optional<Company> companyOptional=companyRepository.findByMail(dto.getMail());
-        Company company;
+        Company company = getCompanyByPublicKey(dto.getPublicKey());
+        log.info("company : {}", company);
 
         boolean isValid = Utility.domaineValidate.isValid(dto.getDomaine());
 
@@ -386,8 +417,7 @@ public class CompanyService implements ICompany {
             return new Response(EnumStatus.ERROR, null, "Nom de domaine ne correspondant pas à l'expression régulière attendue");
         }
 
-        if (companyOptional.isPresent()){
-            company = companyOptional.get();
+        if (company != null){
             log.info("Company : {}", company);
 
             company.setDomaine(dto.getDomaine());

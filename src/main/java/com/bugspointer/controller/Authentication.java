@@ -35,6 +35,7 @@ public class Authentication {
         model.addAttribute("companyLogin", dtoLogin);
         model.addAttribute("status", request.getParameter("status"));
         model.addAttribute("notification", request.getParameter("message"));
+        log.info("status : {}", request.getParameter("status"));
         return "public/authentication";
     }
 
@@ -48,6 +49,7 @@ public class Authentication {
                 model.addAttribute("companyRegister", dtoRegister);
                 model.addAttribute("companyLogin", dtoLogin);
                 model.addAttribute("page", "register");
+                //TODO: modifier l'adresse mail par dto.getMail()
                 response = mailService.sendMailRegister("amandine.feronramet2022@campus-eni.fr", companyService.getCompanyByMail(dto.getMail()).getPublicKey());
                 model.addAttribute("notification", response.getMessage());
                 model.addAttribute("status", String.valueOf(response.getStatus()));
@@ -71,26 +73,25 @@ public class Authentication {
         return "public/registerConfirm";
     }
 
-    @GetMapping("newUser/{mail}")//TODO: ajouter des variables dans l'url pour identifier la company et sécuriser
-    String getNewUser(@PathVariable("mail") String companyMail,  Model model, HttpServletRequest request){
-        Company company = companyService.getCompanyByMail(companyMail);
+    @GetMapping("newUser/{publicKey}")//TODO: ajouter des variables dans l'url pour identifier la company et sécuriser
+    String getNewUser(@PathVariable("publicKey") String publicKey,  Model model, HttpServletRequest request){
+        Company company = companyService.getCompanyByPublicKey(publicKey);
         model.addAttribute("company", company);
         model.addAttribute("status", request.getParameter("status"));
         model.addAttribute("notification", request.getParameter("message"));
-        log.info("mail : {}", companyMail);
         return "public/newUser";
     }
 
-    @PostMapping("newUser/{mail}")
-    String registerSite(@PathVariable("mail") String companyMail,
+    @PostMapping("newUser/{publicKey}")
+    String registerSite(@PathVariable("publicKey") String publicKey,
                         @Valid AccountDTO dto,
                         BindingResult result,
                         Model model){
         if (!result.hasErrors()) {
-            companyMail = dto.getMail();
+            String companyMail = dto.getMail();
             Response response = companyService.registerDomaine(dto);
             if (response.getStatus().equals(EnumStatus.OK)) {
-                model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyByMail(companyMail)));
+                model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey)));
                 model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());
                 model.addAttribute("etat", "ok");
@@ -102,8 +103,8 @@ public class Authentication {
                 model.addAttribute("etat", "error");
             }
         }
-        model.addAttribute("mail", companyMail);
-        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyByMail(companyMail)));
+        model.addAttribute("publicKey", publicKey);
+        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey)));
         return "public/newUser";
     }
 
