@@ -140,8 +140,8 @@ public class MailService {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject);
-            message.setContent(htmlContent, "text/html");
+            message.setSubject(subject, "UTF-8");
+            message.setContent(htmlContent, "text/html; charset=UTF-8");
 
             // Envoi du message
             Transport.send(message);
@@ -202,8 +202,8 @@ public class MailService {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject);
-            message.setContent(htmlContent, "text/html");
+            message.setSubject(subject, "UTF-8");
+            message.setContent(htmlContent, "text/html; charset=UTF-8");
 
             // Envoi du message
             Transport.send(message);
