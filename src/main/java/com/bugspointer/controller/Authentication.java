@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Slf4j
@@ -51,9 +52,9 @@ public class Authentication {
                 model.addAttribute("companyRegister", dtoRegister);
                 model.addAttribute("companyLogin", dtoLogin);
                 model.addAttribute("page", "register");
-                //TODO: modifier l'adresse mail par dto.getMail()
+                //Mail à modifier pour envoi forcé sinon dto.getMail()
                 try {
-                    response = mailService.sendMailRegister("amandine.feronramet2022@campus-eni.fr", companyService.getCompanyByMail(dto.getMail()).getPublicKey());
+                    response = mailService.sendMailRegister(dto.getMail(), companyService.getCompanyByMail(dto.getMail()).getPublicKey());
                 }
                 catch (Exception e){
                     log.error("Error : {}", e.getMessage());
@@ -78,7 +79,7 @@ public class Authentication {
         return "public/registerConfirm";
     }
 
-    @GetMapping("newUser/{publicKey}")//TODO: ajouter des variables dans l'url pour identifier la company et sécuriser
+    @GetMapping("newUser/{publicKey}")//TODO: ajouter des variables dans l'url pour identifier la company et sécuriser ?
     String getNewUser(@PathVariable("publicKey") String publicKey,  Model model, HttpServletRequest request){
         Company company = companyService.getCompanyByPublicKey(publicKey);
         model.addAttribute("company", company);
@@ -111,6 +112,52 @@ public class Authentication {
         return "public/newUser";
     }
 
+
+    @GetMapping("pwLost")
+    String getPwLost(Model model, AccountDTO dto){
+        model.addAttribute("company", dto);
+        return "public/pwLost";
+    }
+
+    @PostMapping("pwLost")
+    String passwordLost(@Valid AccountDTO dto, BindingResult result, Model model){
+        if(!result.hasErrors()){
+            Response response;
+            try {
+                response = companyService.sendPwLost(dto);
+            } catch (Exception e){
+                log.error(e.getMessage());
+                response = new Response(EnumStatus.ERROR, null, "Une erreur est survenu lors de l'envoi du mail. Si le problème persiste merci de nous contacter");
+            }
+            model.addAttribute("status", String.valueOf(response.getStatus()));
+            model.addAttribute("notification", response.getMessage());
+            model.addAttribute("etat", "ok");
+        }
+
+        return "public/pwLost";
+    }
+
+    @GetMapping("resetPassword/{publicKey}")//TODO: A securiser plus si on possède la clé on peut aller modifier le mot de passe
+    String getResetPassword(@PathVariable("publicKey") String publicKey, Model model, AccountDTO dto){
+        //AccountDTO dto = companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey));
+        model.addAttribute("company", dto);
+        return "public/resetPw";
+    }
+
+    @PostMapping("resetPassword/{publicKey}")
+    String resetPassword(@PathVariable("publicKey") String publicKey, @Valid AccountDTO dto, BindingResult result, RedirectAttributes redirectAttributes){
+        if (!result.hasErrors()){
+
+            Response response = companyService.resetPassword(publicKey, dto);
+            redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+            redirectAttributes.addFlashAttribute("notification", response.getMessage());
+            if (response.getStatus().equals(EnumStatus.OK)) {
+                return "redirect:/authentication";
+            }
+        }
+        redirectAttributes.addAttribute("publicKey", publicKey);
+        return "redirect:/resetPassword/{publicKey}";
+    }
 
     @GetMapping("/logout")
     String logout(HttpServletRequest request){
