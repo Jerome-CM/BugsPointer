@@ -25,7 +25,7 @@
                 </span>
             <form class="container-row" action="#" th:object="${company}" method="post">
                 <input type="text" th:field="*{domaine}" id="domaine" placeholder="www.monsite.fr" th:value="${company.getDomaine()}">
-                <input class="btn-action" type="button" id="btn-envoi" value="Envoyer">
+                <input th:if="${company.getDomaine() == null}" class="btn-action" type="button" id="btn-envoi" value="Envoyer">
             </form>
             </div>
             <img th:if="${company.getDomaine() != null}" alt="valide" th:src="@{/css/img/icones/verifie.gif}">
@@ -83,7 +83,7 @@
 
     </div>
 
-    <div class="popup" id="popup">
+    <div class="popup" id="popup" th:if="${company.getDomaine() == null}">
         <form class="form container popup-container" action="#" id="form-confirmation" th:action="@{/newUser/{publicKey}(publicKey=${publicKey})}" th:object="${company}" method="post">
             <label style="margin: 25px auto;">Merci de confirmer que votre nom de domaine est bien :</label>
             <input type="text" th:field="*{domaine}" id="domaine-a-confirmer" value readonly>

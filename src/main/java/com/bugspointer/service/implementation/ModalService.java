@@ -116,8 +116,8 @@ public class ModalService implements IModal {
             log.info("bug :  {}", bug);
             try {
                 Bug savedBug = bugRepository.save(bug);
-                /* Vérification du compte gratuit, si oui -> si dernier envoi date de +30jours -> envoi du mail avec détail
-                *   Si -30 jours, mail sans détail avec abonnez-vous pour le voir */
+                /* Vérification du compte gratuit, si oui → si dernier envoi date de +30jours → envoi du mail avec détail
+                *   Si -30 jours, mail sans détail avec 'abonnez-vous pour le voir' */
                 if (company.getPlan().equals(EnumPlan.FREE) && envoi) {
 
                     Response response = mailService.sendMailNewBugDetail(company.getMail(), savedBug);

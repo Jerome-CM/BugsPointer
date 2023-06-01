@@ -35,8 +35,6 @@ public class ApiCompany {
         redirectAttributes.addFlashAttribute("notification", response.getMessage());
         redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
 
-        log.info("status : {}", String.valueOf(response.getStatus()));
-
         if (response.getStatus().equals(EnumStatus.OK)) {
             return "redirect:/newUser/{publicKey}";
         }

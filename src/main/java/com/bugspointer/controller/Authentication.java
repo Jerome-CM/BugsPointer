@@ -38,7 +38,6 @@ public class Authentication {
             model.addAttribute("status", request.getParameter("status"));
             model.addAttribute("notification", request.getParameter("message"));
         }
-        log.info("status : {}", request.getParameter("status"));
         return "public/authentication";
     }
 

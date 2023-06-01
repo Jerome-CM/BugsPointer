@@ -15,13 +15,12 @@ let os = document.getElementById('bugspointer-popup-os');
 let browser = document.getElementById('bugspointer-popup-browser');
 let screen = document.getElementById('bugspointer-popup-screen');
 let pointerSelected = document.getElementById('bugspointer-popup-pointer-bug');
-let validated = document.getElementById('bugspointer-popup-btn-validated');
+let submit = document.getElementById('bugspointer-popup-btn-submit');//boutton initiallement désactivé
 let textPointed = document.getElementById('bugspointer-popup-pointer-bug-text');
 const publicKey = document.getElementById("key");
 
 /* Autres variables */
-const textValid = "Visée validée";
-const textRepointer = "Repointer le bug";
+const textValid = "Bug pointé correctement";
 const platform = get_platform();
 const browserWithVersion = get_browser();
 
@@ -34,10 +33,6 @@ url.value = urlPointed;
 function afficher(){
     /* Lorsque la fonction est appelée, elle ouvre la popup contenant le formulaire de bug */
     document.querySelector('#bugspointer_popup').style.display = "flex";
-    /* Si le bouton validated contient textRepointer, le bouton devient cliquable et si l'event click est activé alors on déclenche la fontion pointer.*/
-    if (validated.innerHTML == textRepointer) {
-        validated.addEventListener("click", pointer);
-    }
 }
 
 function masquer(){
@@ -230,11 +225,10 @@ function pointer(){
                     /* On change le texte du bouton pointer par textvalid ainsi que sa couleur */
                     btnpointer.innerHTML = textValid;
                     btnpointer.style.backgroundColor = "#00E676"
-                    /* On ajoute le texte pour le bouton Repointer que l'on rend visible */
-                    validated.innerHTML = textRepointer;
-                    validated.style.display = "flex";
                     /* On rend invisible le texte d'indication, car il a été suivi */
                     textPointed.style.display = "none";
+                    /* On active le bouton d'envoi du formulaire */
+                    submit.disabled = false;
 
                     /* On réaffiche la popup pour continuer le formulaire et l'envoyer */
                     afficher();
