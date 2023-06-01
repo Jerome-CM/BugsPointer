@@ -23,7 +23,7 @@
                     <input type="text" th:field="*{mail}" id="registerMail" placeholder="E-mail">
                     <input type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmation de l'e-mail">
                     <input type="password" th:field="*{password}" id="registerPassword" placeholder="Mot de passe">
-                    <input type="assword" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmation du mot de passe">
+                    <input type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmation du mot de passe">
                     <input class="btn-action" type="submit" value="Debug maintenant !">
                 </form>
             </div>
@@ -38,7 +38,7 @@
                     <p style="height: fit-content; margin-right:5px;"><input type="checkbox" name="rememberMe" id="rememberMe"> Se souvenir de moi</p>
                     <input class="btn-action cancel-margin-top" type="submit" value="Connexion">
                 </form>
-                <a th:href="@{/pwLost}">Mot de passe oublié ?</a><!--redirection sur page mot de passe oublié pour saisir adresse mail avec lien pour créer un nouveau mot de passe-->
+                <a style="color: black;" th:href="@{/pwLost}">Mot de passe oublié ?</a>
             </div>
         </section>
     </div>
