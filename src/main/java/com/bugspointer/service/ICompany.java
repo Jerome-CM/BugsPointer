@@ -18,4 +18,6 @@ public interface ICompany {
     Response passwordUpdate(AccountDTO dto);
     Response smsUpdate(AccountDTO dto);
     Response delete(AccountDeleteDTO dto);
+
+    Response resetPassword(String publicKey, AccountDTO dto);
 }

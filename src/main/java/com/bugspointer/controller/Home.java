@@ -26,7 +26,6 @@ public class Home {
         return "public/documentations";
     }
 
-    // TODO a delete
     @GetMapping("modal")
     String getModalForTest(){
         return "download/modal";

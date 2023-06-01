@@ -26,6 +26,8 @@ public class CompanyService implements ICompany {
     private final BugRepository bugRepository;
     private final CompanyPreferencesRepository preferencesRepository;
 
+    private final MailService mailService;
+
     private final Utility utility;
     private final PasswordEncoder passwordEncoder;
 
@@ -33,10 +35,11 @@ public class CompanyService implements ICompany {
 
     private final ModelMapper modelMapper;
 
-    public CompanyService(CompanyRepository companyRepository, BugRepository bugRepository, CompanyPreferencesRepository preferencesRepository, Utility utility, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ModelMapper modelMapper) {
+    public CompanyService(CompanyRepository companyRepository, BugRepository bugRepository, CompanyPreferencesRepository preferencesRepository, MailService mailService, Utility utility, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ModelMapper modelMapper) {
         this.companyRepository = companyRepository;
         this.bugRepository = bugRepository;
         this.preferencesRepository = preferencesRepository;
+        this.mailService = mailService;
         this.utility = utility;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -422,6 +425,47 @@ public class CompanyService implements ICompany {
 
             company.setDomaine(dto.getDomaine());
             return companyTryRegistration(company, "Nom de domaine enregistré");
+        }
+
+        return new Response(EnumStatus.ERROR, null, "Error in the process");
+    }
+
+    public Response sendPwLost(AccountDTO dto){
+        log.info("Password Lost :");
+        log.info("dto: {}", dto);
+
+        Optional<Company> companyOptional = companyRepository.findByMail(dto.getMail());
+        log.info("company : {}", companyOptional);
+        Company company;
+
+        if (companyOptional.isPresent()){
+            company = companyOptional.get();
+            return mailService.sendMailLostPassword("amandine.feronramet2022@campus-eni.fr", company.getPublicKey());
+        }
+
+        return new Response(EnumStatus.OK, null, "Un mail pour réinitialiser votre mot de passe vient de vous êtes envoyé");
+    }
+
+    public Response resetPassword(String publicKey, AccountDTO dto){
+        log.info("resetPasseword : ");
+        log.info("publicKey : {}", publicKey);
+        log.info("dto : {}", dto);
+
+        Company company = getCompanyByPublicKey(publicKey);
+
+        if (company != null){
+            if (dto.getPassword().isEmpty() || dto.getConfirmPassword().isEmpty()) {
+                return new Response(EnumStatus.ERROR, null, "Password empty");
+            } else {
+                if (dto.getPassword().equals(dto.getConfirmPassword())) {
+                    company.setPassword(passwordEncoder.encode(dto.getPassword()));
+                    log.info("company modified :  {}", company);
+                    return companyTryRegistration(company, "Password updated");
+                } else {
+                    log.info("Password not identical");
+                    return new Response(EnumStatus.ERROR, null, "Password not identical");
+                }
+            }
         }
 
         return new Response(EnumStatus.ERROR, null, "Error in the process");

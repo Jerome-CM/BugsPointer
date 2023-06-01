@@ -119,18 +119,17 @@ public class ModalService implements IModal {
                 /* Vérification du compte gratuit, si oui -> si dernier envoi date de +30jours -> envoi du mail avec détail
                 *   Si -30 jours, mail sans détail avec abonnez-vous pour le voir */
                 if (company.getPlan().equals(EnumPlan.FREE) && envoi) {
-                    log.info("mail à envoyer");
-                    //TODO: Mail à modifier par company.getMail()
+
                     Response response = mailService.sendMailNewBugDetail(company.getMail(), savedBug);
                     if (response.getStatus().equals(EnumStatus.OK)) {
-                        log.info("mail envoyé");
+                        log.info("mail gratuit envoyé avec détails");
                     }
                 } else if (company.getPlan().equals(EnumPlan.FREE)){
-                    log.info("mail à envoyer sans détail");
-                    //TODO: Mail à modifier par company.getMail()
+                 
+
                     Response response = mailService.sendMailNewBugNoDetail(company.getMail());
                     if (response.getStatus().equals(EnumStatus.OK)) {
-                        log.info("mail envoyé");
+                        log.info("mail envoyer sans détail");
                     }
                 } else {
                     //TODO: envoyer mail lié au compte payant

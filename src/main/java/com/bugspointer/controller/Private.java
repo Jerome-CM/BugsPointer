@@ -115,7 +115,7 @@ public class Private {
         return "private/account";
     }
 
-    @PostMapping("account") //TODO: afficher les messages de succes ou d'echec sur la page
+    @PostMapping("account")
     String update(@Valid AccountDTO dto,
                   BindingResult result,
                   Model model,
