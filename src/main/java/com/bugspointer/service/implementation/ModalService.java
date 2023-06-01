@@ -120,15 +120,15 @@ public class ModalService implements IModal {
                 *   Si -30 jours, mail sans détail avec abonnez-vous pour le voir */
                 if (company.getPlan().equals(EnumPlan.FREE) && envoi) {
                     log.info("mail à envoyer");
-                    //TODO: Mail à modifier par company.getMail()
-                    Response response = mailService.sendMailNewBugDetail("amandine.feronramet2022@campus-eni.fr", savedBug);
+                    //Mail à modifier pour envoi forcé sinon company.getMail()
+                    Response response = mailService.sendMailNewBugDetail(company.getMail(), savedBug);
                     if (response.getStatus().equals(EnumStatus.OK)) {
                         log.info("mail envoyé");
                     }
                 } else if (company.getPlan().equals(EnumPlan.FREE)){
                     log.info("mail à envoyer sans détail");
-                    //TODO: Mail à modifier par company.getMail()
-                    Response response = mailService.sendMailNewBugNoDetail("amandine.feronramet2022@campus-eni.fr");
+                    //Mail à modifier pour envoi forcé sinon company.getMail()
+                    Response response = mailService.sendMailNewBugNoDetail(company.getMail());
                     if (response.getStatus().equals(EnumStatus.OK)) {
                         log.info("mail envoyé");
                     }

@@ -1,4 +1,4 @@
-const key = "Vw6QSo7nPHkhXk7pD2z69HJ3A"; /*Ajoutez votre clé public ici, entre les ""*/
+const key = "Vw6QSo7nPHkhXk7pD2z69HJ3A"; /*Ajoutez votre clé publique ici, entre les ""*/
 window.addEventListener("DOMContentLoaded", function(){
 
 /* Variables document */
@@ -34,7 +34,7 @@ url.value = urlPointed;
 function afficher(){
     /* Lorsque la fonction est appelée, elle ouvre la popup contenant le formulaire de bug */
     document.querySelector('#bugspointer_popup').style.display = "flex";
-    /* Si le bouton validated contient textRepointer, le bouton devient cliquable et si l'event click est activé alors on déclenche la fontion pointer*/
+    /* Si le bouton validated contient textRepointer, le bouton devient cliquable et si l'event click est activé alors on déclenche la fontion pointer.*/
     if (validated.innerHTML == textRepointer) {
         validated.addEventListener("click", pointer);
     }
@@ -46,7 +46,7 @@ function masquer(){
 }
 
 function message(){
-    /* Affiche le message lorsque du clique sur le bouton envoi (même si un problème lors de l'enregistrement est survenu)
+    /* Affiche le message lors du clic sur le bouton envoi (même si un problème lors de l'enregistrement est survenu)
     * et masque le formulaire, il ne reste que le bouton close */
     messageElement.innerHTML = "Merci pour votre envoi";
     section.style.display = "none";
@@ -82,11 +82,11 @@ function get_platform() {
     return 'unknown';
 }
 
-/* Récupère le le navigateur de l'utilisateur */
+/* Récupère le navigateur de l'utilisateur */
 function get_browser() {
      // Nouvelle méthode
     if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
-        /* brands récupère un tableau de 3 données, c'et la première qui nous intéresse ainsi que la version*/
+        /* brands récupère un tableau de 3 données, c'est la première qui nous intéresse ainsi que la version*/
         const firstBrand = navigator.userAgentData.brands[0];
         return firstBrand.brand + ' v' + firstBrand.version;
     }
@@ -94,7 +94,7 @@ function get_browser() {
     // Ancienne méthode pour la plupart des navigateurs
     if (typeof navigator.userAgent !== 'undefined') {
         const userAgent = navigator.userAgent.toLowerCase();
-        // Chaque navigateur à son systhème de notation comme ci-joint
+        // Chaque navigateur à son système de notation comme ci-joint
         const browsers = {
             edge: /edge\/([\d.]+)/.exec(userAgent),
             chrome: /chrome\/([\d.]+)/.exec(userAgent),
@@ -110,7 +110,7 @@ function get_browser() {
             }
         }
     }
-    // si le browser n'a pas pu être récupéré on retourne indefini
+    // si le browser n'a pas pu être récupéré on retourne indéfini
     return 'undefined';
 }
 
@@ -134,7 +134,7 @@ function pointer(){
 
         /* Lorsque la souris passe sur une balise */
         function handleMouseOver(event) {
-            /* Permet de survoler toutes les balises sauf les balise body et html */
+            /* Permet de survoler toutes les balises sauf les balises body et html */
             let balise = event.target.closest("*:not(body):not(html)");
             if (balise != null) {
                 /* Récupère le style de bordure de la balise survolée */
@@ -149,7 +149,7 @@ function pointer(){
         }
         /* Lorsque la souris ne survole plus une balise */
         function handleMouseOut(event) {
-            /* Sur toutes les balises sauf les body et html */
+            /* Sur toutes les balises sauf les balises body et html */
             let balise = event.target.closest("*:not(body):not(html)");
             if (balise != null) {
                 /* Réapplilque la bordure initiale */
@@ -172,18 +172,18 @@ function pointer(){
                 /* récupère l'élément sélectionné (balise, class, text, value etc...) */
                 let balise = event.target.closest("*:not(body):not(html)");
                 if (balise != null) {
-                    /* On réaplique le style initial */
+                    /* On réapplique le style initial */
                     balise.style.border = styleInitial;
                     /* La variable parentAffichage permettra d'afficher le dernier parent de balise
-                    * et s'il n'y en a pas alors affichera la balise */
+                    * et s'il n'y en a pas alors affichera la balise. */
                     let parentAffichage = balise;
 
-                    /* Pour trouver les parents on réalise une boucle à 2 itérations */
+                    /* Pour trouver les parents, on réalise une boucle à 2 itérations */
                     for (let i = 0; i < 2; i++) {
                         /* parent prend la valeur de parentAffichage (initialement balise) */
                         let parent = parentAffichage;
 
-                        /* si la balise <> de parent correspond à l'une de celle-ci alors on arrête la boucle (initialement on récupère balise) */
+                        /* si la balise <> de parent correspond à l'une de celle-ci alors on arrête la boucle (initialement on récupère balise). */
                         if (parent.tagName == "SECTION" || parent.tagName == "ARTICLE" || parent.tagName == "ASIDE"
                                 || parent.tagName == "FOOTER" || parent.tagName == "HEADER" || parent.tagName == "NAV" || parent.tagName == "FROM") {
                             break;
@@ -191,7 +191,7 @@ function pointer(){
 
                         /* parent(i+1) prend la valeur du parent de parentAffichage */
                         parent = parentAffichage.parentElement;
-                        /* S'il n'y a pas de parent supérieur ou si le parent correspond à BODY on arrête la boucle et on récupère le parent précédent */
+                        /* S'il n'y a pas de parent supérieur ou si le parent correspond à BODY on arrête la boucle et on récupère le parent précédent. */
                         if (parent === null || parent.tagName == "BODY"){
                             break;
                         } else {
@@ -201,7 +201,7 @@ function pointer(){
                     }
 
                     let baliseType = balise.tagName.toLowerCase(); // On récupère le type de la balise
-                    let baliseLu = balise.outerHTML; // On renvoi les données de balise en format text
+                    let baliseLu = balise.outerHTML; // On renvoie les données de balise en format text
                     let baliseModif; // permettra de récupérer le text modifié
                     if (baliseLu.includes('class="')){
                         /* Si dans la balise il existe une class, alors on va ajouter à celle-ci la class "bugspointer-text-balise */
@@ -210,14 +210,14 @@ function pointer(){
                         /* S'il n'y a pas de class alors on ajoute la class après le type de la balise */
                         baliseModif = baliseLu.replace('<' + baliseType, '<' + baliseType + ' class="bugspointer-text-balise"');
                     }
-                    /* On récupère le texte dernier parent trouvé dans la boucle (ou à défaut la balise) */
+                    /* On récupère le texte dernier parent trouvé dans la boucle (ou à défaut la balise). */
                     let parentLu = parentAffichage.outerHTML;
                     /* On remplace la balise récupérée par sa modification ci-dessus */
                     let parentModif = parentLu.replace(baliseLu, baliseModif);
                     /* On retire tous les éléments de style (car mouseover et mouseout ajoute des styles qui pourraient perturber les clients et ça allège le texte */
                     let parentWithoutStyle = parentModif.replace(/ style="[^"]*"/g, "");
                     console.log(parentWithoutStyle);
-                    /* On envoi le parent ainsi modifié à la valeur du pointer */
+                    /* On envoie le parent ainsi modifié à la valeur du pointer */
                     pointerSelected.innerHTML = parentWithoutStyle;
 
                     /* On annule tous les écoutes sur évènement lié à pointer */
@@ -233,7 +233,7 @@ function pointer(){
                     /* On ajoute le texte pour le bouton Repointer que l'on rend visible */
                     validated.innerHTML = textRepointer;
                     validated.style.display = "flex";
-                    /* On rend invisible le texte d'indication car il a été suivi */
+                    /* On rend invisible le texte d'indication, car il a été suivi */
                     textPointed.style.display = "none";
 
                     /* On réaffiche la popup pour continuer le formulaire et l'envoyer */
@@ -250,9 +250,17 @@ function pointer(){
 }
 
 /* Events Listener */
-
-btnopen.addEventListener("click", afficher); // le clic sur le lien ouvre la popup
-btnopenlogo.addEventListener("click", afficher); // le clic sur le logo ouvre la popup
+    /* On vérifie que les boutons sont bien présents sur la page pour lancer les events d'affichage*/
+    if (btnopen != null) {
+        btnopen.addEventListener("click", afficher); // le clic sur le lien ouvre la popup
+        /* Permet de déclencher la lecture des dimensions de l'écran au moment du clic pour l'ouverture de la popup */
+        btnopen.addEventListener("click", dimension);
+    }
+    if (btnopenlogo != null) {
+        btnopenlogo.addEventListener("click", afficher); // le clic sur le logo ouvre la popup
+        /* Permet de déclencher la lecture des dimensions de l'écran au moment du clic pour l'ouverture de la popup */
+        btnopenlogo.addEventListener("click", dimension);
+    }
 /* Le clic sur la croix ferme la popup et permet de rafraichir la page pour recharger un nouveau formulaire après envoi */
 btnclose.addEventListener("mousedown", () => {
     masquer();
@@ -286,8 +294,6 @@ form.addEventListener("submit", function (e) {
         console.error("Une erreur s'est produite lors de l'envoi du formulaire", error)
     })
 });
-/* Permet de déclencher la lecture des dimensions de l'écran au moment du clic pour l'ouverture de la popup */
-btnopen.addEventListener("click", dimension);
-btnopenlogo.addEventListener("click", dimension);
+
 
 });
