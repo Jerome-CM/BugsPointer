@@ -84,7 +84,7 @@ public class MailService {
             Transport.send(message);
 
             log.info("email register sent at : {}", to);
-            return new Response(EnumStatus.OK, null, "Vous avez un nouvel e-mail");
+            return new Response(EnumStatus.OK, null, "Vous avez un nouvel e-mail pour confirmer votre compte");
         } catch (MessagingException e) {
             e.printStackTrace();
             log.info("error from mail sender : " + e.getMessage());
@@ -105,8 +105,8 @@ public class MailService {
                         "       <h1>Nouveau Bug</h1><br>" +
                         "       <p>Un utilisateur vient de déclarer un nouveau bug sur votre site " +
                         "       <p>URL concernée : "+ newBug.getUrl() +"</p><br>" +
-                        "       <p>Description donnée : <br>" + newBug.getDescription() +"</p><br>" +
-                        "       <p>Afin d'avoir plus d'information, n'hésitez pas à vous abonner en cliquant sur le bouton, ci-dessous:" +
+                        "       <p>Description du bug : <br>" + newBug.getDescription() +"</p><br>" +
+                        "       <p>Afin d'avoir plus d'informations sur ce bug, vous pouvez changer votre abonnement en cliquant sur le bouton ci-dessous:" +
                         "       <table border='0' cellpadding='0' cellspacing='0' >" +
                         "           <tr>" +
                         "               <td align='center' style='padding: 10px;'>" +
@@ -146,8 +146,10 @@ public class MailService {
             // Envoi du message
             Transport.send(message);
 
+
             log.info("email new bug sent at : {}", to);
-            return new Response(EnumStatus.OK, null, "Mail envoyé");
+            return new Response(EnumStatus.OK, null, "Mail gratuit avec détails envoyé");
+
         } catch (MessagingException e) {
             e.printStackTrace();
             log.info("error from mail sender : " + e.getMessage());
@@ -167,8 +169,8 @@ public class MailService {
                         "   <body>" +
                         "       <h1>Nouveau Bug</h1><br>" +
                         "       <p>Un utilisateur vient de déclarer un nouveau bug sur votre site " +
-                        "       <p>Vous avez atteint la limite d'un rapport de bug tout les 30 jours</p><br>" +
-                        "       <p>Afin de connaitre les informations sur ce bug, abonnez-vous en cliquant sur le bouton, ci-dessous:" +
+                        "       <p>Vous avez atteint la limite gratuite d'un rapport de bug tout les 30 jours</p><br>" +
+                        "       <p>Afin de connaitre les informations sur ce bug, changer d'offre en cliquant sur le bouton ci-dessous:" +
                         "       <table border='0' cellpadding='0' cellspacing='0' >" +
                         "           <tr>" +
                         "               <td align='center' style='padding: 10px;'>" +
@@ -209,7 +211,8 @@ public class MailService {
             Transport.send(message);
 
             log.info("email new bug sent at : {}", to);
-            return new Response(EnumStatus.OK, null, "Mail envoyé");
+            return new Response(EnumStatus.OK, null, "Mail gratuit sans détails envoyé");
+
         } catch (MessagingException e) {
             e.printStackTrace();
             log.info("error from mail sender : " + e.getMessage());

@@ -17,13 +17,13 @@
     <div class="container container-row">
         <section>
             <div class="cards cards_detail">
-                <h3>Register</h3>
+                <h3>S'inscrire</h3>
                 <form class="form" action="#" th:action="@{/register}" th:object="${companyRegister}" method="post">
-                    <input type="text" th:field="*{companyName}" id="companyName" placeholder="Nom de l'entreprise">
-                    <input type="text" th:field="*{mail}" id="registerMail" placeholder="Mail">
+                    <input type="text" th:field="*{companyName}" id="companyName" placeholder="Nom de votre entreprise">
+                    <input type="text" th:field="*{mail}" id="registerMail" placeholder="E-mail">
                     <input type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmation de l'e-mail">
-                    <input type="text" th:field="*{password}" id="registerPassword" placeholder="Mot de passe">
-                    <input type="text" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmation du mot de passe">
+                    <input type="password" th:field="*{password}" id="registerPassword" placeholder="Mot de passe">
+                    <input type="assword" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmation du mot de passe">
                     <input class="btn-action" type="submit" value="Debug maintenant !">
                 </form>
             </div>
@@ -31,11 +31,11 @@
         <br>
         <section>
             <div class="cards cards_detail">
-                <h3>Login</h3>
+                <h3>Se connecter</h3>
                 <form class="form" action="#" th:action="@{/login}" th:object="${companyLogin}" method="post">
-                    <input type="text" th:field="*{mail}" id="mail" placeholder="E-mail" th:value="${companyLogin.getMail()}" >
-                    <input type="text" th:field="*{password}" id="password" placeholder="Password" th:value="${companyLogin.getPassword()}">
-                    <p style="height: fit-content; margin-right:5px;"><input type="checkbox" name="rememberMe" id="rememberMe"> Remember Me</p>
+                    <input type="text" th:field="*{mail}" id="mail" placeholder="E-mail"  >
+                    <input type="password" th:field="*{password}" id="password" placeholder="Mot de passe">
+                    <p style="height: fit-content; margin-right:5px;"><input type="checkbox" name="rememberMe" id="rememberMe"> Se souvenir de moi</p>
                     <input class="btn-action cancel-margin-top" type="submit" value="Connexion">
                 </form>
                 <a th:href="@{/pwLost}">Mot de passe oublié ?</a><!--redirection sur page mot de passe oublié pour saisir adresse mail avec lien pour créer un nouveau mot de passe-->

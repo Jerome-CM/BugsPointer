@@ -18,7 +18,7 @@
         <h1>Mail confirmé avec succès</h1>
 
         <div class="btn-download newUser">
-            <div class="center">
+            <div class="center" style="width: 100%;">
                 <span class="center">
                     Merci de nous indiquer l'url de votre site web <br>
                     <span class="small-text">(à des fins de sécurité lors de la réception des bugs)</span>
@@ -32,10 +32,13 @@
         </div>
 
         <div th:if="${company.getDomaine() != null}" style="width: 100%">
-            <div th:replace="~{include/btnDownload.html}"></div>
 
-            <div class="btn-download newUser">
-                <div class="center">
+            <h2 class="h2-newUser">Suivez les étapes pour mettre en place Bugspointer sur votre site internet</h2>
+
+            <div class="w40" th:replace="~{include/btnDownload.html}"></div>
+
+            <div class="btn-download newUser ">
+                <div class="center center-in-card fs20">
                     <span class="center">
                         Aller sur votre Dashboard puis dans Account
                         <br>Copier la Security Key et coller là dans le fichier modalControl.js, au début du fichier
@@ -48,23 +51,23 @@
                 <img alt="clé" th:src="@{/css/img/icones/chiffrement.gif}"/>
             </div>
 
-            <div th:if="${company.getPlan()==T(com.bugspointer.entity.EnumPlan).FREE}" class="btn-download newUser">
-                <div class="center">
+            <div th:if="${company.getPlan()==T(com.bugspointer.entity.EnumPlan).FREE}" class="btn-download newUser w90">
+                <div class="center center-in-card fs20">
                     <span class="center">
                         Vous avez actuellement la version gratuite <br>
-                        Passer à une autre version pour suivre vos rapports
+                        Passer à Target Plan pour suivre vos rapports
                     </span>
                     <div class="container-row">
-                    <a th:href="@{/features}" class="btn-action">Voir les Avantages pour 15€/an</a>
+                    <a th:href="@{/features#targetplan}" class="btn-action">Voir les avantages pour 15€/an</a>
                     </div>
                 </div>
                 <img alt="moniteur" th:src="@{/css/img/icones/moniteur.gif}"/>
             </div>
 
             <div class="btn-download newUser">
-                <div class="center">
+                <div class="center center-in-card fs20">
                     <span class="center">
-                        Intégrer vos fichiers sur toutes les pages où vous souhaiter faire afficher le formulaire de bug
+                        Intégrer vos fichiers sur toutes les pages où vous souhaitez faire afficher le formulaire de bug
                     </span>
                     <div class="container-row">
                         <a th:href="@{/documentations}" class="btn-action">Documentation</a>
@@ -73,7 +76,7 @@
                 <img alt="transfert" th:src="@{/css/img/icones/transfert.gif}"/>
             </div>
 
-            <p class="center">Pour tous soucis, suggestions ou remarque, écrivez-nous à : <br>
+            <p class="center space">Pour tous soucis, suggestions ou remarques, écrivez-nous à : <br>
             contact@bugspointer.com</p>
 
         </div>
@@ -82,7 +85,7 @@
 
     <div class="popup" id="popup">
         <form class="form container popup-container" action="#" id="form-confirmation" th:action="@{/newUser/{publicKey}(publicKey=${publicKey})}" th:object="${company}" method="post">
-            <label>Confirmez-vous que votre nom de domaine est :</label>
+            <label style="margin: 25px auto;">Merci de confirmer que votre nom de domaine est bien :</label>
             <input type="text" th:field="*{domaine}" id="domaine-a-confirmer" value readonly>
             <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}">
             <div class="container-row">
