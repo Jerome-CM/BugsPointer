@@ -121,14 +121,14 @@ public class ModalService implements IModal {
                 if (company.getPlan().equals(EnumPlan.FREE) && envoi) {
                     log.info("mail à envoyer");
                     //TODO: Mail à modifier par company.getMail()
-                    Response response = mailService.sendMailNewBugDetail("amandine.feronramet2022@campus-eni.fr", savedBug);
+                    Response response = mailService.sendMailNewBugDetail(company.getMail(), savedBug);
                     if (response.getStatus().equals(EnumStatus.OK)) {
                         log.info("mail envoyé");
                     }
                 } else if (company.getPlan().equals(EnumPlan.FREE)){
                     log.info("mail à envoyer sans détail");
                     //TODO: Mail à modifier par company.getMail()
-                    Response response = mailService.sendMailNewBugNoDetail("amandine.feronramet2022@campus-eni.fr");
+                    Response response = mailService.sendMailNewBugNoDetail(company.getMail());
                     if (response.getStatus().equals(EnumStatus.OK)) {
                         log.info("mail envoyé");
                     }

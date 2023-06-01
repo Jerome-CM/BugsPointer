@@ -540,7 +540,7 @@ ul{
     margin: 20px auto;
     padding: 5px 15px 5px 5px;
     width: 80%;
-    max-width: 600px;
+    max-width: 900px;
     height: 125px;
     border-radius: 5px;
     border: 5px solid var(--color-btn-green);
@@ -549,7 +549,7 @@ ul{
 
 .btn-download img {
     position: relative;
-    width: auto;/*précédemment 120px*/
+    width: 100px;
 }
 
 .btn-action{
@@ -583,24 +583,48 @@ ul{
 
 /* newUser */
 
+.h2-newUser{
+    color: var(--color-white);
+    text-transform: initial;
+}
+
+.w40{
+    width: 50%;
+}
+
+.w90{
+    width: 90%;
+    max-width: inherit;
+}
+
+.center-in-card{
+    margin-top: 15px;
+    margin-bottom: -5px;
+}
+
 .newUser {
     height: max-content;
 }
 
 .newUser img {
-    width: 120px;
+    width: 110px;
     height: auto;
 }
 
 .newUser input {
-    border-color: darkgray;
+    border:none;
     text-align: center;
     border-radius: var(--radius);
+    box-shadow: var(--shadow);
     font-size: 22px;
     height: max-content;
     margin-top: 1px;
     padding-top: 7px;
     padding-bottom: 7px;
+}
+
+.newUser input[type="text"]{
+    width: 70%;
 }
 
 .small-text {
@@ -610,6 +634,7 @@ ul{
 .newUser a {
     margin-top: 1px;
     padding: 7px 20px;
+    box-shadow: var(--shadow);
 }
 
 .popup {
@@ -620,7 +645,7 @@ ul{
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0.9);
     padding-top: 60px;
     display: none;
     color: black;

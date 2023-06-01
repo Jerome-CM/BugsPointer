@@ -7,8 +7,8 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class AuthLoginCompanyDTO {
 
-    private String mail = "comp1@comp.fr";
+    private String mail;
 
-    private String password = "test";
+    private String password;
 
 }

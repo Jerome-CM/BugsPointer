@@ -53,7 +53,7 @@ public class Authentication {
                 model.addAttribute("page", "register");
                 //TODO: modifier l'adresse mail par dto.getMail()
                 try {
-                    response = mailService.sendMailRegister("amandine.feronramet2022@campus-eni.fr", companyService.getCompanyByMail(dto.getMail()).getPublicKey());
+                    response = mailService.sendMailRegister(dto.getMail(), companyService.getCompanyByMail(dto.getMail()).getPublicKey());
                 }
                 catch (Exception e){
                     log.error("Error : {}", e.getMessage());
