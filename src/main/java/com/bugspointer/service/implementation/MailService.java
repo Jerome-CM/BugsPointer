@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 @Service
@@ -31,7 +29,7 @@ public class MailService {
     @Value("${mail.password}")
     private String password;
 
-    private static final String adresse = "http://bugspointer.com/";
+    private static final String ADRESSE = "http://bugspointer.com/";
 
     public Response sendMailRegister(String to, String publicKey) {
 
@@ -49,7 +47,7 @@ public class MailService {
                 "       <table border='0' cellpadding='0' cellspacing='0' >" +
                 "           <tr>" +
                 "               <td align='center' style='padding: 10px;'>" +
-                "                   <a href='"+ adresse +"confirmRegister/"+ publicKey + "' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Confirmer</a>" +
+                "                   <a href='"+ ADRESSE +"confirmRegister/"+ publicKey + "' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Confirmer</a>" +
                 "               </td>" +
                 "           </tr>" +
                 "       </table>" +
@@ -112,7 +110,7 @@ public class MailService {
                         "       <table border='0' cellpadding='0' cellspacing='0' >" +
                         "           <tr>" +
                         "               <td align='center' style='padding: 10px;'>" +
-                        "                   <a href='"+ adresse +"features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
+                        "                   <a href='"+ ADRESSE +"features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
                         "               </td>" +
                         "           </tr>" +
                         "       </table>" +
@@ -176,7 +174,7 @@ public class MailService {
                         "       <table border='0' cellpadding='0' cellspacing='0' >" +
                         "           <tr>" +
                         "               <td align='center' style='padding: 10px;'>" +
-                        "                   <a href='"+ adresse +"/features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
+                        "                   <a href='"+ ADRESSE +"/features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
                         "               </td>" +
                         "           </tr>" +
                         "       </table>" +
@@ -238,12 +236,12 @@ public class MailService {
                         "       <table border='0' cellpadding='0' cellspacing='0' >" +
                         "           <tr>" +
                         "               <td align='center' style='padding: 10px;'>" +
-                        "                   <a href='"+ adresse +"resetPassword/"+ publicKey + "' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Réinitialiser mon mot de passe</a>" +
+                        "                   <a href='"+ ADRESSE +"resetPassword/"+ publicKey + "' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Réinitialiser mon mot de passe</a>" +
                         "               </td>" +
                         "           </tr>" +
                         "       </table>" +
                         "       <p>Ou copier et coller l'URL dans votre navigateur : </p>" +
-                        "       <a href='"+ adresse +"resetPassword/"+ publicKey + "'>"+ adresse +"resetPassword/"+ publicKey +"</a>" +
+                        "       <a href='"+ ADRESSE +"resetPassword/"+ publicKey + "'>"+ ADRESSE +"resetPassword/"+ publicKey +"</a>" +
                         "       <br>" +
                         "       <p>Si vous n'avez pas demandé un nouveau mot de passe, veuillez ignorer ce message" +
                         "   </body>" +

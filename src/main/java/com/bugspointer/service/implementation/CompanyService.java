@@ -408,7 +408,7 @@ public class CompanyService implements ICompany {
     }
 
     public Response registerDomaine(AccountDTO dto){
-        log.info("register site :");
+        log.info("register domaine :");
         log.info("dto: {}", dto);
 
         Company company = getCompanyByPublicKey(dto.getPublicKey());

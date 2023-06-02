@@ -13,6 +13,8 @@ import com.bugspointer.service.IModal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -33,15 +35,18 @@ public class ModalService implements IModal {
     }
 
 
-    public Response saveModalFree(ModalDTO dto){
-        log.info("saveModalFree");
+    public Response saveModal(ModalDTO dto){
+        log.info("saveModal");
         log.info("in dto :  {}", dto);
         boolean bot;
         boolean description;
         boolean key;
         boolean envoi = false;
         Company company;
+        Date dateJour = new Date();
         Date dateDernierEnvoi = null;
+        Date dateIpEnvoi;
+        long timeSeconde = 60;
 
         if (dto.getBot().isEmpty())
         {
@@ -65,7 +70,11 @@ public class ModalService implements IModal {
             company = companyOptional.get();
             if (company.isEnable())
             {
-                key = true;
+                if (company.getDomaine() != null && dto.getUrl().contains(company.getDomaine())) { //On vérifie que l'URL contient le nom de domaine (s'il est présent) où la modal est censé apparaitre.
+                    key = true;
+                } else {
+                    return new Response(EnumStatus.ERROR, null, "L'URL ne correspond pas au domaine transmis");
+                }
             } else {
                 return new Response(EnumStatus.ERROR, null, "company not enable");
             }
@@ -75,8 +84,22 @@ public class ModalService implements IModal {
             return new Response(EnumStatus.ERROR, null, "company not exist");
         }
 
+        if (dto.getAdresseIp() != null){
+            //On récupère la liste des bugs reçus de cette adresse Ip
+            List<Bug> bugs =  bugRepository.findAllByAdresseIp(dto.getAdresseIp());
+
+            if (!bugs.isEmpty()){
+                int i = bugs.size()-1;
+                dateIpEnvoi = bugs.get(i).getDateCreation();
+                boolean ok = differenceDate(dateIpEnvoi, dateJour, timeSeconde);
+                if (!ok){
+                    return new Response(EnumStatus.ERROR, null, "Délai entre les envois trop court");
+                }
+            }
+        }
+
         if (company.getPlan().equals(EnumPlan.FREE)){
-            //On récupère la liste des bugs reçu
+            //On récupère la liste des bugs reçus
             List<Bug> bugs = bugRepository.findAllByCompany(company);
             int i = bugs.size()-1;
 
@@ -88,10 +111,10 @@ public class ModalService implements IModal {
                 }
                 i--;
             }
-            Date dateJour = new Date();
-            long j30 = TimeUnit.MILLISECONDS.convert(30, TimeUnit.DAYS);
+
+            long j30 = TimeUnit.SECONDS.convert(30, TimeUnit.DAYS);
             if (dateDernierEnvoi != null){
-                if (dateJour.getTime() - dateDernierEnvoi.getTime() > j30){
+                if (differenceDate(dateDernierEnvoi, dateJour, j30)){
                     envoi = true;
                 }
             } else {
@@ -107,13 +130,13 @@ public class ModalService implements IModal {
             bug.setOs(dto.getOs());
             bug.setBrowser(dto.getBrowser());
             bug.setScreenSize(dto.getScreenSize());
-            bug.setDateCreation(new Date());
+            bug.setDateCreation(dateJour);
             bug.setEtatBug(EnumEtatBug.NEW);
             bug.setCompany(company);
+            bug.setAdresseIp(dto.getAdresseIp());
             if (envoi){
-                bug.setDateEnvoi(new Date());
+                bug.setDateEnvoi(dateJour);
             }
-            log.info("bug :  {}", bug);
             try {
                 Bug savedBug = bugRepository.save(bug);
                 /* Vérification du compte gratuit, si oui → si dernier envoi date de +30jours → envoi du mail avec détail
@@ -145,5 +168,12 @@ public class ModalService implements IModal {
         }
 
         return null;
+    }
+
+    private boolean differenceDate (Date date1, Date date2, long temps){
+        Instant instant1 = date1.toInstant();
+        Instant instant2 = date2.toInstant();
+        Duration elapsedDuration = Duration.between(instant1, instant2);
+        return elapsedDuration.getSeconds() > temps;
     }
 }
