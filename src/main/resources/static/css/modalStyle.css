@@ -164,3 +164,7 @@
 #bugspointer-message-success{
     text-align: center;
 }
+
+#bugspointer-popup-pointer-bug-text{
+    color: red;
+}

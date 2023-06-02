@@ -50,9 +50,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } else {
                 logger.error("JWT Token does not begin with Bearer String");
             }
-        } else {
+        } /*else {
             logger.error("Session with token is null");
-        }
+        }*/
 
 
         // token is valid ?

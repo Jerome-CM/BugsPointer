@@ -139,8 +139,10 @@ public class Private {
                 }
             } else if ("updatePw".equals(action)){
                 response = companyService.passwordUpdate(dto);
-            } else if ("updateSms".equals(action)){
+            } else if ("updateSms".equals(action)) {
                 response = companyService.smsUpdate(dto);
+            } else if ("updateDomaine".equals(action)) {
+                response = companyService.registerDomaine(dto);
             } else {
                 response = new Response(EnumStatus.ERROR, null, "Error to click of button");
             }

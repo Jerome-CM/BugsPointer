@@ -408,7 +408,7 @@ public class CompanyService implements ICompany {
     }
 
     public Response registerDomaine(AccountDTO dto){
-        log.info("register site :");
+        log.info("register domaine :");
         log.info("dto: {}", dto);
 
         Company company = getCompanyByPublicKey(dto.getPublicKey());
@@ -417,7 +417,7 @@ public class CompanyService implements ICompany {
         boolean isValid = Utility.domaineValidate.isValid(dto.getDomaine());
 
         if (!isValid){
-            return new Response(EnumStatus.ERROR, null, "Nom de domaine ne correspondant pas à l'expression régulière attendue");
+            return new Response(EnumStatus.ERROR, null, "Le site renseigné ne correspond pas au format www.monsite.extension");
         }
 
         if (company != null){
@@ -440,7 +440,7 @@ public class CompanyService implements ICompany {
 
         if (companyOptional.isPresent()){
             company = companyOptional.get();
-            return mailService.sendMailLostPassword("amandine.feronramet2022@campus-eni.fr", company.getPublicKey());
+            return mailService.sendMailLostPassword(dto.getMail(), company.getPublicKey());
         }
 
         return new Response(EnumStatus.OK, null, "Un mail pour réinitialiser votre mot de passe vient de vous êtes envoyé");

@@ -64,6 +64,16 @@
         </section>
 
         <section>
+            <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
+                <h3>Domaine</h3>
+                <input type="text" th:field="*{domaine}" id="domaine" th:value="${company.getDomaine()}" placeholder="Indiquez le domaine du site contenant la modal de rapport de bug">
+                <input type="password" th:field="*{password}" placeholder="Password">
+                <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}" readonly>
+                <button type="submit" class="submit" name="action" value="updateDomaine">Update</button>
+            </form>
+        </section>
+
+        <section>
             <div class="cards account">
                 <h3>Type of plan</h3>
                 <span th:text="${company.getPlan()}"></span>

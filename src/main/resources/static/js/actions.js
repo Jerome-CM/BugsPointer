@@ -20,19 +20,28 @@ window.addEventListener('DOMContentLoaded', function () {
             popup.style.display = "none";
         }
 
-        document.addEventListener("keydown", function(event) {
-            /* Vérifie si la touche pressée est Entrée */
-            if (event.key === "Enter"){
-                if (enterPressed) {
-                    form.submit();
-                } else {
-                    enterPressed = true;
-                    event.preventDefault();
-                    afficher();
+        if (domaine == null) {
+            document.addEventListener("keydown", function (event) {
+                /* Vérifie si la touche pressée est Entrée */
+                if (event.key === "Enter") {
+                    if (enterPressed) {
+                        form.submit();
+                    } else {
+                        enterPressed = true;
+                        event.preventDefault();
+                        afficher();
+                    }
                 }
-            }
-        })
-        btnOpen.addEventListener("click", afficher);
+            })
+            btnOpen.addEventListener("click", afficher);
+        } else {
+            document.addEventListener("keydown", function (event) {
+                /* Vérifie si la touche pressée est Entrée */
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                }
+            });
+        }
         btnClose.addEventListener("click", masquer);
 
     }

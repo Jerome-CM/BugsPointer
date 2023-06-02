@@ -5,5 +5,5 @@ import com.bugspointer.dto.Response;
 
 public interface IModal {
 
-    public Response saveModalFree(ModalDTO dto);
+    Response saveModal(ModalDTO dto);
 }

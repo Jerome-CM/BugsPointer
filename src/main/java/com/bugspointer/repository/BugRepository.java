@@ -18,4 +18,7 @@ public interface BugRepository extends CrudRepository<Bug, Long> {
     //Liste des bugs selon la company
     List<Bug> findAllByCompany(Company company);
 
+    //Liste des bugs selon l'adresse Ip
+    List<Bug> findAllByAdresseIp(String adresseIp);
+
 }

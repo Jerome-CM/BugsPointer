@@ -36,6 +36,9 @@ public class Bug {
     private String browser;
 
     @NotNull
+    private String adresseIp;
+
+    @NotNull
     private String screenSize;
 
     private EnumEtatBug etatBug = EnumEtatBug.NEW;

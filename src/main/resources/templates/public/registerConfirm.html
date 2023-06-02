@@ -16,7 +16,7 @@
 
     <div class="container">
         <div th:if="${page=='register' || page=='delete'}" class="btn-download welcome">
-            <img th:class="${page=='delete'} ? 'auRevoir' : ''" alt="welcome" th:src="${page=='register'} ? @{/css/img/icones/accueillir.gif} : @{/css/img/icones/au-revoir.gif}"/>
+            <img th:class="${page=='delete'} ? 'auRevoir' : ''" alt="welcome" id="gifElement" th:src="${page=='register'} ? @{/css/img/icones/accueillir.gif} : @{/css/img/icones/au-revoir.gif}"/>
         </div>
         <h1 class="space" th:if="${page == 'register'}">Merci de nous avoir rejoints !</h1>
 

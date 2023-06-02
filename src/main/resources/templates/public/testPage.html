@@ -12,7 +12,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
-    <title>Register Confirm</title>
     <title>Page de test</title>
     <style>
         html,body{
@@ -142,10 +141,9 @@
                 <label for="bugspointer-urlPointed">Url avec ce bug</label>
                 <input type="text" name="url" class="bugspointer-popup-content-texturl" id="bugspointer-urlPointed" value="" readonly>
 
-                <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-pointer">Pointer un bug</button>
-                <p id="bugspointer-popup-pointer-bug-text">Merci de sélectionner la ligne contenant le bug en cliquant sur le bouton si dessus</p>
+                <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-pointer" title="Cliquez-ici avant d'envoyer le formulaire">Pointer le bug</button>
+                <p class="bugspointer-popup-pointer-bug-text" id="bugspointer-popup-pointer-bug-text">Merci de sélectionner l'endroit contenant le bug en cliquant sur le bouton ci dessus</p>
 
-                <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-validated" style="display: none"></button>
                 <textarea name="codeLocation" id="bugspointer-popup-pointer-bug" readonly hidden></textarea>
 
                 <label>Description du bug</label>
@@ -157,7 +155,7 @@
                 <input type="hidden" name="screenSize" id="bugspointer-popup-screen" readonly>
                 <input type="hidden" name="key" id="key" readonly>
 
-                <button class="bugspointer-popup-btn-submit" type="submit" id="bugspointer-popup-btn-submit">Envoyer mon rapport</button>
+                <button class="bugspointer-popup-btn-submit" type="submit" id="bugspointer-popup-btn-submit" disabled title="Veuillez cliquer sur le bouton 'Pointer le bug' avant d'envoyer le formulaire">Envoyer mon rapport</button>
             </div>
         </form>
     </div>

@@ -579,6 +579,15 @@ ul{
     position: relative;
     width: 90%;
     max-height: max-content !important;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-name: stop-animation;
+}
+
+@keyframes stop-animation {
+    to {
+        background-position: 0 0;
+    }
 }
 
 /* newUser */

@@ -30,12 +30,9 @@ public class ApiCompany {
     @GetMapping("/confirmRegister/{publicKey}")
     String confirmRegister(@PathVariable("publicKey") String publicKey, RedirectAttributes redirectAttributes, HttpServletRequest request){
         Response response = companyService.validateRegister(publicKey);
-        log.info("response : {}", response);
 
         redirectAttributes.addFlashAttribute("notification", response.getMessage());
         redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
-
-        log.info("status : {}", String.valueOf(response.getStatus()));
 
         if (response.getStatus().equals(EnumStatus.OK)) {
             return "redirect:/newUser/{publicKey}";
