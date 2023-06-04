@@ -43,7 +43,7 @@
             </form>
         </section>
 
-        <section>
+        <!--<section>
             <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
                 <h3>SMS</h3>
                 <div class="container-phone">
@@ -61,9 +61,9 @@
                     <a class="submit align_in_container_row" th:href="@{/app/private/notifications}"><img th:src="@{/css/img/notification.png}" alt="Notification"></a>
                 </div>
             </form>
-        </section>
+        </section>-->
 
-        <section>
+        <section id="domain">
             <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
                 <h3>Domaine</h3>
                 <input type="text" th:field="*{domaine}" id="domaine" th:value="${company.getDomaine()}" placeholder="Indiquez le domaine du site contenant la modal de rapport de bug">
@@ -77,13 +77,13 @@
             <div class="cards account">
                 <h3>Type of plan</h3>
                 <span th:text="${company.getPlan()}"></span>
-                <a class="submit" th:href="@{/features}">Change</a>
+                <a class="submit" th:href="@{/features#targetPlan}">Change</a>
             </div>
         </section>
 
         <section>
             <form class="cards account" th:object="${company}" method="get">
-                <h3>Security Key</h3>
+                <h3>Public Key</h3>
                 <input type="text" th:field="*{publicKey}" id="publicKey" th:value="${company.getPublicKey()}" readonly>
             </form>
         </section>

@@ -1,4 +1,4 @@
-const key = "Vw6QSo7nPHkhXk7pD2z69HJ3A"; /*Ajoutez votre clé publique ici, entre les ""*/
+const key = "YOUR_KEY_HERE"; /*Ajoutez votre clé publique ici, entre les ""*/
 window.addEventListener("DOMContentLoaded", function(){
 
 /* Variables document */
@@ -61,7 +61,7 @@ window.addEventListener("DOMContentLoaded", function(){
     function message(){
         /* Affiche le message lors du clic sur le bouton envoi (même si un problème lors de l'enregistrement est survenu)
         * et masque le formulaire, il ne reste que le bouton 'close' */
-        messageElement.innerHTML = "Merci pour votre envoi";
+        messageElement.innerHTML = "Merci pour votre envoi, vous pouvez fermer cette fenêtre";
         section.style.display = "none";
     }
 

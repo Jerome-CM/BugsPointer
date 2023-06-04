@@ -20,8 +20,8 @@
         <div class="btn-download newUser">
             <div class="center" style="width: 100%;">
                 <span class="center">
-                    Merci de nous indiquer l'url de votre site web <br>
-                    <span class="small-text">(à des fins de sécurité lors de la réception des bugs)</span>
+                    Merci de nous indiquer l'url du site web concerné<br>
+                    <span class="small-text">(Ceci à des fins de sécurité lors de la réception des bugs )</span>
                 </span>
             <form class="container-row" action="#" th:object="${company}" method="post">
                 <input type="text" th:field="*{domaine}" id="domaine" placeholder="www.monsite.fr" th:value="${company.getDomaine()}">
@@ -44,8 +44,8 @@
                         <br>Copier la Security Key et coller là dans le fichier modalControl.js, au début du fichier
                     </span>
                     <div class="container-row">
-                        <a th:href="@{/documentations}" class="btn-action">Documentation</a>
-                        <a th:href="@{/authentication}" class="submit">Dashboard</a>
+                        <a th:href="@{/documentations}" target="_blank" class="btn-action">Documentation</a>
+                        <a th:href="@{/authentication}" target="_blank" class="submit">Dashboard</a>
                     </div>
                 </div>
                 <img alt="clé" th:src="@{/css/img/icones/chiffrement.gif}"/>
@@ -58,7 +58,7 @@
                         Passer à Target Plan pour suivre vos rapports
                     </span>
                     <div class="container-row">
-                    <a th:href="@{/features#targetplan}" class="btn-action">Voir les avantages pour 15€/an</a>
+                    <a th:href="@{/features#targetplan}" target="_blank" class="btn-action">Voir les avantages pour 15€/an</a>
                     </div>
                 </div>
                 <img alt="moniteur" th:src="@{/css/img/icones/moniteur.gif}"/>
@@ -70,7 +70,7 @@
                         Intégrer vos fichiers sur toutes les pages où vous souhaitez faire afficher le formulaire de bug
                     </span>
                     <div class="container-row">
-                        <a th:href="@{/documentations}" class="btn-action">Documentation</a>
+                        <a th:href="@{/documentations}" target="_blank" class="btn-action">Documentation</a>
                     </div>
                 </div>
                 <img alt="transfert" th:src="@{/css/img/icones/transfert.gif}"/>
