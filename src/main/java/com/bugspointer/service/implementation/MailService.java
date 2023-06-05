@@ -370,7 +370,14 @@ public class MailService {
                                 "            </table>" +
                                 "          </td>" +
                         "               </tr>" +
-                        "               <tr>" +
+                        "               </body>" +
+                        "               <thead>" +
+                        "                  <tr>" +
+                        "                     <th>Merci d'avoir testé notre application, aidez-nous à nous améliorer encore plus en cliquant sur le bouton ci-dessous : </th>" +
+                        "                  </tr>" +
+                        "               </thead>" +
+                        "               <tbody>" +
+                        "                  <tr>" +
                         "                   <td>" +
                         "                       <table border='0' cellpadding='0' cellspacing='0' >" +
                         "                       <tr>" +
