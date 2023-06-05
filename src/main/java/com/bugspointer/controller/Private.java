@@ -1,6 +1,8 @@
 package com.bugspointer.controller;
 
 import com.bugspointer.dto.*;
+import com.bugspointer.entity.Company;
+import com.bugspointer.jwtConfig.JwtTokenUtil;
 import com.bugspointer.service.implementation.CompanyPreferencesService;
 import com.bugspointer.service.implementation.CompanyService;
 import com.bugspointer.service.implementation.MailService;
@@ -24,14 +26,14 @@ public class Private {
 
     private final CompanyService companyService;
 
-    private final MailService mailService;
-
     private final CompanyPreferencesService preferencesService;
 
-    public Private(CompanyService companyService, MailService mailService, CompanyPreferencesService preferencesService) {
+    private final JwtTokenUtil jwtTokenUtil;
+
+    public Private(CompanyService companyService, CompanyPreferencesService preferencesService, JwtTokenUtil jwtTokenUtil) {
         this.companyService = companyService;
-        this.mailService = mailService;
         this.preferencesService = preferencesService;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @GetMapping("invoices")
@@ -195,14 +197,14 @@ public class Private {
         return "private/solvedBugList";
     }
 
-    // TODO : Juste pour l'exemple, à supprimer après, ne pas oublier le constructeur à clean
-    @GetMapping(value="mail")
-    String sendMailRegister(){
-        Response response = mailService.sendMailRegister("bouteveillejerome@hotmail.fr", "HKVJHsgfir813dkfh");
-        if(response.getStatus().equals(EnumStatus.OK)){
-            return "index";
-        }
-        return "private/dashboard";
+    @GetMapping(value="thanks")
+    String thanks(Model model, HttpServletRequest request){
+
+        HttpSession session = request.getSession();
+        Company company = companyService.getCompanyByMail(jwtTokenUtil.getUsernameFromToken(jwtTokenUtil.getTokenWithoutBearer((String) session.getAttribute("token"))));
+
+        model.addAttribute("plan", String.valueOf(company.getPlan()));
+        return "private/thanks";
     }
 
 }

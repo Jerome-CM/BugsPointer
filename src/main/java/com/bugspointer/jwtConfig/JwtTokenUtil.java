@@ -98,4 +98,8 @@ public class JwtTokenUtil implements Serializable {
         return "Bearer " + generateToken(userDetails, auth);
     }
 
+    public String getTokenWithoutBearer(String headerToken){
+        return headerToken.substring(7);
+    }
+
 }

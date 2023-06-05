@@ -1,0 +1,38 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+    <title>Merci pour votre abonnement</title>
+</head>
+<body class="index">
+    <div th:replace="~{include/notifAlert.html}"></div>
+    <div th:replace="~{include/nav.html}"></div>
+
+    <div class="container">
+        <div class="btn-download welcome">
+            <img th:src="@{/css/img/icones/merci.gif}" alt="thanks"/>
+        </div>
+
+        <h1 class="space">Merci beaucoup pour votre abonnement à Bugspointer</h1>
+
+        <div th:if="${plan == 'TARGET'}" class="btn-download container-row">
+            <p class="center">Venez profiter dès à présent de votre tout nouveau Dashboard, fraichement construit pour votre arrivée</p>
+            <a th:href="@{/app/private/dashboard}" class="btn-action">Mon Dashboard</a>
+        </div>
+
+       <!-- <div th:if="${plan == 'ULTIMATE'}" class="btn-download container-row">
+            <p class="center">Rendez-vous dans votre Dashboard, dans une nouvelle catégorie fraichement construite, afin de mettre en place simplement le lien entre Bugspointer et votre plateforme de développement</p>
+            <a th:href="@{/app/private/dashboard}" class="btn-action">Mon Dashboard</a>
+        </div>-->
+
+    </div>
+
+    <div th:replace="~{include/footer.html}"></div>
+</body>
+</html>
