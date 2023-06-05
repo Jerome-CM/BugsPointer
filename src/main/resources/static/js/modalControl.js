@@ -25,7 +25,7 @@ window.addEventListener("DOMContentLoaded", function(){
     const ADRESSE = "http://bugspointer.com/sondage"
     // Texte pour le bouton envoyer un bug
     const textEnvoiNoValid = "Sélectionner le bug avec le bouton 'Pointer le bug'";
-    const textEnvoiNoTime = "Patientez un instant";
+    const textEnvoiNoTime = "Merci de patienter";
     const textEnvoiOk = "Envoyer le rapport";
     const textEnvoiEnCours = "Envoi en cours...";
 
@@ -42,7 +42,7 @@ window.addEventListener("DOMContentLoaded", function(){
     setTimeout(function () {
         okSubmit = true;
         validEnvoi(); // On vérifie que le bug est pointé sinon on attend
-    }, 30000); // 30 secondes (en millisecondes
+    }, 20000); // 20 secondes (en millisecondes
 
 /* Valeurs document modifiées */
     /* url */
@@ -63,8 +63,8 @@ window.addEventListener("DOMContentLoaded", function(){
     function message(){
         /* Affiche le message lors du clic sur le bouton envoi (même si un problème lors de l'enregistrement est survenu)
         * et masque le formulaire, il ne reste que le bouton 'close' */
-        messageElement.innerHTML = "Merci pour votre envoi, vous pouvez fermer cette fenêtre";
-        lienElement.innerHTML = "Qu'avez-vous penser de ce formulaire ? Donnez-nous votre avis ici en remplissant ce sondage"
+        messageElement.innerHTML = "Merci infiniment pour votre envoi <br><br><br>Donnez votre avis et façonnez l'avenir de notre produit ";
+        lienElement.innerHTML = "Evaluer en 3 questions"
         lienElement.href = ADRESSE;
         section.style.display = "none";
     }
@@ -221,11 +221,11 @@ window.addEventListener("DOMContentLoaded", function(){
                         let baliseLu = balise.outerHTML; // On renvoie les données de balise en format text
                         let baliseModif; // permettra de récupérer le text modifié
                         if (baliseLu.includes('class="')){
-                            /* Si dans la balise il existe une class, alors on va ajouter à celle-ci la class "bugspointer-text-balise */
-                            baliseModif = baliseLu.replace('class="', 'class="bugspointer-text-balise ');
+                            /* Si dans la balise il existe une class, alors on va ajouter à celle-ci la class "bugspointer-pointed-balise */
+                            baliseModif = baliseLu.replace('class="', 'class="bugspointer-pointed-balise ');
                         } else {
                             /* S'il n'y a pas de class alors on ajoute la class après le type de la balise */
-                            baliseModif = baliseLu.replace('<' + baliseType, '<' + baliseType + ' class="bugspointer-text-balise"');
+                            baliseModif = baliseLu.replace('<' + baliseType, '<' + baliseType + ' class="bugspointer-pointed-balise"');
                         }
                         /* On récupère le texte dernier parent trouvé dans la boucle (ou à défaut la balise). */
                         let parentLu = parentAffichage.outerHTML;

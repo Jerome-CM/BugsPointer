@@ -159,7 +159,7 @@
     margin: 0;
 }
 
-.bugspointer-text-balise { /* applique une couleur pour la balise sélectionnée par le pointer */
+.bugspointer-pointed-balise { /* applique une couleur pour la balise sélectionnée par le pointer */
      color: red !important;
 }
 
@@ -170,4 +170,14 @@
 
 #bugspointer-popup-pointer-bug-text{
     color: red;
+}
+
+.btn-action{
+    margin-top: 30px;
+    background-color: var(--color-btn-green);
+    padding: 7px 20px;
+    color: var(--color-white);
+    width: fit-content;
+    font-size: 22px;
+    border-radius: var(--radius);
 }
