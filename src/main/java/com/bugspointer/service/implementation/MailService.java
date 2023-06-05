@@ -284,5 +284,135 @@ public class MailService {
             return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
         }
     }
+
+    public Response sendMailTest(String to, Bug bugTest) {
+
+
+        // Paramètres du destinataire
+        String subject = "Bugspointer - Nouveau Bug (Test)";
+
+        // Contenu HTML de l'email
+        String htmlContent =
+                "<html>" +
+                        "  <body>" +
+                        "    <h1> Vous venez d'envoyer un rapport de bug depuis la page de test du site bugspointer.com </h1>" +
+                        "      <table>" +
+                        "        <thead>" +
+                        "        <tr>" +
+                        "          <th>Pour une utilisation gratuite vous recevrez ce type de mail :</th>" +
+                        "          </tr>" +
+                        "        </thead>" +
+                        "        <tbody>" +
+                        "        <tr>" +
+                        "          <td>" +
+                        "            <h1>Nouveau Bug</h1><br>" +
+                        "            <p>Un utilisateur vient de déclarer un nouveau bug sur votre site " +
+                        "            <p>URL concernée : "+ bugTest.getUrl() +"</p><br>" +
+                        "            <p>Description du bug : <br>" + bugTest.getDescription() +"</p><br>" +
+                        "            <p>Afin d'avoir plus d'informations sur ce bug, vous pouvez changer votre abonnement en cliquant sur le bouton ci-dessous:" +
+                        "            <table border='0' cellpadding='0' cellspacing='0' >" +
+                        "              <tr>" +
+                        "                <td align='center' style='padding: 10px;'>" +
+                        "                  <a href='"+ ADRESSE +"features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
+                        "                </td>" +
+                        "              </tr>" +
+                        "            </table>" +
+                        "          </td>" +
+                        "        </tr>" +
+                        "        <tr>" +
+                        "        </tbody>" +
+                        "        <thead>" +
+                        "            <tr>" +
+                        "              <th>Voici le niveau de détail que vous recevrez pour une utilisation payante : </th>" +
+                        "          </tr>" +
+                        "         </thead>" +
+                        "          <tbody>" +
+                        "            <tr>" +
+                        "          <td>" +
+                        "            <h1>Nouveau Bug</h1>" +
+                        "            <table>" +
+                        "              <tr>" +
+                        "                <th>URL concernée : </th>" +
+                        "                <td>"+ bugTest.getUrl() +"</td>" +
+                        "              </tr>" +
+                        "              <tr>" +
+                        "                <th>Date du rapport : </th>" +
+                        "                <td>"+ bugTest.getDateCreation() +"</td>" +
+                        "              </tr>" +
+                        "              <tr>" +
+                        "                <th>Description du bug : </th>" +
+                        "                <td>" + bugTest.getDescription() +"</td>" +
+                        "              </tr>" +
+                        "              <tr>" +
+                        "                <th>OS utilisateur : </th>" +
+                        "                <td>"  + bugTest.getOs() +"</td>" +
+                        "              </tr>" +
+                        "              <tr>" +
+                        "                <th>Browser utilisateur : </th>" +
+                        "                <td>"  + bugTest.getBrowser() +"</td>" +
+                        "              </tr>" +
+                        "              <tr>" +
+                        "                <th>Taille écran utilisateur : </th>" +
+                        "                <td>"  + bugTest.getScreenSize() +"</td>" +
+                        "              </tr>" +
+                        "              <tr>" +
+                        "                <th>Code HTML sélectionné : </th>" +
+                        "                <td><code>"  + bugTest.getCodeLocation() +"</code></td>" +
+                        "              </tr>" +
+                        "            </table>" +
+                        "            <p>Vous pouvez retrouver ces détails dans votre Dashboard en cliquant sur le bouton ci-dessous:" +
+                        "            <table border='0' cellpadding='0' cellspacing='0' >" +
+                        "              <tr>" +
+                        "                <td align='center' style='padding: 10px;'>" +
+                        "                  <a href='"+ ADRESSE +"dashboard/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Voir mon Dashboard</a>" +
+                        "                </td>" +
+                        "              </tr>" +
+                        "            </table>" +
+                        "          </td>" +
+                        "        </tr>" +
+                        "       </tbody>" +
+                        "      </table>" +
+                        "  </body>" +
+                        "</html>";
+
+
+        // Configuration des propriétés
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+
+        // Création de l'authentificateur
+        Authenticator auth = new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, password);
+            }
+        };
+
+        // Création de la session
+        Session session = Session.getInstance(properties, auth);
+
+        try {
+            // Création du message
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject(subject, "UTF-8");
+            message.setContent(htmlContent, "text/html; charset=UTF-8");
+
+            // Envoi du message
+            Transport.send(message);
+
+
+            log.info("email new bug sent at : {}", to);
+            return new Response(EnumStatus.OK, null, "Mail avec le bug sur page de test envoyé");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            log.info("error from mail sender : " + e.getMessage());
+            return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
+        }
+    }
 }
 

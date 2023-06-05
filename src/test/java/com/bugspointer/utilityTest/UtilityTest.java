@@ -15,7 +15,7 @@ public class UtilityTest {
 
     @Test
     public void createPublicKeyTest(){
-        String key = utility.createPublicKey();
+        String key = utility.createPublicKey(25);
         assertTrue("", key.length()==25);
 
     }

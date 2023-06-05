@@ -23,4 +23,6 @@ public class ModalDTO {
 
     private String bot;
 
+    private String mail;
+
 }
