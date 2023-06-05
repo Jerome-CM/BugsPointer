@@ -142,7 +142,7 @@ public class Private {
             } else if ("updateSms".equals(action)) {
                 response = companyService.smsUpdate(dto);
             } else if ("updateDomaine".equals(action)) {
-                response = companyService.registerDomaine(dto);
+                response = companyService.updateDomaine(dto);
             } else {
                 response = new Response(EnumStatus.ERROR, null, "Error to click of button");
             }

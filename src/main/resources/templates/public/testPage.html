@@ -137,6 +137,7 @@
                 <span class="bugspointer-close-popup" id="bugspointer_close_popup">&times;</span>
             </div>
             <div id="bugspointer-message-success"></div>
+            <a id="bugspointer-lien-success"></a>
             <div class="bugspointer-popup-content" id="bugspointer-affichage">
                 <label for="bugspointer-urlPointed">Url avec ce bug</label>
                 <input type="text" name="url" class="bugspointer-popup-content-texturl" id="bugspointer-urlPointed" value="" readonly>
@@ -154,6 +155,11 @@
                 <input type="hidden" name="browser" id="bugspointer-popup-browser" readonly>
                 <input type="hidden" name="screenSize" id="bugspointer-popup-screen" readonly>
                 <input type="hidden" name="key" id="key" readonly>
+
+                <label for="bugspointer-mail-test">Afin de découvrir le rapport que vous recevrez, veuillez indiquer votre mail ci-dessous</label>
+                <input type="text" name="mail" class="bugspointer-popup-content-texturl" id="bugspointer-mail-test" placeholder="Mail">
+
+                <p class="small-text">Ce mail ne sera pas conservé ni utilisé à des fins commerciales</p>
 
                 <button class="bugspointer-popup-btn-submit" type="submit" id="bugspointer-popup-btn-submit" disabled title="Veuillez cliquer sur le bouton 'Pointer le bug' avant d'envoyer le formulaire">Envoyer mon rapport</button>
             </div>

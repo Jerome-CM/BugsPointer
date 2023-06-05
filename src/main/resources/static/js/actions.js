@@ -13,14 +13,16 @@ window.addEventListener('DOMContentLoaded', function () {
             /* Lorsque la fonction est appelée, elle ouvre la popup contenant le formulaire de bug */
             domaineConfirme.value = domaine.value;
             popup.style.display = "flex";
+            enterPressed = true;
         }
 
         function masquer() {
             /* Lorsque la fonction est appelée, elle ferme la popup contenant le formulaire de bug */
             popup.style.display = "none";
+            enterPressed = false;
         }
 
-        if (domaine == null) {
+        if (domaine.value === "") {
             document.addEventListener("keydown", function (event) {
                 /* Vérifie si la touche pressée est Entrée */
                 if (event.key === "Enter") {

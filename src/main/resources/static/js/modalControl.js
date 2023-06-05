@@ -1,4 +1,4 @@
-const key = "YOUR_KEY_HERE"; /*Ajoutez votre clé publique ici, entre les ""*/
+const key = "C1estLaClePublicAModifier"; /*Ajoutez votre clé publique ici, entre les ""*/
 window.addEventListener("DOMContentLoaded", function(){
 
 /* Variables document */
@@ -8,6 +8,7 @@ window.addEventListener("DOMContentLoaded", function(){
     let btnpointer = document.querySelector('#bugspointer-popup-btn-pointer');
     let form = document.querySelector('.bugspointer-popup-container');
     let messageElement = document.getElementById("bugspointer-message-success");
+    let lienElement = document.getElementById("bugspointer-lien-success");
     let section = document.getElementById("bugspointer-affichage");
     let url = document.getElementById("bugspointer-urlPointed");
     let urlPointed = window.location.href;
@@ -21,6 +22,7 @@ window.addEventListener("DOMContentLoaded", function(){
 
 /* Autres variables */
     const textValid = "Bug pointé correctement";
+    const ADRESSE = "http://bugspointer.com/sondage"
     // Texte pour le bouton envoyer un bug
     const textEnvoiNoValid = "Sélectionner le bug avec le bouton 'Pointer le bug'";
     const textEnvoiNoTime = "Patientez un instant";
@@ -40,7 +42,7 @@ window.addEventListener("DOMContentLoaded", function(){
     setTimeout(function () {
         okSubmit = true;
         validEnvoi(); // On vérifie que le bug est pointé sinon on attend
-    }, 10000); // 30 secondes (en millisecondes
+    }, 30000); // 30 secondes (en millisecondes
 
 /* Valeurs document modifiées */
     /* url */
@@ -62,6 +64,8 @@ window.addEventListener("DOMContentLoaded", function(){
         /* Affiche le message lors du clic sur le bouton envoi (même si un problème lors de l'enregistrement est survenu)
         * et masque le formulaire, il ne reste que le bouton 'close' */
         messageElement.innerHTML = "Merci pour votre envoi, vous pouvez fermer cette fenêtre";
+        lienElement.innerHTML = "Qu'avez-vous penser de ce formulaire ? Donnez-nous votre avis ici en remplissant ce sondage"
+        lienElement.href = ADRESSE;
         section.style.display = "none";
     }
 

@@ -69,7 +69,7 @@ public class CompanyService implements ICompany {
     }
 
     public String createPublicKey() {
-        return utility.createPublicKey();
+        return utility.createPublicKey(25);
     }
 
     @Override
@@ -430,6 +430,17 @@ public class CompanyService implements ICompany {
         return new Response(EnumStatus.ERROR, null, "Error in the process");
     }
 
+    public Response updateDomaine(AccountDTO dto){
+
+        Company company = getCompanyByPublicKey(dto.getPublicKey());
+
+        if (passwordEncoder.matches(dto.getPassword(), company.getPassword())){
+            return registerDomaine(dto);
+        } else {
+            return new Response(EnumStatus.ERROR, null, "Erreur de mot de passe");
+        }
+    }
+
     public Response sendPwLost(AccountDTO dto){
         log.info("Password Lost :");
         log.info("dto: {}", dto);
@@ -443,7 +454,7 @@ public class CompanyService implements ICompany {
             return mailService.sendMailLostPassword(dto.getMail(), company.getPublicKey());
         }
 
-        return new Response(EnumStatus.OK, null, "Un mail pour réinitialiser votre mot de passe vient de vous êtes envoyé");
+        return new Response(EnumStatus.OK, null, "Un mail pour réinitialiser votre mot de passe vient de vous êtes envoyé");//TODO: message si votre mail est en base de donnée un mail vous sera envoyé
     }
 
     public Response resetPassword(String publicKey, AccountDTO dto){
