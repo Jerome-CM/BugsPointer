@@ -328,48 +328,57 @@ public class MailService {
                         "         </thead>" +
                         "          <tbody>" +
                         "            <tr>" +
-                        "          <td>" +
-                        "            <h1>Nouveau Bug</h1>" +
-                        "            <table>" +
-                        "              <tr>" +
-                        "                <th>URL concernée : </th>" +
-                        "                <td>"+ bugTest.getUrl() +"</td>" +
-                        "              </tr>" +
-                        "              <tr>" +
-                        "                <th>Date du rapport : </th>" +
-                        "                <td>"+ bugTest.getDateCreation() +"</td>" +
-                        "              </tr>" +
-                        "              <tr>" +
-                        "                <th>Description du bug : </th>" +
-                        "                <td>" + bugTest.getDescription() +"</td>" +
-                        "              </tr>" +
-                        "              <tr>" +
-                        "                <th>OS utilisateur : </th>" +
-                        "                <td>"  + bugTest.getOs() +"</td>" +
-                        "              </tr>" +
-                        "              <tr>" +
-                        "                <th>Browser utilisateur : </th>" +
-                        "                <td>"  + bugTest.getBrowser() +"</td>" +
-                        "              </tr>" +
-                        "              <tr>" +
-                        "                <th>Taille écran utilisateur : </th>" +
-                        "                <td>"  + bugTest.getScreenSize() +"</td>" +
-                        "              </tr>" +
-                        "              <tr>" +
-                        "                <th>Code HTML sélectionné : </th>" +
-                        "                <td><code>"  + bugTest.getCodeLocation() +"</code></td>" +
-                        "              </tr>" +
+                        "               <td>" +
+                        "                   <h1>Nouveau Bug</h1>" +
+                        "                   <table>" +
+                        "                       <tr>" +
+                                "                <th>URL concernée : </th>" +
+                                "                <td>"+ bugTest.getUrl() +"</td>" +
+                                "              </tr>" +
+                                "              <tr>" +
+                                "                <th>Date du rapport : </th>" +
+                                "                <td>"+ bugTest.getDateCreation() +"</td>" +
+                                "              </tr>" +
+                                "              <tr>" +
+                                "                <th>Description du bug : </th>" +
+                                "                <td>" + bugTest.getDescription() +"</td>" +
+                                "              </tr>" +
+                                "              <tr>" +
+                                "                <th>OS utilisateur : </th>" +
+                                "                <td>"  + bugTest.getOs() +"</td>" +
+                                "              </tr>" +
+                                "              <tr>" +
+                                "                <th>Browser utilisateur : </th>" +
+                                "                <td>"  + bugTest.getBrowser() +"</td>" +
+                                "              </tr>" +
+                                "              <tr>" +
+                                "                <th>Taille écran utilisateur : </th>" +
+                                "                <td>"  + bugTest.getScreenSize() +"</td>" +
+                                "              </tr>" +
+                                "              <tr>" +
+                                "                <th>Code HTML sélectionné : </th>" +
+                                "                <td><code>"  + bugTest.getCodeLocation() +"</code></td>" +
+                                "              </tr>" +
+                        "                   </table>" +
+                                "            <p>Vous pouvez retrouver ces détails dans votre Dashboard en cliquant sur le bouton ci-dessous:" +
+                                "            <table border='0' cellpadding='0' cellspacing='0' >" +
+                                "              <tr>" +
+                                "                <td align='center' style='padding: 10px;'>" +
+                                "                  <a href='"+ ADRESSE +"app/private/dashboard' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Voir mon Dashboard</a>" +
+                                "                </td>" +
+                                "              </tr>" +
+                                "            </table>" +
+                                "          </td>" +
+                        "               </tr>" +
+                        "               <tr>" +
+                        "                   <td>" +
+                        "                       <table border='0' cellpadding='0' cellspacing='0' >" +
+                        "                       <tr>" +
+                        "                       <td align='center' style='padding: 10px;'>" +
+                        "                           <a href='"+ ADRESSE +"sondage' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Donner mon avis</a>" +
+                        "                       </td>" +
+                        "                   </tr>" +
                         "            </table>" +
-                        "            <p>Vous pouvez retrouver ces détails dans votre Dashboard en cliquant sur le bouton ci-dessous:" +
-                        "            <table border='0' cellpadding='0' cellspacing='0' >" +
-                        "              <tr>" +
-                        "                <td align='center' style='padding: 10px;'>" +
-                        "                  <a href='"+ ADRESSE +"dashboard/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: orange;'>Voir mon Dashboard</a>" +
-                        "                </td>" +
-                        "              </tr>" +
-                        "            </table>" +
-                        "          </td>" +
-                        "        </tr>" +
                         "       </tbody>" +
                         "      </table>" +
                         "  </body>" +
