@@ -207,4 +207,19 @@ public class Private {
         return "private/thanks";
     }
 
+    @GetMapping(value="recapPayment")
+    String getRecapPayment(Model model, HttpServletRequest request){
+
+        HttpSession session = request.getSession();
+        Company company = companyService.getCompanyByMail(jwtTokenUtil.getUsernameFromToken(jwtTokenUtil.getTokenWithoutBearer((String) session.getAttribute("token"))));
+
+        CustomerDTO customer = new CustomerDTO();
+        customer.setMail(company.getMail());
+        customer.setCompanyName(company.getCompanyName());
+        model.addAttribute("product", request.getAttribute("product"));
+        model.addAttribute("company", customer);
+        return "private/recapPayment";
+    }
+
+
 }

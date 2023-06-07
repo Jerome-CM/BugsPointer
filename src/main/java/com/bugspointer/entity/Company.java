@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 
 @Entity
@@ -48,5 +49,8 @@ public class Company {
     private Date dateCloture; //Ajoute la date quand le compte passe en inactif
 
     private String role = "ROLE_USER";
+
+    @OneToOne
+    private Customer customer;
 
 }

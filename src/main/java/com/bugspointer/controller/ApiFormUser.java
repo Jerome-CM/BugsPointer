@@ -1,7 +1,11 @@
 package com.bugspointer.controller;
 
+import be.woutschoovaerts.mollie.exception.MollieException;
+import com.bugspointer.dto.CustomerDTO;
 import com.bugspointer.dto.ModalDTO;
+import com.bugspointer.dto.Response;
 import com.bugspointer.service.implementation.ModalService;
+import com.bugspointer.service.implementation.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -19,8 +23,11 @@ public class ApiFormUser {
 
     private final ModalService modalService;
 
-    public ApiFormUser(ModalService modalService) {
+    private final PaymentService paymentService;
+
+    public ApiFormUser(ModalService modalService, PaymentService paymentService) {
         this.modalService = modalService;
+        this.paymentService = paymentService;
     }
 
 
@@ -34,6 +41,15 @@ public class ApiFormUser {
         }
 
         return new RedirectView(dto.getUrl());
+    }
+
+    @PostMapping("/newCustomer")
+    String createNewCustomer(@Valid CustomerDTO customer) throws MollieException {
+
+        paymentService.createNewCustomer(customer);
+        return "/";
+
+
     }
 
 }

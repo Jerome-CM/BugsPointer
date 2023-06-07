@@ -1,0 +1,43 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <title>Téléchargement</title>
+</head>
+<body class="black">
+
+    <div th:replace="~{include/nav.html}"></div>
+
+    <div class="container">
+        <h1 class="h-in-black">Récapitulatif du produit</h1>
+        <p>
+            Vous êtes sur le point de souscrire à l'abonnement : <span th:text="${product}"></span> pour 15€/an, renouvelable automatiquement à partir du paiement<!--dynamique-->
+
+            <br><br>
+
+            Merci de completer les informations vous concernant :
+        </p>
+
+        <form action="#" th:action="@{/api/user/newCustomer}" method="post" class="form-info-user" th:object="${company}">
+            <input type="text" th:field="*{mail}" placeholder="Votre e-mail" th:value="${company.getMail()}">
+            <input type="text" th:field="*{companyName}" placeholder="Nom de l'entreprise" th:value="${company.getCompanyName()}">
+            <input type="text" th:field="*{address1}" placeholder="Adresse 1">
+            <input type="text" th:field="*{address2}" placeholder="Adresse 2">
+            <input type="text" th:field="*{cp}" placeholder="Code Postal">
+            <input type="text" th:field="*{city}" placeholder="Ville">
+            <input type="text" th:field="*{country}" placeholder="Pays" value="France">
+            <input type="hidden" th:field="*{product}" th:value="*{product}">
+            <p><input type="checkbox" th:field="*{cguAccepted}"> Merci d'accepter les <a th:href="@{/cgu}">CGU</a></p>
+
+            <input type="submit"  value="Passer au paiement">
+
+        </form>
+    </div>
+    <div th:replace="~{include/footer.html}"></div>
+</body>
+</html>

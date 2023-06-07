@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
@@ -22,6 +23,8 @@ public class ApiCompany {
     private final CompanyService companyService;
 
     private final PaymentService paymentService;
+
+    HttpServletResponse response;
 
     public ApiCompany(CompanyService companyService, PaymentService paymentService) {
         this.companyService = companyService;
@@ -48,7 +51,7 @@ public class ApiCompany {
 
     @GetMapping(value="/payment")
     public void getPayment() throws MollieException, IOException {
-        paymentService.paymentTest();
+        paymentService.paymentTest(response);
     }
 
 }
