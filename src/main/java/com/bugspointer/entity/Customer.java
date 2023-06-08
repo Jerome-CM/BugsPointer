@@ -3,6 +3,7 @@ package com.bugspointer.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 
 @Entity
 @Data
@@ -21,4 +22,8 @@ public class Customer {
 
     private String dateStartSubscribe;
 
+    @OneToMany
+    List<Mandate> mandateList = new ArrayList();
+    //TODO Class mandate à créer pour que ça fasse aussi une table en bdd
+    // ID, customerId mollie, mandateId.
 }

@@ -454,7 +454,7 @@ public class CompanyService implements ICompany {
             return mailService.sendMailLostPassword(dto.getMail(), company.getPublicKey());
         }
 
-        return new Response(EnumStatus.OK, null, "Un mail pour réinitialiser votre mot de passe vient de vous êtes envoyé");//TODO: message si votre mail est en base de donnée un mail vous sera envoyé
+        return new Response(EnumStatus.OK, null, "Si votre mail nous est connu, un mail vient d'être envoyé à : dto.getMail()");
     }
 
     public Response resetPassword(String publicKey, AccountDTO dto){

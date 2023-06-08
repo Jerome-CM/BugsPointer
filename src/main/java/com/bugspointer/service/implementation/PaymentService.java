@@ -14,6 +14,7 @@ import be.woutschoovaerts.mollie.data.payment.PaymentResponse;
 import be.woutschoovaerts.mollie.data.payment.SequenceType;
 import be.woutschoovaerts.mollie.data.subscription.SubscriptionRequest;
 import be.woutschoovaerts.mollie.data.subscription.SubscriptionResponse;
+import be.woutschoovaerts.mollie.data.subscription.SubscriptionStatus;
 import be.woutschoovaerts.mollie.exception.MollieException;
 import be.woutschoovaerts.mollie.handler.CustomerHandler;
 import com.bugspointer.dto.CustomerDTO;
@@ -70,7 +71,7 @@ public class PaymentService {
         customerBugspointerOptional = customerRepository.findByCompany_CompanyName(customerDTO.getMail());
         if (customerBugspointerOptional.isPresent()){
             CustomerResponse customerResponse = client.customers().getCustomer(customerBugspointerOptional.get().getCustomerId());
-            //TODO : vérifier que sur mollie le customer existe sinon le créer
+
         } else {
 
             // Create customer
@@ -78,8 +79,11 @@ public class PaymentService {
 
             customer.setEmail(Optional.of(customerDTO.getMail()));
             customer.setName(Optional.of(customerDTO.getCompanyName()));
-            customer.setLocale(Optional.of(fr_FR)); //TODO gérer dynamiquement le lieu de residence
+            customer.setLocale(Optional.of(fr_FR));
+            //TODO Faire un enum comme les indicatifs, Si pays choisit c'est france (liste déroulante dans newCustomer), alors ici c'est fr_FR
+            // Si c'est la belgique alors fr_BE
 
+            //TODO Rendre obligatoire ces données ( rapide require en front, mais surtout renvoie d'erreur en back )
             Map<String, Object> meta = new HashMap<>();
             meta.put("address1", customerDTO.getAddress1());
             meta.put("address2", customerDTO.getAddress2());
@@ -91,6 +95,9 @@ public class PaymentService {
             CustomerResponse customerHandler = client.customers().createCustomer(customer);
 
             if (customerHandler.getId() != null) {
+                log.info("\r -------  ");
+                log.info("New Mollie customer : {} - {} - {}", customerHandler.getName(),customerHandler.getEmail(),customerHandler.getId());
+                log.info("\r -------  ");
                 Customer customerBugspointer = new Customer();
 
                 customerBugspointer.setCustomerId(customerHandler.getId());
@@ -98,7 +105,9 @@ public class PaymentService {
 
                 try {
                     Customer returnCustomerSaved = customerRepository.save(customerBugspointer);
-                    log.info("Customer save with success : {}", returnCustomerSaved);
+                    log.info("\r -------  ");
+                    log.info("New Bugspointer Customer : {} - {}", returnCustomerSaved.getId(), returnCustomerSaved.getCustomerId());
+                    log.info("\r -------  ");
                     return new Response(EnumStatus.OK, customerBugspointer, null);
                 } catch (Exception e) {
                     log.error("Impossible to save a new customer : {}", e.getMessage());
@@ -112,60 +121,6 @@ public class PaymentService {
 
     }
 
-    public Response createSubscription(Response response, Customer customer) throws MollieException, IOException {
-
-        MandateResponse mandateResponse = (MandateResponse) response.getContent();
-
-        /*PaymentRequest paymentRequest = new PaymentRequest();
-
-        paymentRequest.setAmount(new Amount("EUR", new BigDecimal("15.00")));
-        paymentRequest.setDescription("Subscribe to Target Plan, Order #12345");
-        paymentRequest.setRedirectUrl(Optional.of("http://bugspointer.com/thanks"));
-        paymentRequest.setSequenceType(Optional.of(SequenceType.FIRST));
-        paymentRequest.setBillingEmail(Optional.of("test@test.fr"));
-        paymentRequest.setConsumerName(Optional.of("My Company"));
-        paymentRequest.setCustomerId(Optional.ofNullable(customer.getCustomerId()));
-
-        log.info("paiement envoyé : {}", paymentRequest);
-
-        PaymentResponse paymentResponse = client.payments().createPayment(paymentRequest);
-
-        if(paymentResponse.getLinks().getCheckout().getHref() != null){
-
-            responseHttp.sendRedirect(paymentResponse.getLinks().getCheckout().getHref());
-
-            log.info("customer ID : {}", customer.getCustomerId());
-
-            log.info("mandat ID : {}", paymentResponse.getMandateId());
-            client.mandates().getMandate(customer.getCustomerId(), String.valueOf(paymentResponse.getMandateId()));
-
-
-            return new Response(EnumStatus.OK, paymentResponse, "Paiement accepté");
-
-            // TODO redirect user to checkout page with paymentResponse.getLinks().getCheckout().getHref()
-            // Pour simplifier la chose, il n'y aura pas de carte de crédit, seulement le virement / prelevement SEPA
-            // Tu n'as pas forcement besoin de mon interface Mollie, car dans les logs tous est correctement noté suivant le succès ou l'erreur de la transaction
-        }*/
-
-        SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
-
-        subscriptionRequest.setAmount(new Amount("EUR", new BigDecimal("15.00")));
-        subscriptionRequest.setDescription("Subscribe to Target Plan, Order #12345");
-        subscriptionRequest.setTimes(Optional.of(4));
-        subscriptionRequest.setInterval("12 months");
-        /*subscriptionRequest.setMethod(MandatePaymentMethod.DIRECTDEBIT);*/
-        subscriptionRequest.setMandateId(Optional.ofNullable(mandateResponse.getId()));
-
-        SubscriptionResponse subscriptionResponse = client.subscriptions().createSubscription(customer.getCustomerId(), subscriptionRequest);
-
-        log.info("subscription : {}", subscriptionResponse);
-
-        /*if (subscriptionResponse.getLinks() != null)*/
-
-// Il faut un retour ici mais je n'ai pas eu le temps de réflechir auquel
-        return new Response(EnumStatus.ERROR, null, "Erreur dans le paiement");
-    }
-
     public Response createMandate(Response response) throws MollieException {
 
         Customer customer = (Customer) response.getContent();
@@ -177,95 +132,54 @@ public class PaymentService {
         mandateRequest.setConsumerName(customer.getCompany().getCompanyName());
         mandateRequest.setConsumerAccount("FR7617418000010000052248408");
         mandateRequest.setConsumerBic(Optional.of("SNNNFR22XXX"));
-        mandateRequest.setSignatureDate(Optional.of(LocalDate.parse("2023-06-06")));
-        mandateRequest.setMandateReference(Optional.of("BugsPointerMandate-2023-06-06-cst_V4fQbSFEn7"));
+        mandateRequest.setSignatureDate(Optional.of(LocalDate.parse("2023-06-06"))); //TODO Mettre la date du jour actuel
+        mandateRequest.setMandateReference(Optional.of("BugsPointer-Mandate-2023-06-06-cst_V4fQbSFEn7"));
+        // TODO Valeur de MandateReference : customer.getCompany()-Mandate-Bugspointer-directdebit-date()
 
         MandateResponse mandateHandler = client.mandates().createMandate(customer.getCustomerId(), mandateRequest);
 
-        log.info("mandat : {}", mandateHandler);
-
         if (mandateHandler.getStatus().equals(MandateStatus.VALID)){
-            return new Response(EnumStatus.OK, mandateHandler, "Mandat Valide");
+            log.info("\r -------  ");
+            log.info("New Mollie Mandate : {} - {} - {}", customer.getCompany(), mandateHandler.getSignatureDate(), mandateHandler.getId());
+            log.info("\r -------  ");
+            // TODO Envoie de mail pour indiquer la confirmation du mandat
+            return new Response(EnumStatus.OK, mandateHandler, ""); // Ne pas mettre de message car on passe directement à la méthode de subscrible
         }
 
-        return new Response(EnumStatus.ERROR, null, "Mandat non valide");
+        return new Response(EnumStatus.ERROR, null, "Oups, le mandat est non valide, merci de vérifier");
     }
 
 
-    // Pour définir un paiement récurrent,
-    // s'assurer que le client à un mandat valide et garder son id => Mandate API / list mandate : https://docs.mollie.com/reference/v2/mandates-api/list-mandates
-    // si mandat valide; configurer paiement récurrent.
+    public Response createSubscription(Response response, Customer customer) throws MollieException, IOException {
 
-    //S'assurer que le client ne soit pas facturer 2 fois le même premier mois
+        MandateResponse mandateResponse = (MandateResponse) response.getContent();
 
+        // TODO Avant de faire la souscription, il faut s'assurer que le mandat est encore valide pendant au moins 70j
+        //Mandate API / list mandate : https://docs.mollie.com/reference/v2/mandates-api/list-mandates
+        
+        SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
 
+        // TODO rendre le nom du plan et le montant dynamique (peut être faire une table en BDD, id,plan,amount)
+        subscriptionRequest.setAmount(new Amount("EUR", new BigDecimal("15.00")));
+        subscriptionRequest.setDescription("Subscribe to Target Plan");
+        subscriptionRequest.setTimes(Optional.of(4));
+        subscriptionRequest.setInterval("12 months");
+        subscriptionRequest.setMandateId(Optional.ofNullable(mandateResponse.getId()));
 
+        SubscriptionResponse subscriptionResponse = client.subscriptions().createSubscription(customer.getCustomerId(), subscriptionRequest);
 
+        if(subscriptionResponse.getStatus() == SubscriptionStatus.PENDING || subscriptionResponse.getStatus() == SubscriptionStatus.ACTIVE){
+            log.info("\r -------  ");
+            log.info("New Mollie Subscription : {} - {}", customer.getCustomerId(), subscriptionRequest.getDescription());
+            log.info("\r -------  ");
+            // TODO Envoie de mail pour confirmer la souscription
+            return new Response(EnumStatus.OK, null, "La souscription à Target Plan est validé");
+        }                                                               // TODO reprendre le nom dynamique du plan
 
-    //Ancien code pour tester
-    /*SubscriptionRequest reccuring = new SubscriptionRequest();
-        reccuring.setAmount(new Amount("EUR", new BigDecimal("15.00")));
-        reccuring.setDescription("Subscribe to Target Plan, Order #12345");
-        reccuring.setTimes(Optional.of(2));
-        reccuring.setInterval("12 months");
-        reccuring.setMandateId(Optional.ofNullable(mandateHandler.getId()));
-
-    SubscriptionResponse subResponse = client.subscriptions().createSubscription(customerHandler.getId(),reccuring);*/
-
-
-
-    public void paymentTest(HttpServletResponse response) throws MollieException, IOException {
-
-        /*// Create customer
-        CustomerRequest customer = new CustomerRequest();
-
-        customer.setEmail(Optional.of("test@test.com"));
-        customer.setName(Optional.of("My Company"));
-        customer.setLocale(Optional.of(fr_FR));
-        CustomerResponse customerHandler = client.customers().createCustomer(customer);
-        // TODO Save customer in DB
-
-
-
-        // Create mandate
-        MandateRequest mandate = new MandateRequest();
-
-        mandate.setMethod("directdebit");
-        mandate.setConsumerName(customerHandler.getName());
-        mandate.setConsumerAccount("FR7617418000010000052248408");
-        mandate.setConsumerBic(Optional.of("SNNNFR22XXX"));
-        mandate.setSignatureDate(Optional.of(LocalDate.parse("2023-06-06")));
-        mandate.setMandateReference(Optional.of("BugsPointerMandate-2023-06-06-cst_V4fQbSFEn7"));
-        MandateResponse mandateHandler = client.mandates().createMandate(customerHandler.getId(), mandate);
-
-        // Create reccurring payment
-        SubscriptionRequest reccuring = new SubscriptionRequest();
-        reccuring.setAmount(new Amount("EUR", new BigDecimal("15.00")));
-        reccuring.setDescription("Subscribe to Target Plan, Order #12345");
-        reccuring.setTimes(Optional.of(2));
-        reccuring.setInterval("12 months");
-        reccuring.setMandateId(Optional.ofNullable(mandateHandler.getId()));
-
-        SubscriptionResponse subResponse = client.subscriptions().createSubscription(customerHandler.getId(),reccuring);
-
-        PaymentRequest request = new PaymentRequest();
-        request.setAmount(new Amount("EUR", new BigDecimal("20.00")));
-        request.setDescription("Subscribe to Target Plan, Order #12345");
-        request.setRedirectUrl(Optional.of("http://bugspointer.com/thanks"));
-        request.setBillingEmail(Optional.of("test@test.fr"));
-        request.setConsumerName(Optional.of("My Company"));
-        request.setLocale(Optional.of(fr_FR));
-
-        PaymentResponse paymentResponse = client.payments().createPayment(request);
-
-        log.info("{}",paymentResponse);
-
-        String checkoutUrl = paymentResponse.getLinks().getCheckout().getHref();
-        // Redirection vers l'URL de paiement
-        //HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-
-        response.sendRedirect(checkoutUrl); */
+        return new Response(EnumStatus.ERROR, null, "Erreur lors de la souscription");
     }
+
+}
 
 
 
