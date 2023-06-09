@@ -24,4 +24,10 @@ public class CustomerDTO {
 
     private boolean cguAccepted;
 
+    private String publicKey;
+
+    private String iban;
+
+    private String bic;
+
 }

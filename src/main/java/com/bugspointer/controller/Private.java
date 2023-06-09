@@ -2,10 +2,11 @@ package com.bugspointer.controller;
 
 import com.bugspointer.dto.*;
 import com.bugspointer.entity.Company;
+import com.bugspointer.entity.Customer;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
 import com.bugspointer.service.implementation.CompanyPreferencesService;
 import com.bugspointer.service.implementation.CompanyService;
-import com.bugspointer.service.implementation.MailService;
+import com.bugspointer.service.implementation.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,12 +27,15 @@ public class Private {
 
     private final CompanyService companyService;
 
+    private final CustomerService customerService;
+
     private final CompanyPreferencesService preferencesService;
 
     private final JwtTokenUtil jwtTokenUtil;
 
-    public Private(CompanyService companyService, CompanyPreferencesService preferencesService, JwtTokenUtil jwtTokenUtil) {
+    public Private(CompanyService companyService, CustomerService customerService, CompanyPreferencesService preferencesService, JwtTokenUtil jwtTokenUtil) {
         this.companyService = companyService;
+        this.customerService = customerService;
         this.preferencesService = preferencesService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
@@ -216,9 +220,25 @@ public class Private {
         CustomerDTO customer = new CustomerDTO();
         customer.setMail(company.getMail());
         customer.setCompanyName(company.getCompanyName());
+        customer.setPublicKey(company.getPublicKey());
         model.addAttribute("product", request.getAttribute("product"));
-        model.addAttribute("company", customer);
+        model.addAttribute("customer", customer);
         return "private/recapPayment";
+    }
+
+    @GetMapping(value = "BankAccount")
+    String getBankAccount(Model model, HttpServletRequest request){
+
+        HttpSession session = request.getSession();
+        Company company = companyService.getCompanyByMail(jwtTokenUtil.getUsernameFromToken(jwtTokenUtil.getTokenWithoutBearer((String) session.getAttribute("token"))));
+
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setPublicKey(company.getPublicKey());
+
+        log.info("customer : {}", customerDTO);
+
+        model.addAttribute("customer", customerDTO);
+        return "private/bankAccount";
     }
 
 

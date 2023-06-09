@@ -4,6 +4,7 @@ import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.dto.CustomerDTO;
 import com.bugspointer.dto.ModalDTO;
 import com.bugspointer.dto.Response;
+import com.bugspointer.entity.Company;
 import com.bugspointer.entity.Customer;
 import com.bugspointer.service.implementation.ModalService;
 import com.bugspointer.service.implementation.PaymentService;
@@ -55,7 +56,7 @@ public class ApiFormUser {
         Response response = paymentService.createNewCustomer(customer);
         redirectAttributes.addFlashAttribute("customer", customer);
         redirectAttributes.addFlashAttribute("response", response);
-        return "redirect:/api/user/newMandate";
+        return "redirect:/app/private/BankAccount";
 
 
     }
@@ -81,7 +82,7 @@ public class ApiFormUser {
     String createSubscription(@ModelAttribute("response") Response response, @ModelAttribute("customer") Customer customer) throws MollieException, IOException {
 
         Response response1 = paymentService.createSubscription(response, customer);
-        return "/";
+        return "redirect:/";
     }
 
 }

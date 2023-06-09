@@ -23,16 +23,17 @@
             Merci de completer les informations vous concernant :
         </p>
 
-        <form action="#" th:action="@{/api/user/newCustomer}" method="post" class="form-info-user" th:object="${company}">
-            <input type="text" th:field="*{mail}" placeholder="Votre e-mail" th:value="${company.getMail()}">
-            <input type="text" th:field="*{companyName}" placeholder="Nom de l'entreprise" th:value="${company.getCompanyName()}">
-            <input type="text" th:field="*{address1}" placeholder="Adresse 1">
+        <form action="#" th:action="@{/api/user/newCustomer}" method="post" class="form-info-user" th:object="${customer}">
+            <input type="text" th:field="*{mail}" placeholder="Votre e-mail" th:value="${customer.getMail()}" required>
+            <input type="text" th:field="*{companyName}" placeholder="Nom de l'entreprise" th:value="${customer.getCompanyName()}" required>
+            <input type="text" th:field="*{address1}" placeholder="Adresse 1" required>
             <input type="text" th:field="*{address2}" placeholder="Adresse 2">
-            <input type="text" th:field="*{cp}" placeholder="Code Postal">
-            <input type="text" th:field="*{city}" placeholder="Ville">
-            <input type="text" th:field="*{country}" placeholder="Pays" value="France">
-            <input type="hidden" th:field="*{product}" th:value="*{product}">
-            <p><input type="checkbox" th:field="*{cguAccepted}"> Merci d'accepter les <a th:href="@{/cgu}">CGU</a></p>
+            <input type="text" th:field="*{cp}" placeholder="Code Postal" required>
+            <input type="text" th:field="*{city}" placeholder="Ville" required>
+            <input type="text" th:field="*{country}" placeholder="Pays" value="France" required>
+            <input type="hidden" th:field="*{product}" th:value="*{product}" required>
+            <input type="hidden" th:field="*{publicKey}" th:value="${customer.getPublicKey()}" readonly>
+            <p><input type="checkbox" th:field="*{cguAccepted}" required> Merci d'accepter les <a th:href="@{/cgu}">CGU</a></p>
 
             <input type="submit"  value="Passer au paiement">
 
