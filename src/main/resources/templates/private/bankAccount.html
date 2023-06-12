@@ -14,14 +14,20 @@
 
     <div class="container">
       <h1 class="h-in-black">Merci de votre confiance</h1>
+        <p>
+            <!--Pour valider votre abonnement : <span th:text="${product}"></span> pour <span th:text="${product.getValeur()}"></span>€/an, renouvelable automatiquement à partir du paiement
+            <br><br>-->
+
+            Merci de completer vos informations bancaires afin de procéder au paiement.
+        </p>
         <section>
             <div class="cards cards_detail w40 margin_auto">
                 <h3>IBAN / BIC</h3>
                 <form class="form" action="#" th:action="@{/api/user/newMandate}" th:object="${customer}" method="post">
-                    <input type="text" th:field="*{iban}" placeholder="IBAN : FR76 1254 8029 9898 7654 3210 917"  >
-                    <input type="text" th:field="*{bic}" placeholder="BIC : CCOPFRPP">
-                    <input type="hidden" th:field="*{publicKey}" th:value="${customer.publicKey}">
-                    <p style="height: fit-content;"><input type="checkbox" name="signature" id="rememberMe"> Je signe le mandat de prélèvement SEPA autorisant Bugspointer à prélever la somme de 15€ une fois par an</p>
+                    <input type="text" th:field="*{iban}" placeholder="IBAN : FR76 1254 8029 9898 7654 3210 917" required>
+                    <input type="text" th:field="*{bic}" placeholder="BIC : CCOPFRPP" required>
+                    <input type="hidden" th:field="*{publicKey}" th:value="${customer.publicKey}" readonly>
+                    <p style="height: fit-content;"><input type="checkbox" name="signature" required> Je signe le mandat de prélèvement SEPA autorisant Bugspointer à prélever la somme de 15€ une fois par an</p>
                     <input class="btn-action cancel-margin-top" type="submit" value="Souscrire">
                 </form>
             </div>

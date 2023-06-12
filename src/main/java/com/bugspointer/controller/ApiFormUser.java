@@ -6,6 +6,7 @@ import com.bugspointer.dto.ModalDTO;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.Customer;
+import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.service.implementation.ModalService;
 import com.bugspointer.service.implementation.PaymentService;
 import lombok.extern.slf4j.Slf4j;
@@ -53,12 +54,24 @@ public class ApiFormUser {
     @PostMapping("/newCustomer")
     String createNewCustomer(@Valid @ModelAttribute CustomerDTO customer, RedirectAttributes redirectAttributes) throws MollieException {
 
+        //log.info("product : {}", product);
         Response response = paymentService.createNewCustomer(customer);
         redirectAttributes.addFlashAttribute("customer", customer);
+        /*redirectAttributes.addFlashAttribute("product", product);*/
+
         redirectAttributes.addFlashAttribute("response", response);
         return "redirect:/app/private/BankAccount";
 
 
+    }
+
+    @PostMapping("/newMandate")
+    String createMandate(@Valid @ModelAttribute CustomerDTO customer, RedirectAttributes redirectAttributes) throws MollieException {
+
+        Response response = paymentService.createMandate(customer);
+        redirectAttributes.addFlashAttribute("response", response);
+        redirectAttributes.addFlashAttribute("customer", customer);
+        return "redirect:/api/user/newSubscription";
     }
 
     @GetMapping("/newPayment")
@@ -69,17 +82,17 @@ public class ApiFormUser {
         return "redirect:/api/user/newMandate";
     }
 
-    @GetMapping("/newMandate")
+    /*@GetMapping("/newMandate")
     String createMandate(@ModelAttribute("response") Response response, RedirectAttributes redirectAttributes) throws MollieException {
 
         Response response1 = paymentService.createMandate(response);
         redirectAttributes.addFlashAttribute("response", response1);
         redirectAttributes.addFlashAttribute("customer", response.getContent());
         return "redirect:/api/user/newSubscription";
-    }
+    }*/
 
     @GetMapping("newSubscription")
-    String createSubscription(@ModelAttribute("response") Response response, @ModelAttribute("customer") Customer customer) throws MollieException, IOException {
+    String createSubscription(@ModelAttribute("response") Response response, @ModelAttribute("customer") Customer customer) throws MollieException {
 
         Response response1 = paymentService.createSubscription(response, customer);
         return "redirect:/";

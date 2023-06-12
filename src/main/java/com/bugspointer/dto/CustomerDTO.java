@@ -30,4 +30,6 @@ public class CustomerDTO {
 
     private String bic;
 
+    private EnumPlan plan;
+
 }

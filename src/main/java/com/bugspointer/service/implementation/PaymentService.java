@@ -3,8 +3,10 @@ package com.bugspointer.service.implementation;
 import be.woutschoovaerts.mollie.Client;
 import be.woutschoovaerts.mollie.ClientBuilder;
 import be.woutschoovaerts.mollie.data.common.Amount;
+import be.woutschoovaerts.mollie.data.common.Pagination;
 import be.woutschoovaerts.mollie.data.customer.CustomerRequest;
 import be.woutschoovaerts.mollie.data.customer.CustomerResponse;
+import be.woutschoovaerts.mollie.data.mandate.MandateListResponse;
 import be.woutschoovaerts.mollie.data.mandate.MandateRequest;
 import be.woutschoovaerts.mollie.data.mandate.MandateResponse;
 import be.woutschoovaerts.mollie.data.mandate.MandateStatus;
@@ -17,6 +19,7 @@ import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.Customer;
+import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -155,19 +159,53 @@ public class PaymentService {
 
     }
 
-    public Response createMandate(Response response) throws MollieException {
+    public Response createMandate(CustomerDTO customerDTO) throws MollieException {
 
-        Customer customer = (Customer) response.getContent();
+        if (customerDTO.getIban() == null || customerDTO.getBic() == null){
+            return new Response(EnumStatus.ERROR, null, "Veuillez compléter les champs obligatoires");
+        }
+
+        Customer customer = null;
+        //On cherche la company à partir de la publicKey
+        Optional<Company> companyOptional = companyRepository.findByPublicKey(customerDTO.getPublicKey());
+        if (companyOptional.isPresent()){
+            //Si on retrouve la company on recherche le customer
+            Optional<Customer> customerOptional = customerRepository.findByCompany_CompanyId(companyOptional.get().getCompanyId());
+            if (customerOptional.isPresent()) {
+                customer = customerOptional.get();
+            } else {
+                //Si le customer n'est pas présent alors il faut le créer TODO: retourne une erreur et renvoi vers la page de création
+                return new Response(EnumStatus.ERROR, null, "Une erreur est survenu");
+            }
+        } else {
+            log.error("Company non trouvée");
+            return new Response(EnumStatus.ERROR, null, "Une erreur est survenu, merci de vous connecter");
+        }
+
         log.info("customer paiement : {}", customer);
+
+        //On vérifie si un mandat existe et qu'il est valide
+        //On récupère la liste des mandats
+        //Pagination<MandateListResponse> mandateListResponses = client.mandates().listMandates(customer.getCustomerId());
+        List<MandateResponse> mandates = client.mandates().listMandates(customer.getCustomerId()).getEmbedded().getMandates();
+        if (!mandates.isEmpty()){
+            MandateResponse mandat = mandates.get(0);
+            log.info("\r -------  ");
+            log.info("New Mollie Mandate : {} - {} - {}", customer.getCompany(), mandat.getSignatureDate(), mandat.getId());
+            log.info("\r -------  ");
+            if (mandat.getStatus()!=MandateStatus.INVALID){
+                return new Response(EnumStatus.OK, mandat, "Un mandat est déjà présent vous devez le révoquer avant d'en créer un nouveau");
+            }
+        }
 
         MandateRequest mandateRequest = new MandateRequest();
 
         mandateRequest.setMethod("directdebit");
         mandateRequest.setConsumerName(customer.getCompany().getCompanyName());
-        mandateRequest.setConsumerAccount("FR7617418000010000052248408");
-        mandateRequest.setConsumerBic(Optional.of("SNNNFR22XXX"));
-        mandateRequest.setSignatureDate(Optional.of(LocalDate.parse("2023-06-06"))); //TODO Mettre la date du jour actuel
-        mandateRequest.setMandateReference(Optional.of("BugsPointer-Mandate-2023-06-06-cst_V4fQbSFEn7"));
+        mandateRequest.setConsumerAccount(customerDTO.getIban());
+        mandateRequest.setConsumerBic(Optional.ofNullable(customerDTO.getBic()));
+        mandateRequest.setSignatureDate(Optional.of(LocalDate.now())); //TODO Mettre la date du jour actuel
+        mandateRequest.setMandateReference(Optional.of(customer.getCustomerId() + "-Mandate-BugsPointer-directdebit-" + LocalDate.now()));
         // TODO Valeur de MandateReference : customer.getCompany()-Mandate-Bugspointer-directdebit-date()
 
         MandateResponse mandateHandler = client.mandates().createMandate(customer.getCustomerId(), mandateRequest);
@@ -184,9 +222,22 @@ public class PaymentService {
     }
 
 
-    public Response createSubscription(Response response, Customer customer) throws MollieException, IOException {
+    public Response createSubscription(Response response, Customer customer) throws MollieException {
 
         MandateResponse mandateResponse = (MandateResponse) response.getContent();
+        if (mandateResponse.getStatus()==MandateStatus.INVALID){
+            return new Response(EnumStatus.ERROR, null, "Mandat invalide");
+        }
+
+        List<SubscriptionResponse> subscriptionResponses = client.subscriptions().listSubscriptions(customer.getCustomerId()).getEmbedded().getSubscriptions();
+        if (!subscriptionResponses.isEmpty()){
+            SubscriptionResponse subscriptionResponse = subscriptionResponses.get(0);
+            if (subscriptionResponse.getStatus()!=SubscriptionStatus.CANCELED &&
+                    subscriptionResponse.getStatus()!=SubscriptionStatus.SUSPENDED &&
+                    subscriptionResponse.getTimesRemaining() > 0){
+                return new Response(EnumStatus.ERROR, null, "Un abonnement est déjà en cours");//TODO:Voir comment faire si l'abonnement est présent
+            }
+        }
 
         // TODO Avant de faire la souscription, il faut s'assurer que le mandat est encore valide pendant au moins 70j
         //Mandate API / list mandate : https://docs.mollie.com/reference/v2/mandates-api/list-mandates
@@ -194,7 +245,7 @@ public class PaymentService {
         SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
 
         // TODO rendre le nom du plan et le montant dynamique (peut être faire une table en BDD, id,plan,amount)
-        subscriptionRequest.setAmount(new Amount("EUR", new BigDecimal("15.00")));
+        subscriptionRequest.setAmount(new Amount("EUR", new BigDecimal(EnumPlan.TARGET.getValeur())));
         subscriptionRequest.setDescription("Subscribe to Target Plan");
         subscriptionRequest.setTimes(Optional.of(4));
         subscriptionRequest.setInterval("12 months");

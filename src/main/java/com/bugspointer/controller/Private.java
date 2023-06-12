@@ -3,6 +3,7 @@ package com.bugspointer.controller;
 import com.bugspointer.dto.*;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.Customer;
+import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
 import com.bugspointer.service.implementation.CompanyPreferencesService;
 import com.bugspointer.service.implementation.CompanyService;
@@ -11,9 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +31,11 @@ public class Private {
     private final CompanyPreferencesService preferencesService;
 
     private final JwtTokenUtil jwtTokenUtil;
+
+    @ModelAttribute("plans")
+    public EnumPlan[] getPlans(){
+        return EnumPlan.values();
+    }
 
     public Private(CompanyService companyService, CustomerService customerService, CompanyPreferencesService preferencesService, JwtTokenUtil jwtTokenUtil) {
         this.companyService = companyService;
@@ -212,7 +216,7 @@ public class Private {
     }
 
     @GetMapping(value="recapPayment")
-    String getRecapPayment(Model model, HttpServletRequest request){
+    String getRecapPayment(@RequestParam("product") EnumPlan selectedProduct, Model model, HttpServletRequest request){
 
         HttpSession session = request.getSession();
         Company company = companyService.getCompanyByMail(jwtTokenUtil.getUsernameFromToken(jwtTokenUtil.getTokenWithoutBearer((String) session.getAttribute("token"))));
@@ -221,7 +225,8 @@ public class Private {
         customer.setMail(company.getMail());
         customer.setCompanyName(company.getCompanyName());
         customer.setPublicKey(company.getPublicKey());
-        model.addAttribute("product", request.getAttribute("product"));
+        model.addAttribute("selectedProduct", selectedProduct);
+        log.info("product GetRecap : {}", selectedProduct);
         model.addAttribute("customer", customer);
         return "private/recapPayment";
     }
