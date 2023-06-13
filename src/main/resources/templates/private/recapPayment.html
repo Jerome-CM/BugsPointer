@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -7,10 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
     <link th:href="@{/css/style.css}" rel="stylesheet" />
-    <title>Téléchargement</title>
+    <title>Récapitulatif de paiement</title>
 </head>
-<body class="black">
+<body class="index">
 
+    <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/nav.html}"></div>
 
     <div class="container">
@@ -24,7 +25,7 @@
         </p>-->
         <div class="cards cards_detail w40 margin_auto">
             <h3>Adresse de facturation</h3>
-            <form class="form" action="#" th:action="@{/api/user/newCustomer}" method="post" class="form-info-user" th:object="${customer}">
+            <form action="#" th:action="@{/api/user/newCustomer}" method="post" class="form" th:object="${customer}">
                 <p>Soucrire à l'abonnement :
                     <select name="plan">
                         <option value="Sélectionner votre abonnement"></option>
@@ -40,11 +41,10 @@
                 <input type="text" th:field="*{cp}" placeholder="Code Postal" required>
                 <input type="text" th:field="*{city}" placeholder="Ville" required>
                 <input type="text" th:field="*{country}" placeholder="Pays" value="France" required>
-                <input type="hidden" th:field="*{product}" th:value="*{product}" required>
                 <input type="hidden" th:field="*{publicKey}" th:value="${customer.getPublicKey()}" readonly>
                 <p><input type="checkbox" th:field="*{cguAccepted}" required> Merci d'accepter les <a th:href="@{/cgu}">CGU</a></p>
 
-                <input type="submit"  value="Passer au paiement">
+                <input class="btn-action cancel-margin-top" type="submit"  value="Passer au paiement">
 
             </form>
         </div>

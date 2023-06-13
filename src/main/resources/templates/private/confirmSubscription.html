@@ -1,0 +1,41 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      class="black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <title>Confirmer l'abonnement</title>
+</head>
+<body class="index">
+
+<div th:replace="~{include/notifAlert.html}"></div>
+<div th:replace="~{include/nav.html}"></div>
+
+<div class="container">
+    <h1 class="h-in-black">Confirmation d'abonnement</h1>
+
+    <div class="cards cards_detail w40 margin_auto">
+        <h3>Conflit d'abonnement</h3>
+        <form action="#" th:action="@{/api/user/subscription}" method="post" class="form" th:object="${customer}">
+            <p>Votre abonnement actuel : <span th:text="${subscription.getDescription()}"></span> Plan pour <span th:text="${subscription.getAmount().getValue()}"></span> € par an
+                <br>
+                Il est valable jusqu'au : <span th:text="${subscription.getNextPaymentDate()}"></span>
+            </p>
+            <p>Nouvel abonnement choisi : <span th:text="${customer.getPlan().name()}"></span> Plan pour <span th:text="${customer.getPlan().getValeur()}"></span> € par an
+            </p>
+            <input type="hidden" th:field="*{plan}" th:value="${customer.getPlan()}" readonly>
+            <input type="hidden" th:field="*{publicKey}" th:value="${customer.getPublicKey()}" readonly>
+
+            <button class="btn-action cancel-margin-top" type="submit" name="action" value="submit">Changer de Plan</button>
+            <button class="btn-action cancel-margin-top" type="button" name="action" value="annuler">Annuler le changement</button>
+
+        </form>
+    </div>
+</div>
+<div th:replace="~{include/footer.html}"></div>
+</body>
+</html>

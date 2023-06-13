@@ -10,6 +10,7 @@
     <title>Coordonnées bancaire</title>
 </head>
 <body class="black">
+    <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/nav.html}"></div>
 
     <div class="container">
@@ -27,7 +28,8 @@
                     <input type="text" th:field="*{iban}" placeholder="IBAN : FR76 1254 8029 9898 7654 3210 917" required>
                     <input type="text" th:field="*{bic}" placeholder="BIC : CCOPFRPP" required>
                     <input type="hidden" th:field="*{publicKey}" th:value="${customer.publicKey}" readonly>
-                    <p style="height: fit-content;"><input type="checkbox" name="signature" required> Je signe le mandat de prélèvement SEPA autorisant Bugspointer à prélever la somme de 15€ une fois par an</p>
+                    <input type="hidden" th:field="*{plan}" th:value="${customer.plan}" readonly>
+                    <p style="height: fit-content;"><input type="checkbox" th:field="*{signature}" required> Je signe le mandat de prélèvement SEPA autorisant Bugspointer à prélever la somme de <span th:text="*{plan.getValeur()}"></span>€ une fois par an</p>
                     <input class="btn-action cancel-margin-top" type="submit" value="Souscrire">
                 </form>
             </div>

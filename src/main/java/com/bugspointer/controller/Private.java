@@ -1,8 +1,8 @@
 package com.bugspointer.controller;
 
+import be.woutschoovaerts.mollie.data.subscription.SubscriptionResponse;
 import com.bugspointer.dto.*;
 import com.bugspointer.entity.Company;
-import com.bugspointer.entity.Customer;
 import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
 import com.bugspointer.service.implementation.CompanyPreferencesService;
@@ -225,6 +225,7 @@ public class Private {
         customer.setMail(company.getMail());
         customer.setCompanyName(company.getCompanyName());
         customer.setPublicKey(company.getPublicKey());
+        model.addAttribute("product", selectedProduct);
         model.addAttribute("selectedProduct", selectedProduct);
         log.info("product GetRecap : {}", selectedProduct);
         model.addAttribute("customer", customer);
@@ -232,12 +233,11 @@ public class Private {
     }
 
     @GetMapping(value = "BankAccount")
-    String getBankAccount(Model model, HttpServletRequest request){
+    String getBankAccount(@ModelAttribute("customer") CustomerDTO customerDTO, Model model, HttpServletRequest request){
 
         HttpSession session = request.getSession();
         Company company = companyService.getCompanyByMail(jwtTokenUtil.getUsernameFromToken(jwtTokenUtil.getTokenWithoutBearer((String) session.getAttribute("token"))));
 
-        CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setPublicKey(company.getPublicKey());
 
         log.info("customer : {}", customerDTO);
@@ -246,5 +246,10 @@ public class Private {
         return "private/bankAccount";
     }
 
+    @GetMapping("confirmSubscription")
+    String getSubscription(@ModelAttribute("subscription")SubscriptionResponse subscriptionResponse, @ModelAttribute("customer") CustomerDTO customer){
+
+        return "private/confirmSubscription";
+    }
 
 }

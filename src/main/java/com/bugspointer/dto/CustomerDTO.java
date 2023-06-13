@@ -20,7 +20,7 @@ public class CustomerDTO {
 
     private String country;
 
-    private EnumPlan product;
+    private EnumPlan plan;
 
     private boolean cguAccepted;
 
@@ -30,6 +30,6 @@ public class CustomerDTO {
 
     private String bic;
 
-    private EnumPlan plan;
+    private boolean signature;
 
 }

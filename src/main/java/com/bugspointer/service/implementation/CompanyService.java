@@ -481,4 +481,14 @@ public class CompanyService implements ICompany {
 
         return new Response(EnumStatus.ERROR, null, "Error in the process");
     }
+
+    public Response updatePlan(Company company, Date dateLine, EnumPlan plan){
+        log.info("Plan : {}", plan);
+        log.info("DateLine Facture : {}", dateLine);
+        company.setPlan(plan);
+        company.setDateLineFacturePlan(dateLine);
+
+        return companyTryRegistration(company, "Plan update");
+
+    }
 }
