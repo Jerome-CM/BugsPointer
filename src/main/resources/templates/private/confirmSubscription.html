@@ -1,6 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
-      class="black">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -8,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
     <link th:href="@{/css/style.css}" rel="stylesheet" />
-    <title>Confirmer l'abonnement</title>
+    <title>Récapitulatif de paiement</title>
 </head>
 <body class="index">
 
@@ -19,19 +18,22 @@
     <h1 class="h-in-black">Confirmation d'abonnement</h1>
 
     <div class="cards cards_detail w40 margin_auto">
-        <h3>Conflit d'abonnement</h3>
-        <form action="#" th:action="@{/api/user/subscription}" method="post" class="form" th:object="${customer}">
-            <p>Votre abonnement actuel : <span th:text="${subscription.getDescription()}"></span> Plan pour <span th:text="${subscription.getAmount().getValue()}"></span> € par an
+        <h3>Conflit d'abonnement</h3><!--TODO: ajouter une protection avec le jwt si publickey est changée ? Pour ne pas permettre le plvt sur un autre compte-->
+        <form action="#" th:action="@{/api/user/subscription}" method="post" class="form" th:object="${subscription}">
+            <p>Votre abonnement actuel : <span th:text="${produit.toString()}"></span> Plan pour <span th:text="${subscription.getAmount().getValue()}"></span> € par an
                 <br>
-                Il est valable jusqu'au : <span th:text="${subscription.getNextPaymentDate()}"></span>
+                Il est valable jusqu'au : <span th:text="${#dates.format(nextPaymentDate, 'dd/MM/yyyy')}"></span>
             </p>
-            <p>Nouvel abonnement choisi : <span th:text="${customer.getPlan().name()}"></span> Plan pour <span th:text="${customer.getPlan().getValeur()}"></span> € par an
+            <p>Nouvel abonnement choisi : <span th:text="${subscription.getNewPlan().name()}"></span> Plan pour <span th:text="${subscription.getNewPlan().getValeur()}"></span> € par an
             </p>
-            <input type="hidden" th:field="*{plan}" th:value="${customer.getPlan()}" readonly>
-            <input type="hidden" th:field="*{publicKey}" th:value="${customer.getPublicKey()}" readonly>
+            <input type="hidden" th:field="*{id}" th:value="${subscription.getId()}" readonly>
+            <input type="hidden" th:field="*{mandateId}" th:value="${subscription.getMandateId()}" readonly>
+            <input type="hidden" th:field="*{status}" th:value="${subscription.getStatus()}" readonly>
+            <input type="hidden" th:field="*{newPlan}" th:value="${subscription.getNewPlan()}" readonly>
+            <input type="hidden" th:field="*{publicKey}" th:value="${subscription.getPublicKey()}" readonly>
 
             <button class="btn-action cancel-margin-top" type="submit" name="action" value="submit">Changer de Plan</button>
-            <button class="btn-action cancel-margin-top" type="button" name="action" value="annuler">Annuler le changement</button>
+            <button class="btn-action cancel-margin-top" type="submit" name="action" value="annuler">Annuler le changement</button>
 
         </form>
     </div>

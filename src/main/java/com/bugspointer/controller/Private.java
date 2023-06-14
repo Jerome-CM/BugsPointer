@@ -1,13 +1,11 @@
 package com.bugspointer.controller;
 
-import be.woutschoovaerts.mollie.data.subscription.SubscriptionResponse;
 import com.bugspointer.dto.*;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
 import com.bugspointer.service.implementation.CompanyPreferencesService;
 import com.bugspointer.service.implementation.CompanyService;
-import com.bugspointer.service.implementation.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Date;
 
 @Controller
 @Slf4j
@@ -26,7 +25,6 @@ public class Private {
 
     private final CompanyService companyService;
 
-    private final CustomerService customerService;
 
     private final CompanyPreferencesService preferencesService;
 
@@ -37,9 +35,8 @@ public class Private {
         return EnumPlan.values();
     }
 
-    public Private(CompanyService companyService, CustomerService customerService, CompanyPreferencesService preferencesService, JwtTokenUtil jwtTokenUtil) {
+    public Private(CompanyService companyService, CompanyPreferencesService preferencesService, JwtTokenUtil jwtTokenUtil) {
         this.companyService = companyService;
-        this.customerService = customerService;
         this.preferencesService = preferencesService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
@@ -247,8 +244,21 @@ public class Private {
     }
 
     @GetMapping("confirmSubscription")
-    String getSubscription(@ModelAttribute("subscription")SubscriptionResponse subscriptionResponse, @ModelAttribute("customer") CustomerDTO customer){
+    String getSubscription(@ModelAttribute("subscription")SubscriptionDTO subscriptionDTO, Model model){
 
+        String produit;
+        if (subscriptionDTO.getDescription().contains("TARGET")){
+            produit = "TARGET";
+        } else if (subscriptionDTO.getDescription().contains("ULTIMATE")){
+            produit = "ULTIMATE";
+        } else {
+            produit = subscriptionDTO.getDescription();
+        }
+
+        Date nextPaymentDate = java.sql.Date.valueOf(subscriptionDTO.getNextPaymentDate());
+
+        model.addAttribute("produit", produit);
+        model.addAttribute("nextPaymentDate", nextPaymentDate);
         return "private/confirmSubscription";
     }
 

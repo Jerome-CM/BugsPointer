@@ -1,11 +1,7 @@
 package com.bugspointer.controller;
 
-import be.woutschoovaerts.mollie.data.subscription.SubscriptionResponse;
 import be.woutschoovaerts.mollie.exception.MollieException;
-import com.bugspointer.dto.CustomerDTO;
-import com.bugspointer.dto.EnumStatus;
-import com.bugspointer.dto.ModalDTO;
-import com.bugspointer.dto.Response;
+import com.bugspointer.dto.*;
 import com.bugspointer.service.implementation.ModalService;
 import com.bugspointer.service.implementation.PaymentService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +16,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 
 @Controller
 @Slf4j
@@ -133,21 +128,19 @@ public class ApiFormUser {
 
         if (!result.hasErrors()) {
             Response response1 = paymentService.createSubscription(response, customer);
-            Object content = response.getContent();
+            Object content = response1.getContent();
 
             redirectAttributes.addFlashAttribute("notification", response1.getMessage());
             redirectAttributes.addFlashAttribute("status", String.valueOf(response1.getStatus()));
 
-            if (content instanceof SubscriptionResponse){//TODO: modifier instanceof par subscriptionDTO pour aller à la page pour valider
-                SubscriptionResponse subscriptionResponse = (SubscriptionResponse) content;
-                redirectAttributes.addFlashAttribute("subscription", subscriptionResponse);
-                redirectAttributes.addFlashAttribute("customer", customer);
-                log.info("customer : {}", customer);
-                log.info("subscription : {}", subscriptionResponse);
-                return "redirect:/app/private/confirmSubscription";//TODO: retourner vers une page pour valider la subscription
-            }
+            if (response1.getStatus().equals(EnumStatus.OK)) {
+                if (content instanceof SubscriptionDTO){
+                    SubscriptionDTO dto = (SubscriptionDTO) content;
+                    redirectAttributes.addFlashAttribute("subscription", dto);
+                    log.info("subscription : {}", dto);
+                    return "redirect:/app/private/confirmSubscription";
+                }
 
-            if (response.getStatus().equals(EnumStatus.OK)) {
                 return "redirect:/app/private/dashboard";
             }
         }
@@ -155,18 +148,19 @@ public class ApiFormUser {
     }
 
     @PostMapping("subscription")
-    String subscription(@Valid @ModelAttribute CustomerDTO customer,
-                        @ModelAttribute("subscription")SubscriptionResponse subscriptionResponse,
+    String subscription(@Valid @ModelAttribute SubscriptionDTO subscription,
                         BindingResult result,
                         RedirectAttributes redirectAttributes,
                         HttpServletRequest request) throws MollieException {
         String action = request.getParameter("action");
+        log.info("action : {}", action);
+        log.info("subscriptionDTO : {}", subscription);
         if (!result.hasErrors()){
             if ("annuler".equals(action)){
-                return "redirect:/dashboard";
+                return "redirect:/app/private/dashboard";
             }
 
-            Response response = paymentService.changeSubscription(customer, subscriptionResponse);
+            Response response = paymentService.changeSubscription(subscription);
 
             redirectAttributes.addFlashAttribute("notification", response.getMessage());
             redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));

@@ -15,11 +15,14 @@ import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.dto.CustomerDTO;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
+import com.bugspointer.dto.SubscriptionDTO;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.Customer;
+import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -38,11 +41,14 @@ public class PaymentService {
 
     private final CustomerRepository customerRepository;
 
+    private final ModelMapper modelMapper;
 
-    public PaymentService(CompanyRepository companyRepository, CompanyService companyService, CustomerRepository customerRepository) {
+
+    public PaymentService(CompanyRepository companyRepository, CompanyService companyService, CustomerRepository customerRepository, ModelMapper modelMapper) {
         this.companyRepository = companyRepository;
         this.companyService = companyService;
         this.customerRepository = customerRepository;
+        this.modelMapper = modelMapper;
     }
 
     Client client = new ClientBuilder()
@@ -83,7 +89,6 @@ public class PaymentService {
         //TODO Faire un enum comme les indicatifs, Si pays choisit c'est france (liste déroulante dans newCustomer), alors ici c'est fr_FR
         // Si c'est la belgique alors fr_BE
 
-        //TODO Rendre obligatoire ces données ( rapide require en front, mais surtout renvoie d'erreur en back )
         Map<String, Object> meta = new HashMap<>();
         meta.put("address1", customerDTO.getAddress1());
         meta.put("address2", customerDTO.getAddress2());
@@ -131,7 +136,6 @@ public class PaymentService {
             log.info("Pas de mandat enregistré");
             return new Response(EnumStatus.OK, customerBugspointer, null);
 
-            //TODO vérifier s'il existe un mandat, si présent on affiche les données (milieu haché) getMandate.getDetail() -> on vérifie les infos envoyé si identique rien sinon on révoque et créé
 
         } else {
 
@@ -284,14 +288,19 @@ public class PaymentService {
                         log.info("\r -------  ");
                         log.info("Mollie Subscription : {} - {}", customer.getCustomerId(), subscriptionResponse.getDescription());
                         log.info("\r -------  ");
-                        return new Response(EnumStatus.ERROR, subscriptionResponse, "Vous avez déjà souscrit à cet abonnement");
+                        SubscriptionDTO dto = getSubscriptionDTO(subscriptionResponse);
+                        dto.setNewPlan(customerDTO.getPlan());
+                        dto.setPublicKey(customerDTO.getPublicKey());
+                        return new Response(EnumStatus.ERROR, dto, "Vous avez déjà souscrit à cet abonnement");
                     } else {
                         log.info("\r -------  ");
                         log.info("Mollie Subscription : {} - {}", customer.getCustomerId(), subscriptionResponse.getDescription());
                         log.info("A modifier par : Subscribe to {} Plan", customerDTO.getPlan().name());
                         log.info("\r -------  ");
-                        //TODO: Créer un DTO suscription avec les info pertinente pour le retourner
-                        return new Response(EnumStatus.OK, subscriptionResponse, "Voulez-vous changer d'abonnement ?");
+                        SubscriptionDTO dto = getSubscriptionDTO(subscriptionResponse);
+                        dto.setNewPlan(customerDTO.getPlan());
+                        dto.setPublicKey(customerDTO.getPublicKey());
+                        return new Response(EnumStatus.OK, dto, "Voulez-vous changer d'abonnement ?");
                     }
                 }
             }
@@ -300,17 +309,18 @@ public class PaymentService {
         }
 
         String mandateId = mandateResponse.getId();
+        EnumPlan plan = customerDTO.getPlan();
 
-        return saveSubscription(customerDTO, customer, company, mandateId);
+        return saveSubscription(plan, customer, company, mandateId);
     }
 
-    public Response changeSubscription(CustomerDTO customerDTO, SubscriptionResponse subscription) throws MollieException {
+    public Response changeSubscription(SubscriptionDTO subscription) throws MollieException {
 
         log.info("suscription actual : {}", subscription);
         Customer customer;
         Company company;
         //On cherche la company à partir de la publicKey
-        Optional<Company> companyOptional = companyRepository.findByPublicKey(customerDTO.getPublicKey());
+        Optional<Company> companyOptional = companyRepository.findByPublicKey(subscription.getPublicKey());
         if (companyOptional.isPresent()){
             company = companyOptional.get();
             //Si on retrouve la company on recherche le customer
@@ -328,17 +338,18 @@ public class PaymentService {
 
         client.subscriptions().cancelSubscription(customer.getCustomerId(), subscription.getId());
 
-        String mandateId = String.valueOf(subscription.getMandateId());
+        String mandateId = subscription.getMandateId();
+        EnumPlan plan = subscription.getNewPlan();
 
-        return saveSubscription(customerDTO, customer, company, mandateId);
+        return saveSubscription(plan, customer, company, mandateId);
     }
 
-    private Response saveSubscription(CustomerDTO customerDTO, Customer customer, Company company, String mandateId) throws MollieException {
+    private Response saveSubscription(EnumPlan plan, Customer customer, Company company, String mandateId) throws MollieException {
 
         SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
 
-        subscriptionRequest.setAmount(new Amount("EUR", new BigDecimal(customerDTO.getPlan().getValeur())));
-        subscriptionRequest.setDescription("Subscribe to " + customerDTO.getPlan().name() + " Plan");
+        subscriptionRequest.setAmount(new Amount("EUR", new BigDecimal(plan.getValeur())));
+        subscriptionRequest.setDescription("Subscribe to " + plan.name() + " Plan");
         subscriptionRequest.setTimes(Optional.of(4));
         subscriptionRequest.setInterval("12 months");
         subscriptionRequest.setMandateId(Optional.ofNullable(mandateId));
@@ -349,23 +360,34 @@ public class PaymentService {
             log.info("\r -------  ");
             log.info("New Mollie Subscription : {} - {}", customer.getCustomerId(), subscriptionRequest.getDescription());
             log.info("\r -------  ");
+
             // TODO Envoie de mail pour confirmer la souscription
 
             //Modification du plan de la company
             LocalDate dateLineFacture = subscriptionResponse.getStartDate().plusYears(1);
             Date dateLine = Date.from(dateLineFacture.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Response responseUpdate = companyService.updatePlan(company, dateLine, customerDTO.getPlan());
+            Response responseUpdate = companyService.updatePlan(company, dateLine, plan);
 
             if (responseUpdate.getStatus().equals(EnumStatus.ERROR)){
                 return new Response(EnumStatus.ERROR, responseUpdate, "Une erreur est survenu, merci de nous contacter à l'adresse mail ci-dessous");
             }
 
-            return new Response(EnumStatus.OK, null, "La souscription à "+ customerDTO.getPlan().name() +" Plan est validé");
+            return new Response(EnumStatus.OK, null, "La souscription à "+ plan.name() +" Plan est validé");
         }
 
         return new Response(EnumStatus.ERROR, null, "Erreur lors de la souscription");
     }
 
+    public SubscriptionDTO getSubscriptionDTO(SubscriptionResponse subscriptionResponse){
+        log.info("SubscriptionDTO - response : {}", subscriptionResponse);
+        SubscriptionDTO dto;
+        dto = modelMapper.map(subscriptionResponse, SubscriptionDTO.class);
+        log.info("SubscriptionDTO - dto : {}", dto);
+
+
+
+        return dto;
+    }
 }
 
 
