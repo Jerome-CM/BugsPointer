@@ -66,7 +66,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         }
         log.info("Token in session : {}", session.getAttribute("token"));
         company.setLastVisit(new Date());
-        Company companySaved = companyService.companyTryUpdate(company);
+        Company companySaved = companyService.companyTryUpdateLastVisit(company);
         log.info("Dernière connexion company : {}", companySaved.getLastVisit());
 
         if(company.getRole().equals("ROLE_ADMIN")){

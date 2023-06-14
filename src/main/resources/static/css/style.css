@@ -88,6 +88,10 @@ a{
     text-align: center;
 }
 
+.margin_auto{
+    margin: auto !important;
+}
+
 .text_align_left{
     text-align: left;
     margin: initial;

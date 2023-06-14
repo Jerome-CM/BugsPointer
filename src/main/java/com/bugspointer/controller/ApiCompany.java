@@ -49,9 +49,9 @@ public class ApiCompany {
         return "redirect:/authentication";
     }
 
-    @GetMapping(value="/payment")
+    /*@GetMapping(value="/payment")
     public void getPayment() throws MollieException, IOException {
         paymentService.paymentTest(response);
-    }
+    }*/
 
 }

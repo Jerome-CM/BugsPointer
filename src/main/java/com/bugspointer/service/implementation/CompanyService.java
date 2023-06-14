@@ -46,7 +46,7 @@ public class CompanyService implements ICompany {
         this.modelMapper = modelMapper;
     }
 
-    public Company getCompanyByMail(String mail){
+    public Company getCompanyByMail(String mail){//TODO: A transformer en DTO
         Optional<Company> company = companyRepository.findByMail(mail);
         Company companyGet = null;
 
@@ -347,10 +347,10 @@ public class CompanyService implements ICompany {
         }
     }
 
-    public Company companyTryUpdate(Company company) {
+    public Company companyTryUpdateLastVisit(Company company) {
         try {
             Company savedCompany = companyRepository.save(company);
-            log.info("Company update :  {}", savedCompany);
+            log.info("Company update :  {} - {}", savedCompany.getCompanyId(), savedCompany.getLastVisit());
             return savedCompany;
         }
         catch (Exception e){
@@ -480,5 +480,15 @@ public class CompanyService implements ICompany {
         }
 
         return new Response(EnumStatus.ERROR, null, "Error in the process");
+    }
+
+    public Response updatePlan(Company company, Date dateLine, EnumPlan plan){
+        log.info("Plan : {}", plan);
+        log.info("DateLine Facture : {}", dateLine);
+        company.setPlan(plan);
+        company.setDateLineFacturePlan(dateLine);
+
+        return companyTryRegistration(company, "Plan update");
+
     }
 }

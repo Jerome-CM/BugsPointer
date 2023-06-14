@@ -20,8 +20,16 @@ public class CustomerDTO {
 
     private String country;
 
-    private EnumPlan product;
+    private EnumPlan plan;
 
     private boolean cguAccepted;
+
+    private String publicKey;
+
+    private String iban;
+
+    private String bic;
+
+    private boolean signature;
 
 }
