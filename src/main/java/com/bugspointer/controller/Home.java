@@ -6,6 +6,9 @@ import com.bugspointer.service.implementation.MailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class Home {
 
@@ -23,8 +26,16 @@ public class Home {
     }
 
     @GetMapping("download")
-    String getDownloadPage(){
-        return "public/download";
+    String getDownloadPage(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String mail = (String) session.getAttribute("mail");
+
+        if(mail != null){
+            return "public/download";
+        } else {
+            return "redirect:authentication?status=ERROR&message=Please Login In or Register";
+        }
+
     }
 
     @GetMapping("features")
@@ -62,13 +73,4 @@ public class Home {
         return "public/testPage";
     }
 
-    // TODO : Juste pour l'exemple, à supprimer après, ne pas oublier le constructeur à clean
-    @GetMapping(value="mail")
-    String sendMailRegister(){
-        Response response = mailService.sendMailRegister("bouteveillejerome@hotmail.fr", "HKVJHsgfir813dkfh");
-        if(response.getStatus().equals(EnumStatus.OK)){
-            return "public/testPage";
-        }
-        return "public/testPage";
-    }
 }

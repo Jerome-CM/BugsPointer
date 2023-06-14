@@ -50,7 +50,5 @@ public class Company {
 
     private String role = "ROLE_USER";
 
-    @OneToOne
-    private Customer customer;
 
 }

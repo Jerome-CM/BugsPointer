@@ -1,41 +1,51 @@
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+
+    &lt;!&ndash; Modifier le chemin href pour accéder au fichier modalStyle.css dans votre arborescence &ndash;&gt;
     <link href="/css/modalStyle.css" rel="stylesheet" />
-    <script type="text/javascript" src="/js/modalControl.js" async></script>
+
+    &lt;!&ndash; Modifier le chemin src pour accéder au fichier modalControl.js dans votre arborescence &ndash;&gt;
+    <script src="/js/modalControl.js" type="text/javascript"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
-<a class="bugspointer-open-popup" id="bugspointer_open_popup">Signaler un bug</a>
-<button class="bugspointer-logo" id="bugspointer_logo">
-    <div class="bugspointer-objet-logo">
-        <div class="bugspointer-objet-ellispe"></div>
-        <span class="bugspointer-objet-report">Signaler un bug</span>
-    </div>
-</button>
+-->
+
 <div class="bugspointer-popup" id="bugspointer_popup">
-    <form class="bugspointer-popup-container" method="post" action="/modalControl">
+    <form class="bugspointer-popup-container" method="post" action="https://www.bugspointer.com/api/user/modalControl">
         <div class="bugspointer-popup-header">
             <span class="bugspointer-popup-titre">Signaler un nouveau bug</span>
             <span class="bugspointer-close-popup" id="bugspointer_close_popup">&times;</span>
         </div>
-        <div class="bugspointer-popup-content">
-            <label for="urlPointed">Url avec ce bug</label>
-            <input type="text" name="url" class="bugspointer-popup-content-texturl" id="urlPointed" value="" readonly>
+        <div id="bugspointer-message-success"></div>
+        <div class="bugspointer-popup-content" id="bugspointer-affichage">
+            <label for="bugspointer-urlPointed">Url avec ce bug</label>
+            <input type="text" name="url" class="bugspointer-popup-content-texturl" id="bugspointer-urlPointed" value="" readonly>
+
+            <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-pointer" title="Cliquer sur la page à l'endroit du bug">Pointer le bug</button>
+            <p class="bugspointer-popup-pointer-bug-text" id="bugspointer-popup-pointer-bug-text">Merci de sélectionner l'endroit contenant le bug en cliquant sur le bouton ci dessus</p>
+
+            <textarea name="codeLocation" id="bugspointer-popup-pointer-bug" readonly hidden></textarea>
 
             <label>Description du bug</label>
-            <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="10"></textarea>
+            <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="10" required></textarea>
             <input type="text" name="bot" class="bugspointer-popup-content-inputbot">
-            <input type="hidden" name="key" value="NMYij1d8zKkHIUdBCvDb1b01L">
-            <!--TODO : changer la value par la variable récupérant cette valeur-->
 
-            <button class="bugspointer-popup-btn-submit" type="submit">Envoyer mon rapport</button>
+            <input type="hidden" name="os" id="bugspointer-popup-os" readonly>
+            <input type="hidden" name="browser" id="bugspointer-popup-browser" readonly>
+            <input type="hidden" name="screenSize" id="bugspointer-popup-screen" readonly>
+            <input type="hidden" name="key" id="key" readonly>
+
+            <button class="bugspointer-popup-btn-submit" type="submit" id="bugspointer-popup-btn-submit" disabled title="Veuillez cliquer sur le bouton 'Pointer le bug' et remplir la description">Envoyer mon rapport</button>
         </div>
     </form>
 </div>
+<!--
 </body>
-</html>
+</html>-->

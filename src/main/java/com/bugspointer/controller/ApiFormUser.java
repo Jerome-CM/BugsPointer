@@ -4,12 +4,9 @@ import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.dto.CustomerDTO;
 import com.bugspointer.dto.ModalDTO;
 import com.bugspointer.dto.Response;
-import com.bugspointer.entity.Customer;
 import com.bugspointer.service.implementation.ModalService;
-import com.bugspointer.service.implementation.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,11 +26,9 @@ public class ApiFormUser {
 
     private final ModalService modalService;
 
-    private final PaymentService paymentService;
 
-    public ApiFormUser(ModalService modalService, PaymentService paymentService) {
+    public ApiFormUser(ModalService modalService) {
         this.modalService = modalService;
-        this.paymentService = paymentService;
     }
 
 
@@ -49,39 +44,5 @@ public class ApiFormUser {
         return new RedirectView(dto.getUrl());
     }
 
-    @PostMapping("/newCustomer")
-    String createNewCustomer(@Valid @ModelAttribute CustomerDTO customer, RedirectAttributes redirectAttributes) throws MollieException {
-
-        Response response = paymentService.createNewCustomer(customer);
-        redirectAttributes.addFlashAttribute("customer", customer);
-        redirectAttributes.addFlashAttribute("response", response);
-        return "redirect:/api/user/newMandate";
-
-
-    }
-
-    @GetMapping("/newPayment")
-    String createFirstPaiement(@ModelAttribute("response") Response response, RedirectAttributes redirectAttributes) throws MollieException, IOException {
-
-        /*Response response1 = paymentService.createFirstPayment(response);
-        redirectAttributes.addFlashAttribute("response", response1);*/
-        return "redirect:/api/user/newMandate";
-    }
-
-    @GetMapping("/newMandate")
-    String createMandate(@ModelAttribute("response") Response response, RedirectAttributes redirectAttributes) throws MollieException {
-
-        Response response1 = paymentService.createMandate(response);
-        redirectAttributes.addFlashAttribute("response", response1);
-        redirectAttributes.addFlashAttribute("customer", response.getContent());
-        return "redirect:/api/user/newSubscription";
-    }
-
-    @GetMapping("newSubscription")
-    String createSubscription(@ModelAttribute("response") Response response, @ModelAttribute("customer") Customer customer) throws MollieException, IOException {
-
-        Response response1 = paymentService.createSubscription(response, customer);
-        return "/";
-    }
 
 }
