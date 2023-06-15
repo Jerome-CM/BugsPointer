@@ -16,25 +16,25 @@
 
     <div class="container container-row">
         <section>
-            <div class="cards cards_detail">
+            <div class="cards cards_detail w90">
                 <h3>S'inscrire</h3>
                 <form class="form" action="#" th:action="@{/register}" th:object="${companyRegister}" method="post">
-                    <input type="text" th:field="*{companyName}" id="companyName" placeholder="Nom de votre entreprise">
-                    <input type="text" th:field="*{mail}" id="registerMail" placeholder="E-mail">
-                    <input type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmation de l'e-mail">
-                    <input type="password" th:field="*{password}" id="registerPassword" placeholder="Mot de passe">
-                    <input type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmation du mot de passe">
+                    <input type="text" th:field="*{companyName}" id="companyName" placeholder="Nom de votre entreprise" required>
+                    <input type="text" th:field="*{mail}" id="registerMail" placeholder="E-mail" required>
+                    <input type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmation de l'e-mail" required>
+                    <input type="password" th:field="*{password}" id="registerPassword" placeholder="Mot de passe" required>
+                    <input type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmation du mot de passe" required>
                     <input class="btn-action" type="submit" value="Debug maintenant !">
                 </form>
             </div>
         </section>
         <br>
         <section>
-            <div class="cards cards_detail">
+            <div class="cards cards_detail w40">
                 <h3>Se connecter</h3>
                 <form class="form" action="#" th:action="@{/login}" th:object="${companyLogin}" method="post">
-                    <input type="text" th:field="*{mail}" id="mail" placeholder="E-mail"  >
-                    <input type="password" th:field="*{password}" id="password" placeholder="Mot de passe">
+                    <input type="text" th:field="*{mail}" id="mail" placeholder="E-mail" required>
+                    <input type="password" th:field="*{password}" id="password" placeholder="Mot de passe" required>
                     <p style="height: fit-content; margin-right:5px;"><input type="checkbox" name="rememberMe" id="rememberMe"> Se souvenir de moi</p>
                     <input class="btn-action cancel-margin-top" type="submit" value="Connexion">
                 </form>
