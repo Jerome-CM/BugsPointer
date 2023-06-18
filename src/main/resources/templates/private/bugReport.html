@@ -1,0 +1,86 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/prism.css}">
+    <script th:src="@{/js/prism.js}"></script>
+    <title>Documentations</title>
+</head>
+<body>
+
+<div th:replace="~{include/navCompany.html}"></div>
+
+
+<div class="container-documentation">
+    <div class="menu">
+        <h2>Report</h2>
+        <a href="#" class="btn-nbr-bug"><span class="bug-type">Nouveau</span><span class="nbr-bug new">1</span></a>
+        <a href="#" class="btn-nbr-bug"><span class="bug-type">En cours</span><span class="nbr-bug pending">3</span></a>
+        <a href="#" class="btn-nbr-bug"><span class="bug-type">Résolu</span><span class="nbr-bug solved">12</span></a>
+        <a href="#" class="btn-nbr-bug"><span class="bug-type">Ignoré</span><span class="nbr-bug ignored">2</span></a>
+
+        <br>
+
+        <h2>Paramètres</h2>
+        <a href="" class="btn-nbr-bug"><span class="bug-type">Factures</span></a>
+        <a href="" class="btn-nbr-bug"><span class="bug-type">Notifications</span></a>
+        <a href="" class="btn-nbr-bug"><span class="bug-type">Mon compte</span></a>
+    </div>
+
+    <div class="container anti-margin">
+        <h1 th:text="${title}"></h1>
+
+        <div class="container-report">
+            <div class="aside">
+                <div class="component">
+                    <h2>Chronologie</h2>
+                    <span class="indicator">Signalé</span>
+                    <span class="indicator-result">23/8/2023 - 15:35:14</span>
+                    <span class="indicator">Vu</span>
+                    <span class="indicator-result">- -</span>
+                    <span class="indicator">Résolu / Ignoré</span>
+                    <span class="indicator-result">- -</span>
+                </div>
+                <div class="component">
+                    <h2>Environnement</h2>
+                    <span class="indicator">OS</span>
+                    <span class="indicator-result">- -</span>
+                    <span class="indicator">Navigateur</span>
+                    <span class="indicator-result">- -</span>
+                    <span class="indicator">Taille de l'écran</span>
+                    <span class="indicator-result">- -</span>
+                </div>
+                <div class="component content-btn-action">
+                    <a href="" class="pending">Retour</a>
+                    <a href="" class="solved">Confirmer</a>
+                    <a href="" class="ignored">Ignorer</a></div>
+            </div>
+            <div class="aside w85">
+                <div class="component">
+                    <h2>Url contenant un bug</h2>
+                    <p>https://monsitequibug.com/lapagenequestion#avecl-idsvp</p>
+                </div>
+                <div class="component">
+                    <h2>description</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem eius molestiae perspiciatis saepe tempora, vel! </p>
+                    <hr>
+                    <pre>
+                        <code class="language-html">
+                            <div th:text="${code}"></div>
+                        </code>
+                    </pre>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+</body>
+</html>

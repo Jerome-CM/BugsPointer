@@ -1,4 +1,4 @@
-const key = "C1estLaClePublicAModifier"; /*Ajoutez votre clé publique ici, entre les ""*/
+const key = "C1estLaClePublicAModifier"; /*Ajoutez votre clé publique ici, entre les ""   6to6QesMaRXL7XPkIKI9PKRV5 */
 window.addEventListener("DOMContentLoaded", function(){
 
 /* Variables document */
