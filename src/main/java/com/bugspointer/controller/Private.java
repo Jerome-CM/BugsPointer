@@ -1,6 +1,7 @@
 package com.bugspointer.controller;
 
 import com.bugspointer.dto.*;
+import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
@@ -186,11 +187,33 @@ public class Private {
     }
 
     @GetMapping("bugReport/{id}")
-    String getNewBugReport(Model map, @PathVariable Long id){ // Long id
-        map.addAttribute("title", "New Bug Report");
+    String getNewBugReport(Model map, @PathVariable Long id, HttpServletRequest request, RedirectAttributes redirectAttributes){ // Long id
 
-        map.addAttribute("code", bugService.codeBlockFormatter(id));
-        return "private/bugReport";
+        Company company = companyService.getCompanyWithToken(request);
+        Long idCompany = company.getCompanyId();
+        EnumPlan plan = company.getPlan();
+
+        Response response = bugService.viewBug(id, idCompany, plan);
+        if (response.getStatus()==EnumStatus.OK){
+            Bug bug = (Bug) response.getContent();
+            String title = bug.getEtatBug().name().substring(0, 1).toUpperCase() + bug.getEtatBug().name().substring(1).toLowerCase() + " Bug Report";
+            map.addAttribute("title", title);
+            map.addAttribute("bug", bug);
+            map.addAttribute("code", bugService.codeBlockFormatter(bug.getCodeLocation()));
+            return "private/bugReport";
+        }
+        else {
+            redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+            redirectAttributes.addFlashAttribute("notification", response.getMessage());
+            log.info("{}", response.getMessage());
+            return "redirect:/app/private/dashboard";
+        }
+    }
+
+    @GetMapping("retourBug/{id}")
+    String getBackBug(@PathVariable Long id){
+        bugService.bugPending(id);
+        return "redirect:/app/private/dashboard";
     }
 
     @GetMapping("pendingBugList")

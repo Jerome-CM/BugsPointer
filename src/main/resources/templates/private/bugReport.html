@@ -10,7 +10,7 @@
     <script type="text/javascript" th:src="@{/js/actions.js}"></script>
     <link rel="stylesheet" th:href="@{/css/prism.css}">
     <script th:src="@{/js/prism.js}"></script>
-    <title>Documentations</title>
+    <title th:text="${title}"></title>
 </head>
 <body>
 
@@ -41,34 +41,34 @@
                 <div class="component">
                     <h2>Chronologie</h2>
                     <span class="indicator">Signalé</span>
-                    <span class="indicator-result">23/8/2023 - 15:35:14</span>
+                    <span class="indicator-result" th:text="${bug.getDateCreation() != null ? #dates.format(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}">23/8/2023 - 15:35:14</span>
                     <span class="indicator">Vu</span>
-                    <span class="indicator-result">- -</span>
+                    <span class="indicator-result" th:text="${bug.getDateView() != null ? bug.getDateView() : '- -'}"></span>
                     <span class="indicator">Résolu / Ignoré</span>
-                    <span class="indicator-result">- -</span>
+                    <span class="indicator-result" th:text="${bug.getDateSolved() != null ? bug.getDateSolved() : '- -'}"></span>
                 </div>
                 <div class="component">
                     <h2>Environnement</h2>
                     <span class="indicator">OS</span>
-                    <span class="indicator-result">- -</span>
+                    <span class="indicator-result" th:text="${bug.getOs() != null ? bug.getOs() : '- -'}"></span>
                     <span class="indicator">Navigateur</span>
-                    <span class="indicator-result">- -</span>
+                    <span class="indicator-result" th:text="${bug.getBrowser() != null ? bug.getBrowser() : '- -'}"></span>
                     <span class="indicator">Taille de l'écran</span>
-                    <span class="indicator-result">- -</span>
+                    <span class="indicator-result" th:text="${bug.getScreenSize() != null ? bug.getScreenSize() : '- -'}"></span>
                 </div>
                 <div class="component content-btn-action">
-                    <a href="" class="pending">Retour</a>
+                    <a th:href="@{/app/private/retourBug/{id}(id=${bug.getId()})}" class="pending">Retour</a>
                     <a href="" class="solved">Confirmer</a>
                     <a href="" class="ignored">Ignorer</a></div>
             </div>
             <div class="aside w85">
                 <div class="component">
                     <h2>Url contenant un bug</h2>
-                    <p>https://monsitequibug.com/lapagenequestion#avecl-idsvp</p>
+                    <p th:text="${bug.getUrl()}"></p>
                 </div>
                 <div class="component">
                     <h2>description</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem eius molestiae perspiciatis saepe tempora, vel! </p>
+                    <p th:text="${bug.getDescription()}"></p>
                     <hr>
 
                     <p><strong>La balise pointée par l'utilisateur est celle ayant la classe : bugspointer-pointed-balise</strong></p>
