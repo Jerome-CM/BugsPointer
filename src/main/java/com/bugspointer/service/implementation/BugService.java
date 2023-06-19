@@ -44,4 +44,25 @@ public class BugService {
 
         return "";
     }
+
+    public String codeBlockFormatter(String code){
+
+        // Charge HTML in Document JSoup objet
+        Document document = Jsoup.parse(code);
+
+        // Use output method to get indented HTML
+        document.outputSettings().indentAmount(4).prettyPrint();
+
+        // Get new HTML code
+        String codeHtmlIndente = document.html();
+        codeHtmlIndente = codeHtmlIndente.replace("<html>", "");
+        codeHtmlIndente = codeHtmlIndente.replace("</html>", "");
+        codeHtmlIndente = codeHtmlIndente.replace("<head>", "");
+        codeHtmlIndente = codeHtmlIndente.replace("</head>", "");
+        codeHtmlIndente = codeHtmlIndente.replace("<body>", "");
+        codeHtmlIndente = codeHtmlIndente.replace("</body>", "");
+
+        return codeHtmlIndente;
+
+    }
 }

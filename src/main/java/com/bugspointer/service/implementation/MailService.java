@@ -31,6 +31,13 @@ public class MailService {
 
     private static final String ADRESSE = "http://bugspointer.com/";
 
+
+    private final BugService bugService;
+
+    public MailService(BugService bugService) {
+        this.bugService = bugService;
+    }
+
     public Response sendMailRegister(String to, String publicKey) {
 
 
@@ -359,10 +366,10 @@ public class MailService {
                                 "              </tr>" +
                                 "              <tr>" +
                                 "                <th width='170px' text-align='right'>Code HTML sélectionné : </th>" +
-                                "                <td><code>"  + bugTest.getCodeLocation() +"</code></td>" +
+                                "                <td><pre><code>"  + bugService.codeBlockFormatter(bugTest.getCodeLocation()) +"</code></pre></td>" +
                                 "              </tr>" +
                                 "               <tr>" +
-                                "               <th>La balise pointé par vos soins est maintenant identifiable par la classe : bugspointer-pointed-balise</th>" +
+                                "               <th colspan=2>La balise pointé par vos soins est maintenant identifiable par la classe : bugspointer-pointed-balise</th>" +
                                 "              </tr>" +
                                 "            </table>" +
                                 "            <p>Imaginez la valeur que vous pourriez obtenir en ayant accès à ces détails précis pour tous vos rapports de bugs. Notre offre payante vous permettra de prendre des décisions éclairées, d'améliorer rapidement votre site et de fournir une expérience utilisateur exceptionnelle. <br><br>" +
