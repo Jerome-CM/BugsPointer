@@ -3,7 +3,6 @@ package com.bugspointer.controller;
 import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.dto.*;
 import com.bugspointer.service.implementation.ModalService;
-import com.bugspointer.service.implementation.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -24,11 +23,9 @@ public class ApiFormUser {
 
     private final ModalService modalService;
 
-    private final PaymentService paymentService;
 
-    public ApiFormUser(ModalService modalService, PaymentService paymentService) {
+    public ApiFormUser(ModalService modalService) {
         this.modalService = modalService;
-        this.paymentService = paymentService;
     }
 
 
@@ -105,23 +102,6 @@ public class ApiFormUser {
         }
         return "redirect:/";
     }
-
-    /*@GetMapping("/newPayment")
-    String createFirstPaiement(@ModelAttribute("response") Response response, RedirectAttributes redirectAttributes) throws MollieException, IOException {
-
-        Response response1 = paymentService.createFirstPayment(response);
-        redirectAttributes.addFlashAttribute("response", response1);
-        return "redirect:/api/user/newMandate";
-    }*/
-
-    /*@GetMapping("/newMandate")
-    String createMandate(@ModelAttribute("response") Response response, RedirectAttributes redirectAttributes) throws MollieException {
-
-        Response response1 = paymentService.createMandate(response);
-        redirectAttributes.addFlashAttribute("response", response1);
-        redirectAttributes.addFlashAttribute("customer", response.getContent());
-        return "redirect:/api/user/newSubscription";
-    }*/
 
     @GetMapping("newSubscription")
     String createSubscription(@ModelAttribute("response") Response response, @ModelAttribute("customer") CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes) throws MollieException {

@@ -53,16 +53,26 @@
                     Pour profiter de BugsPointer sur votre site, il vous suffit de copier/coller les fichiers que vous avez téléchargés. <br>
                     Placer-les dans votre arborescence : <br><br>
 
-                    modalCss.css à placer dans votre dossier de style<br>
-                    modalControl.js à placer dans votre dossier js<br>
+                    lien.html<br>
+                    bouton.html<br>
+                    modalStyle.css à placer dans votre dossier de style<br>
+                    modalControl.js à placer dans votre dossier javascript<br>
                     modal.html à placer à la racine de votre site
                     </p>
-                </div>
 
-                <div class="warning border-orange">
-                    <img th:src="@{/css/img/alerte.gif}" alt="Gyrophare">
-                    <span>Il vous faudra ensuite récupérer ces fichiers en indiquant le chemin dans vos fichiers. <br>
-                    Le lien ou le logo (modal.html) sont à inclure dans toutes les pages que vous voulez débugger.</span>
+                    <p>Pour que les fichiers soient visibles sur votre page, vous devez ensuite : <br><br>
+                    <ul>
+                        <li>inclure un lien et/ou un bouton sur la page à débugger</li>
+                        <li>inclure le fichier modalStyle.css et modalControl.js dans votre balise <code>&lt;head&gt;&lt;/head&gt;</code> </li>
+                        <li>inclure en fin de page le fichier modal.html</li>
+                    </ul>
+                    </p>
+                    
+                    <div class="warning border-orange">
+                        <img th:src="@{/css/img/alerte.gif}" alt="Gyrophare">
+                        <span>L'intégration des fichiers est différente selon le langage utilisé : <a href="https://chat.openai.com/share/a7f57638-408a-4322-86c4-193b2f085c96">Voir des exemples</a></span>
+                    </div>
+
                 </div>
 
                 <h2 id="configuration">Configuration</h2>
@@ -71,7 +81,7 @@
                 <div class="card_doc">
                     <p>
                         Rendez-vous dans votre page Account pour trouver votre Public Key. <br><br>
-                        Copiez-là puis coller là dans le fichier modalControl.js à la ligne 1, à la place de YOUR_KEY_HERE :<br><br>
+                        Coller là dans le fichier modalControl.js à la ligne 1, à la place de YOUR_KEY_HERE :<br><br>
                         <code>1| const key = "YOUR_KEY_HERE"; /* Ajoutez votre clé publique ici, entre les "" */</code>
                         <br><br>
                     </p>
@@ -87,7 +97,7 @@
 
                 <div class="warning border-orange">
                     <img th:src="@{/css/img/alerte.gif}" alt="Gyrophare">
-                    <span>L'intégration de votre clé public et de votre nom de domaine est obligatoire pour recevoir vos rapports de bugs</span>
+                    <span>L'intégration de votre clé publique et de votre nom de domaine est obligatoire pour recevoir vos rapports de bugs</span>
                 </div>
 
                 <h2 id="customisation">Customisation</h2>
@@ -95,10 +105,10 @@
                 <h3 id="link" class="h3_documentation">Lien sur votre page</h3>
                 <div class="card_doc">
                     <p>La customisation du lien contenant le formulaire n'appartient qu'à vous. Vous êtes libre d'appliquer le style ainsi que le message que vous souhaitez sur ces boutons</p>
-                    <br><br>
+                    <br>
                     <code>&lt;a class="bugspointer-open-popup" id="bugspointer_open_popup"&gt;Signaler un bug&lt;/a&gt;</code>
                     <br><br>
-                    <p>Cependant, vous pouvez ajouter n'importe quelles classes <strong>en plus de bugspointer-open-popup</strong> mais, vous ne devait en aucun cas toucher à <strong>l'id</strong></p>
+                    <p>Cependant, vous pouvez ajouter n'importe quelles classes <strong>en plus de bugspointer-open-popup</strong> mais, <span style="color:red; font-weight: bold;">vous ne devait en aucun cas toucher à l'id</span></p>
                 </div>
 
                 <h3 id="logo" class="h3_documentation">Logo sur votre page</h3>
@@ -106,7 +116,11 @@
                     <p>La customisation du logo est également possible. Pour cela, rendez-vous dans le fichier modalStyle.css</p>
                     <br>
                     <p>Les couleurs et polices sont changeables dans la classe :root, cependant comme conformément à nos cgu, vous ne pouvez pas changer les ids et les classes du fichier modal.html et modalStyle.css, mais vous pouvez ajouter d'autres classes afin de parfaire le style, selon votre charte graphique.</p>
-                    <p>Changer les classes et les ids originales pourrait nuire au bon fonctionnement de l'application</p>
+                </div>
+
+                <div class="warning border-red">
+                    <img th:src="@{/css/img/alerte.gif}" alt="Gyrophare">
+                    <span>Changer les classes et les ids originales nuira au bon fonctionnement de l'application</span>
                 </div>
 
                 <h2 id="reportBug">Déclarer un bug</h2>

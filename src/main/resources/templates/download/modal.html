@@ -2,21 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+
+    <!-- Ajouter le chemin correct pour accéder au fichier modalStyle.css -->
     <link href="/css/modalStyle.css" rel="stylesheet" />
     <script type="text/javascript" src="/js/modalControl.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <!-- Votre lien à placer où vous le souhaiter -->
     <a class="bugspointer-open-popup" id="bugspointer_open_popup">Signaler un bug</a>
+
+    <!-- Le bouton à placer où vous le souhaiter -->
     <button class="bugspointer-logo" id="bugspointer_logo">
         <div class="bugspointer-objet-logo">
             <div class="bugspointer-objet-ellispe"></div>
             <span class="bugspointer-objet-report">Signaler un bug</span>
         </div>
     </button>
+
+
+
     <div class="bugspointer-popup" id="bugspointer_popup">
       <form class="bugspointer-popup-container" method="post" action="/api/user/modalControl">
           <div class="bugspointer-popup-header">
@@ -42,7 +51,7 @@
               <input type="hidden" name="screenSize" id="bugspointer-popup-screen" readonly>
               <input type="hidden" name="key" id="key" readonly>
 
-              <button class="bugspointer-popup-btn-submit" type="submit" id="bugspointer-popup-btn-submit" disabled title="Veuillez cliquer sur le bouton 'Pointer le bug' avant d'envoyer le formulaire">Envoyer mon rapport</button>
+              <button class="bugspointer-popup-btn-submit" type="submit" id="bugspointer-popup-btn-submit" disabled title="Veuillez cliquer sur le bouton 'Pointer le bug' et remplir la description">Envoyer mon rapport</button>
           </div>
       </form>
   </div>

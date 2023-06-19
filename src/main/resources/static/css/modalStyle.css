@@ -166,6 +166,7 @@
 #bugspointer-message-success{
     text-align: center;
     padding: 15px 0 10px 0;
+    display: none;
 }
 
 #bugspointer-popup-pointer-bug-text{

@@ -1,10 +1,8 @@
 package com.bugspointer.controller;
 
-import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.service.implementation.CompanyService;
-import com.bugspointer.service.implementation.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +20,10 @@ public class ApiCompany {
 
     private final CompanyService companyService;
 
-    private final PaymentService paymentService;
-
     HttpServletResponse response;
 
-    public ApiCompany(CompanyService companyService, PaymentService paymentService) {
+    public ApiCompany(CompanyService companyService) {
         this.companyService = companyService;
-        this.paymentService = paymentService;
     }
 
     @GetMapping("plan/{publicKey}")
@@ -49,9 +44,5 @@ public class ApiCompany {
         return "redirect:/authentication";
     }
 
-    /*@GetMapping(value="/payment")
-    public void getPayment() throws MollieException, IOException {
-        paymentService.paymentTest(response);
-    }*/
 
 }

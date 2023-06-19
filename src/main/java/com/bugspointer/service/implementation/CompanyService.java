@@ -74,8 +74,7 @@ public class CompanyService implements ICompany {
 
     @Override
     public Response saveCompany(AuthRegisterCompanyDTO dto) {
-        log.info("SaveCompany");
-        log.info("in dto :  {}", dto);
+        log.info("SaveCompany : {}", dto);
         boolean mail;
         boolean pw;
         boolean name;
@@ -88,24 +87,24 @@ public class CompanyService implements ICompany {
         if (dto.getPassword().equals(dto.getConfirmPassword())){
             pw = true;
         } else {
-            return new Response(EnumStatus.ERROR, null, "Passwords not identical");
+            return new Response(EnumStatus.ERROR, null, "Les mots de passes ne sont pas identiques");
         }
 
         if (dto.getMail().equals(dto.getConfirmMail())) {
             Optional<Company> companyOptional = companyRepository.findByMail(dto.getMail());
             if(companyOptional.isPresent()){
                 if (!companyOptional.get().isEnable()) {
-                    log.info("Company is disable");
+                    log.warn("Company is disable : {}",companyOptional.get().getMail());
                     return new Response(EnumStatus.ERROR, null, "Le compte existe mais est fermé, pour le réactiver veuillez envoyer un mail à contact@bugspointer.com");
                 }
                 log.info("CompanyMail is exist :  {}", dto.getMail());
-                return new Response(EnumStatus.ERROR, null, "CompanyMail is exist already");
+                return new Response(EnumStatus.ERROR, null, "Ce mail existe déjà");
             }
             else{
                 mail = true;
             }
         } else {
-            return new Response(EnumStatus.ERROR, null, "Mails not identical");
+            return new Response(EnumStatus.ERROR, null, "Les mails ne sont pas identiques");
         }
 
         Optional<Company> companyOptional = companyRepository.findByCompanyName(dto.getCompanyName());
@@ -464,7 +463,7 @@ public class CompanyService implements ICompany {
             return mailService.sendMailLostPassword(dto.getMail(), company.getPublicKey());
         }
 
-        return new Response(EnumStatus.OK, null, "Si votre mail nous est connu, un mail vient d'être envoyé à : dto.getMail()");
+        return new Response(EnumStatus.OK, null, "Si votre mail nous est connu, un mail vient d'être envoyé à : "+dto.getMail());
     }
 
     public Response resetPassword(String publicKey, AccountDTO dto){
