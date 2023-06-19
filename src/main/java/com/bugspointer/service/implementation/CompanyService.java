@@ -233,6 +233,16 @@ public class CompanyService implements ICompany {
                 log.info("Mail empty");
                 return new Response(EnumStatus.ERROR, null, "Mail empty");
             } else {
+                if (company.getMail().equals(dto.getMail())) {
+                    log.info("Mail identique");
+                    return new Response(EnumStatus.ERROR, null, "Mail identique");
+                } else {
+                    Optional<Company> companyMail = companyRepository.findByMail(dto.getMail());
+                    if (companyMail.isPresent()){
+                        log.info("Mail déjà utilisé");
+                        return new Response(EnumStatus.ERROR, null, "Ce mail est déjà utilisée veuillez en saisir un autre");
+                    }
+                }
                 log.info("Mail completed");
                 mail = true;
             }
