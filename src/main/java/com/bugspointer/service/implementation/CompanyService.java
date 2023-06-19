@@ -46,7 +46,7 @@ public class CompanyService implements ICompany {
         this.modelMapper = modelMapper;
     }
 
-    public Company getCompanyByMail(String mail){
+    public Company getCompanyByMail(String mail){//TODO: A transformer en DTO
         Optional<Company> company = companyRepository.findByMail(mail);
         Company companyGet = null;
 
@@ -232,6 +232,16 @@ public class CompanyService implements ICompany {
                 log.info("Mail empty");
                 return new Response(EnumStatus.ERROR, null, "Mail empty");
             } else {
+                if (company.getMail().equals(dto.getMail())) {
+                    log.info("Mail identique");
+                    return new Response(EnumStatus.ERROR, null, "Mail identique");
+                } else {
+                    Optional<Company> companyMail = companyRepository.findByMail(dto.getMail());
+                    if (companyMail.isPresent()){
+                        log.info("Mail déjà utilisé");
+                        return new Response(EnumStatus.ERROR, null, "Ce mail est déjà utilisée veuillez en saisir un autre");
+                    }
+                }
                 log.info("Mail completed");
                 mail = true;
             }
@@ -346,10 +356,10 @@ public class CompanyService implements ICompany {
         }
     }
 
-    public Company companyTryUpdate(Company company) {
+    public Company companyTryUpdateLastVisit(Company company) {
         try {
             Company savedCompany = companyRepository.save(company);
-            log.info("Company update :  {}", savedCompany);
+            log.info("Company update :  {} - {}", savedCompany.getCompanyId(), savedCompany.getLastVisit());
             return savedCompany;
         }
         catch (Exception e){
@@ -479,5 +489,15 @@ public class CompanyService implements ICompany {
         }
 
         return new Response(EnumStatus.ERROR, null, "Error in the process");
+    }
+
+    public Response updatePlan(Company company, Date dateLine, EnumPlan plan){
+        log.info("Plan : {}", plan);
+        log.info("DateLine Facture : {}", dateLine);
+        company.setPlan(plan);
+        company.setDateLineFacturePlan(dateLine);
+
+        return companyTryRegistration(company, "Plan update");
+
     }
 }

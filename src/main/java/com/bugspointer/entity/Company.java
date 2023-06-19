@@ -2,10 +2,10 @@ package com.bugspointer.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Date;
 
 @Entity
@@ -14,7 +14,7 @@ public class Company {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    private Long companyId;
 
     private String companyName;
 
@@ -50,5 +50,54 @@ public class Company {
 
     private String role = "ROLE_USER";
 
+    @ToString.Exclude
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private Customer customer;
 
+    @Override
+    public String toString() {
+
+        if (customer != null) {
+            return "Company{" +
+                    "companyId=" + companyId +
+                    ", companyName='" + companyName + '\'' +
+                    ", mail='" + mail + '\'' +
+                    ", password='" + password + '\'' +
+                    ", indicatif=" + indicatif +
+                    ", phoneNumber='" + phoneNumber + '\'' +
+                    ", domaine='" + domaine + '\'' +
+                    ", plan=" + plan +
+                    ", dateLineFacturePlan=" + dateLineFacturePlan +
+                    ", publicKey='" + publicKey + '\'' +
+                    ", dateCreation=" + dateCreation +
+                    ", lastVisit=" + lastVisit +
+                    ", isEnable=" + isEnable +
+                    ", motifEnable=" + motifEnable +
+                    ", dateCloture=" + dateCloture +
+                    ", role='" + role + '\'' +
+                    ", Customer(id='" + customer.getId() + '\'' +
+                    ", customer_id='" + customer.getCustomerId() + '\'' +
+                    ")}";
+        } else {
+            return "Company{" +
+                    "companyId=" + companyId +
+                    ", companyName='" + companyName + '\'' +
+                    ", mail='" + mail + '\'' +
+                    ", password='" + password + '\'' +
+                    ", indicatif=" + indicatif +
+                    ", phoneNumber='" + phoneNumber + '\'' +
+                    ", domaine='" + domaine + '\'' +
+                    ", plan=" + plan +
+                    ", dateLineFacturePlan=" + dateLineFacturePlan +
+                    ", publicKey='" + publicKey + '\'' +
+                    ", dateCreation=" + dateCreation +
+                    ", lastVisit=" + lastVisit +
+                    ", isEnable=" + isEnable +
+                    ", motifEnable=" + motifEnable +
+                    ", dateCloture=" + dateCloture +
+                    ", role='" + role + '\'' +
+                    ")}";
+        }
+    }
 }

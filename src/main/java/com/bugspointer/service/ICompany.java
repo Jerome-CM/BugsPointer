@@ -18,7 +18,7 @@ public interface ICompany {
     Response mailUpdate(AccountDTO dto);
     Response passwordUpdate(AccountDTO dto);
     Response smsUpdate(AccountDTO dto);
-    Company companyTryUpdate(Company company);
+    Company companyTryUpdateLastVisit(Company company);
     Response delete(AccountDeleteDTO dto);
     Response validateRegister(String publicKey);
     Response registerDomaine(AccountDTO dto);

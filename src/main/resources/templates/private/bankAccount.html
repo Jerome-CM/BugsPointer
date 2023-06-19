@@ -1,0 +1,46 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <title>Coordonnées bancaire</title>
+</head>
+<body class="black">
+    <div th:replace="~{include/notifAlert.html}"></div>
+    <div th:replace="~{include/nav.html}"></div>
+
+    <div class="container">
+      <h1 class="h-in-black">Merci de votre confiance</h1>
+        <p>
+            <!--Pour valider votre abonnement : <span th:text="${product}"></span> pour <span th:text="${product.getValeur()}"></span>€/an, renouvelable automatiquement à partir du paiement
+            <br><br>-->
+
+            Merci de completer vos informations bancaires afin de procéder au paiement.
+        </p>
+        <section>
+            <div class="cards cards_detail w40 margin_auto">
+                <h3>IBAN / BIC</h3>
+                <form class="form" action="#" th:action="@{/api/user/newMandate}" th:object="${customer}" method="post">
+                    <input type="text" th:field="*{iban}" placeholder="IBAN : FR76 1254 8029 9898 7654 3210 917" required>
+                    <input type="text" th:field="*{bic}" placeholder="BIC : CCOPFRPP" required>
+                    <input type="hidden" th:field="*{publicKey}" th:value="${customer.publicKey}" readonly>
+                    <input type="hidden" th:field="*{plan}" th:value="${customer.plan}" readonly>
+                    <p style="height: fit-content;"><input type="checkbox" th:field="*{signature}" required> Je signe le mandat de prélèvement SEPA autorisant Bugspointer à prélever la somme de <span th:text="*{plan.getValeur()}"></span>€ une fois par an</p>
+                    <input class="btn-action cancel-margin-top" type="submit" value="Souscrire">
+                </form>
+            </div>
+
+            <div class="btn-download">
+                <img alt="donnée" th:src="@{/css/img/utilisateur.gif}"/>
+                <span class="center fs20">Toutes ces informations ne sont pas stockées sur nos serveurs</span>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="~{include/footer.html}"></div>
+</body>
+</html>

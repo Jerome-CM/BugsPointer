@@ -50,12 +50,6 @@ public class ModalService implements IModal {
         Date dateIpEnvoi;
         long timeSeconde = 60;
 
-        // TODO indentation code => mail : Fail
-        String codeLoc = dto.getCodeLocation();
-        codeLoc = codeLoc.replace("<", "&lt;");
-        codeLoc = codeLoc.replace(">", "&gt;");
-        dto.setCodeLocation(codeLoc);
-
         log.info("in dto :  {}", dto);
 
         if (dto.getBot().isEmpty())
@@ -180,6 +174,10 @@ public class ModalService implements IModal {
                     }
                     log.info("bug saved :  {}", savedBug);
                 } else {
+                    String codeLoc = dto.getCodeLocation();
+                    codeLoc = codeLoc.replace("<", "&lt;");
+                    codeLoc = codeLoc.replace(">", "&gt;");
+                    bug.setCodeLocation(codeLoc);
                     Response response = mailService.sendMailTest(dto.getMail(), bug);
                     if (response.getStatus().equals(EnumStatus.OK)) {
                         log.info("mail test envoyé");

@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -7,36 +7,48 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
     <link th:href="@{/css/style.css}" rel="stylesheet" />
-    <title>Téléchargement</title>
+    <title>Récapitulatif de paiement</title>
 </head>
-<body class="black">
+<body class="index">
 
+    <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/nav.html}"></div>
 
     <div class="container">
         <h1 class="h-in-black">Récapitulatif du produit</h1>
-        <p>
-            Vous êtes sur le point de souscrire à l'abonnement : <span th:text="${product}"></span> pour 15€/an, renouvelable automatiquement à partir du paiement<!--dynamique-->
+        <!--<p>
+            Vous êtes sur le point de souscrire à l'abonnement : <span th:text="${selectedProduct}"></span> pour <span th:text="${selectedProduct.getValeur()}"></span>€/an, renouvelable automatiquement à partir du paiement
 
             <br><br>
 
             Merci de completer les informations vous concernant :
-        </p>
+        </p>-->
+        <div class="cards cards_detail w40 margin_auto space">
+            <h3>Adresse de facturation</h3>
+            <form action="#" th:action="@{/api/user/newCustomer}" method="post" class="form" th:object="${customer}">
+                <p>Souscrire à l'abonnement :
+                    <select name="plan">
+                        <option value="Sélectionner votre abonnement"></option>
+                        <option th:each="plan : ${plans}" th:value="${plan}" th:selected="${plan == selectedProduct}">
+                            <span th:text="${plan.name()}"></span> pour <span th:text="${plan.getValeur()}"></span>€/an
+                        </option>
+                    </select>
+                     renouvelable automatiquement
+                </p>
+                <input type="text" th:field="*{mail}" placeholder="Votre e-mail" th:value="${customer.getMail()}" required>
+                <input type="text" th:field="*{companyName}" placeholder="Nom de l'entreprise" th:value="${customer.getCompanyName()}" required>
+                <input type="text" th:field="*{address1}" placeholder="Adresse 1" required>
+                <input type="text" th:field="*{address2}" placeholder="Adresse 2">
+                <input type="text" th:field="*{cp}" placeholder="Code Postal" required>
+                <input type="text" th:field="*{city}" placeholder="Ville" required>
+                <input type="text" th:field="*{country}" placeholder="Pays" th:value="France" required>
+                <input type="hidden" th:field="*{publicKey}" th:value="${customer.getPublicKey()}" readonly>
+                <p><input type="checkbox" th:field="*{cguAccepted}" required> J'accepter les <a style="color: black;" th:href="@{/cgv}">CGV</a></p>
 
-        <form action="#" th:action="@{/api/user/newCustomer}" method="post" class="form-info-user" th:object="${company}">
-            <input type="text" th:field="*{mail}" placeholder="Votre e-mail" th:value="${company.getMail()}">
-            <input type="text" th:field="*{companyName}" placeholder="Nom de l'entreprise" th:value="${company.getCompanyName()}">
-            <input type="text" th:field="*{address1}" placeholder="Adresse 1">
-            <input type="text" th:field="*{address2}" placeholder="Adresse 2">
-            <input type="text" th:field="*{cp}" placeholder="Code Postal">
-            <input type="text" th:field="*{city}" placeholder="Ville">
-            <input type="text" th:field="*{country}" placeholder="Pays" value="France">
-            <input type="hidden" th:field="*{product}" th:value="*{product}">
-            <p><input type="checkbox" th:field="*{cguAccepted}"> Merci d'accepter les <a th:href="@{/cgu}">CGU</a></p>
+                <input class="btn-action cancel-margin-top" type="submit"  value="Passer au paiement">
 
-            <input type="submit"  value="Passer au paiement">
-
-        </form>
+            </form>
+        </div>
     </div>
     <div th:replace="~{include/footer.html}"></div>
 </body>
