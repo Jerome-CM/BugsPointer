@@ -3,6 +3,7 @@ package com.bugspointer.controller;
 import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.dto.*;
 import com.bugspointer.service.implementation.ModalService;
+import com.bugspointer.service.implementation.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -22,10 +23,12 @@ import javax.validation.Valid;
 public class ApiFormUser {
 
     private final ModalService modalService;
+    private final PaymentService paymentService;
 
 
-    public ApiFormUser(ModalService modalService) {
+    public ApiFormUser(ModalService modalService, PaymentService paymentService) {
         this.modalService = modalService;
+        this.paymentService = paymentService;
     }
 
 
