@@ -57,25 +57,46 @@ public class Company {
 
     @Override
     public String toString() {
-        return "Company{" +
-                "companyId=" + companyId +
-                ", companyName='" + companyName + '\'' +
-                ", mail='" + mail + '\'' +
-                ", password='" + password + '\'' +
-                ", indicatif=" + indicatif +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", domaine='" + domaine + '\'' +
-                ", plan=" + plan +
-                ", dateLineFacturePlan=" + dateLineFacturePlan +
-                ", publicKey='" + publicKey + '\'' +
-                ", dateCreation=" + dateCreation +
-                ", lastVisit=" + lastVisit +
-                ", isEnable=" + isEnable +
-                ", motifEnable=" + motifEnable +
-                ", dateCloture=" + dateCloture +
-                ", role='" + role + '\'' +
-                ", Customer(id='" + customer.getId() + '\'' +
-                ", customer_id='" + customer.getCustomerId() + '\'' +
-                ")}";
+        if (customer != null) {
+            return "Company{" +
+                    "companyId=" + companyId +
+                    ", companyName='" + companyName + '\'' +
+                    ", mail='" + mail + '\'' +
+                    ", password='" + password + '\'' +
+                    ", indicatif=" + indicatif +
+                    ", phoneNumber='" + phoneNumber + '\'' +
+                    ", domaine='" + domaine + '\'' +
+                    ", plan=" + plan +
+                    ", dateLineFacturePlan=" + dateLineFacturePlan +
+                    ", publicKey='" + publicKey + '\'' +
+                    ", dateCreation=" + dateCreation +
+                    ", lastVisit=" + lastVisit +
+                    ", isEnable=" + isEnable +
+                    ", motifEnable=" + motifEnable +
+                    ", dateCloture=" + dateCloture +
+                    ", role='" + role + '\'' +
+                    ", Customer(id='" + customer.getId() + '\'' +
+                    ", customer_id='" + customer.getCustomerId() + '\'' +
+                    ")}";
+        } else {
+            return "Company{" +
+                    "companyId=" + companyId +
+                    ", companyName='" + companyName + '\'' +
+                    ", mail='" + mail + '\'' +
+                    ", password='" + password + '\'' +
+                    ", indicatif=" + indicatif +
+                    ", phoneNumber='" + phoneNumber + '\'' +
+                    ", domaine='" + domaine + '\'' +
+                    ", plan=" + plan +
+                    ", dateLineFacturePlan=" + dateLineFacturePlan +
+                    ", publicKey='" + publicKey + '\'' +
+                    ", dateCreation=" + dateCreation +
+                    ", lastVisit=" + lastVisit +
+                    ", isEnable=" + isEnable +
+                    ", motifEnable=" + motifEnable +
+                    ", dateCloture=" + dateCloture +
+                    ", role='" + role + '\'' +
+                    ")}";
+        }
     }
 }
