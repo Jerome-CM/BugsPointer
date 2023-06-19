@@ -49,6 +49,3 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-function showAlert() {
-    alert("The button was clicked!");
-}

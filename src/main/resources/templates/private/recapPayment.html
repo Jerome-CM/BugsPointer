@@ -23,16 +23,17 @@
 
             Merci de completer les informations vous concernant :
         </p>-->
-        <div class="cards cards_detail w40 margin_auto">
+        <div class="cards cards_detail w40 margin_auto space">
             <h3>Adresse de facturation</h3>
             <form action="#" th:action="@{/api/user/newCustomer}" method="post" class="form" th:object="${customer}">
-                <p>Soucrire à l'abonnement :
+                <p>Souscrire à l'abonnement :
                     <select name="plan">
                         <option value="Sélectionner votre abonnement"></option>
                         <option th:each="plan : ${plans}" th:value="${plan}" th:selected="${plan == selectedProduct}">
-                            <span th:text="${plan.name()}"></span> pour <span th:text="${plan.getValeur()}"></span>€/an, renouvelable automatiquement
+                            <span th:text="${plan.name()}"></span> pour <span th:text="${plan.getValeur()}"></span>€/an
                         </option>
                     </select>
+                     renouvelable automatiquement
                 </p>
                 <input type="text" th:field="*{mail}" placeholder="Votre e-mail" th:value="${customer.getMail()}" required>
                 <input type="text" th:field="*{companyName}" placeholder="Nom de l'entreprise" th:value="${customer.getCompanyName()}" required>
@@ -40,9 +41,9 @@
                 <input type="text" th:field="*{address2}" placeholder="Adresse 2">
                 <input type="text" th:field="*{cp}" placeholder="Code Postal" required>
                 <input type="text" th:field="*{city}" placeholder="Ville" required>
-                <input type="text" th:field="*{country}" placeholder="Pays" value="France" required>
+                <input type="text" th:field="*{country}" placeholder="Pays" th:value="France" required>
                 <input type="hidden" th:field="*{publicKey}" th:value="${customer.getPublicKey()}" readonly>
-                <p><input type="checkbox" th:field="*{cguAccepted}" required> Merci d'accepter les <a th:href="@{/cgu}">CGU</a></p>
+                <p><input type="checkbox" th:field="*{cguAccepted}" required> J'accepter les <a style="color: black;" th:href="@{/cgv}">CGV</a></p>
 
                 <input class="btn-action cancel-margin-top" type="submit"  value="Passer au paiement">
 

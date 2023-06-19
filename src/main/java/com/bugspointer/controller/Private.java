@@ -4,6 +4,7 @@ import com.bugspointer.dto.*;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
+import com.bugspointer.service.implementation.BugService;
 import com.bugspointer.service.implementation.CompanyPreferencesService;
 import com.bugspointer.service.implementation.CompanyService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -25,6 +25,8 @@ public class Private {
 
     private final CompanyService companyService;
 
+    private final BugService bugService;
+
 
     private final CompanyPreferencesService preferencesService;
 
@@ -35,8 +37,9 @@ public class Private {
         return EnumPlan.values();
     }
 
-    public Private(CompanyService companyService, CompanyPreferencesService preferencesService, JwtTokenUtil jwtTokenUtil) {
+    public Private(CompanyService companyService, BugService bugService, CompanyPreferencesService preferencesService, JwtTokenUtil jwtTokenUtil) {
         this.companyService = companyService;
+        this.bugService = bugService;
         this.preferencesService = preferencesService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
@@ -182,9 +185,12 @@ public class Private {
         return "private/newBugList";
     }
 
-    @GetMapping("newBugReport")
-    String getNewBugReport(){
-        return "private/newBugReport";
+    @GetMapping("bugReport/{id}")
+    String getNewBugReport(Model map, @PathVariable Long id){ // Long id
+        map.addAttribute("title", "New Bug Report");
+
+        map.addAttribute("code", bugService.codeBlockFormatter(id));
+        return "private/bugReport";
     }
 
     @GetMapping("pendingBugList")

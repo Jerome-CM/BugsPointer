@@ -166,7 +166,7 @@ public class ApiFormUser {
             redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
 
             if (response.getStatus().equals(EnumStatus.OK)) {
-                return "redirect:/app/private/dashboard";
+                return "redirect:/app/private/thanks";
             }
         }
         return "redirect:/";

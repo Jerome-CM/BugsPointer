@@ -57,6 +57,7 @@ public class Company {
 
     @Override
     public String toString() {
+
         if (customer != null) {
             return "Company{" +
                     "companyId=" + companyId +
