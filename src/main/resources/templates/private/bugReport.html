@@ -18,20 +18,7 @@
 
 
 <div class="container-documentation">
-    <div class="menu">
-        <h2>Report</h2>
-        <a href="#" class="btn-nbr-bug"><span class="bug-type">Nouveau</span><span class="nbr-bug new">1</span></a>
-        <a href="#" class="btn-nbr-bug"><span class="bug-type">En cours</span><span class="nbr-bug pending">3</span></a>
-        <a href="#" class="btn-nbr-bug"><span class="bug-type">Résolu</span><span class="nbr-bug solved">12</span></a>
-        <a href="#" class="btn-nbr-bug"><span class="bug-type">Ignoré</span><span class="nbr-bug ignored">2</span></a>
-
-        <br>
-
-        <h2>Paramètres</h2>
-        <a href="" class="btn-nbr-bug"><span class="bug-type">Factures</span></a>
-        <a href="" class="btn-nbr-bug"><span class="bug-type">Notifications</span></a>
-        <a href="" class="btn-nbr-bug"><span class="bug-type">Mon compte</span></a>
-    </div>
+    <div th:replace="~{include/asideReport.html}"></div>
 
     <div class="container anti-margin">
         <h1 th:text="${title}"></h1>

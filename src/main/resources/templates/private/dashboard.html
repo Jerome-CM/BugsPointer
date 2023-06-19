@@ -22,19 +22,19 @@
             <h2 style="text-align: center">Report section</h2>
             <hr>
             <div class="container-row">
-                <a th:href="@{/app/private/newBugList}" class="cards">
+                <a th:href="@{/app/private/bugList(state='new', publicKey=${company.getPublicKey()})}" class="cards">
                     <span class="number_cards new" th:field="*{nbNewBug}" id="nbNewBug" th:text="${company.getNbNewBug()}"></span>
                     <h3>New bug</h3>
                 </a>
-                <a th:href="@{/app/private/pendingBugList}" class="cards">
+                <a th:href="@{/app/private/bugList(state='pending', publicKey=${company.getPublicKey()})}" class="cards">
                     <span class="number_cards pending" th:field="*{nbPendingBug}" id="nbPendingBug" th:text="${company.getNbPendingBug()}"></span>
                     <h3>Pending bug</h3>
                 </a>
-                <a th:href="@{/app/private/solvedBugList}" class="cards">
+                <a th:href="@{/app/private/bugList(state='solved', publicKey=${company.getPublicKey()})}" class="cards">
                     <span class="number_cards solved" th:field="*{nbSolvedBug}" id="nbSolvedBug" th:text="${company.getNbSolvedBug()}"></span>
                     <h3>Solved bug</h3>
                 </a>
-                <a th:href="@{/app/private/solvedBugList}" class="cards">
+                <a th:href="@{/app/private/bugList(state='ignored', publicKey=${company.getPublicKey()})}" class="cards">
                     <span class="number_cards ignored" th:field="*{nbIgnoredBug}" id="nbIgnoredBug" th:text="${company.getNbIgnoredBug()}">1</span>
                     <h3>Ignored bug</h3>
                 </a>
@@ -52,7 +52,7 @@
             </div>
         </section>
         
-        <section>
+        <section th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
             <div class="container-row">
                 <div class="cards cards_promo">
                     <h2>Change Plan</h2>

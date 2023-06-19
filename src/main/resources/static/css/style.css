@@ -1065,7 +1065,6 @@ code{
 }
 
 
-
 .indicator{
     font-family: "Raleway", sans-serif;
     margin: 7px auto 0 auto;
@@ -1106,6 +1105,56 @@ pre code{
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
     color: #333333;
+}
+
+/* Report list */
+
+.card-reportList{
+    width: 100%;
+    border-radius: var(--radius);
+    background-color: var(--color-white);
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.led{
+    align-items: center;
+    width: 60px;
+}
+
+.led-report{
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.description-reportList{
+    width: 90%;
+    height: 100%;
+    text-align: center;
+}
+
+.description-reportList th{
+    font-weight: bold;
+}
+
+.description-reportList td{
+    font-family: "Inter", sans-serif;
+    color: grey;
+}
+
+.row-url{
+    border-top: solid 0.5px black;
+}
+
+.card-reportList a{
+    margin: 0 10px 0 auto;
 }
 
 /* Footer */
