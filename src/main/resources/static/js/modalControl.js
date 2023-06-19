@@ -1,4 +1,4 @@
-const key = "CEOFRSrIlGexZShn7Y6znGXGL"; /*Ajoutez votre clé publique ici, entre les ""    C1estLaClePublicAModifier*/
+const key = "C1estLaClePublicAModifier"; /*Ajoutez votre clé publique ici, entre les ""    C1estLaClePublicAModifier*/
 window.addEventListener("DOMContentLoaded", function(){
 
 /* Variables document */
@@ -63,8 +63,7 @@ window.addEventListener("DOMContentLoaded", function(){
     function message(){
         /* Affiche le message lors du clic sur le bouton envoi (même si un problème lors de l'enregistrement est survenu)
         * et masque le formulaire, il ne reste que le bouton 'close' */
-        messageElement.innerHTML = "Merci infiniment pour votre envoi <br><br><br>Donnez votre avis et façonnez l'avenir de notre produit ";
-        lienElement.innerHTML = "Evaluer en 3 questions"
+        messageElement.style.display = "block";
         lienElement.href = ADRESSE;
         section.style.display = "none";
     }
@@ -295,9 +294,7 @@ window.addEventListener("DOMContentLoaded", function(){
     /* Le clic sur la croix ferme la popup et permet de rafraichir la page pour recharger un nouveau formulaire après envoi */
     btnclose.addEventListener("mousedown", () => {
         masquer();
-        if (messageElement.innerHTML != null){ // TODO: Supprimer le if pour n'appliquer que le reload ?
-            location.reload();
-        }
+        location.reload();
     });
 
     btnpointer.addEventListener("click", pointer);  // Le clic sur 'pointer le bug' actif la fonction pointer

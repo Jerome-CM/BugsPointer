@@ -50,8 +50,6 @@ public class ModalService implements IModal {
         Date dateIpEnvoi;
         long timeSeconde = 60;
 
-        log.info("in dto :  {}", dto);
-
         if (dto.getBot().isEmpty())
         {
             bot = true;
