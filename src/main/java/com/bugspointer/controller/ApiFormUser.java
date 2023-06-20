@@ -23,7 +23,8 @@ import javax.validation.Valid;
 public class ApiFormUser {
 
     private final ModalService modalService;
-    private final PaymentService paymentService;
+
+    public final PaymentService paymentService;
 
 
     public ApiFormUser(ModalService modalService, PaymentService paymentService) {

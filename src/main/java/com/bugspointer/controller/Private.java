@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -181,11 +182,6 @@ public class Private {
         return "private/dashboard";
     }
 
-    @GetMapping("newBugList")
-    String getNewBugList(){
-        return "private/newBugList";
-    }
-
     @GetMapping("bugReport/{id}")
     String getNewBugReport(Model map, @PathVariable Long id, HttpServletRequest request, RedirectAttributes redirectAttributes){ // Long id
 
@@ -220,6 +216,32 @@ public class Private {
     String getIgnoredBug(@PathVariable Long id){
         bugService.bugIgnored(id);
         return "redirect:/app/private/bugReport/{id}";
+    }
+
+    @GetMapping("bugList")
+    String getbugList(Model map,@RequestParam("publicKey") String publicKey, @RequestParam("state") String state){
+
+        Response responseBugList = bugService.getBugDTOByCompanyAndState(publicKey, state);
+        List<BugDTO> bugDTOList = (List<BugDTO>) responseBugList.getContent();
+
+        if(responseBugList.getContent() == null){
+            return "redirect:dashboard";
+        }
+        BugDTO bugDTO = bugDTOList.get(0);
+        if(bugDTOList.size() == 1){
+            map.addAttribute("title", bugService.getTitle(state, false));
+            map.addAttribute("state", bugDTO.getEtatBug());
+            map.addAttribute("publicKey", publicKey);
+            return "redirect:bugReport/"+bugDTO.getId()+"?publicKey="+publicKey;
+        } else {
+            map.addAttribute("title", bugService.getTitle(state, true));
+            map.addAttribute("bugList", bugDTOList);
+            map.addAttribute("state", bugDTO.getEtatBug());
+            map.addAttribute("publicKey", publicKey);
+
+            return "private/bugList";
+        }
+
     }
 
     @GetMapping("pendingBugList")

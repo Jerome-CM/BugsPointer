@@ -1,0 +1,56 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/prism.css}">
+    <script th:src="@{/js/prism.js}"></script>
+    <title>List des bugs</title>
+</head>
+<body>
+
+<div th:replace="~{include/navCompany.html}"></div>
+
+
+<div class="container-documentation">
+    <div th:replace="~{include/asideReport.html}"></div>
+
+    <div class="container anti-margin">
+        <h1 th:text="${title}"></h1>
+
+        <div class="container-report">
+            <div class="card-reportList" th:each="bug : ${bugList}">
+                <div class="led"><span class="led-report"></span></div>
+                <table class="description-reportList">
+                    <tbody>
+                    <tr>
+                        <th>Reçu le</th>
+                        <th>confirmé le</th>
+                        <th>Résolu / Ignoré le</th>
+                    </tr>
+                    <tr>
+                        <td th:text="${bug.getDateCreation() != null ? bug.getDateCreation() : '- -'}"></td>
+                        <td th:text="${bug.getDateView() != null ? bug.getDateView() : '- -'}"></td>
+                        <td th:text="${bug.getDateSolved() != null ? bug.getDateSolved() : '- -'}"></td>
+                    </tr>
+                    <tr class="row-url" th:colspan="3">
+                        <th th:colspan="3" class="center">Url concernée</th>
+                    </tr>
+                    <tr th:colspan="3">
+                        <td th:colspan="3" th:text="${bug.getUrl()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <a th:href="@{/app/private/bugReport/{id}(id=${bug.getId()})}" class="submit">Détails</a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</body>
+</html>
