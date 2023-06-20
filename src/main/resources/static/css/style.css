@@ -484,8 +484,7 @@ ul{
 /* Features */
 .cards_detail img{
     position: relative;
-    min-width: 400px;
-    max-width: 500px;
+    width: 100%;
 }
 
 .left{
@@ -1032,11 +1031,11 @@ code{
 }
 
 .nbr-bug{
-    width: 30px;
+    width: fit-content;
     height: 30px;
     font-size: 20px;
     align-items: center;
-    padding: 5px;
+    padding: 4px 6px 0 5px;
     font-family: "Inter", sans-serif;
     color: var(--color-white);
     border-radius: 15px;
@@ -1061,9 +1060,11 @@ code{
     font-size: 20px;
     text-transform: uppercase;
     margin-bottom: 12px;
-
 }
 
+.component p{
+    overflow-wrap: anywhere;
+}
 
 .indicator{
     font-family: "Raleway", sans-serif;
@@ -1177,7 +1178,82 @@ footer a{
     color: var(--color-white);
 }
 
-@media only screen and(min-width: 951px) and (max-width: 1280px) { }
-@media only screen and(min-width: 700px) and (max-width: 950px) { }
-@media only screen and(min-width: 600px) and (max-width: 699px) { }
-@media only screen and (min-device-width: 320px) and (max-device-height: 599px) and (orientation : portrait) { }
+@media only screen and (min-width: 951px) and (max-width: 1280px) {
+
+    /* Index*/
+    .green{
+        padding: 3% 0 5% 0;
+        margin: 5% -10% 2% -10%;
+    }
+
+    .sliderIndex{
+        margin-right: 60px;
+    }
+
+    /* Documentation */
+    .menu{
+        margin: -45px 0 0 0;
+    }
+
+    /* Authentication*/
+
+    .form > input {
+        width: 100%;
+    }
+
+    .form input[type=submit]{
+        width: initial;
+    }
+
+    .w95{
+        width: 95%!important;
+    }
+
+    /* bugReport */
+
+    .container-report-tablette{
+        width: 80%;
+    }
+
+    .container-report{
+        flex-direction: column;
+    }
+
+    .w100{
+        width: 100%!important;
+    }
+
+    .content-btn-action{
+        flex-direction: row;
+    }
+
+    .content-btn-action a{
+        margin: 7px 11px;
+    }
+
+    .bug-type{
+        font-size: 18px;
+    }
+
+    .nbr-bug{
+        font-size : 18px;
+    }
+
+    .menu h2{
+        font-size: 20px;
+    }
+
+    .order1{
+        order: 1;
+    }
+
+    .order2{
+        order: 2;
+    }
+
+    .order3{
+        order: 3;
+    }
+}
+@media only screen and (min-width: 700px) and (max-width: 950px) { }
+@media only screen and (min-width: 600px) and (max-width: 699px) { }

@@ -1,6 +1,7 @@
 <nav class="navCompany">
     <span class="title">Bugspointer</span>
     <ul>
+        <li th:if="${isLoggedIn == false}"><a th:href="@{/}">Accueil</a></li>
         <li th:if="${isLoggedIn == true}"><a th:href="@{/app/private/dashboard}">Dashboard</a></li>
         <li th:if="${isLoggedIn == true}"><a th:href="@{/download}">Download</a></li>
         <li><a th:href="@{/documentations}">Documentations</a></li>

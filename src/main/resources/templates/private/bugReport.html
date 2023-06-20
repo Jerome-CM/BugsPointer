@@ -21,11 +21,11 @@
 
     <div th:replace="~{include/asideReport.html}"></div>
 
-    <div class="container anti-margin">
+    <div class="container anti-margin container-report-tablette">
         <h1 th:text="${title}"></h1>
 
         <div class="container-report">
-            <div class="aside">
+            <div class="aside order2">
                 <div class="component">
                     <h2>Chronologie</h2>
                     <span class="indicator">Signalé</span>
@@ -49,7 +49,7 @@
                     <a th:if="${bug.getEtatBug().name() != 'SOLVED' && bug.getEtatBug().name() != 'IGNORED'}" th:href="@{/app/private/confirmBug/{id}(id=${bug.getId()})}" class="solved" th:text="${bug.getEtatBug().name == 'PENDING' ? 'Résoudre' : 'Confirmer'}">Confirmer</a>
                     <a th:if="${bug.getEtatBug().name() != 'IGNORED'}" th:href="@{/app/private/ignoredBug/{id}(id=${bug.getId()})}" class="ignored">Ignorer</a></div>
             </div>
-            <div class="aside w85">
+            <div class="aside w85 w100 order1">
                 <div class="component">
                     <h2>Url contenant un bug</h2>
                     <p th:text="${bug.getUrl()}"></p>
@@ -72,6 +72,6 @@
         </div>
     </div>
     </div>
-
+<div th:replace="~{include/footer.html}"></div>
 </body>
 </html>
