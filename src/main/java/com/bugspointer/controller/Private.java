@@ -1,6 +1,7 @@
 package com.bugspointer.controller;
 
 import com.bugspointer.dto.*;
+import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
@@ -182,11 +183,39 @@ public class Private {
     }
 
     @GetMapping("bugReport/{id}")
-    String getNewBugReport(Model map, @PathVariable Long id, @RequestParam("publicKey") String publicKey){ // Long id
-        map.addAttribute("title", "New Bug Report"); // TODO Recuperer l'etat_bug pour afficher le bon titre
-        map.addAttribute("publicKey", publicKey);
-        map.addAttribute("code", bugService.codeBlockFormatter(id));
-        return "private/bugReport";
+    String getNewBugReport(Model map, @PathVariable Long id, HttpServletRequest request, RedirectAttributes redirectAttributes){ // Long id
+
+        Company company = companyService.getCompanyWithToken(request);
+        Long idCompany = company.getCompanyId();
+        EnumPlan plan = company.getPlan();
+
+        Response response = bugService.viewBug(id, idCompany, plan);
+        if (response.getStatus()==EnumStatus.OK){
+            Bug bug = (Bug) response.getContent();
+            String title = bug.getEtatBug().name().substring(0, 1).toUpperCase() + bug.getEtatBug().name().substring(1).toLowerCase() + " Bug Report"; //TODO a mettre en français
+            map.addAttribute("title", title);
+            map.addAttribute("bug", bug);
+            map.addAttribute("code", bugService.codeBlockFormatter(bug.getCodeLocation()));
+            return "private/bugReport";
+        }
+        else {
+            redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+            redirectAttributes.addFlashAttribute("notification", response.getMessage());
+            log.info("{}", response.getMessage());
+            return "redirect:/app/private/dashboard";
+        }
+    }
+
+    @GetMapping("confirmBug/{id}")
+    String getConfirmeBug(@PathVariable Long id){
+        bugService.bugPending(id);//Si le bug a l'état pending alors on passe à la méthode solved
+        return "redirect:/app/private/bugReport/{id}";
+    }
+
+    @GetMapping("ignoredBug/{id}")
+    String getIgnoredBug(@PathVariable Long id){
+        bugService.bugIgnored(id);
+        return "redirect:/app/private/bugReport/{id}";
     }
 
     @GetMapping("bugList")
