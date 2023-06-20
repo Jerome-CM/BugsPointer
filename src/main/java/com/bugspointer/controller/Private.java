@@ -188,6 +188,7 @@ public class Private {
         Company company = companyService.getCompanyWithToken(request);
         Long idCompany = company.getCompanyId();
         EnumPlan plan = company.getPlan();
+        String publicKey = company.getPublicKey();
 
         Response response = bugService.viewBug(id, idCompany, plan);
         if (response.getStatus()==EnumStatus.OK){
@@ -196,6 +197,7 @@ public class Private {
             map.addAttribute("title", title);
             map.addAttribute("bug", bug);
             map.addAttribute("code", bugService.codeBlockFormatter(bug.getCodeLocation()));
+            map.addAttribute("publicKey", publicKey);
             return "private/bugReport";
         }
         else {
@@ -207,14 +209,22 @@ public class Private {
     }
 
     @GetMapping("confirmBug/{id}")
-    String getConfirmeBug(@PathVariable Long id){
-        bugService.bugPending(id);//Si le bug a l'état pending alors on passe à la méthode solved
+    String getConfirmeBug(@PathVariable Long id, HttpServletRequest request){
+        Company company = companyService.getCompanyWithToken(request);
+        Long idCompany = company.getCompanyId();
+        String plan = company.getPlan().name();
+
+        bugService.bugPending(id, idCompany, plan);//Si le bug a l'état pending alors on passe à la méthode solved
         return "redirect:/app/private/bugReport/{id}";
     }
 
     @GetMapping("ignoredBug/{id}")
-    String getIgnoredBug(@PathVariable Long id){
-        bugService.bugIgnored(id);
+    String getIgnoredBug(@PathVariable Long id, HttpServletRequest request){
+        Company company = companyService.getCompanyWithToken(request);
+        Long idCompany = company.getCompanyId();
+        String plan = company.getPlan().name();
+
+        bugService.bugIgnored(id, idCompany, plan);
         return "redirect:/app/private/bugReport/{id}";
     }
 

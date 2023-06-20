@@ -63,6 +63,9 @@ public class BugService {
 
     public String codeBlockFormatter(String code){
 
+        if (code == null){
+            return "";
+        }
         // Charge HTML in Document JSoup objet
         Document document = Jsoup.parse(code);
 
@@ -104,10 +107,10 @@ public class BugService {
         }
     }
 
-    public void bugPending(Long idBug){
+    public void bugPending(Long idBug, Long idCompany, String plan){
         Optional<Bug> bugOptional = bugRepository.findById(idBug);
         Bug bug;
-        if (bugOptional.isPresent()) {
+        if (bugOptional.isPresent() && bugOptional.get().getCompany().getCompanyId().equals(idCompany) && !plan.equals("FREE")) {
             bug = bugOptional.get();
             if (bug.getEtatBug().equals(EnumEtatBug.PENDING)){
                 bugSolved(bug);
@@ -133,10 +136,10 @@ public class BugService {
         }
     }
 
-    public void bugIgnored(Long idBug){
+    public void bugIgnored(Long idBug, Long idCompany, String plan) {
         Optional<Bug> bugOptional = bugRepository.findById(idBug);
         Bug bug;
-        if (bugOptional.isPresent()) {
+        if (bugOptional.isPresent() && bugOptional.get().getCompany().getCompanyId().equals(idCompany) && !plan.equals("FREE")) {
             bug = bugOptional.get();
 
             Date jour = new Date();
@@ -150,6 +153,7 @@ public class BugService {
                 log.info("Bug update : id = {}, company = {}, etat = {} date view = {}", bugSaved.getId(), bugSaved.getCompany().getMail(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
             }
         }
+    }
 
     public String getTitle(String state, boolean isList){
         String title;
