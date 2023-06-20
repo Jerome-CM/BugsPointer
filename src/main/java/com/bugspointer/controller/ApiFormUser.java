@@ -1,11 +1,13 @@
 package com.bugspointer.controller;
 
 import be.woutschoovaerts.mollie.exception.MollieException;
+import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.*;
 import com.bugspointer.service.implementation.ModalService;
 import com.bugspointer.service.implementation.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,10 +28,12 @@ public class ApiFormUser {
 
     public final PaymentService paymentService;
 
+    private  final UserAuthenticationUtil userAuthenticationUtil;
 
-    public ApiFormUser(ModalService modalService, PaymentService paymentService) {
+    public ApiFormUser(ModalService modalService, PaymentService paymentService, UserAuthenticationUtil userAuthenticationUtil) {
         this.modalService = modalService;
         this.paymentService = paymentService;
+        this.userAuthenticationUtil = userAuthenticationUtil;
     }
 
 
@@ -108,8 +112,8 @@ public class ApiFormUser {
     }
 
     @GetMapping("newSubscription")
-    String createSubscription(@ModelAttribute("response") Response response, @ModelAttribute("customer") CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes) throws MollieException {
-
+    String createSubscription(Model model, @ModelAttribute("response") Response response, @ModelAttribute("customer") CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes) throws MollieException {
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         if (!result.hasErrors()) {
             Response response1 = paymentService.createSubscription(response, customer);
             Object content = response1.getContent();

@@ -1,5 +1,6 @@
 package com.bugspointer.controller;
 
+import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,9 +26,12 @@ public class Authentication {
 
     private final MailService mailService;
 
-    public Authentication(CompanyService companyService, MailService mailService) {
+    private  final UserAuthenticationUtil userAuthenticationUtil;
+
+    public Authentication(CompanyService companyService, MailService mailService, UserAuthenticationUtil userAuthenticationUtil) {
         this.companyService = companyService;
         this.mailService = mailService;
+        this.userAuthenticationUtil = userAuthenticationUtil;
     }
 
     @GetMapping("/authentication")
@@ -38,6 +42,7 @@ public class Authentication {
             model.addAttribute("status", request.getParameter("status"));
             model.addAttribute("notification", request.getParameter("message"));
         }
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/authentication";
     }
 
@@ -75,6 +80,7 @@ public class Authentication {
     String getRegisterConfirm(Model model, AuthRegisterCompanyDTO dtoRegister, AuthLoginCompanyDTO dtoLogin, HttpServletRequest request){
         model.addAttribute("companyRegister", dtoRegister);
         model.addAttribute("companyLogin", dtoLogin);
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/registerConfirm";
     }
 
@@ -82,6 +88,7 @@ public class Authentication {
     String getNewUser(@PathVariable("publicKey") String publicKey,  Model model, HttpServletRequest request){
         Company company = companyService.getCompanyByPublicKey(publicKey);
         model.addAttribute("company", company);
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/newUser";
     }
 
@@ -115,6 +122,7 @@ public class Authentication {
     @GetMapping("pwLost")
     String getPwLost(Model model, AccountDTO dto){
         model.addAttribute("company", dto);
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/pwLost";
     }
 
@@ -140,6 +148,7 @@ public class Authentication {
     String getResetPassword(@PathVariable("publicKey") String publicKey, Model model, AccountDTO dto){
         //AccountDTO dto = companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey));
         model.addAttribute("company", dto);
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/resetPw";
     }
 
@@ -160,7 +169,6 @@ public class Authentication {
 
     @GetMapping("/logout")
     String logout(HttpServletRequest request){
-
         HttpSession session = request.getSession();
         session.invalidate();
         return "index";

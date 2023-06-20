@@ -1,5 +1,6 @@
 package com.bugspointer.controller;
 
+import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.*;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumPlan;
@@ -28,25 +29,28 @@ public class Private {
 
     private final BugService bugService;
 
-
     private final CompanyPreferencesService preferencesService;
 
     private final JwtTokenUtil jwtTokenUtil;
+
+    private final UserAuthenticationUtil userAuthenticationUtil;
 
     @ModelAttribute("plans")
     public EnumPlan[] getPlans(){
         return EnumPlan.values();
     }
 
-    public Private(CompanyService companyService, BugService bugService, CompanyPreferencesService preferencesService, JwtTokenUtil jwtTokenUtil) {
+    public Private(CompanyService companyService, BugService bugService, CompanyPreferencesService preferencesService, JwtTokenUtil jwtTokenUtil, UserAuthenticationUtil userAuthenticationUtil) {
         this.companyService = companyService;
         this.bugService = bugService;
         this.preferencesService = preferencesService;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.userAuthenticationUtil = userAuthenticationUtil;
     }
 
     @GetMapping("invoices")
-    String getInvoices(){
+    String getInvoices(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/invoices";
     }
 
@@ -55,6 +59,7 @@ public class Private {
         HttpSession session = request.getSession();
         log.info("session mail : {}", session.getAttribute("mail"));
         model.addAttribute("company", preferencesService.getCompanyPreferenceDTO(companyService.getCompanyWithToken(request)));
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/notifications";
     }
 
@@ -62,6 +67,7 @@ public class Private {
     String updateNotifications(@Valid CompanyPreferenceDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
         String action = request.getParameter("action");
         log.info("buttonName : {}", action);
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         if (!result.hasErrors()) {
             Response response = preferencesService.updatePreference(dto, action);
             if (response.getStatus().equals(EnumStatus.OK)) {
@@ -82,11 +88,13 @@ public class Private {
         HttpSession session = request.getSession();
         log.info("session mail : {}", session.getAttribute("mail"));
         model.addAttribute("company", companyService.getAccountDeleteDto(companyService.getCompanyWithToken(request)));
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/deleteAccount";
     }
 
     @PostMapping("account/delete/confirm")
     String deleteAccount(@Valid AccountDeleteDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         if (!result.hasErrors()) {
             Response response = companyService.delete(dto);
             if (response.getStatus().equals(EnumStatus.OK)) {
@@ -110,6 +118,7 @@ public class Private {
         HttpSession session = request.getSession();
         log.info("session mail : {}", session.getAttribute("mail"));
         model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/account";
     }
 
@@ -118,6 +127,7 @@ public class Private {
                   BindingResult result,
                   Model model,
                   HttpServletRequest request) {
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         if (!result.hasErrors()) {
             model.addAttribute("company", companyService.getAccountDeleteDto(companyService.getCompanyWithToken(request)));
             return "private/deleteAccount";
@@ -134,6 +144,7 @@ public class Private {
                   HttpServletRequest request){
         String action = request.getParameter("action");
         log.info("buttonName : {}", action);
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         if (!result.hasErrors()) {
             Response response;
             if ("updateMail".equals(action)){
@@ -175,9 +186,8 @@ public class Private {
 
     @GetMapping("dashboard")
     String getDashboard(Model model, HttpServletRequest request){
-        /*HttpSession session = request.getSession();
-        log.info("session mail : {}", session.getAttribute("mail"));*/
         model.addAttribute("company", companyService.getDashboardDto(companyService.getCompanyWithToken(request)));
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/dashboard";
     }
 
@@ -186,12 +196,13 @@ public class Private {
         map.addAttribute("title", "New Bug Report"); // TODO Recuperer l'etat_bug pour afficher le bon titre
         map.addAttribute("publicKey", publicKey);
         map.addAttribute("code", bugService.codeBlockFormatter(id));
+        map.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/bugReport";
     }
 
     @GetMapping("bugList")
     String getbugList(Model map,@RequestParam("publicKey") String publicKey, @RequestParam("state") String state){
-
+        map.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         Response responseBugList = bugService.getBugDTOByCompanyAndState(publicKey, state);
         List<BugDTO> bugDTOList = (List<BugDTO>) responseBugList.getContent();
 
@@ -235,7 +246,7 @@ public class Private {
 
         HttpSession session = request.getSession();
         Company company = companyService.getCompanyByMail(jwtTokenUtil.getUsernameFromToken(jwtTokenUtil.getTokenWithoutBearer((String) session.getAttribute("token"))));
-
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("plan", String.valueOf(company.getPlan()));
         return "private/thanks";
     }
@@ -254,6 +265,7 @@ public class Private {
         model.addAttribute("selectedProduct", selectedProduct);
         log.info("product GetRecap : {}", selectedProduct);
         model.addAttribute("customer", customer);
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/recapPayment";
     }
 
@@ -266,7 +278,7 @@ public class Private {
         customerDTO.setPublicKey(company.getPublicKey());
 
         log.info("customer : {}", customerDTO);
-
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("customer", customerDTO);
         return "private/bankAccount";
     }
@@ -287,6 +299,7 @@ public class Private {
 
         model.addAttribute("produit", produit);
         model.addAttribute("nextPaymentDate", nextPaymentDate);
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/confirmSubscription";
     }
 

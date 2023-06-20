@@ -1,75 +1,85 @@
 package com.bugspointer.controller;
 
-import com.bugspointer.dto.EnumStatus;
-import com.bugspointer.dto.Response;
+import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.service.implementation.MailService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
+@Slf4j
 public class Home {
-
 
     private final MailService mailService;
 
-    public Home(MailService mailService) {
+    private final UserAuthenticationUtil userAuthenticationUtil;
+
+    public Home(MailService mailService, UserAuthenticationUtil userAuthenticationUtil) {
         this.mailService = mailService;
+        this.userAuthenticationUtil = userAuthenticationUtil;
     }
 
 
     @GetMapping("/")
-    String getHome(){
+    String getHome(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "index";
     }
 
     @GetMapping("download")
-    String getDownloadPage(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        String mail = (String) session.getAttribute("mail");
+    String getDownloadPage(Model model){
 
-        if(mail != null){
+        if(userAuthenticationUtil.isUserLoggedIn()){
+            model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
             return "public/download";
         } else {
-            return "redirect:authentication?status=ERROR&message=Please Login In or Register";
+            return "redirect:authentication?status=ERROR&message=Merci de vous connecter";
         }
 
     }
 
     @GetMapping("features")
-    String getFeatures(){
+    String getFeatures(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/features";
     }
 
     @GetMapping("documentations")
-    String getDocumentations(){
+    String getDocumentations(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/documentations";
     }
 
     @GetMapping("modal")
-    String getModalForTest(){
+    String getModalForTest(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "download/modal";
     }
 
     @GetMapping("cgu")
-    String getCgu(){
+    String getCgu(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/cgu";
     }
 
     @GetMapping("cgv")
-    String getCgv(){
+    String getCgv(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/cgv";
     }
 
     @GetMapping("mentions")
-    String getMentions(){
+    String getMentions(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/mentions";
     }
 
     @GetMapping("testPage")
-    String getTestPage(){
+    String getTestPage(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/testPage";
     }
 
