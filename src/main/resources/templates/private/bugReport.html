@@ -20,7 +20,7 @@
 <div class="container-documentation">
     <div class="menu">
         <h2>Report</h2>
-        <a href="#" class="btn-nbr-bug"><span class="bug-type">Nouveau</span><span class="nbr-bug new">1</span></a>
+        <a href="#" class="btn-nbr-bug"><span class="bug-type">Nouveau</span><span class="nbr-bug new">1</span></a> <!-- TODO Mettre le nombre de bug à jour -->
         <a href="#" class="btn-nbr-bug"><span class="bug-type">En cours</span><span class="nbr-bug pending">3</span></a>
         <a href="#" class="btn-nbr-bug"><span class="bug-type">Résolu</span><span class="nbr-bug solved">12</span></a>
         <a href="#" class="btn-nbr-bug"><span class="bug-type">Ignoré</span><span class="nbr-bug ignored">2</span></a>
@@ -41,7 +41,7 @@
                 <div class="component">
                     <h2>Chronologie</h2>
                     <span class="indicator">Signalé</span>
-                    <span class="indicator-result" th:text="${bug.getDateCreation() != null ? #dates.format(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}">23/8/2023 - 15:35:14</span>
+                    <span class="indicator-result" th:text="${bug.getDateCreation() != null ? #dates.format(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></span>
                     <span class="indicator">Vu</span>
                     <span class="indicator-result" th:text="${bug.getDateView() != null ? bug.getDateView() : '- -'}"></span>
                     <span class="indicator">Résolu / Ignoré</span>
