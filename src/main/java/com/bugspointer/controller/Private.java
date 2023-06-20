@@ -254,21 +254,6 @@ public class Private {
 
     }
 
-    @GetMapping("pendingBugList")
-    String getPendingBugList(){
-        return "private/pendingBugList";
-    }
-
-    @GetMapping("pendingBugReport")
-    String getPendingBugReport(){
-        return "private/pendingBugReport";
-    }
-
-    @GetMapping("solvedBugList")
-    String getSolvedBugReport(){
-        return "private/solvedBugList";
-    }
-
     @GetMapping(value="thanks")
     String thanks(Model model, HttpServletRequest request){
 
