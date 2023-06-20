@@ -31,9 +31,9 @@
                     <span class="indicator">Signalé</span>
                     <span class="indicator-result" th:text="${bug.getDateCreation() != null ? #dates.format(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></span>
                     <span class="indicator">Vu</span>
-                    <span class="indicator-result" th:text="${bug.getDateView() != null ? bug.getDateView() : '- -'}"></span>
+                    <span class="indicator-result" th:text="${bug.getDateView() != null ? #dates.format(bug.getDateView(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></span>
                     <span class="indicator">Résolu / Ignoré</span>
-                    <span class="indicator-result" th:text="${bug.getDateSolved() != null ? bug.getDateSolved() : '- -'}"></span>
+                    <span class="indicator-result" th:text="${bug.getDateSolved() != null ? #dates.format(bug.getDateSolved(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></span>
                 </div>
                 <div class="component">
                     <h2>Environnement</h2>
@@ -56,7 +56,7 @@
                 </div>
                 <div class="component">
                     <h2>description</h2>
-                    <p th:text="${bug.getDescription()}"></p>
+                    <p th:text="${bug.getDescription() != null ? bug.getDescription() : ''}"></p>
                     <hr>
 
                     <p><strong>La balise pointée par l'utilisateur est celle ayant la classe : bugspointer-pointed-balise</strong></p>
