@@ -210,10 +210,16 @@ public class Private {
         }
     }
 
-    @GetMapping("retourBug/{id}")
-    String getBackBug(@PathVariable Long id){
-        bugService.bugPending(id);
-        return "redirect:/app/private/dashboard";
+    @GetMapping("confirmBug/{id}")
+    String getConfirmeBug(@PathVariable Long id){
+        bugService.bugPending(id);//Si le bug a l'état pending alors on passe à la méthode solved
+        return "redirect:/app/private/bugReport/{id}";
+    }
+
+    @GetMapping("ignoredBug/{id}")
+    String getIgnoredBug(@PathVariable Long id){
+        bugService.bugIgnored(id);
+        return "redirect:/app/private/bugReport/{id}";
     }
 
     @GetMapping("pendingBugList")

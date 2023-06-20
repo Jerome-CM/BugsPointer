@@ -57,9 +57,9 @@
                     <span class="indicator-result" th:text="${bug.getScreenSize() != null ? bug.getScreenSize() : '- -'}"></span>
                 </div>
                 <div class="component content-btn-action">
-                    <a th:href="@{/app/private/retourBug/{id}(id=${bug.getId()})}" class="pending">Retour</a>
-                    <a href="" class="solved">Confirmer</a>
-                    <a href="" class="ignored">Ignorer</a></div>
+                    <a th:href="@{/app/private/dashboard}" class="pending">Retour</a>
+                    <a th:if="${bug.getEtatBug().name() != 'SOLVED' && bug.getEtatBug().name() != 'IGNORED'}" th:href="@{/app/private/confirmBug/{id}(id=${bug.getId()})}" class="solved" th:text="${bug.getEtatBug().name == 'PENDING' ? 'Résoudre' : 'Confirmer'}">Confirmer</a>
+                    <a th:if="${bug.getEtatBug().name() != 'IGNORED'}" th:href="@{/app/private/ignoredBug/{id}(id=${bug.getId()})}" class="ignored">Ignorer</a></div>
             </div>
             <div class="aside w85">
                 <div class="component">
