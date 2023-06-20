@@ -30,6 +30,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
+    @Autowired
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
+
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -67,20 +71,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(customAuthenticationFailureHandler)
                 .successHandler(customAuthenticationSuccessHandler)
                 .and()
-                // Show 403.html if access is denied, /error is a get controller
-                //exceptionHandling().accessDeniedPage("/app/error")
+                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
+                .and()
+                .rememberMe()
+                .and()
+                .logout().logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .deleteCookies("JSESSIONID", "remember-me")
+                .and()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
                 //.and()
-               .rememberMe()
-               .and()
-               .logout().logoutUrl("/logout")
-               .logoutSuccessUrl("/")
-               .deleteCookies("JSESSIONID", "remember-me")
-               .and()
-               .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
-               //.and()
-               //.sessionManagement()
-               // make sure we use stateless session; session won't be used to store user's state.
-               //.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                //.sessionManagement()
+                // make sure we use stateless session; session won't be used to store user's state.
+                //.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Add a filter to validate the tokens with every request
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

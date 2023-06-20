@@ -2,7 +2,7 @@
     <span class="title">Bugspointer</span>
     <ul>
         <li th:if="${isLoggedIn == true}"><a th:href="@{/app/private/dashboard}">Dashboard</a></li>
-        <li><a th:href="@{/download}">Download</a></li>
+        <li th:if="${isLoggedIn == true}"><a th:href="@{/download}">Download</a></li>
         <li><a th:href="@{/documentations}">Documentations</a></li>
         <li><a class="plan" th:href="@{/features}">Offres</a></li>
         <li th:if="${isLoggedIn == false}"><a th:href="@{/authentication}">Connexion</a></li>
