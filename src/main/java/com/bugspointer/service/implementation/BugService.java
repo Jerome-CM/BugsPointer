@@ -1,5 +1,6 @@
 package com.bugspointer.service.implementation;
 
+import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.dto.BugDTO;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
@@ -13,7 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +63,9 @@ public class BugService {
 
     public String codeBlockFormatter(String code){
 
+        if (code == null){
+            return "";
+        }
         // Charge HTML in Document JSoup objet
         Document document = Jsoup.parse(code);
 
@@ -81,6 +85,75 @@ public class BugService {
 
     }
 
+
+    public Response viewBug(Long idBug, Long idCompany, EnumPlan plan){
+        //Vérifier compte non FREE, company de bug correspondant à la company de la session
+
+        if (plan != EnumPlan.FREE) {
+            Optional<Bug> bugOptional = bugRepository.findById(idBug);
+            Bug bug;
+            if (bugOptional.isPresent()){
+                bug = bugOptional.get();
+                if (bug.getCompany().getCompanyId().equals(idCompany)){
+                    return new Response(EnumStatus.OK, bug, "Détail bug");
+                } else {
+                    return new Response(EnumStatus.ERROR, null, "Ce bug ne vous appartient pas");
+                }
+            } else {
+                return new Response(EnumStatus.ERROR, null, "Ce bug n'existe pas");
+            }
+        } else {
+            return new Response(EnumStatus.ERROR, null, "Vous ne pouvez pas accéder au détail de bug");
+        }
+    }
+
+    public void bugPending(Long idBug, Long idCompany, String plan){
+        Optional<Bug> bugOptional = bugRepository.findById(idBug);
+        Bug bug;
+        if (bugOptional.isPresent() && bugOptional.get().getCompany().getCompanyId().equals(idCompany) && !plan.equals("FREE")) {
+            bug = bugOptional.get();
+            if (bug.getEtatBug().equals(EnumEtatBug.PENDING)){
+                bugSolved(bug);
+            } else {
+                Date jour = new Date();
+                if (bug.getDateView() == null) {
+                    bug.setDateView(jour);
+                }
+                bug.setEtatBug(EnumEtatBug.PENDING);
+                Bug bugSaved = bugRepository.save(bug);
+                log.info("Bug update : id = {}, company = {}, etat = {} date view = {}", bugSaved.getId(), bugSaved.getCompany().getMail(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
+            }
+        }
+    }
+
+    public void bugSolved(Bug bug){
+        Date jour = new Date();
+        if (bug.getDateSolved() == null) {
+            bug.setDateSolved(jour);
+            bug.setEtatBug(EnumEtatBug.SOLVED);
+            Bug bugSaved = bugRepository.save(bug);
+            log.info("Bug update : id = {}, company = {}, etat = {} date view = {}", bugSaved.getId(), bugSaved.getCompany().getMail(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
+        }
+    }
+
+    public void bugIgnored(Long idBug, Long idCompany, String plan) {
+        Optional<Bug> bugOptional = bugRepository.findById(idBug);
+        Bug bug;
+        if (bugOptional.isPresent() && bugOptional.get().getCompany().getCompanyId().equals(idCompany) && !plan.equals("FREE")) {
+            bug = bugOptional.get();
+
+            Date jour = new Date();
+            if (bug.getDateView() == null) {
+                bug.setDateView(jour);
+            }
+            if (bug.getDateSolved() == null) {
+                bug.setDateSolved(jour);
+                bug.setEtatBug(EnumEtatBug.IGNORED);
+                Bug bugSaved = bugRepository.save(bug);
+                log.info("Bug update : id = {}, company = {}, etat = {} date view = {}", bugSaved.getId(), bugSaved.getCompany().getMail(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
+            }
+        }
+    }
 
     public String getTitle(String state, boolean isList){
         String title;
@@ -163,5 +236,6 @@ public class BugService {
             return new Response(EnumStatus.OK, null, "La liste des bugs pour cette compagnie est vide");
         }
         return new Response(EnumStatus.ERROR, null, "La compagnie ou l'état du bug n'est pas bon");
+
     }
 }
