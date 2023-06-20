@@ -196,7 +196,7 @@ public class Private {
         Response response = bugService.viewBug(id, idCompany, plan);
         if (response.getStatus()==EnumStatus.OK){
             Bug bug = (Bug) response.getContent();
-            String title = bug.getEtatBug().name().substring(0, 1).toUpperCase() + bug.getEtatBug().name().substring(1).toLowerCase() + " Bug Report";
+            String title = bug.getEtatBug().name().substring(0, 1).toUpperCase() + bug.getEtatBug().name().substring(1).toLowerCase() + " Bug Report"; //TODO a mettre en français
             map.addAttribute("title", title);
             map.addAttribute("bug", bug);
             map.addAttribute("code", bugService.codeBlockFormatter(bug.getCodeLocation()));
