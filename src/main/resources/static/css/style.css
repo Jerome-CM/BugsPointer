@@ -1289,7 +1289,54 @@ footer a{
         order: 3;
     }
 }
-@media only screen and (min-width: 700px) and (max-width: 950px) { }
+@media only screen and (min-width: 700px) and (max-width: 950px) {
+
+    /* Index*/
+    .green{
+        padding: 3% 0 5% 0;
+        margin: 5% -10% 2% -10%;
+    }
+
+    .sliderIndex{
+        margin-right: 60px;
+    }
+
+    .cards{
+        padding: 10px 15px;
+    }
+
+    .cards_detail h3{
+        font-size: 20px;
+
+    }
+
+    /* Documentation */
+    .menu{
+        margin: -45px 0 0 0;
+    }
+
+
+    code{
+        padding: 2px 5px;
+    }
+
+
+
+}
+
+@media only screen and (min-width: 700px) and (max-width: 850px) {
+
+    /* bugReport */
+    .content-btn-action a{
+        margin: 7px 7px;
+        padding: 6px 5px;
+    }
+
+    .form > input{
+        padding: 10px;
+    }
+
+}
 @media only screen and (max-width: 850px){
 
     /* Nav */
