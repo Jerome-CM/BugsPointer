@@ -194,11 +194,12 @@ public class Private {
 
     @GetMapping("bugReport/{id}")
     String getNewBugReport(Model map, @PathVariable Long id, HttpServletRequest request, RedirectAttributes redirectAttributes){
-
-        Company company = companyService.getCompanyWithToken(request);
-        Long idCompany = company.getCompanyId();
+        DashboardDTO company = companyService.getDashboardDto(companyService.getCompanyWithToken(request));
+        Long idCompany = company.getId();
         EnumPlan plan = company.getPlan();
         String publicKey = company.getPublicKey();
+        map.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        map.addAttribute("dataBug", company);
 
         Response response = bugService.viewBug(id, idCompany, plan);
         if (response.getStatus()==EnumStatus.OK){
@@ -221,8 +222,8 @@ public class Private {
 
     @GetMapping("confirmBug/{id}")
     String getConfirmeBug(@PathVariable Long id, HttpServletRequest request){
-        Company company = companyService.getCompanyWithToken(request);
-        Long idCompany = company.getCompanyId();
+        DashboardDTO company = companyService.getDashboardDto(companyService.getCompanyWithToken(request));
+        Long idCompany = company.getId();
         String plan = company.getPlan().name();
 
         bugService.bugPending(id, idCompany, plan);//Si le bug a l'état pending alors on passe à la méthode solved
@@ -231,8 +232,8 @@ public class Private {
 
     @GetMapping("ignoredBug/{id}")
     String getIgnoredBug(@PathVariable Long id, HttpServletRequest request){
-        Company company = companyService.getCompanyWithToken(request);
-        Long idCompany = company.getCompanyId();
+        DashboardDTO company = companyService.getDashboardDto(companyService.getCompanyWithToken(request));
+        Long idCompany = company.getId();
         String plan = company.getPlan().name();
 
         bugService.bugIgnored(id, idCompany, plan);
@@ -240,8 +241,9 @@ public class Private {
     }
 
     @GetMapping("bugList")
-    String getbugList(Model map,@RequestParam("publicKey") String publicKey, @RequestParam("state") String state){
+    String getbugList(Model map,@RequestParam("publicKey") String publicKey, @RequestParam("state") String state, HttpServletRequest request){
         map.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        map.addAttribute("dataBug", companyService.getDashboardDto(companyService.getCompanyWithToken(request)));
         Response responseBugList = bugService.getBugDTOByCompanyAndState(publicKey, state);
         List<BugDTO> bugDTOList = (List<BugDTO>) responseBugList.getContent();
 

@@ -23,20 +23,20 @@
     <div class="container anti-margin">
         <h1 th:text="${title}"></h1>
 
-        <div class="container-report">
+        <div class="container-report list">
             <div class="card-reportList" th:each="bug : ${bugList}">
                 <div class="led"><span class="led-report"></span></div>
                 <table class="description-reportList">
                     <tbody>
                     <tr>
-                        <th>Reçu le</th>
-                        <th>confirmé le</th>
-                        <th>Résolu / Ignoré le</th>
+                        <th>Reçu</th>
+                        <th>Confirmé</th>
+                        <th>Résolu / Ignoré</th>
                     </tr>
                     <tr>
-                        <td th:text="${bug.getDateCreation() != null ? bug.getDateCreation() : '- -'}"></td>
-                        <td th:text="${bug.getDateView() != null ? bug.getDateView() : '- -'}"></td>
-                        <td th:text="${bug.getDateSolved() != null ? bug.getDateSolved() : '- -'}"></td>
+                        <td th:text="${bug.getDateCreation() != null ? #dates.format(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></td>
+                        <td th:text="${bug.getDateView() != null ? #dates.format(bug.getDateView(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></td>
+                        <td th:text="${bug.getDateSolved() != null ? #dates.format(bug.getDateSolved(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></td>
                     </tr>
                     <tr class="row-url" th:colspan="3">
                         <th th:colspan="3" class="center">Url concernée</th>

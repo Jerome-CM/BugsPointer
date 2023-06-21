@@ -1,9 +1,12 @@
-<div class="menu">
+<div class="menu" id="menu">
+    <button class="nav-toggler" id="navDashboard-toggler">
+        <span class="navDashboard-toggler-icon"></span>
+    </button>
     <h2>Report</h2>
-    <a th:href="@{/app/private/bugList(state='new', publicKey=${publicKey})}" class="btn-nbr-bug"><span class="bug-type">Nouveau</span><span class="nbr-bug new">1</span></a>
-    <a th:href="@{/app/private/bugList(state='pending', publicKey=${publicKey})}" class="btn-nbr-bug"><span class="bug-type">En cours</span><span class="nbr-bug pending">3</span></a>
-    <a th:href="@{/app/private/bugList(state='solved', publicKey=${publicKey})}" class="btn-nbr-bug"><span class="bug-type">Résolu</span><span class="nbr-bug solved">12</span></a>
-    <a th:href="@{/app/private/bugList(state='ignored', publicKey=${publicKey})}" class="btn-nbr-bug"><span class="bug-type">Ignoré</span><span class="nbr-bug ignored">2</span></a>
+    <a th:href="@{/app/private/bugList(state='new', publicKey=${publicKey})}" class="btn-nbr-bug"><span class="bug-type">Nouveau</span><span class="nbr-bug new" th:text="${dataBug.getNbNewBug()}"></span></a>
+    <a th:href="@{/app/private/bugList(state='pending', publicKey=${publicKey})}" class="btn-nbr-bug"><span class="bug-type">En cours</span><span class="nbr-bug pending" th:text="${dataBug.getNbPendingBug()}"></span></a>
+    <a th:href="@{/app/private/bugList(state='solved', publicKey=${publicKey})}" class="btn-nbr-bug"><span class="bug-type">Résolu</span><span class="nbr-bug solved" th:text="${dataBug.getNbSolvedBug()}"></span></a>
+    <a th:href="@{/app/private/bugList(state='ignored', publicKey=${publicKey})}" class="btn-nbr-bug"><span class="bug-type">Ignoré</span><span class="nbr-bug ignored" th:text="${dataBug.getNbIgnoredBug()}"></span></a>
 
     <br>
 

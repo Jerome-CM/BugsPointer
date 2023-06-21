@@ -44,11 +44,35 @@ window.addEventListener('DOMContentLoaded', function () {
                 }
             });
         }
-        btnClose.addEventListener("click", masquer);
+        if (btnClose != null) {
+            btnClose.addEventListener("click", masquer);
+        }
 
     }
-    document.getElementById('nav-toggler').addEventListener('click', function (){
-        document.getElementById('nav-menu').classList.toggle('show');
-    });
+    if (document.getElementById('nav-toggler') != null) {
+        document.getElementById('nav-toggler').addEventListener('click', function () {
+            document.getElementById('nav-menu').classList.toggle('show');
+        });
+    }
+    if (document.getElementById('navDashboard-toggler') != null) {
+        const menuToggle = document.getElementById('navDashboard-toggler');
+        const menu = document.getElementById('menu');
+            menuToggle.addEventListener('click', function (/*event*/) {
+            /*event.preventDefault();*/
+            menu.classList.toggle('show');
+
+            /*const toggleRect = menuToggle.getBoundingClientRect();
+            console.log(toggleRect);
+
+            menu.style.top = -toggleRect.top + 'px';*/
+
+        });
+        menu.querySelectorAll('a').forEach(function (link){
+            link.addEventListener('click', function (){
+                menu.classList.remove('show');
+                /*menu.style.top = '0';*/
+            });
+        });
+    }
 });
 
