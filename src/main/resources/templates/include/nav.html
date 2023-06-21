@@ -1,12 +1,15 @@
 <nav class="nav">
     <span class="title">Bugspointer</span>
-    <ul>
-        <li th:if="${isLoggedIn == true}"><a class="a_action" th:href="@{/app/private/dashboard}">Dashboard</a></li>
-        <li><a th:href="@{/features}">Fonctionnalités</a></li>
-        <li><a th:href="@{/documentations}">Documentations</a></li>
-        <li><a th:href="@{/#pricing}">Prix</a></li>
-        <li th:if="${isLoggedIn == false}"><a class="a_action" th:href="@{/authentication}">Connexion</a></li>
-        <li th:if="${isLoggedIn == true}"><a class="a_action" th:href="@{/logout}">Déconnexion</a></li>
+    <button class="nav-toggler" id="nav-toggler">
+        <span class="nav-toggler-icon"></span>
+    </button>
+    <ul class="nav-menu" id="nav-menu">
+        <li class="nav-item" th:if="${isLoggedIn == true}"><a class="a_action" th:href="@{/app/private/dashboard}">Dashboard</a></li>
+        <li class="nav-item"><a th:href="@{/features}">Fonctionnalités</a></li>
+        <li class="nav-item"><a th:href="@{/documentations}">Documentations</a></li>
+        <li class="nav-item"><a th:href="@{/#pricing}">Prix</a></li>
+        <li class="nav-item" th:if="${isLoggedIn == false}"><a class="a_action" th:href="@{/authentication}">Connexion</a></li>
+        <li class="nav-item" th:if="${isLoggedIn == true}"><a class="a_action" th:href="@{/logout}">Déconnexion</a></li>
     </ul>
 </nav>
 

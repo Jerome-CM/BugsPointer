@@ -2,6 +2,7 @@ package com.bugspointer.controller;
 
 import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.*;
+import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
@@ -192,12 +193,50 @@ public class Private {
     }
 
     @GetMapping("bugReport/{id}")
-    String getNewBugReport(Model map, @PathVariable Long id, @RequestParam("publicKey") String publicKey){ // Long id
-        map.addAttribute("title", "New Bug Report"); // TODO Recuperer l'etat_bug pour afficher le bon titre
-        map.addAttribute("publicKey", publicKey);
-        map.addAttribute("code", bugService.codeBlockFormatter(id));
-        map.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        return "private/bugReport";
+    String getNewBugReport(Model map, @PathVariable Long id, HttpServletRequest request, RedirectAttributes redirectAttributes){
+
+        Company company = companyService.getCompanyWithToken(request);
+        Long idCompany = company.getCompanyId();
+        EnumPlan plan = company.getPlan();
+        String publicKey = company.getPublicKey();
+
+        Response response = bugService.viewBug(id, idCompany, plan);
+        if (response.getStatus()==EnumStatus.OK){
+            Bug bug = (Bug) response.getContent();
+            String title = bugService.getTitle(bug.getEtatBug().name().toLowerCase(), false);
+            //String title = bug.getEtatBug().name().substring(0, 1).toUpperCase() + bug.getEtatBug().name().substring(1).toLowerCase() + " Bug Report";
+            map.addAttribute("title", title);
+            map.addAttribute("bug", bug);
+            map.addAttribute("code", bugService.codeBlockFormatter(bug.getCodeLocation()));
+            map.addAttribute("publicKey", publicKey);
+            return "private/bugReport";
+        }
+        else {
+            redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+            redirectAttributes.addFlashAttribute("notification", response.getMessage());
+            log.info("{}", response.getMessage());
+            return "redirect:/app/private/dashboard";
+        }
+    }
+
+    @GetMapping("confirmBug/{id}")
+    String getConfirmeBug(@PathVariable Long id, HttpServletRequest request){
+        Company company = companyService.getCompanyWithToken(request);
+        Long idCompany = company.getCompanyId();
+        String plan = company.getPlan().name();
+
+        bugService.bugPending(id, idCompany, plan);//Si le bug a l'état pending alors on passe à la méthode solved
+        return "redirect:/app/private/bugReport/{id}";
+    }
+
+    @GetMapping("ignoredBug/{id}")
+    String getIgnoredBug(@PathVariable Long id, HttpServletRequest request){
+        Company company = companyService.getCompanyWithToken(request);
+        Long idCompany = company.getCompanyId();
+        String plan = company.getPlan().name();
+
+        bugService.bugIgnored(id, idCompany, plan);
+        return "redirect:/app/private/bugReport/{id}";
     }
 
     @GetMapping("bugList")

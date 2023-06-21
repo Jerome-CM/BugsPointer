@@ -1,11 +1,14 @@
 <nav class="navCompany">
     <span class="title">Bugspointer</span>
-    <ul>
-        <li th:if="${isLoggedIn == true}"><a th:href="@{/app/private/dashboard}">Dashboard</a></li>
-        <li th:if="${isLoggedIn == true}"><a th:href="@{/download}">Download</a></li>
-        <li><a th:href="@{/documentations}">Documentations</a></li>
-        <li><a class="plan" th:href="@{/features}">Offres</a></li>
-        <li th:if="${isLoggedIn == false}"><a th:href="@{/authentication}">Connexion</a></li>
-        <li th:if="${isLoggedIn == true}"><a th:href="@{/logout}">Déconnexion</a></li>
+    <button class="nav-toggler" id="nav-toggler">
+        <span class="navCompany-toggler-icon"></span>
+    </button>
+    <ul class="nav-menu" id="nav-menu">
+        <li class="navCompany-item" th:if="${isLoggedIn == true}"><a th:href="@{/app/private/dashboard}">Dashboard</a></li>
+        <li class="navCompany-item"><a th:href="@{/download}">Download</a></li>
+        <li class="navCompany-item"><a th:href="@{/documentations}">Documentations</a></li>
+        <li class="navCompany-item"><a class="plan" th:href="@{/features}">Offres</a></li>
+        <li class="navCompany-item" th:if="${isLoggedIn == false}"><a th:href="@{/authentication}">Connexion</a></li>
+        <li class="navCompany-item" th:if="${isLoggedIn == true}"><a th:href="@{/logout}">Déconnexion</a></li>
     </ul>
 </nav>
