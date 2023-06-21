@@ -169,6 +169,7 @@ nav ul li a {
     box-shadow: var(--shadow);
     position: relative;
     min-height: 50px;
+    z-index: 2;
 }
 
 .plan{
@@ -505,7 +506,6 @@ ul{
 
 .left{
     width: 45%;
-
 }
 
 .right{
@@ -811,7 +811,8 @@ ul{
     top: 0;
     left: 0;
     position: sticky;
-    overflow-y: auto
+    overflow-y: auto;
+    z-index: 0;
 }
 
 .menu::-webkit-scrollbar-thumb {
@@ -1197,6 +1198,8 @@ footer{
     font-family: "Raleway", sans-serif;
     background-color: var(--color-grey-footer);
     color: var(--color-white);
+    position: relative;
+    z-index: 2;
 }
 
 footer a{
@@ -1282,6 +1285,7 @@ footer a{
 }
 @media only screen and (min-width: 700px) and (max-width: 950px) { }
 @media only screen and (min-width: 600px) and (max-width: 699px) { }
+
 @media only screen and (min-width: 320px) and (max-width: 599px) and (orientation : portrait) {
 
     /* Nav */
