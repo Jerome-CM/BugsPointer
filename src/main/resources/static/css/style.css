@@ -158,11 +158,17 @@ nav ul li a {
     padding: 0 10px;
 }
 
+.nav-toggler{
+    display: none;
+}
+
     /* NavCompany */
 
 .navCompany{
     background-color: var(--color-orange);
-    box-shadow: 0 0 5px dimgrey;;
+    box-shadow: var(--shadow);
+    position: relative;
+    min-height: 50px;
 }
 
 .plan{
@@ -179,6 +185,10 @@ nav ul li a {
 
 .nav ul li:last-child a{
     color: var(--color-btn-green);
+}
+
+.navCompany-toggler{
+    display: none;
 }
 
 /* Alerte Notification */
@@ -435,6 +445,10 @@ ul{
     color: var(--color-btn-green);
 }
 
+.padding-bottom-20{
+    padding-bottom: 20px;
+}
+
 /*CSS Logo*/
 .bugspointer-logo{
     background: none;
@@ -485,6 +499,8 @@ ul{
 .cards_detail img{
     position: relative;
     width: 100%;
+    min-width: 250px;
+    max-width: 500px;
 }
 
 .left{
@@ -896,6 +912,15 @@ code{
     box-shadow: var(--shadow);
 }
 
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    margin: 20px auto;
+}
+
 .container-phone {
     display: flex;
     flex-direction: row;
@@ -1257,3 +1282,99 @@ footer a{
 }
 @media only screen and (min-width: 700px) and (max-width: 950px) { }
 @media only screen and (min-width: 600px) and (max-width: 699px) { }
+@media only screen and (min-width: 320px) and (max-width: 599px) and (orientation : portrait) {
+
+    /* Nav */
+    .nav-menu{
+        display: none;
+    }
+    .nav-toggler{
+        display: block;
+    }
+    .nav-toggler-icon{
+        display: block;
+        width: 25px;
+        height: 3px;
+        background-color: var(--color-btn-green);
+        margin: 5px 0;
+    }
+    .nav-menu.show {
+        display: block;
+        height: 100%;
+        text-align: end;
+    }
+    /* Nav Company */
+
+    .navCompany-toggler-icon{
+        display: block;
+        width: 25px;
+        height: 3px;
+        background-color: var(--color-orange);
+        margin: 5px 0;
+    }
+    .navCompany-item{
+        background-color: var(--color-orange);
+    }
+
+    /* Authentification */
+    .container{
+        width: 100%;
+    }
+    .container-row {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .w90 {
+        width: 100%;
+    }
+
+    .w40 {
+        width: 100%;
+    }
+
+    .cards {
+        padding: 10px 5px;
+    }
+
+    .form input {
+        margin: 5px auto;
+    }
+
+    .form input[type=submit] {
+        width: 90%;
+    }
+
+    /* Dashboard */
+    h1{
+        font-size: 40px;
+    }
+
+    .cards {
+        width: 95%;
+        margin: 10px auto;
+    }
+    .number_cards{
+        padding: 4px 50px;
+    }
+
+    /* Account */
+    .account{
+        width: 95%;
+    }
+
+    /* Features */
+    .left{
+        width: 100%;
+    }
+    .right{
+        width: 100%;
+    }
+
+    /* Index */
+    .ul-index{
+        width: 90%;
+        top: 0;
+
+    }
+}

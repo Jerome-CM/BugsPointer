@@ -47,5 +47,8 @@ window.addEventListener('DOMContentLoaded', function () {
         btnClose.addEventListener("click", masquer);
 
     }
+    document.getElementById('nav-toggler').addEventListener('click', function (){
+        document.getElementById('nav-menu').classList.toggle('show');
+    });
 });
 

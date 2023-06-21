@@ -25,7 +25,7 @@
                 <input type="text" th:field="*{mail}" id="mail" name="mail" th:value="${company.getMail()}" placeholder="E-mail">
                 <input type="password" th:field="*{password}" id="password" name="password" placeholder="Password">
                 <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
-                <div class="container-row">
+                <div class="row">
                     <button type="submit" class="submit" name="action" value="updateMail">Update</button> <span>&nbsp; | &nbsp;</span>
                     <a class="submit align_in_container_row" th:href="@{/app/private/notifications}"><img th:src="@{/css/img/notification.png}" alt="Notification"></a>
                 </div>

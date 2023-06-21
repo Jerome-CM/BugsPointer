@@ -199,7 +199,7 @@ public class Private {
         Long idCompany = company.getCompanyId();
         EnumPlan plan = company.getPlan();
         String publicKey = company.getPublicKey();
-        map.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+
         Response response = bugService.viewBug(id, idCompany, plan);
         if (response.getStatus()==EnumStatus.OK){
             Bug bug = (Bug) response.getContent();
@@ -218,6 +218,7 @@ public class Private {
             return "redirect:/app/private/dashboard";
         }
     }
+
     @GetMapping("confirmBug/{id}")
     String getConfirmeBug(@PathVariable Long id, HttpServletRequest request){
         Company company = companyService.getCompanyWithToken(request);
@@ -225,11 +226,6 @@ public class Private {
         String plan = company.getPlan().name();
 
         bugService.bugPending(id, idCompany, plan);//Si le bug a l'état pending alors on passe à la méthode solved
-        try {
-            Thread.sleep(1500); // Pause de 1,5 seconde
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return "redirect:/app/private/bugReport/{id}";
     }
 
@@ -240,11 +236,6 @@ public class Private {
         String plan = company.getPlan().name();
 
         bugService.bugIgnored(id, idCompany, plan);
-        try {
-            Thread.sleep(1500); // Pause de 1,5 seconde
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return "redirect:/app/private/bugReport/{id}";
     }
 
