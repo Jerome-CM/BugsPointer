@@ -62,6 +62,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
                 .antMatchers("/registerConfirm").permitAll()
+               .antMatchers("/confirmRegister/*").permitAll()
+               .antMatchers("/newUser/*").permitAll()//TODO: à modifier si on récupère le mail pour connecter une session ?
+               .antMatchers("/pwLost").permitAll()
+               .antMatchers("/resetPassword/*").permitAll()//TODO: à modifier ?
                 .antMatchers("/features").permitAll()
                 .antMatchers("/documentations").permitAll()
                 .antMatchers(HttpMethod.GET,"/modal").permitAll()

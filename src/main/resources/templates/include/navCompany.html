@@ -3,7 +3,7 @@
     <button class="nav-toggler" id="nav-toggler">
         <span class="navCompany-toggler-icon"></span>
     </button>
-    <ul class="nav-menu" id="nav-menu">
+    <ul class="nav-menu company" id="nav-menu">
         <li class="navCompany-item" th:if="${isLoggedIn == true}"><a th:href="@{/app/private/dashboard}">Dashboard</a></li>
         <li class="navCompany-item"><a th:href="@{/download}">Download</a></li>
         <li class="navCompany-item"><a th:href="@{/documentations}">Documentations</a></li>
