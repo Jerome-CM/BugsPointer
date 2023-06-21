@@ -173,5 +173,18 @@ public class Authentication {
         session.invalidate();
         return "index";
     }
-    
+
+    @GetMapping("/denied")
+    String accesDenied(Model model){
+        //TODO les attribute ne sont pas visible dans la vue
+        model.addAttribute("status", "ERROR");
+        model.addAttribute("notification", "Vous n'avez pas accès à cette page");
+        if (userAuthenticationUtil.isUserLoggedIn()) {
+            model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+            return "redirect:/app/private/dashboard";
+        }
+        return "redirect:/authentication";
+    }
+
+
 }
