@@ -515,7 +515,7 @@ ul{
 .gray{
     background-color: var(--color-grey-footer);
     padding: 7% 0 6% 0;
-    margin: -5% -10% 0% -10%; /*retrait de la marge de -5% sur le bottom pour le footer*/
+    margin: -5% -10% 0 -10%; /*retrait de la marge de -5% sur le bottom pour le footer*/
 }
 .h-in-features{
     text-transform: none;
@@ -1396,8 +1396,12 @@ footer a{
     }
     /* Menu Interne */
     .menu{
-        width: fit-content;
+        /*width: fit-content;*/
         margin: -30px 0 0 0;
+        display: flex;
+        height: fit-content;
+        width: 100%;
+        align-items: baseline;
     }
     .menu h2{
         font-size: 17px;
@@ -1430,7 +1434,8 @@ footer a{
         height: 100%;
         margin: 20px 0 0 0;
         background-color: var(--color-white);
-        z-index: 10;
+        z-index: 4;
+        display: block;
     }
     .menu.show h2{
         display: block;
@@ -1448,6 +1453,18 @@ footer a{
     }
     .menu.show ul li{
         margin: 20px 0;
+    }
+    .container-documentation{
+        flex-direction: column;
+    }
+    .menu a{
+        justify-content: flex-end;
+    }
+    .menu.show a{
+        justify-content: space-around;
+    }
+    .anti-margin{
+        margin: auto!important;
     }
 
     /* Index */
@@ -1473,7 +1490,6 @@ footer a{
 
     /*Menu interne*/
     .menu{
-
         margin: -25px 0 0 0;
     }
     /* Authentification */
