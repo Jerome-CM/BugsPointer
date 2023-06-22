@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import com.bugspointer.entity.Company;
-import com.bugspointer.entity.CompanyToken;
 import com.bugspointer.service.implementation.CompanyService;
 import com.bugspointer.service.implementation.CompanyTokenService;
 import com.bugspointer.service.implementation.MailService;
@@ -20,8 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -84,7 +81,7 @@ public class Authentication {
     }
 
     @GetMapping("/registerConfirm")
-    String getRegisterConfirm(Model model, AuthRegisterCompanyDTO dtoRegister, AuthLoginCompanyDTO dtoLogin, HttpServletRequest request){
+    String getRegisterConfirm(Model model, AuthRegisterCompanyDTO dtoRegister, AuthLoginCompanyDTO dtoLogin){
         model.addAttribute("companyRegister", dtoRegister);
         model.addAttribute("companyLogin", dtoLogin);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
@@ -92,7 +89,7 @@ public class Authentication {
     }
 
     @GetMapping("newUser/{publicKey}")//TODO: ajouter des variables dans l'url pour identifier la company et sécuriser ?
-    String getNewUser(@PathVariable("publicKey") String publicKey,  Model model, HttpServletRequest request){
+    String getNewUser(@PathVariable("publicKey") String publicKey,  Model model){
         Company company = companyService.getCompanyByPublicKey(publicKey);
         model.addAttribute("company", company);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
@@ -165,11 +162,16 @@ public class Authentication {
         return "redirect:/authentication";
     }
 
-    @PostMapping("resetPassword/{publicKey}")
-    String resetPassword(@PathVariable("publicKey") String publicKey, @Valid AccountDTO dto, BindingResult result, RedirectAttributes redirectAttributes){
+    @PostMapping("resetPassword/{publicKey}/{token}")
+    String resetPassword(@PathVariable("publicKey") String publicKey,
+                         @PathVariable("token") String token,
+                         @Valid AccountDTO dto,
+                         BindingResult result,
+                         RedirectAttributes redirectAttributes){
+        log.info("token : {}", token);
         if (!result.hasErrors()){
 
-            Response response = companyService.resetPassword(publicKey, dto);
+            Response response = companyService.resetPassword(publicKey, dto, token);
             redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
             redirectAttributes.addFlashAttribute("notification", response.getMessage());
             if (response.getStatus().equals(EnumStatus.OK)) {
@@ -177,7 +179,8 @@ public class Authentication {
             }
         }
         redirectAttributes.addAttribute("publicKey", publicKey);
-        return "redirect:/resetPassword/{publicKey}";
+        redirectAttributes.addAttribute("token", token);
+        return "redirect:/resetPassword/{publicKey}/{token}";
     }
 
     @GetMapping("/logout")

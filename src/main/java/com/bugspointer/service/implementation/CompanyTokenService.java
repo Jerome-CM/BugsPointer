@@ -18,45 +18,69 @@ public class CompanyTokenService {
 
     private final CompanyTokenRepository companyTokenRepository;
 
+    final String WITHOUT_TOKEN = "PasDeDemandeEnCours";
+
     public CompanyTokenService(PasswordEncoder passwordEncoder, CompanyTokenRepository companyTokenRepository) {
         this.passwordEncoder = passwordEncoder;
         this.companyTokenRepository = companyTokenRepository;
     }
 
     public boolean getDateNotExpired(CompanyToken companyToken){
+        final int TEMPS_TOKEN = 5;
         Date now = new Date();
 
         long diffInMillis = now.getTime() - companyToken.getDateCreation().getTime();
         long diffInMinutes = diffInMillis / (60 * 1000);
 
-        return diffInMinutes <= 5;
+        return diffInMinutes <= TEMPS_TOKEN;
     }
 
-    public CompanyToken saveCompanyToken(Company company, String token){
+    public void saveCompanyToken(Company company, String token){
         Date creation = new Date();
-        CompanyToken companyToken = new CompanyToken();
-        companyToken.setCompanyMail(company.getMail());
-        companyToken.setPublicKey(company.getPublicKey());
+        CompanyToken companyToken;
+        Optional<CompanyToken> companyTokenOptional = companyTokenRepository.findByPublicKey(company.getPublicKey());
+        if (companyTokenOptional.isPresent()){
+            companyToken = companyTokenOptional.get();
+        } else {
+            companyToken = new CompanyToken();
+            companyToken.setCompanyMail(company.getMail());
+            companyToken.setPublicKey(company.getPublicKey());
+        }
         companyToken.setTokenReset(passwordEncoder.encode(token));
         companyToken.setDateCreation(creation);
         log.info("companyToken : {}", companyToken);
 
         try {
-            return companyTokenRepository.save(companyToken);
+            companyTokenRepository.save(companyToken);
         }catch (Exception e){
             log.error("Error : {}", e.getMessage());
-            return null;
+        }
+    }
+
+    public void deleteToken(Company company){
+        CompanyToken companyToken;
+        Optional<CompanyToken> companyTokenOptional = companyTokenRepository.findByPublicKey(company.getPublicKey());
+        if (companyTokenOptional.isPresent()){
+            companyToken = companyTokenOptional.get();
+            if (!companyToken.getCompanyMail().equals(company.getMail())){
+                companyToken.setCompanyMail(company.getMail());
+            }
+            companyToken.setTokenReset(WITHOUT_TOKEN);
+            companyToken.setDateCreation(null);
         }
     }
 
     public boolean testToken(String tokenUrl, String key){
+        if (tokenUrl == null || tokenUrl.equals(WITHOUT_TOKEN)){
+            return false;
+        }
         Optional<CompanyToken> companyTokenOptional = companyTokenRepository.findByPublicKey(key);
 
         if (companyTokenOptional.isPresent()){
             CompanyToken companyToken = companyTokenOptional.get();
             log.info("token present");
-            if (getDateNotExpired(companyToken)){
-                log.info("date dépassée");
+            if (companyToken.getDateCreation() != null && getDateNotExpired(companyToken)){
+                log.info("temps non dépassé");
                 return passwordEncoder.matches(tokenUrl, companyToken.getTokenReset());
             }
         }

@@ -15,9 +15,9 @@ public class CompanyToken {
 
     private String companyMail;
 
+    @Column(unique = true)
     private String publicKey;
 
-    @Column(unique = true)
     private String tokenReset;
 
     private Date dateCreation;
