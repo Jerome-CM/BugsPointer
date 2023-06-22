@@ -8,7 +8,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import com.bugspointer.entity.Company;
+import com.bugspointer.entity.CompanyToken;
 import com.bugspointer.service.implementation.CompanyService;
+import com.bugspointer.service.implementation.CompanyTokenService;
 import com.bugspointer.service.implementation.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -19,17 +21,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Optional;
+
 @Controller
 @Slf4j
 public class Authentication {
     private final CompanyService companyService;
 
+    private final CompanyTokenService companyTokenService;
+
     private final MailService mailService;
 
     private  final UserAuthenticationUtil userAuthenticationUtil;
 
-    public Authentication(CompanyService companyService, MailService mailService, UserAuthenticationUtil userAuthenticationUtil) {
+    public Authentication(CompanyService companyService, CompanyTokenService companyTokenService, MailService mailService, UserAuthenticationUtil userAuthenticationUtil) {
         this.companyService = companyService;
+        this.companyTokenService = companyTokenService;
         this.mailService = mailService;
         this.userAuthenticationUtil = userAuthenticationUtil;
     }
@@ -144,12 +151,18 @@ public class Authentication {
         return "public/pwLost";
     }
 
-    @GetMapping("resetPassword/{publicKey}")//TODO: A securiser plus si on possède la clé on peut aller modifier le mot de passe
-    String getResetPassword(@PathVariable("publicKey") String publicKey, Model model, AccountDTO dto){
-        //AccountDTO dto = companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey));
-        model.addAttribute("company", dto);
-        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        return "public/resetPw";
+    @GetMapping("resetPassword/{publicKey}/{token}")//TODO: A securiser plus si on possède la clé on peut aller modifier le mot de passe
+    String getResetPassword(@PathVariable("publicKey") String publicKey, @PathVariable("token") String token, Model model, AccountDTO dto){
+        log.info("token : {} - key : {}", token, publicKey);
+        boolean ok = companyTokenService.testToken(token, publicKey);
+        log.info("test : {}", ok);
+        if (ok) {
+            //AccountDTO dto = companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey));
+            model.addAttribute("company", dto);
+            model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+            return "public/resetPw";
+        }
+        return "redirect:/authentication";
     }
 
     @PostMapping("resetPassword/{publicKey}")

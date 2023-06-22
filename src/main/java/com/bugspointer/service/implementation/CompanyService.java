@@ -28,6 +28,8 @@ public class CompanyService implements ICompany {
 
     private final MailService mailService;
 
+    private final CompanyTokenService companyTokenService;
+
     private final Utility utility;
     private final PasswordEncoder passwordEncoder;
 
@@ -35,11 +37,12 @@ public class CompanyService implements ICompany {
 
     private final ModelMapper modelMapper;
 
-    public CompanyService(CompanyRepository companyRepository, BugRepository bugRepository, CompanyPreferencesRepository preferencesRepository, MailService mailService, Utility utility, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ModelMapper modelMapper) {
+    public CompanyService(CompanyRepository companyRepository, BugRepository bugRepository, CompanyPreferencesRepository preferencesRepository, MailService mailService, CompanyTokenService companyTokenService, Utility utility, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ModelMapper modelMapper) {
         this.companyRepository = companyRepository;
         this.bugRepository = bugRepository;
         this.preferencesRepository = preferencesRepository;
         this.mailService = mailService;
+        this.companyTokenService = companyTokenService;
         this.utility = utility;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -460,7 +463,10 @@ public class CompanyService implements ICompany {
 
         if (companyOptional.isPresent()){
             company = companyOptional.get();
-            return mailService.sendMailLostPassword(dto.getMail(), company.getPublicKey());
+            String token = jwtTokenUtil.generateTokenForResetPassword();
+            log.info("token : {}", token);
+            companyTokenService.saveCompanyToken(company, token);
+            return mailService.sendMailLostPassword(dto.getMail(), company.getPublicKey(), token);
         }
 
         return new Response(EnumStatus.OK, null, "Si votre mail nous est connu, un mail vient d'être envoyé à : "+dto.getMail());

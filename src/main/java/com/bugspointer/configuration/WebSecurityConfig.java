@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/confirmRegister/*").permitAll()
                .antMatchers("/newUser/*").permitAll()//TODO: demande de connexion puis redirection vers newUser ?
                 .antMatchers("/pwLost").permitAll()
-                .antMatchers("/resetPassword/*").permitAll()
+                .antMatchers("/resetPassword/*/*").permitAll()
                 .antMatchers("/features").permitAll()
                 .antMatchers("/documentations").permitAll()
                 .antMatchers(HttpMethod.GET,"/modal").permitAll()

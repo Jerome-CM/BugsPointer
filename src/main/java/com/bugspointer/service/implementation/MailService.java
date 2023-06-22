@@ -227,7 +227,7 @@ public class MailService {
         }
     }
 
-    public Response sendMailLostPassword(String to, String publicKey) {
+    public Response sendMailLostPassword(String to, String publicKey, String token) {
 
         // Paramètres du destinataire
         String subject = "Bugspointer - Réinitisation mot de passe";
@@ -243,12 +243,12 @@ public class MailService {
                         "       <table border='0' cellpadding='0' cellspacing='0' >" +
                         "           <tr>" +
                         "               <td align='center' style='padding: 10px;'>" +
-                        "                   <a href='"+ ADRESSE +"resetPassword/"+ publicKey + "' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Réinitialiser mon mot de passe</a>" +
+                        "                   <a href='"+ ADRESSE +"resetPassword/"+ publicKey + "?token=" + token + "' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Réinitialiser mon mot de passe</a>" +
                         "               </td>" +
                         "           </tr>" +
                         "       </table>" +
                         "       <p>Ou copier et coller l'URL dans votre navigateur : </p>" +
-                        "       <a href='"+ ADRESSE +"resetPassword/"+ publicKey + "'>"+ ADRESSE +"resetPassword/"+ publicKey +"</a>" +
+                        "       <a href='"+ ADRESSE +"resetPassword/"+ publicKey + "?token=" + token + "'>"+ ADRESSE +"resetPassword/"+ publicKey +"</a>" +
                         "       <br>" +
                         "       <p>Si vous n'avez pas demandé un nouveau mot de passe, veuillez ignorer ce message" +
                         "   </body>" +
