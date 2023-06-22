@@ -16,12 +16,12 @@
 <div th:replace="~{include/nav.html}"></div>
 
 <div class="container">
-    <h1 class="h-in-black">Confirmation d'abonnement</h1>
+    <h1 class="h-in-black space">Confirmation d'abonnement</h1>
 
     <div class="cards cards_detail w40 margin_auto">
         <h3>Conflit d'abonnement</h3><!--TODO: ajouter une protection avec le jwt si publickey est changée ? Pour ne pas permettre le plvt sur un autre compte-->
         <form action="#" th:action="@{/api/user/subscription}" method="post" class="form" th:object="${subscription}">
-            <p>Votre abonnement actuel : <span th:text="${produit.toString()}"></span> Plan pour <span th:text="${subscription.getAmount().getValue()}"></span> € par an
+            <p class="space">Votre abonnement actuel : <span th:text="${produit.toString()}"></span> Plan pour <span th:text="${subscription.getAmount().getValue()}"></span> € par an
                 <br>
                 Il est valable jusqu'au : <span th:text="${#dates.format(nextPaymentDate, 'dd/MM/yyyy')}"></span>
             </p>

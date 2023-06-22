@@ -15,8 +15,8 @@
     <div th:replace="~{include/nav.html}"></div>
 
     <div class="container">
-      <h1 class="h-in-black">Merci de votre confiance</h1>
-        <p>
+      <h1 class="h-in-black space">Merci de votre confiance</h1>
+        <p class="center">
             <!--Pour valider votre abonnement : <span th:text="${product}"></span> pour <span th:text="${product.getValeur()}"></span>€/an, renouvelable automatiquement à partir du paiement
             <br><br>-->
 
@@ -30,7 +30,7 @@
                     <input type="text" th:field="*{bic}" placeholder="BIC : CCOPFRPP" required>
                     <input type="hidden" th:field="*{publicKey}" th:value="${customer.publicKey}" readonly>
                     <input type="hidden" th:field="*{plan}" th:value="${customer.plan}" readonly>
-                    <p style="height: fit-content;"><input type="checkbox" th:field="*{signature}" required> Je signe le mandat de prélèvement SEPA autorisant Bugspointer à prélever la somme de <span th:text="*{plan.getValeur()}"></span>€ une fois par an</p>
+                    <p style="height: fit-content;"><input type="checkbox" th:field="*{signature}" required> Je signe le mandat de prélèvement SEPA autorisant Bugspointer à prélever la somme de <span class="tarif" th:text="*{plan.getValeur()}"></span>€ une fois par an</p>
                     <input class="btn-action cancel-margin-top" type="submit" value="Souscrire">
                 </form>
             </div>
