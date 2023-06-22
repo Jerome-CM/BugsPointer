@@ -1,0 +1,56 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+    <title>Sondage</title>
+</head>
+<body class="index">
+
+    <div th:replace="~{include/nav.html}"></div>
+
+    <div class="container">
+        <h1 class="h-in-black space">Sondage</h1>
+
+        <h3 class="h-in-black">Merci de votre intérêt à Bugspointer</h3>
+        
+        <p class="space">Afin de nous améliorer, merci noté l'expérience que vous avez ressentie avec notre produit</p>
+        
+        <div class="cards cards_detail" th:if="${user == 'yes'}">
+            <form action="#" th:action="@{/pollUser}" th:object="${pollUser}" method="post">
+               <table class="poll-table">
+                   <tbody>
+                   <tr>
+                       <td><p>Avez-vous trouver facilement le lien pour signaler un bug</p></td>
+                       <td><select th:field="*{findEasy}" >
+                           <option th:each="rank : ${ranks}" th:value="${rank}" th:text="${rank}"></option>
+                       </select></td>
+                   </tr>
+                   <tr>
+                       <td><p>Les étapes étaient-elles claires ?</p></td>
+                       <td><select th:field="*{stepClarity}">
+                           <option th:each="rank : ${ranks}" th:value="${rank}" th:text="${rank}"></option>
+                       </select></td>
+                   </tr>
+                   <tr>
+                       <td><p>La fonctionnalité de pointage fonctionne-t-elle bien ?</p></td>
+                       <td><select th:field="*{targetFeatureGoodWork}">
+                           <option th:each="rank : ${ranks}" th:value="${rank}" th:text="${rank}"></option>
+                       </select></td>
+                   </tr>
+                   </tbody>
+               </table>
+
+                <textarea th:field="*{comment}" cols="30" rows="10" placeholder="Vos remarques constructives, améliorations, érgonomie, ... "></textarea>
+                <input type="submit" th:value="Envoyer" class="btn-action">
+            </form>
+        </div>
+    </div>
+    <div th:replace="~{include/footer.html}"></div>
+</body>
+</html>

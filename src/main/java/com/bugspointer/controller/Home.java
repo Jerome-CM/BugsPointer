@@ -1,13 +1,16 @@
 package com.bugspointer.controller;
 
 import com.bugspointer.configuration.UserAuthenticationUtil;
+import com.bugspointer.dto.EnumStatus;
+import com.bugspointer.dto.Response;
+import com.bugspointer.entity.Poll;
 import com.bugspointer.service.implementation.MailService;
+import com.bugspointer.service.implementation.PollService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @Slf4j
@@ -17,9 +20,12 @@ public class Home {
 
     private final UserAuthenticationUtil userAuthenticationUtil;
 
-    public Home(MailService mailService, UserAuthenticationUtil userAuthenticationUtil) {
+    private final PollService pollService;
+
+    public Home(MailService mailService, UserAuthenticationUtil userAuthenticationUtil, PollService pollService) {
         this.mailService = mailService;
         this.userAuthenticationUtil = userAuthenticationUtil;
+        this.pollService = pollService;
     }
 
 
@@ -81,6 +87,25 @@ public class Home {
     String getTestPage(Model model){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/testPage";
+    }
+
+    @GetMapping("pollUser")
+    String getPullUser(Model model){
+        int[] ranks = new int[] { 0,1,2,3,4,5,6,7,8,9,10 };
+        model.addAttribute("ranks", ranks);
+        model.addAttribute("user", "yes");
+        model.addAttribute("pollUser", new Poll());
+        return "public/poll";
+    }
+
+    @PostMapping("pollUser")
+    String savePoll(Poll poll, Model model){
+        Response response = pollService.savePoll(poll);
+        if(response.getStatus().equals(EnumStatus.OK)){
+            model.addAttribute("title", "Merci beaucoup pour votre participation au sondage");
+            return "private/thanks";
+        }
+        return "redirect:/pollUser";
     }
 
 }

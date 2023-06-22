@@ -750,7 +750,39 @@ ul{
     width: 600px;
     height: 333px;
 }
+/* Poll */
 
+.poll-table{
+    width: 100%;
+    border-spacing: 30px;
+}
+
+.poll-table tr{
+    padding-bottom: 20px;
+}
+
+.poll-table tr td{
+    width: calc(100% - 50px);
+    text-align: left;
+}
+
+.poll-table tr td:nth-last-child(1){
+    width: 50px;
+}
+
+textarea{
+    width: 100%;
+    block-size: auto;
+    display: inline-block;
+    box-sizing: border-box;
+    min-height: 50px;
+    height: 150px;
+    padding: 5px;
+    font-family: var(--font);
+    border: 1px solid lightgrey;
+    margin-bottom: 5px;
+    color: black;
+}
 
 /* Dashboard Company */
 

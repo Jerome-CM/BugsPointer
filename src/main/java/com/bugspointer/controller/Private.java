@@ -274,6 +274,8 @@ public class Private {
         Company company = companyService.getCompanyByMail(jwtTokenUtil.getUsernameFromToken(jwtTokenUtil.getTokenWithoutBearer((String) session.getAttribute("token"))));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("plan", String.valueOf(company.getPlan()));
+        model.addAttribute("title", "Merci beaucoup pour votre abonnement à Bugspointer");
+
         return "private/thanks";
     }
 

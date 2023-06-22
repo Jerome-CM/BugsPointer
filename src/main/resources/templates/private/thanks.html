@@ -19,9 +19,9 @@
             <img th:src="@{/css/img/icones/merci.gif}" alt="thanks"/>
         </div>
 
-        <h1 class="space">Merci beaucoup pour votre abonnement à Bugspointer</h1>
+        <h1 th:text="${title}" class="space"></h1>
 
-        <div th:if="${plan == 'TARGET'}" class="btn-download container-row">
+        <div th:if="${plan != null && plan == 'TARGET'}" class="btn-download container-row">
             <p class="center">Venez profiter dès à présent de votre tout nouveau Dashboard, fraichement construit pour votre arrivée</p>
             <a th:href="@{/app/private/dashboard}" class="btn-action">Mon Dashboard</a>
         </div>
