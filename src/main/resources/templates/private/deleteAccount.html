@@ -25,17 +25,17 @@
                     <h3>E-mail</h3>
                     <input type="text" th:field="*{mail}" id="mail" th:value="${company.getMail()}" readonly>
                     <br>
-                    <h3>Security Key</h3>
+                    <h3>Clé publique</h3>
                     <input type="text" th:field="*{publicKey}" id="publicKey" th:value="${company.getPublicKey()}" readonly>
                     <br>
                     <div class="cards bug">
                         <span class="number_cards new" id="nbNewBug" th:text="${company.getNbNewBug()}"></span>
-                        <h3>New Bug</h3>
+                        <h3>Nouveau Bug</h3>
                     </div>
                     <br>
                     <div class="cards bug" th:if="*{nbPendingBug != 0}">
                         <span class="number_cards pending" th:field="*{nbPendingBug}" id="nbPendingBug" th:text="${company.getNbPendingBug()}"></span>
-                        <h3>Pending Bug</h3>
+                        <h3>Bug en cours</h3>
                     </div>
                     <br th:if="*{nbPendingBug != 0}">
                     <span class="account" th:if="*{dateLineFacturePlan != null}">
@@ -44,7 +44,7 @@
                     </span>
                     <br th:if="*{dateLineFacturePlan != null}">
                     <h3>Password</h3>
-                    <input type="password" th:field="*{password}" id="password" placeholder="Password">
+                    <input type="password" th:field="*{password}" id="password" placeholder="Password" required>
                 </div>
                 <br>
                 <div class="account">
