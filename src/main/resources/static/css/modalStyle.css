@@ -34,7 +34,7 @@
 .bugspointer-objet-ellispe{
     margin:0 auto;
     width: 65px;
-    min-height: 65px;
+    height: 65px;
     border-radius:100%;
     border: 0.5em solid var(--btn-logo-color);
     background-image: url(img/chercher.gif);
@@ -52,8 +52,13 @@
     margin: 0;
 }
 
+.span-desktop {
+    display: block;
+}
 
-
+.span-mobile {
+    display: none;
+}
 
 /*CSS modal*/
 .bugspointer-open-popup:hover{
@@ -202,9 +207,9 @@
     text-decoration: none;
 }
 
-@media only screen/* and (min-width: 951px)*/ and (max-width: 1280px) {
+@media only screen and (max-width: 1280px) {
     .bugspointer-logo{
-        bottom: 0px;
+        bottom: 0;
         right: 4px;
     }
 
@@ -221,6 +226,28 @@
     }
     .bugspointer-popup-content {
         padding: 15px 10px 0;
+    }
+
+    /* Logo */
+
+    .bugspointer-logo{
+        right: -17px;
+    }
+    .bugspointer-objet-ellispe {
+        margin: 0 auto;
+        width: 50px;
+        height: 50px;
+        border: 0.3em solid var(--btn-logo-color);
+    }
+
+    .span-desktop {
+        display: none;
+    }
+
+    .span-mobile {
+        display: block;
+        width: 38px;
+        margin: 0 auto;
     }
 
 }

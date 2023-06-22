@@ -33,6 +33,7 @@
             display:flex;
             justify-content: space-around;
             align-items: center;
+            margin: 0 auto;
         }
 
         .cards{
@@ -69,13 +70,19 @@
             color: #FFFFFF;
         }
 
-        @media only screen and (min-width: 320px) and (max-width: 599px) and (orientation : portrait) {
+        @media only screen and (max-width: 599px){
             .container{
                 flex-direction: column;
                 width: 100%;
             }
             ul{
                 padding: 0;
+            }
+
+            .cards{
+                width: 90%;
+                margin: 10px auto;
+
             }
         }
 
@@ -120,12 +127,12 @@
     </div>
     <div class="container">
         <div class="cards">
-            <img src="/css/img/utilisateur.gif" alt="">
-            <p>Une photo qui fonctionne comme il le faut</p>
+            <img src="/css/img/utilisateur.gif" alt="Security data">
+            <p>Un logo qui fonctionne correctement</p>
         </div>
         <div class="cards">
-            <p>La réponse est dans cette photo</p>
-            <img src="/css/img/imgnotfound.jpeg" alt="">
+            <p>La réponse est dans cette photo, regarder bien la voiture rouge : </p>
+            <img src="/css/img/icones/fileError.png" alt="File error">
         </div>
     </div>
 
@@ -133,7 +140,8 @@
     <button class="bugspointer-logo" id="bugspointer_logo">
         <div class="bugspointer-objet-logo">
             <div class="bugspointer-objet-ellispe"></div>
-            <span class="bugspointer-objet-report">Signaler un bug</span>
+            <span class="bugspointer-objet-report span-desktop">Signaler un bug</span>
+            <span class="bugspointer-objet-report span-mobile">Bug</span>
         </div>
     </button>
     <footer>
