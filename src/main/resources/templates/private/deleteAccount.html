@@ -40,7 +40,7 @@
                     <br th:if="*{nbPendingBug != 0}">
                     <span class="account" th:if="*{dateLineFacturePlan != null}">
                         <h3>Plan valid through</h3>
-                        <input type="text" th:field="*{dateLineFacturePlan}" id="dateLineFacturePlan" th:value="${company.getDateLineFacturePlan()}" readonly>
+                        <span th:field="*{dateLineFacturePlan}" id="dateLineFacturePlan" th:text="${#dates.format(company.getDateLineFacturePlan(), 'dd/MM/yyyy')}"></span>
                     </span>
                     <br th:if="*{dateLineFacturePlan != null}">
                     <h3>Password</h3>

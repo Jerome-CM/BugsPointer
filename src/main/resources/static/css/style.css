@@ -581,6 +581,7 @@ ul{
     width: fit-content;
     font-size: 22px;
     border-radius: var(--radius);
+    border: none;
 }
 
 /* RegisterConfirm */
@@ -1023,6 +1024,11 @@ code{
     text-align: left;
 }
 
+/* Payment */
+.tarif{
+    font-weight: bold;
+}
+
 /* Bug report */
 
 .container-report{
@@ -1298,7 +1304,7 @@ footer a{
     }
     .nav-toggler{
         display: block;
-        margin: 5px 0;
+        margin: 5px 10px 5px 5px;
     }
     .nav-toggler-icon{
         display: block;
@@ -1320,7 +1326,7 @@ footer a{
         left: 0;
         width: 100%;
         display: block;
-        height: 90%;
+        height: 100%;
         padding: 0;
         text-align: center;
         z-index: 100;
@@ -1335,7 +1341,7 @@ footer a{
         margin: 5px 0;
     }
     .navCompany-item{
-        margin: 20px 0;
+        margin: 45px 0;
     }
     .company{
         background-color: var(--color-orange);
@@ -1343,15 +1349,15 @@ footer a{
 }
 @media only screen and (min-width: 600px) and (max-width: 699px) { }
 
-@media only screen and (min-width: 320px) and (max-width: 599px) and (orientation : portrait) {
+@media only screen and (min-width: 320px) and (max-width: 699px) /*and (orientation : portrait) */{
 
     /* Authentification */
     .container{
-        width: 85%;
+        width: 93%;
     }
     .container-row {
         flex-direction: column;
-        width: 100%;
+        width: 93%;
     }
 
     .w90 {
@@ -1475,7 +1481,7 @@ footer a{
         position: absolute;
         top: 30px;
         left: 0;
-        width: 100%;
+        width: 75%;
         height: 100%;
         margin: 20px 0 0 0;
         background-color: var(--color-white);
@@ -1529,6 +1535,7 @@ footer a{
     /* Footer */
     footer{
         display: block;
+        min-height: max-content;
     }
 
     /* Register */
