@@ -5,7 +5,7 @@
     </button>
     <ul class="nav-menu company" id="nav-menu">
         <li class="navCompany-item" th:if="${isLoggedIn == true}"><a th:href="@{/app/private/dashboard}">Dashboard</a></li>
-        <li class="navCompany-item"><a th:href="@{/download}">Download</a></li>
+        <li class="navCompany-item" th:if="${isLoggedIn == true}"><a th:href="@{/download}">Download</a></li>
         <li class="navCompany-item"><a th:href="@{/documentations}">Documentations</a></li>
         <li class="navCompany-item"><a class="plan" th:href="@{/features}">Offres</a></li>
         <li class="navCompany-item" th:if="${isLoggedIn == false}"><a th:href="@{/authentication}">Connexion</a></li>
