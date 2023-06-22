@@ -118,6 +118,8 @@ public class BugService {
                 Date jour = new Date();
                 if (bug.getDateView() == null) {
                     bug.setDateView(jour);
+                } else if (bug.getDateSolved() != null) {
+                    bug.setDateSolved(null);
                 }
                 bug.setEtatBug(EnumEtatBug.PENDING);
                 Bug bugSaved = bugRepository.save(bug);

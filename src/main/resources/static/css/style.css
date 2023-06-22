@@ -215,8 +215,8 @@ nav ul li a {
     width: 450px;
     text-align: center;
     overflow: hidden;
-    border: 4px solid var(--color-orange);
-    border-radius: var(--radius);
+    /*border: 4px solid var(--color-orange);
+    border-radius: var(--radius);*/
 }
 
 .sliderIndex {
@@ -282,7 +282,7 @@ nav ul li a {
     color: white;
 }
 .slides img {
-    object-fit: cover;
+    object-fit: contain; /*cover;*/
     position: absolute;
     top: 0;
     left: 0;
@@ -397,7 +397,7 @@ nav ul li a {
 
 .rotation {
     transform: rotate(5deg);
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 .rotation-none{
@@ -501,7 +501,6 @@ ul{
 .cards_detail img{
     position: relative;
     width: 100%;
-    min-width: 250px;
     max-width: 500px;
 }
 
@@ -516,7 +515,7 @@ ul{
 .gray{
     background-color: var(--color-grey-footer);
     padding: 7% 0 6% 0;
-    margin: -5% -10% 0% -10%; /*retrait de la marge de -5% sur le bottom pour le footer*/
+    margin: -5% -10% 0 -10%; /*retrait de la marge de -5% sur le bottom pour le footer*/
 }
 .h-in-features{
     text-transform: none;
@@ -703,9 +702,9 @@ ul{
 
 /* Dashboard Free*/
 
-.cards_promo{
+/*.cards_promo{
     border: 4px solid var(--color-orange)!important;
-}
+}*/
 .cards_promo h2{
     font-family: "DM-Sans", sans-serif;
     font-size: 30px;
@@ -739,15 +738,15 @@ ul{
 }
 
 .adjustPlan {
-    width: 605px;
+    /*width: 605px;*/
     text-align: center;
     overflow: hidden;
-    border: 4px solid var(--color-orange);
-    border-radius: var(--radius);
+    /*border: 4px solid var(--color-orange);
+    border-radius: var(--radius);*/
 }
 
 .adjustPlan .slides > div {
-    width: 600px;
+    width: 100%; /*600px;*/
     height: 333px;
 }
 
@@ -1217,7 +1216,9 @@ footer{
 footer a{
     color: var(--color-white);
 }
-
+.container-report-tablette{
+    width: 80%;
+}
 @media only screen/* and (min-width: 951px)*/ and (max-width: 1280px) {
 
     /* Index*/
@@ -1330,7 +1331,7 @@ footer a{
 
 }
 
-@media only screen and (min-width: 700px) and (max-width: 850px) {
+@media only screen/* and (min-width: 700px)*/ and (max-width: 850px) {
 
     /* bugReport */
     .content-btn-action a{
@@ -1365,7 +1366,7 @@ footer a{
         background-color: var(--background-index);
     }
     .nav-item{
-        margin: 20px 0;
+        margin: 45px 0;
     }
     .nav-menu.show {
         position: absolute;
@@ -1393,11 +1394,104 @@ footer a{
     .company{
         background-color: var(--color-orange);
     }
+    /* Menu Interne */
+    .menu{
+        /*width: fit-content;*/
+        margin: -30px 0 0 0;
+        display: flex;
+        height: fit-content;
+        width: 100%;
+        align-items: baseline;
+    }
+    .menu h2{
+        font-size: 17px;
+        display: none;
+    }
+    .bug-type{
+        font-size: 15px;
+        display: none;
+    }
+    .nbr-bug{
+        font-size: 13px;
+        height: 23px;
+        margin: 5px 5px 5px 0;
+    }
+    .navDashboard-toggler-icon{
+        display: block;
+        width: 7px;
+        height: 3px;
+        background-color: var(--color-orange);
+        margin: 5px 0;
+    }
+    .body{
+        position: relative;
+    }
+    .menu.show{
+        position: absolute;
+        top: 30px;
+        left: 0;
+        width: 75%;
+        height: 100%;
+        margin: 20px 0 0 0;
+        background-color: var(--color-white);
+        z-index: 4;
+        display: block;
+    }
+    .menu.show h2{
+        display: block;
+    }
+    .menu.show a span.bug-type{
+        display: block;
+    }
+    .menu h4,
+    .menu ul{
+        display: none;
+    }
+    .menu.show h4,
+    .menu.show ul{
+        display: block;
+    }
+    .menu.show ul li{
+        margin: 20px 0;
+    }
+    .container-documentation{
+        flex-direction: column;
+    }
+    .menu a{
+        justify-content: flex-end;
+    }
+    .menu.show a{
+        justify-content: space-around;
+    }
+    .anti-margin{
+        margin: auto!important;
+    }
+
+    /* Index */
+    .slider{
+        display: none;
+    }
+    .ul-index{
+        width: 80%;
+        top: 30px;
+        padding: 0;
+    }
+
+    /* Dashboard */
+    .dashboard{
+        flex-direction: column;
+    }
 }
-@media only screen and (min-width: 600px) and (max-width: 699px) { }
+@media only screen/* and (min-width: 600px)*/ and (max-width: 699px) {
 
-@media only screen and (min-width: 320px) and (max-width: 699px) /*and (orientation : portrait) */{
+}
 
+@media only screen /*and (min-width: 320px) */and (max-width: 699px) /*and (orientation : portrait) */{
+
+    /*Menu interne*/
+    .menu{
+        margin: -25px 0 0 0;
+    }
     /* Authentification */
     .container{
         width: 93%;
@@ -1456,9 +1550,12 @@ footer a{
 
     /* Index */
     .ul-index{
-        width: 80%;
+        width: 70%;
         top: 0;
         padding: 0;
+    }
+    .ul-index li{
+        list-style: circle;
     }
     .btn-try img{
         display: none;
@@ -1474,9 +1571,8 @@ footer a{
     .index h4{
         text-align: center;
     }
-
-    .slider{
-        display: none;
+    .cards_detail h3{
+        font-size: 20px;
     }
 
     /* Report Bug List */
@@ -1494,62 +1590,6 @@ footer a{
     }
     .description-reportList{
         font-size: 15px;
-    }
-
-    /* Menu Interne */
-    .menu{
-        width: fit-content;
-        margin: -20px 0 0 0;
-    }
-    .menu h2{
-        font-size: 17px;
-        display: none;
-    }
-    .bug-type{
-        font-size: 15px;
-        display: none;
-    }
-    .nbr-bug{
-        font-size: 13px;
-        height: 23px;
-        margin: 5px 5px 5px 0;
-    }
-    .navDashboard-toggler-icon{
-        display: block;
-        width: 7px;
-        height: 3px;
-        background-color: var(--color-orange);
-        margin: 5px 0;
-    }
-    .body{
-        position: relative;
-    }
-    .menu.show{
-        position: absolute;
-        top: 30px;
-        left: 0;
-        width: 75%;
-        height: 100%;
-        margin: 20px 0 0 0;
-        background-color: var(--color-white);
-        z-index: 10;
-    }
-    .menu.show h2{
-        display: block;
-    }
-    .menu.show a span.bug-type{
-        display: block;
-    }
-    .menu h4,
-    .menu ul{
-        display: none;
-    }
-    .menu.show h4,
-    .menu.show ul{
-        display: block;
-    }
-    .menu.show ul li{
-        margin: 20px 0;
     }
 
     /* Report Bug */
@@ -1600,4 +1640,13 @@ footer a{
     .newUser a{
         margin-top: 20px;
     }
+}
+
+@media only screen and (max-width: 449px){
+    /*Menu interne*/
+    .menu{
+
+        margin: -16px 0 0 0;
+    }
+
 }
