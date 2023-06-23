@@ -28,6 +28,8 @@ public class CompanyService implements ICompany {
 
     private final MailService mailService;
 
+    private final CompanyTokenService companyTokenService;
+
     private final Utility utility;
     private final PasswordEncoder passwordEncoder;
 
@@ -35,11 +37,12 @@ public class CompanyService implements ICompany {
 
     private final ModelMapper modelMapper;
 
-    public CompanyService(CompanyRepository companyRepository, BugRepository bugRepository, CompanyPreferencesRepository preferencesRepository, MailService mailService, Utility utility, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ModelMapper modelMapper) {
+    public CompanyService(CompanyRepository companyRepository, BugRepository bugRepository, CompanyPreferencesRepository preferencesRepository, MailService mailService, CompanyTokenService companyTokenService, Utility utility, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ModelMapper modelMapper) {
         this.companyRepository = companyRepository;
         this.bugRepository = bugRepository;
         this.preferencesRepository = preferencesRepository;
         this.mailService = mailService;
+        this.companyTokenService = companyTokenService;
         this.utility = utility;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -460,35 +463,47 @@ public class CompanyService implements ICompany {
 
         if (companyOptional.isPresent()){
             company = companyOptional.get();
-            return mailService.sendMailLostPassword(dto.getMail(), company.getPublicKey());
+            String token = utility.createPublicKey(60);
+            log.info("token : {}", token);
+            companyTokenService.saveCompanyToken(company, token);
+            return mailService.sendMailLostPassword(dto.getMail(), company.getPublicKey(), token);
         }
 
         return new Response(EnumStatus.OK, null, "Si votre mail nous est connu, un mail vient d'être envoyé à : "+dto.getMail());
     }
 
-    public Response resetPassword(String publicKey, AccountDTO dto){
+    public Response resetPassword(String publicKey, AccountDTO dto, String token){
         log.info("resetPasseword : ");
         log.info("publicKey : {}", publicKey);
+        log.info("token : {}", token);
         log.info("dto : {}", dto);
 
         Company company = getCompanyByPublicKey(publicKey);
+        boolean checkToken = companyTokenService.checkToken(token, publicKey);
 
-        if (company != null){
-            if (dto.getPassword().isEmpty() || dto.getConfirmPassword().isEmpty()) {
-                return new Response(EnumStatus.ERROR, null, "Password empty");
-            } else {
-                if (dto.getPassword().equals(dto.getConfirmPassword())) {
-                    company.setPassword(passwordEncoder.encode(dto.getPassword()));
-                    log.info("company modified :  {}", company);
-                    return companyTryRegistration(company, "Password updated");
+        if (checkToken) {
+            if (company != null) {
+                if (dto.getPassword().isEmpty() || dto.getConfirmPassword().isEmpty()) {
+                    return new Response(EnumStatus.ERROR, null, "Mot de passe vide");
                 } else {
-                    log.info("Password not identical");
-                    return new Response(EnumStatus.ERROR, null, "Password not identical");
+                    if (dto.getPassword().equals(dto.getConfirmPassword())) {
+                        company.setPassword(passwordEncoder.encode(dto.getPassword()));
+                        log.info("company modified :  {}", company);
+                        companyTokenService.deleteToken(company);
+                        return companyTryRegistration(company, "Mot de passe modifié");
+                    } else {
+                        log.info("Password not identical");
+                        return new Response(EnumStatus.ERROR, null, "Mot de passe différent");
+                    }
                 }
+            } else {
+                return new Response(EnumStatus.ERROR, null, "Error in the process");
             }
+        } else {
+            return new Response(EnumStatus.ERROR, null, "Votre demande de renouvellement de mot de passe n'a pas été prise en compte");
         }
 
-        return new Response(EnumStatus.ERROR, null, "Error in the process");
+
     }
 
     public Response updatePlan(Company company, Date dateLine, EnumPlan plan){

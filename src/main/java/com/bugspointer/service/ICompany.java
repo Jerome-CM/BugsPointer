@@ -2,8 +2,10 @@ package com.bugspointer.service;
 
 import com.bugspointer.dto.*;
 import com.bugspointer.entity.Company;
+import com.bugspointer.entity.EnumPlan;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 public interface ICompany {
 
@@ -23,5 +25,6 @@ public interface ICompany {
     Response validateRegister(String publicKey);
     Response registerDomaine(AccountDTO dto);
     Response sendPwLost(AccountDTO dto);
-    Response resetPassword(String publicKey, AccountDTO dto);
+    Response resetPassword(String publicKey, AccountDTO dto, String token);
+    Response updatePlan(Company company, Date dateLine, EnumPlan plan);
 }

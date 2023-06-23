@@ -17,7 +17,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -102,6 +101,7 @@ public class ModalService implements IModal {
                 dateIpEnvoi = bugs.get(i).getDateCreation();
                 boolean ok = differenceDate(dateIpEnvoi, dateJour, timeSeconde);
                 if (!ok){
+                    log.info("Délai d'envoi pour même adresse ip trop court");
                     return new Response(EnumStatus.ERROR, null, "Délai entre les envois trop court");
                 }
             }
