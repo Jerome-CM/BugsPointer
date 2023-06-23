@@ -91,6 +91,7 @@ public class Home {
 
     @GetMapping("pollUser")
     String getPullUser(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         int[] ranks = new int[] { 0,1,2,3,4,5,6,7,8,9,10 };
         model.addAttribute("ranks", ranks);
         model.addAttribute("user", "yes");
