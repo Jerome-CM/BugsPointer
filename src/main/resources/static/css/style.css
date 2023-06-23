@@ -141,6 +141,15 @@ nav .title{
     text-transform: uppercase;
 }
 
+.flag-nav{
+    width: 33px;
+    height: 24px;
+    margin: 0px 0 0 10px;
+    top: 4px;
+    position: relative;
+    border-radius: var(--radius);
+}
+
 nav ul{
     display: flex;
     justify-content: space-around;
@@ -1679,6 +1688,14 @@ footer a{
     .menu{
 
         margin: -16px 0 0 0;
+    }
+
+}
+
+@media only screen and (max-width: 290px){
+    /*Menu interne*/
+    .flag-nav{
+        display: none;
     }
 
 }
