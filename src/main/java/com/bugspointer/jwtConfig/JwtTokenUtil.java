@@ -98,8 +98,5 @@ public class JwtTokenUtil implements Serializable {
         return headerToken.substring(7);
     }
 
-    public String generateTokenForResetPassword(){
-        UUID uuid = UUID.randomUUID();
-        return uuid.toString().replace("-", "");
-    }
+
 }

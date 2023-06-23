@@ -26,7 +26,7 @@ public class CompanyTokenService {
     }
 
     public boolean getDateNotExpired(CompanyToken companyToken){
-        final int TEMPS_TOKEN = 5;
+        final int TEMPS_TOKEN = 15;
         Date now = new Date();
 
         long diffInMillis = now.getTime() - companyToken.getDateCreation().getTime();
@@ -70,7 +70,7 @@ public class CompanyTokenService {
         }
     }
 
-    public boolean testToken(String tokenUrl, String key){
+    public boolean checkToken(String tokenUrl, String key){
         if (tokenUrl == null || tokenUrl.equals(WITHOUT_TOKEN)){
             return false;
         }

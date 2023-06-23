@@ -284,7 +284,7 @@ public class MailService {
             Transport.send(message);
 
             log.info("email new bug sent at : {}", to);
-            return new Response(EnumStatus.OK, null, "Un mail pour réinitialiser votre mot de passe vient de vous êtes envoyé");
+            return new Response(EnumStatus.OK, null, "Un mail valable 15 minutes pour réinitialiser votre mot de passe vient de vous êtes envoyé");
         } catch (MessagingException e) {
             e.printStackTrace();
             log.info("error from mail sender : " + e.getMessage());

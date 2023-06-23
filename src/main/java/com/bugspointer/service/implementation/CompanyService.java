@@ -463,7 +463,7 @@ public class CompanyService implements ICompany {
 
         if (companyOptional.isPresent()){
             company = companyOptional.get();
-            String token = jwtTokenUtil.generateTokenForResetPassword();
+            String token = utility.createPublicKey(60);
             log.info("token : {}", token);
             companyTokenService.saveCompanyToken(company, token);
             return mailService.sendMailLostPassword(dto.getMail(), company.getPublicKey(), token);
@@ -479,21 +479,21 @@ public class CompanyService implements ICompany {
         log.info("dto : {}", dto);
 
         Company company = getCompanyByPublicKey(publicKey);
-        boolean testToken = companyTokenService.testToken(token, publicKey);
+        boolean checkToken = companyTokenService.checkToken(token, publicKey);
 
-        if (testToken) {
+        if (checkToken) {
             if (company != null) {
                 if (dto.getPassword().isEmpty() || dto.getConfirmPassword().isEmpty()) {
-                    return new Response(EnumStatus.ERROR, null, "Password empty");
+                    return new Response(EnumStatus.ERROR, null, "Mot de passe vide");
                 } else {
                     if (dto.getPassword().equals(dto.getConfirmPassword())) {
                         company.setPassword(passwordEncoder.encode(dto.getPassword()));
                         log.info("company modified :  {}", company);
                         companyTokenService.deleteToken(company);
-                        return companyTryRegistration(company, "Password updated");
+                        return companyTryRegistration(company, "Mot de passe modifié");
                     } else {
                         log.info("Password not identical");
-                        return new Response(EnumStatus.ERROR, null, "Password not identical");
+                        return new Response(EnumStatus.ERROR, null, "Mot de passe différent");
                     }
                 }
             } else {
