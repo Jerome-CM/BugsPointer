@@ -18,7 +18,7 @@
         <section>
             <div class="cards cards_detail">
                 <h3>Réinitialisation du mot de passe</h3>
-                <form class="form" action="#" th:action="@{/resetPassword/{publicKey}(publicKey=${publicKey})}" th:object="${company}" method="post">
+                <form class="form" action="#" th:action="@{/resetPassword/{publicKey}/{token}(publicKey=${publicKey}, token=${token})}" th:object="${company}" method="post">
                     <input type="password" th:field="*{password}" placeholder="Mot de passe">
                     <input type="password" th:field="*{confirmPassword}" placeholder="Confirmation du mot de passe">
                     <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}">

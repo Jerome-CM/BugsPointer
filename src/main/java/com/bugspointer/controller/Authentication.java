@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import com.bugspointer.entity.Company;
 import com.bugspointer.service.implementation.CompanyService;
+import com.bugspointer.service.implementation.CompanyTokenService;
 import com.bugspointer.service.implementation.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -24,12 +25,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class Authentication {
     private final CompanyService companyService;
 
+    private final CompanyTokenService companyTokenService;
+
     private final MailService mailService;
 
     private  final UserAuthenticationUtil userAuthenticationUtil;
 
-    public Authentication(CompanyService companyService, MailService mailService, UserAuthenticationUtil userAuthenticationUtil) {
+    public Authentication(CompanyService companyService, CompanyTokenService companyTokenService, MailService mailService, UserAuthenticationUtil userAuthenticationUtil) {
         this.companyService = companyService;
+        this.companyTokenService = companyTokenService;
         this.mailService = mailService;
         this.userAuthenticationUtil = userAuthenticationUtil;
     }
@@ -77,7 +81,7 @@ public class Authentication {
     }
 
     @GetMapping("/registerConfirm")
-    String getRegisterConfirm(Model model, AuthRegisterCompanyDTO dtoRegister, AuthLoginCompanyDTO dtoLogin, HttpServletRequest request){
+    String getRegisterConfirm(Model model, AuthRegisterCompanyDTO dtoRegister, AuthLoginCompanyDTO dtoLogin){
         model.addAttribute("companyRegister", dtoRegister);
         model.addAttribute("companyLogin", dtoLogin);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
@@ -85,7 +89,7 @@ public class Authentication {
     }
 
     @GetMapping("newUser/{publicKey}")//TODO: ajouter des variables dans l'url pour identifier la company et sécuriser ?
-    String getNewUser(@PathVariable("publicKey") String publicKey,  Model model, HttpServletRequest request){
+    String getNewUser(@PathVariable("publicKey") String publicKey,  Model model){
         Company company = companyService.getCompanyByPublicKey(publicKey);
         model.addAttribute("company", company);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
@@ -144,19 +148,30 @@ public class Authentication {
         return "public/pwLost";
     }
 
-    @GetMapping("resetPassword/{publicKey}")//TODO: A securiser plus si on possède la clé on peut aller modifier le mot de passe
-    String getResetPassword(@PathVariable("publicKey") String publicKey, Model model, AccountDTO dto){
-        //AccountDTO dto = companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey));
-        model.addAttribute("company", dto);
-        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        return "public/resetPw";
+    @GetMapping("resetPassword/{publicKey}/{token}")//TODO: A securiser plus si on possède la clé on peut aller modifier le mot de passe
+    String getResetPassword(@PathVariable("publicKey") String publicKey, @PathVariable("token") String token, Model model, AccountDTO dto){
+        log.info("token : {} - key : {}", token, publicKey);
+        boolean ok = companyTokenService.checkToken(token, publicKey);
+        log.info("test : {}", ok);
+        if (ok) {
+            //AccountDTO dto = companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey));
+            model.addAttribute("company", dto);
+            model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+            return "public/resetPw";
+        }
+        return "redirect:/authentication";
     }
 
-    @PostMapping("resetPassword/{publicKey}")
-    String resetPassword(@PathVariable("publicKey") String publicKey, @Valid AccountDTO dto, BindingResult result, RedirectAttributes redirectAttributes){
+    @PostMapping("resetPassword/{publicKey}/{token}")
+    String resetPassword(@PathVariable("publicKey") String publicKey,
+                         @PathVariable("token") String token,
+                         @Valid AccountDTO dto,
+                         BindingResult result,
+                         RedirectAttributes redirectAttributes){
+        log.info("token : {}", token);
         if (!result.hasErrors()){
 
-            Response response = companyService.resetPassword(publicKey, dto);
+            Response response = companyService.resetPassword(publicKey, dto, token);
             redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
             redirectAttributes.addFlashAttribute("notification", response.getMessage());
             if (response.getStatus().equals(EnumStatus.OK)) {
@@ -164,7 +179,8 @@ public class Authentication {
             }
         }
         redirectAttributes.addAttribute("publicKey", publicKey);
-        return "redirect:/resetPassword/{publicKey}";
+        redirectAttributes.addAttribute("token", token);
+        return "redirect:/resetPassword/{publicKey}/{token}";
     }
 
     @GetMapping("/logout")
