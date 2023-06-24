@@ -1,4 +1,4 @@
-const key = "YOUR_KEY_HERE"; /* Ajoutez votre clé publique ici, entre les "" */
+const key = "YOUR_KEY_HERE"; /*Ajoutez votre clé publique ici, entre les "" */
 window.addEventListener("DOMContentLoaded", function(){
 
 /* Variables document */
@@ -63,7 +63,9 @@ window.addEventListener("DOMContentLoaded", function(){
     function message(){
         /* Affiche le message lors du clic sur le bouton envoi (même si un problème lors de l'enregistrement est survenu)
         * et masque le formulaire, il ne reste que le bouton 'close' */
-        messageElement.innerHTML = "Merci infiniment pour votre envoi";
+        messageElement.style.display = "block";
+        lienElement.href = ADRESSE;
+        section.style.display = "none";
     }
 
 /* User Agent Navigator */
@@ -134,7 +136,7 @@ window.addEventListener("DOMContentLoaded", function(){
         /* Masque la popup pour aller sélectionner l'endroit où est le bug*/
         masquer();
 
-        /* TODO: Est censé arrêter la fonction pointer si la popup n'a pas été masquée */
+
         if (document.querySelector('#bugspointer_popup').style.display !== "none") {
             console.log("display flex");
             return;
@@ -175,9 +177,8 @@ window.addEventListener("DOMContentLoaded", function(){
                 /* Annule les comportements par défaut (lien, bouton...) */
                 event.preventDefault();
 
-                //TODO : Peut rester coincer dans handleClick et ne s'arrête pas
 
-                /* Si la popup est active alors le clic n'est pas actif TODO:(ça fonctionne mais le mouseover peut être actif quand même) */
+                /* Si la popup est active alors le clic n'est pas actif */
                 if (document.querySelector('#bugspointer_popup').style.display != "none") {
                     return;
                 } else {
@@ -292,9 +293,7 @@ window.addEventListener("DOMContentLoaded", function(){
     /* Le clic sur la croix ferme la popup et permet de rafraichir la page pour recharger un nouveau formulaire après envoi */
     btnclose.addEventListener("mousedown", () => {
         masquer();
-        if (messageElement.innerHTML != null){ // TODO: Supprimer le if pour n'appliquer que le reload ?
-            location.reload();
-        }
+        location.reload();
     });
 
     btnpointer.addEventListener("click", pointer);  // Le clic sur 'pointer le bug' actif la fonction pointer

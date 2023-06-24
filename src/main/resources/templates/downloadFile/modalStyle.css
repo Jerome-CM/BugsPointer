@@ -16,8 +16,8 @@
     padding: 0;
     margin: 0;
     position: fixed;
-    top: 88%;
-    right: 1%;
+    bottom: 2px;
+    right: 4px;
 }
 .bugspointer-logo:hover{
     cursor: pointer;
@@ -34,7 +34,7 @@
 .bugspointer-objet-ellispe{
     margin:0 auto;
     width: 65px;
-    min-height: 65px;
+    height: 65px;
     border-radius:100%;
     border: 0.5em solid var(--btn-logo-color);
     background-image: url(img/chercher.gif);
@@ -52,8 +52,13 @@
     margin: 0;
 }
 
+.span-desktop {
+    display: block;
+}
 
-
+.span-mobile {
+    display: none;
+}
 
 /*CSS modal*/
 .bugspointer-open-popup:hover{
@@ -108,8 +113,8 @@
 }
 .bugspointer-popup-titre{
     font-size: 28px;
-    font-weight: 700;
 }
+
 .bugspointer-close-popup{
     position: absolute;
     top: -4px;
@@ -130,7 +135,8 @@
 }
 
 .bugspointer-popup-content label{
-    font-weight: bold;
+    text-align: center;
+    font-weight: 500;
     margin: 5px;
     text-transform: uppercase;
 }
@@ -140,6 +146,7 @@
     padding : 5px 0 5px 5px;
     box-sizing: border-box;
 }
+
 .bugspointer-popup-content-textdescription{
     width: 100%;
     block-size: auto;
@@ -150,13 +157,19 @@
     padding: 5px;
     font-family: var(--font);
     border: 1px solid lightgrey;
+    margin-bottom: 25px;
 }
+
 .bugspointer-popup-content-inputbot{
     visibility: hidden;
     height: 1px;
     padding: 0;
     border: 0;
     margin: 0;
+}
+
+.bugspointer-popup-content p {
+    font-style: italic;
 }
 
 .bugspointer-pointed-balise { /* applique une couleur pour la balise sélectionnée par le pointer */
@@ -173,12 +186,68 @@
     color: red;
 }
 
+#bugspointer-mail-test{
+    text-align: center;
+}
+/* After send */
+
+#bugspointer-message-success p{
+    font-size: 20px;
+}
+
+#bugspointer-message-success a{
+    font-size: 20px;
+}
+
 .btn-action{
-    margin-top: 30px;
-    background-color: var(--color-btn-green);
     padding: 7px 20px;
-    color: var(--color-white);
-    width: fit-content;
+    color: white;
     font-size: 22px;
-    border-radius: var(--radius);
+    background-color: orange;
+    text-decoration: none;
+}
+
+@media only screen and (max-width: 1280px) {
+    .bugspointer-logo{
+        bottom: 0;
+        right: 4px;
+    }
+
+    .bugspointer-popup-container{
+        width: 69%;
+    }
+}
+@media only screen and (max-width: 599px){
+    .bugspointer-popup-container {
+        width: 95%;
+    }
+    .bugspointer-popup-titre{
+        font-size: 21px;
+    }
+    .bugspointer-popup-content {
+        padding: 15px 10px 0;
+    }
+
+    /* Logo */
+
+    .bugspointer-logo{
+        right: -17px;
+    }
+    .bugspointer-objet-ellispe {
+        margin: 0 auto;
+        width: 50px;
+        height: 50px;
+        border: 0.3em solid var(--btn-logo-color);
+    }
+
+    .span-desktop {
+        display: none;
+    }
+
+    .span-mobile {
+        display: block;
+        width: 38px;
+        margin: 0 auto;
+    }
+
 }

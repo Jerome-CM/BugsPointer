@@ -65,7 +65,7 @@ public class ModalService implements IModal {
             return new Response(EnumStatus.ERROR, null, "Description incomplete");
         }
 
-        if (dto.getKey().equals("C1estLaClePublicAModifier")) { //TODO:A modifier par la publicKey représentant la clé de la company test
+        if (dto.getKey().equals("YOUR_KEY_HERE")) { //TODO:A modifier par la publicKey représentant la clé de la company test
             log.info("Envoi test");
             test = true;
         }
