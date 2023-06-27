@@ -49,14 +49,14 @@ public class CompanyService implements ICompany {
         this.modelMapper = modelMapper;
     }
 
-    public Company getCompanyByMail(String mail){//TODO: A transformer en DTO
+    public Company getCompanyByMail(String mail){
         Optional<Company> company = companyRepository.findByMail(mail);
         Company companyGet = null;
 
         if (company.isPresent()){
             companyGet = company.get();
         }
-
+        //TODO: A transformer en DTO
         return companyGet;
     }
 
@@ -67,7 +67,7 @@ public class CompanyService implements ICompany {
         if (companyOptional.isPresent()){
             company = companyOptional.get();
         }
-
+        //TODO: A transformer en DTO
         return company;
     }
 
@@ -77,7 +77,7 @@ public class CompanyService implements ICompany {
 
     @Override
     public Response saveCompany(AuthRegisterCompanyDTO dto) {
-        log.info("SaveCompany : {}", dto);
+        log.warn("Want save company : name : {}, mail : {},", dto.getCompanyName(), dto.getMail());
         boolean mail;
         boolean pw;
         boolean name;
@@ -100,7 +100,6 @@ public class CompanyService implements ICompany {
                     log.warn("Company is disable : {}",companyOptional.get().getMail());
                     return new Response(EnumStatus.ERROR, null, "Le compte existe mais est fermé, pour le réactiver veuillez envoyer un mail à contact@bugspointer.com");
                 }
-                log.info("CompanyMail is exist :  {}", dto.getMail());
                 return new Response(EnumStatus.ERROR, null, "Ce mail existe déjà");
             }
             else{
@@ -109,11 +108,11 @@ public class CompanyService implements ICompany {
         } else {
             return new Response(EnumStatus.ERROR, null, "Les mails ne sont pas identiques");
         }
-
+//TODO optimisation a faire entre les 2 recherches de company, besoin d'unicité pour le nom ???
         Optional<Company> companyOptional = companyRepository.findByCompanyName(dto.getCompanyName());
         if (companyOptional.isPresent()){
             log.info("CompanyName is exist :  {}", dto.getCompanyName());
-            return new Response(EnumStatus.ERROR, null, "CompanyName is exist already");
+            return new Response(EnumStatus.ERROR, null, "Ce nom d'entreprise existe déjà");
         } else {
             name = true;
         }
@@ -125,25 +124,27 @@ public class CompanyService implements ICompany {
             company.setPassword(passwordEncoder.encode(dto.getPassword()));
             company.setPublicKey(createPublicKey());
             company.setMotifEnable(EnumMotif.CONFIRMATION);
-            log.info("company :  {}", company);
             CompanyPreferences preferences = new CompanyPreferences();
             preferences.setCompany(company);
             preferences.setMailNewBug(true);
             preferences.setMailInactivity(true);
-            log.info("company preferences : {}", preferences);
             try {
                 Company savedCompany = companyRepository.save(company);
-                log.info("Company saved :  {}", savedCompany);
+                log.info("\r -------  ");
+                log.info("New Company : #{} - {}", savedCompany.getCompanyId(), savedCompany.getCompanyName());
+                log.info("\r -------  ");
                 CompanyPreferences savedPreferences = preferencesRepository.save(preferences);
-                log.info("Company preferences saved : {}", savedPreferences);
-                return new Response(EnumStatus.OK, null, "Register successfully - Please login");
+
+                // TODO BETA Auto connect joindre le mail a UserDetailsServiceJwt
+
+                return new Response(EnumStatus.OK, null, "Compte enregistré, merci. Vous pouvez maintenant vous connecter");
             }
             catch (Exception e){
-                log.error("Error :  {}", e.getMessage());
-                return new Response(EnumStatus.ERROR, null, "Error in register");
+                log.error("Error to save a new company: {}", e.getMessage());
+                return new Response(EnumStatus.ERROR, null, "Erreur lors de l'enregistrement");
             }
         }
-        return new Response(EnumStatus.ERROR, null, "A error is present, Retry");
+        return new Response(EnumStatus.ERROR, null, "Une erreur est présente, merci de recommencer");
     }
 
     public Company getCompanyWithToken(HttpServletRequest request) {
@@ -151,7 +152,6 @@ public class CompanyService implements ICompany {
         String token = (String) session.getAttribute("token");
         log.info(token);
         String realToken = token.substring(7);
-        log.info(" token retrieved : {}", jwtTokenUtil.getUsernameFromToken(realToken));
 
         Optional<Company> companyOptional = companyRepository.findByMail(jwtTokenUtil.getUsernameFromToken(realToken));
         if (companyOptional.isPresent()){
@@ -162,22 +162,16 @@ public class CompanyService implements ICompany {
     }
 
     public AccountDTO getAccountDto(Company company) {
-        log.info("AccountDTO : company : {}", company);
         AccountDTO dto;
         dto = modelMapper.map(company, AccountDTO.class);
-        log.info("AccountDTO : dto : {}", dto);
-
         return dto;
     }
 
     public AccountDeleteDTO getAccountDeleteDto(Company company) {
-        log.info("AccountDeleteDTO : company : {}", company);
         AccountDeleteDTO dto;
         dto = modelMapper.map(company, AccountDeleteDTO.class);
         int nbNewBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.NEW).size();
         int nbPendingBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.PENDING).size();
-        log.info("nbNewBug : {}", nbNewBug);
-        log.info("nbPendingBug : {}", nbNewBug);
         dto.setNbNewBug(nbNewBug);
         dto.setNbPendingBug(nbPendingBug);
 
@@ -185,7 +179,6 @@ public class CompanyService implements ICompany {
     }
 
     public DashboardDTO getDashboardDto(Company company) {
-        log.info("DashboardDTO : company : {}", company);
         DashboardDTO dto;
         dto = modelMapper.map(company, DashboardDTO.class);
         if (company.getPlan().equals(EnumPlan.FREE)){
@@ -195,10 +188,6 @@ public class CompanyService implements ICompany {
         int nbPendingBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.PENDING).size();
         int nbSolvedBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.SOLVED).size();
         int nbIgnoredBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.IGNORED).size();
-        log.info("nbNewBug : {}", nbNewBug);
-        log.info("nbPendingBug : {}", nbPendingBug);
-        log.info("nbSolvedBug : {}", nbSolvedBug);
-        log.info("nbIgnoredBug : {}", nbIgnoredBug);
         dto.setNbNewBug(nbNewBug);
         dto.setNbPendingBug(nbPendingBug);
         dto.setNbSolvedBug(nbSolvedBug);
@@ -208,8 +197,7 @@ public class CompanyService implements ICompany {
     }
 
     public Response mailUpdate(AccountDTO dto) {
-        log.info("mailUpdate");
-        log.info("dto : {}", dto);
+        log.info("mailUpdate dto received : {}", dto.getMail());
         boolean mail = false;
         boolean pw = false;
 
@@ -217,91 +205,75 @@ public class CompanyService implements ICompany {
         Company company = new Company();
         if (companyOptional.isPresent()){
             company = companyOptional.get();
-            log.info("Company : {}", company);
             if (dto.getPassword().isEmpty()){
-                return new Response(EnumStatus.ERROR, null, "Password empty");
+                return new Response(EnumStatus.ERROR, null, "Mot de passe non rempli");
             } else {
                 if (passwordEncoder.matches(dto.getPassword(), company.getPassword())){
                     pw = true;
-                    log.info("password ok");
                 }
                 else {
-                    log.info("Error password");
-                    return new Response(EnumStatus.ERROR, null, "Error password");
+                    log.info("Error password to update mail");
+                    return new Response(EnumStatus.ERROR, null, "Mauvais mot de passe");
                 }
             }
 
             if (dto.getMail().isEmpty()) {
-                log.info("Mail empty");
-                return new Response(EnumStatus.ERROR, null, "Mail empty");
+                return new Response(EnumStatus.ERROR, null, "Mail non rempli");
             } else {
                 if (company.getMail().equals(dto.getMail())) {
-                    log.info("Mail identique");
-                    return new Response(EnumStatus.ERROR, null, "Mail identique");
+                    return new Response(EnumStatus.ERROR, null, "Nouveau mail identique à l'ancien");
                 } else {
                     Optional<Company> companyMail = companyRepository.findByMail(dto.getMail());
                     if (companyMail.isPresent()){
-                        log.info("Mail déjà utilisé");
-                        return new Response(EnumStatus.ERROR, null, "Ce mail est déjà utilisée veuillez en saisir un autre");
+                        log.info("Mail already taken : {}", companyMail.get().getMail());
+                        return new Response(EnumStatus.ERROR, null, "Impossible d'utiliser ce mail, merci d'en saisir un autre");
                     }
                 }
-                log.info("Mail completed");
                 mail = true;
             }
         }
 
         if (pw && mail) {
-            log.info("mail at modify : {}", dto.getMail());
             company.setMail(dto.getMail());
-            log.info("Company mail update : {}", company);
-
-            return companyTryRegistration(company, "Mail updated");
+            return companyTryRegistration(company, "Mail modifié avec succès");
         }
-
-        return new Response(EnumStatus.ERROR, null, "Error in the process");
+        return new Response(EnumStatus.ERROR, null, "Erreur inconnue");
     }
 
     public Response passwordUpdate(AccountDTO dto) {
-        log.info("passwordUpdate :");
-        log.info("dto : {}", dto);
+        log.info("passwordUpdate method");
 
         Optional<Company> companyOptional = companyRepository.findByPublicKey(dto.getPublicKey());
         Company company;
         if (companyOptional.isPresent()) {
             company = companyOptional.get();
-            log.info("Company : {}", company);
             if (dto.getPassword().isEmpty() || dto.getNewPassword().isEmpty() || dto.getConfirmPassword().isEmpty()) {
-                return new Response(EnumStatus.ERROR, null, "Password empty");
+                return new Response(EnumStatus.ERROR, null, "Un ou plusieurs champs ne sont pas remplis");
             } else {
                 if (passwordEncoder.matches(dto.getPassword(), company.getPassword())) {
-                    log.info("password ok");
                     if (dto.getNewPassword().equals(dto.getConfirmPassword())){
                         company.setPassword(passwordEncoder.encode(dto.getNewPassword()));
-                        log.info("company modified :  {}", company);
-                        return companyTryRegistration(company, "Password updated");
+
+                        return companyTryRegistration(company, "Mot de passe modifié avec succès");
                     } else {
-                        log.info("Password not identical");
-                        return new Response(EnumStatus.ERROR, null, "Password not identical");
+                        return new Response(EnumStatus.ERROR, null, "Mot de passe non identique");
                     }
                 } else {
-                    return new Response(EnumStatus.ERROR, null, "Wrong password");
+                    return new Response(EnumStatus.ERROR, null, "Mauvais mot de passe");
                 }
             }
         }
 
-        return new Response(EnumStatus.ERROR, null, "Error in the process");
+        return new Response(EnumStatus.ERROR, null, "Erreur inconnue");
     }
 
     public Response smsUpdate(AccountDTO dto){
-        log.info("smsUpdate :");
-        log.info("dto : {}", dto);
+        log.info("SmsUpdate dto received : {}", dto.getPhoneNumber());
 
         Optional<Company> companyOptional = companyRepository.findByPublicKey(dto.getPublicKey());
         Company company;
         if (companyOptional.isPresent()) {
             company = companyOptional.get();
-            log.info("Company : {}", company);
-
             if (dto.getPhoneNumber().isEmpty()){
                 company.setPhoneNumber(null);
                 Optional<CompanyPreferences> preferencesOptional = preferencesRepository.findByCompany_PublicKey(dto.getPublicKey());
@@ -318,14 +290,12 @@ public class CompanyService implements ICompany {
 
                 try {
                     Company savedCompany = companyRepository.save(company);
-                    log.info("Company update :  {}", savedCompany);
                     CompanyPreferences savedPreference = preferencesRepository.save(preferences);
-                    log.info("Company preferences saved : {}", savedPreference);
-                    return new Response(EnumStatus.OK, null, "Phone number delete");
+                    return new Response(EnumStatus.OK, null, "Préférences mises à jour");
                 }
                 catch (Exception e){
-                    log.error("Error :  {}", e.getMessage());
-                    return new Response(EnumStatus.ERROR, null, "Error in update");
+                    log.error("Error to update phone number for sms : {}", e.getMessage());
+                    return new Response(EnumStatus.ERROR, null, "Erreur dans la mise à jour");
                 }
             } else {
                 if (dto.getPhoneNumber().length()==10 && (dto.getPhoneNumber().startsWith("06") || dto.getPhoneNumber().startsWith("07"))) {
@@ -333,76 +303,71 @@ public class CompanyService implements ICompany {
                     if (indicatif != null) {
                         company.setIndicatif(indicatif);
                     } else {
-                        return new Response(EnumStatus.ERROR, null, "the code doesn't exist");
+                        return new Response(EnumStatus.ERROR, null, "Cet indicatif n'existe pas chez nous");
                     }
 
                     company.setPhoneNumber(dto.getPhoneNumber());
-                    return companyTryRegistration(company, "Phone number updated");
+                    return companyTryRegistration(company, "Numéro de téléphone mis à jour");
                 } else {
-                    return new Response(EnumStatus.ERROR, null, "It's not a phone number");
+                    return new Response(EnumStatus.ERROR, null, "Merci de joindre un numéro valide");
                 }
             }
         }
 
-        return new Response(EnumStatus.ERROR, null, "Error in the process");
+        return new Response(EnumStatus.ERROR, null, "Erreur inconnue");
     }
 
     private Response companyTryRegistration(Company company, String message) {
         try {
             Company savedCompany = companyRepository.save(company);
-            log.info("Company update :  {}", savedCompany);
+            log.info("Company #{} - {}", savedCompany.getCompanyId(), message);
             return new Response(EnumStatus.OK, null, message);
         }
         catch (Exception e){
-            log.error("Error :  {}", e.getMessage());
-            return new Response(EnumStatus.ERROR, null, "Error in update");
+            log.error("Error : {}", e.getMessage());
+            return new Response(EnumStatus.ERROR, null, "Erreur lors de la mise à jour");
         }
     }
 
     public Company companyTryUpdateLastVisit(Company company) {
         try {
             Company savedCompany = companyRepository.save(company);
-            log.info("Company update :  {} - {}", savedCompany.getCompanyId(), savedCompany.getLastVisit());
+            log.info("Company #{} connected at {}", savedCompany.getCompanyId(), savedCompany.getLastVisit());
             return savedCompany;
         }
         catch (Exception e){
-            log.error("Error :  {}", e.getMessage());
+            log.error("Error : {}", e.getMessage());
             return null;
         }
     }
 
     public Response delete(AccountDeleteDTO dto){
-        log.info("delete Account");
-        log.info("dto : {}", dto);
+
 
         Optional<Company> companyOptional=companyRepository.findByPublicKey(dto.getPublicKey());
         Company company;
         if (companyOptional.isPresent()){
+            log.info("Company #{} want delete your account", companyOptional.get().getCompanyId());
             company = companyOptional.get();
-            log.info("Company : {}", company);
-
             if (dto.getPassword().isEmpty()){
-                return new Response(EnumStatus.ERROR, null, "Password empty");
+                return new Response(EnumStatus.ERROR, null, "Mot de passe vide");
             } else {
                 if (passwordEncoder.matches(dto.getPassword(), company.getPassword())){
                     company.setEnable(false);//Mise en désactivé
-                    company.setMotifEnable(EnumMotif.SUPPRESSION);//Désactivation lié à la suppression du compte par le client
+                    company.setMotifEnable(EnumMotif.SUPPRESSION);//Désactivation liée à la suppression du compte par le client
                     company.setDateCloture(new Date());// Ajoute la date du jour de la suppression du compte
-                    log.info("company at modify");
-                    return companyTryRegistration(company, "Company disabled");
+
+                    return companyTryRegistration(company, "Compte désactivé");
                 } else {
-                    return new Response(EnumStatus.ERROR, null, "Wrong password");
+                    return new Response(EnumStatus.ERROR, null, "Mauvais mot de passe");
                 }
             }
         }
 
-        return new Response(EnumStatus.ERROR, null, "Error in the process");
+        return new Response(EnumStatus.ERROR, null, "Erreur inconnue");
     }
 
     public Response validateRegister(String publicKey){
-        log.info("validate register :");
-        log.info("publicKey : {}", publicKey);
-
         Company company = getCompanyByPublicKey(publicKey);
 
         if (company != null) {
@@ -420,11 +385,8 @@ public class CompanyService implements ICompany {
     }
 
     public Response registerDomaine(AccountDTO dto){
-        log.info("register domaine :");
-        log.info("dto: {}", dto);
 
         Company company = getCompanyByPublicKey(dto.getPublicKey());
-        log.info("company : {}", company);
 
         boolean isValid = Utility.domaineValidate.isValid(dto.getDomaine());
 
@@ -433,13 +395,11 @@ public class CompanyService implements ICompany {
         }
 
         if (company != null){
-            log.info("Company : {}", company);
-
             company.setDomaine(dto.getDomaine());
             return companyTryRegistration(company, "Nom de domaine enregistré");
         }
 
-        return new Response(EnumStatus.ERROR, null, "Error in the process");
+        return new Response(EnumStatus.ERROR, null, "Erreur inconnue");
     }
 
     public Response updateDomaine(AccountDTO dto){
@@ -454,18 +414,15 @@ public class CompanyService implements ICompany {
     }
 
     public Response sendPwLost(AccountDTO dto){
-        log.info("Password Lost :");
-        log.info("dto: {}", dto);
 
         Optional<Company> companyOptional = companyRepository.findByMail(dto.getMail());
-        log.info("company : {}", companyOptional);
         Company company;
 
         if (companyOptional.isPresent()){
             company = companyOptional.get();
             String token = utility.createPublicKey(60);
-            log.info("token : {}", token);
             companyTokenService.saveCompanyToken(company, token);
+            log.info("Company #{} get new password", company.getCompanyId());
             return mailService.sendMailLostPassword(dto.getMail(), company.getPublicKey(), token);
         }
 
@@ -473,11 +430,6 @@ public class CompanyService implements ICompany {
     }
 
     public Response resetPassword(String publicKey, AccountDTO dto, String token){
-        log.info("resetPasseword : ");
-        log.info("publicKey : {}", publicKey);
-        log.info("token : {}", token);
-        log.info("dto : {}", dto);
-
         Company company = getCompanyByPublicKey(publicKey);
         boolean checkToken = companyTokenService.checkToken(token, publicKey);
 
@@ -488,16 +440,14 @@ public class CompanyService implements ICompany {
                 } else {
                     if (dto.getPassword().equals(dto.getConfirmPassword())) {
                         company.setPassword(passwordEncoder.encode(dto.getPassword()));
-                        log.info("company modified :  {}", company);
                         companyTokenService.deleteToken(company);
                         return companyTryRegistration(company, "Mot de passe modifié");
                     } else {
-                        log.info("Password not identical");
-                        return new Response(EnumStatus.ERROR, null, "Mot de passe différent");
+                        return new Response(EnumStatus.ERROR, null, "Mots de passes différents");
                     }
                 }
             } else {
-                return new Response(EnumStatus.ERROR, null, "Error in the process");
+                return new Response(EnumStatus.ERROR, null, "Erreur inconnue");
             }
         } else {
             return new Response(EnumStatus.ERROR, null, "Votre demande de renouvellement de mot de passe n'a pas été prise en compte");
@@ -507,12 +457,11 @@ public class CompanyService implements ICompany {
     }
 
     public Response updatePlan(Company company, Date dateLine, EnumPlan plan){
-        log.info("Plan : {}", plan);
-        log.info("DateLine Facture : {}", dateLine);
+        log.info("Company #{} want change plan : {} with dateLineFacture : {}", company.getCompanyId(), plan, dateLine);
         company.setPlan(plan);
         company.setDateLineFacturePlan(dateLine);
 
-        return companyTryRegistration(company, "Plan update");
+        return companyTryRegistration(company, "Offre modifié avec succès");
 
     }
 }

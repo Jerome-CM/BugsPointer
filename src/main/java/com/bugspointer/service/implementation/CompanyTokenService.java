@@ -48,10 +48,10 @@ public class CompanyTokenService {
         }
         companyToken.setTokenReset(passwordEncoder.encode(token));
         companyToken.setDateCreation(creation);
-        log.info("companyToken : {}", companyToken);
 
         try {
             companyTokenRepository.save(companyToken);
+
         }catch (Exception e){
             log.error("Error : {}", e.getMessage());
         }
@@ -78,9 +78,7 @@ public class CompanyTokenService {
 
         if (companyTokenOptional.isPresent()){
             CompanyToken companyToken = companyTokenOptional.get();
-            log.info("token present");
             if (companyToken.getDateCreation() != null && getDateNotExpired(companyToken)){
-                log.info("temps non dépassé");
                 return passwordEncoder.matches(tokenUrl, companyToken.getTokenReset());
             }
         }

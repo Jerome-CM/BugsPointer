@@ -22,7 +22,7 @@ window.addEventListener("DOMContentLoaded", function(){
 
 /* Autres variables */
     const textValid = "Bug pointé correctement";
-    const ADRESSE = "http://bugspointer.com/sondage"
+    const ADRESSE = "https://bugspointer.com/pollUser"
     // Texte pour le bouton envoyer un bug
     const textEnvoiNoValid = "Sélectionner le bug avec le bouton 'Pointer le bug'";
     const textEnvoiNoTime = "Merci de patienter";

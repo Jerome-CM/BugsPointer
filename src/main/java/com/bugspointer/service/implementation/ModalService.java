@@ -36,8 +36,6 @@ public class ModalService implements IModal {
 
 
     public Response saveModal(ModalDTO dto){
-        log.info("saveModal");
-        log.info("in dto :  {}", dto);
         boolean test = false;
         boolean bot;
         boolean description;
@@ -53,30 +51,30 @@ public class ModalService implements IModal {
         {
             bot = true;
         } else {
-            log.info("bot completed");
-            return new Response(EnumStatus.ERROR, null, "Form completed by robot");
+            log.warn("Modal completed by BOT");
+            return new Response(EnumStatus.ERROR, null, "");
         }
 
-        if (dto.getDescription().length()>10)
-        {
-            description = true;
+        if (dto.getDescription().length()>10){
+            if(dto.getDescription().contains("<script>")){
+                description = false;
+                return new Response(EnumStatus.ERROR, null, "Merci de ne pas signaler de balise <script> dans la description");
+            } else {
+                description = true;
+            }
         } else {
-            log.info("description incomplete");
             return new Response(EnumStatus.ERROR, null, "Description incomplete");
         }
 
-        if (dto.getKey().equals("YOUR_KEY_HERE")) { //TODO:A modifier par la publicKey représentant la clé de la company test
-            log.info("Envoi test");
+        if (dto.getKey().equals("LaClefDeTest")) { //TODO: A modifier par la publicKey représentant la clé de la company test
             test = true;
         }
 
         Optional<Company> companyOptional = companyRepository.findByPublicKey(dto.getKey());
         if (companyOptional.isPresent()){
-            log.info("Company exist : {}", companyOptional);
 
             company = companyOptional.get();
-            if (company.isEnable())
-            {
+            if (company.isEnable()){
                 if (company.getDomaine() != null && dto.getUrl().contains(company.getDomaine())) { //On vérifie que l'URL contient le nom de domaine (s'il est présent) où la modal est censé apparaitre.
                     key = true;
                 } else {
@@ -84,12 +82,11 @@ public class ModalService implements IModal {
                     return new Response(EnumStatus.ERROR, null, "L'URL ne correspond pas au domaine transmis");
                 }
             } else {
-                return new Response(EnumStatus.ERROR, null, "company non valide");
+                return new Response(EnumStatus.ERROR, null, "Votre compte est désactivé. Contactez-nous pour le réactiver : contact@bugspointer.com");
             }
 
         } else {
-            log.info("Key is not match with a company");
-            return new Response(EnumStatus.ERROR, null, "company not exist");
+            return new Response(EnumStatus.ERROR, null, "Erreur avec votre clé public, assurez-vous quelle soit identique à celle inscrit dans votre compte ( Dashboard > Account )");
         }
 
         if (dto.getAdresseIp() != null && !test){
@@ -101,8 +98,7 @@ public class ModalService implements IModal {
                 dateIpEnvoi = bugs.get(i).getDateCreation();
                 boolean ok = differenceDate(dateIpEnvoi, dateJour, timeSeconde);
                 if (!ok){
-                    log.info("Délai d'envoi pour même adresse ip trop court");
-                    return new Response(EnumStatus.ERROR, null, "Délai entre les envois trop court");
+                    return new Response(EnumStatus.ERROR, null, "Merci de ne pas envoyer plus d'un rapport toutes les minutes");
                 }
             }
         }
@@ -117,14 +113,13 @@ public class ModalService implements IModal {
                 while (i >= 0 && dateDernierEnvoi == null) {
                     if (bugs.get(i).getDateEnvoi() != null) {
                         dateDernierEnvoi = bugs.get(i).getDateEnvoi();
-                        log.info("dernier envoi : {}", dateDernierEnvoi);
                     }
                     i--;
                 }
 
-                long j30 = TimeUnit.SECONDS.convert(30, TimeUnit.DAYS);
+                // Si la différence est bien de + de 30jours
                 if (dateDernierEnvoi != null) {
-                    if (differenceDate(dateDernierEnvoi, dateJour, j30)) {
+                    if (differenceDate(dateDernierEnvoi, dateJour, TimeUnit.SECONDS.convert(30, TimeUnit.DAYS))) {
                         envoi = true;
                     }
                 } else {
@@ -150,10 +145,17 @@ public class ModalService implements IModal {
             }
             try {
                 if (!test) {
-                    Bug savedBug = bugRepository.save(bug);
+                    Bug savedBug = new Bug();
+                    try{
+                        savedBug = bugRepository.save(bug);
+                        log.info("Company #{} save a new bug #{}",savedBug.getCompany().getCompanyId(), savedBug.getId());
+                    } catch (Exception e){
+                        log.error("Impossible to save a bug for company#{} : {}", bug.getCompany().getCompanyId(), e.getMessage());
+                    }
+
                     /* Vérification du compte gratuit, si oui → si dernier envoi date de +30jours → envoi du mail avec détail
-                     *   Si -30 jours, mail sans détail avec 'abonnez-vous pour le voir' */
-                    if (company.getPlan().equals(EnumPlan.FREE) && envoi) {
+                     *   Si -30 jours, mail sans détails avec 'abonnez-vous pour le voir' */
+                    if (company.getPlan().equals(EnumPlan.FREE) && envoi && savedBug.getEtatBug() != null) {
 
                         Response response = mailService.sendMailNewBugDetail(company.getMail(), savedBug);
                         if (response.getStatus().equals(EnumStatus.OK)) {
@@ -161,16 +163,15 @@ public class ModalService implements IModal {
                         }
                     } else if (company.getPlan().equals(EnumPlan.FREE)) {
 
-
                         Response response = mailService.sendMailNewBugNoDetail(company.getMail());
                         if (response.getStatus().equals(EnumStatus.OK)) {
                             log.info("mail envoyer sans détail");
                         }
                     } else {
                         //TODO: envoyer mail lié au compte payant
-                        log.info("compte payant");
+                        log.error("TODO: envoyer mail lié au compte payant");
                     }
-                    log.info("bug saved :  {}", savedBug);
+
                 } else {
                     String codeLoc = dto.getCodeLocation();
                     codeLoc = codeLoc.replace("<", "&lt;");
@@ -178,14 +179,14 @@ public class ModalService implements IModal {
                     bug.setCodeLocation(codeLoc);
                     Response response = mailService.sendMailTest(dto.getMail(), bug);
                     if (response.getStatus().equals(EnumStatus.OK)) {
-                        log.info("mail test envoyé");
+                        log.info("TestPage report send");
                     }
                 }
-                return new Response(EnumStatus.OK, null, "Send successfully");
+                return new Response(EnumStatus.OK, null, "Envoie avec succès");
             }
             catch (Exception e){
-                log.error("Error :  {}", e.getMessage());
-                return new Response(EnumStatus.ERROR, null, "A error is present, Retry");
+                log.error("Error : {}", e.getMessage());
+                return new Response(EnumStatus.ERROR, null, "Une erreur est survenue, merci de recommencer");
             }
         }
 

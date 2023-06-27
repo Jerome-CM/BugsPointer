@@ -50,7 +50,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         }
 
         if(session.getAttribute("token") == null){
-            log.info("Create a new token because is null in the session");
             String token = null;
             try {
                 token = jwtTest.createAuthenticationToken(mail, authentication);
@@ -61,10 +60,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             session.setAttribute("token", token);
             session.setAttribute("role", company.getRole());
             session.setAttribute("mail", mail);
-
-
         }
-        log.info("Token in session : {}", session.getAttribute("token"));
+
         company.setLastVisit(new Date());
         Company companySaved = companyService.companyTryUpdateLastVisit(company);
         log.info("Dernière connexion company : {}", companySaved.getLastVisit());

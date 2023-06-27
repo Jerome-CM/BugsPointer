@@ -26,15 +26,16 @@ public class PollService {
             if(poll.getFindEasy() != null && poll.getStepClarity() != null && poll.getTargetFeatureGoodWork() != null){
                 try{
                     pollRepository.save(poll);
-                    return new Response(EnumStatus.OK, null, null);
+                    return new Response(EnumStatus.OK, null, "Merci de votre soutient. Nous allons prendre en compte vos remarques pour notre prochaine version");
                 } catch (Exception e){
                     log.error("Impossible to save a poll : {}", e.getMessage());
-                    return new Response(EnumStatus.ERROR, null, "Error to save a poll");
+                    return new Response(EnumStatus.ERROR, null, "Erreur lors de l'enregistrement du sondage");
                 }
             } else {
-                return new Response(EnumStatus.ERROR, null, "Error to save a poll");
+                return new Response(EnumStatus.ERROR, null, "Erreur lors de l'enregistrement du sondage");
             }
         } else {
+            //TODO poll company save here
             return new Response(EnumStatus.ERROR, null, "Error");
         }
     }

@@ -27,30 +27,24 @@ public class CompanyPreferencesService implements ICompanyPreferences {
     }
 
     public CompanyPreferenceDTO getCompanyPreferenceDTO(Company company) {
-        log.info("CompanyPreferenceDTO : company : {}", company);
         Optional<CompanyPreferences> preferencesOptional = preferencesRepository.findByCompany(company);
         CompanyPreferenceDTO dto;
         if (preferencesOptional.isPresent()){
             CompanyPreferences preferences = preferencesOptional.get();
-            log.info("companyPreferences : {}", preferences);
             dto = modelMapper.map(preferences, CompanyPreferenceDTO.class);
         } else {
             dto = modelMapper.map(company, CompanyPreferenceDTO.class);
         }
-        log.info("CompanyPreferenceDTO : dto : {}", dto);
         return dto;
     }
 
 
     public Response updatePreference(CompanyPreferenceDTO dto, String action) {
-        log.info("updatePreference :");
-        log.info("dto : {}", dto);
-
         Optional<CompanyPreferences> preferencesOptional = preferencesRepository.findByCompany_PublicKey(dto.getCompanyPublicKey());
         CompanyPreferences preferences;
         if (preferencesOptional.isPresent()){
             preferences = preferencesOptional.get();
-            log.info("Preferences initial : {}", preferences);
+            log.info("Preferences initial for company #{}, MNB:{}, MI:{}, MF:{}, SMSNB:{}, SMSI:{}, SMSF:{}", preferences.getCompany().getCompanyId(), preferences.isMailNewBug(), preferences.isMailInactivity(), preferences.isMailNewFeature(), preferences.isSmsNewBug(), preferences.isSmsInactivity(), preferences.isSmsNewFeature());
             if (action.equals("updateMail")){
                 preferences.setMailNewBug(dto.isMailNewBug());
                 preferences.setMailInactivity(dto.isMailInactivity());
@@ -66,22 +60,21 @@ public class CompanyPreferencesService implements ICompanyPreferences {
                     preferences.setSmsNewFeature(dto.isSmsNewFeature());
                 }
             } else {
-                return new Response(EnumStatus.ERROR, null, "Error to click on button");
+                return new Response(EnumStatus.ERROR, null, "Une erreur s'est produite");
             }
-            log.info("Preferences at modify");
 
             try {
                 CompanyPreferences savedPreferences = preferencesRepository.save(preferences);
-                log.info("Preferences update : {}", savedPreferences);
-                return new Response(EnumStatus.OK, null, "Preferences updated");
+                log.info("Preferences after updated for company #{}, MNB:{}, MI:{}, MF:{}, SMSNB:{}, SMSI:{}, SMSF:{}", savedPreferences.getCompany().getCompanyId(), savedPreferences.isMailNewBug(), savedPreferences.isMailInactivity(), savedPreferences.isMailNewFeature(), savedPreferences.isSmsNewBug(), savedPreferences.isSmsInactivity(), savedPreferences.isSmsNewFeature());
+                return new Response(EnumStatus.OK, null, "Préférences enregistrées avec succès");
             }
             catch (Exception e){
-                log.error("Error : {}", e.getMessage());
-                return new Response(EnumStatus.ERROR, null, "Error in update");
+                log.error("Error to update preferences: {}", e.getMessage());
+                return new Response(EnumStatus.ERROR, null, "Erreur lors de l'enregistrement");
             }
         }
 
-        return new Response(EnumStatus.ERROR, null, "Error in the process");
+        return new Response(EnumStatus.ERROR, null, "Error inconnue");
     }
 
 

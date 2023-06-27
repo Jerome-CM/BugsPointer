@@ -40,7 +40,7 @@ public class BugService {
         Optional<Bug> bug = bugRepository.findById(idBug);
         if(bug.isPresent()){
             String codeHtml = bug.get().getCodeLocation();
-            // Charge HTML in Document JSoupo bjet
+            // Charge HTML in Document JSoup objet
             Document document = Jsoup.parse(codeHtml);
 
             // Use output method to get indented HTML
@@ -87,15 +87,15 @@ public class BugService {
 
 
     public Response viewBug(Long idBug, Long idCompany, EnumPlan plan){
-        //Vérifier compte non FREE, company de bug correspondant à la company de la session
 
+        //Vérifier compte non FREE, company de bug correspondant à la company de la session
         if (plan != EnumPlan.FREE) {
             Optional<Bug> bugOptional = bugRepository.findById(idBug);
             Bug bug;
             if (bugOptional.isPresent()){
                 bug = bugOptional.get();
                 if (bug.getCompany().getCompanyId().equals(idCompany)){
-                    return new Response(EnumStatus.OK, bug, "Détail bug");
+                    return new Response(EnumStatus.OK, bug, "Détails bug");
                 } else {
                     return new Response(EnumStatus.ERROR, null, "Ce bug ne vous appartient pas");
                 }
@@ -103,7 +103,7 @@ public class BugService {
                 return new Response(EnumStatus.ERROR, null, "Ce bug n'existe pas");
             }
         } else {
-            return new Response(EnumStatus.ERROR, null, "Vous ne pouvez pas accéder au détail de bug");
+            return new Response(EnumStatus.ERROR, null, "Vous ne pouvez pas accéder aux détails de bug");
         }
     }
 
@@ -115,27 +115,40 @@ public class BugService {
             if (bug.getEtatBug().equals(EnumEtatBug.PENDING)){
                 bugSolved(bug);
             } else {
-                Date jour = new Date();
                 if (bug.getDateView() == null) {
-                    bug.setDateView(jour);
+                    bug.setDateView(new Date());
                 } else if (bug.getDateSolved() != null) {
                     bug.setDateSolved(null);
                 }
                 bug.setEtatBug(EnumEtatBug.PENDING);
-                Bug bugSaved = bugRepository.save(bug);
-                log.info("Bug update : id = {}, company = {}, etat = {} date view = {}", bugSaved.getId(), bugSaved.getCompany().getMail(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
+                try{
+                    Bug bugSaved = bugRepository.save(bug);
+                    log.info("Bug #{} change state to {} at {}", bugSaved.getId(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
+                } catch (Exception e){
+                    log.error("Impossible to update a pending bug #{}: {}", idBug, e.getMessage());
+                }
             }
+        } else {
+            log.error("Error with idbug #{} or idCompany #{} or plan {}", idBug, idCompany, plan);
         }
     }
 
     public void bugSolved(Bug bug){
-        Date jour = new Date();
-        if (bug.getDateSolved() == null) {
-            bug.setDateSolved(jour);
-            bug.setEtatBug(EnumEtatBug.SOLVED);
-            Bug bugSaved = bugRepository.save(bug);
-            log.info("Bug update : id = {}, company = {}, etat = {} date view = {}", bugSaved.getId(), bugSaved.getCompany().getMail(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
+        if(bug != null){
+            if (bug.getDateSolved() == null) {
+                bug.setDateSolved(new Date());
+                bug.setEtatBug(EnumEtatBug.SOLVED);
+                try{
+                    Bug bugSaved = bugRepository.save(bug);
+                    log.info("Bug #{} change state to {} at {}", bugSaved.getId(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
+                } catch (Exception e){
+                    log.error("Impossible to update a solved bug : {}", e.getMessage());
+                }
+            }
+        } else {
+            log.error("The bug received is null : {}", bug);
         }
+
     }
 
     public void bugIgnored(Long idBug, Long idCompany, String plan) {
@@ -143,16 +156,18 @@ public class BugService {
         Bug bug;
         if (bugOptional.isPresent() && bugOptional.get().getCompany().getCompanyId().equals(idCompany) && !plan.equals("FREE")) {
             bug = bugOptional.get();
-
-            Date jour = new Date();
             if (bug.getDateView() == null) {
-                bug.setDateView(jour);
+                bug.setDateView(new Date());
             }
             if (bug.getDateSolved() == null) {
-                bug.setDateSolved(jour);
+                bug.setDateSolved(new Date());
                 bug.setEtatBug(EnumEtatBug.IGNORED);
-                Bug bugSaved = bugRepository.save(bug);
-                log.info("Bug update : id = {}, company = {}, etat = {} date view = {}", bugSaved.getId(), bugSaved.getCompany().getMail(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
+                try{
+                    Bug bugSaved = bugRepository.save(bug);
+                    log.info("Bug #{} change state to {} at {}", bugSaved.getId(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
+                } catch (Exception e){
+                    log.error("Impossible to update to ignored bug : {}", e.getMessage());
+                }
             }
         }
     }
@@ -196,7 +211,6 @@ public class BugService {
                     break;
             }
         }
-
        return title;
     }
 
@@ -238,6 +252,5 @@ public class BugService {
             return new Response(EnumStatus.OK, null, "La liste des bugs pour cette compagnie est vide");
         }
         return new Response(EnumStatus.ERROR, null, "La compagnie ou l'état du bug n'est pas bon");
-
     }
 }

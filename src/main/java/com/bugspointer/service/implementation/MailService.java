@@ -29,7 +29,7 @@ public class MailService {
     @Value("${mail.password}")
     private String password;
 
-    private static final String ADRESSE = "http://bugspointer.com/";
+    private static final String ADRESSE = "https://bugspointer.com/";
 
 
     private final BugService bugService;
@@ -181,7 +181,7 @@ public class MailService {
                         "       <table border='0' cellpadding='0' cellspacing='0' >" +
                         "           <tr>" +
                         "               <td align='center' style='padding: 10px;'>" +
-                        "                   <a href='"+ ADRESSE +"/features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
+                        "                   <a href='"+ ADRESSE +"features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
                         "               </td>" +
                         "           </tr>" +
                         "       </table>" +
@@ -392,7 +392,7 @@ public class MailService {
                         /*"                       <table border='0' cellpadding='0' cellspacing='0' >" +*/
                         "                       <tr>" +
                         "                       <td align='center' style='padding: 10px'>" +
-                        "                           <a href='"+ ADRESSE +"sondage' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: #00E676;' box-shadow='0 0 5px lightgrey'>Donner mon avis</a>" +
+                        "                           <a href='"+ ADRESSE +"pollUser' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: #00E676;' box-shadow='0 0 5px lightgrey'>Donner mon avis</a>" +
                         "                       </td>" +
                         "                   </tr>" +
 /*                        "            </table>" +*/

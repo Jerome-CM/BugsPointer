@@ -148,7 +148,7 @@ public class Authentication {
         return "public/pwLost";
     }
 
-    @GetMapping("resetPassword/{publicKey}/{token}")//TODO: A securiser plus si on possède la clé on peut aller modifier le mot de passe
+    @GetMapping("resetPassword/{publicKey}/{token}")
     String getResetPassword(@PathVariable("publicKey") String publicKey, @PathVariable("token") String token, Model model, AccountDTO dto){
         log.info("token : {} - key : {}", token, publicKey);
         boolean ok = companyTokenService.checkToken(token, publicKey);
