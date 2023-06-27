@@ -24,6 +24,7 @@ public class Bug {
     private String url;
 
     @NotNull
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(columnDefinition = "TEXT")

@@ -2,10 +2,7 @@ package com.bugspointer.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -20,6 +17,7 @@ public class Poll extends PollUser{
     @NotNull
     private String providedBy = "user";
 
+    @Column(columnDefinition = "TEXT")
     private String comment;
 
     private Date dateSend = new Date();
