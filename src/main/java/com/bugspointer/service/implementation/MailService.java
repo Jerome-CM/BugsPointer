@@ -31,15 +31,19 @@ public class MailService {
 
     private static final String ADRESSE = "https://bugspointer.com/";
 
-
     private final BugService bugService;
 
     public MailService(BugService bugService) {
         this.bugService = bugService;
     }
 
+    /**
+     * Envoie un mail pour confirmer un compte
+     * @param to
+     * @param publicKey
+     * @return
+     */
     public Response sendMailRegister(String to, String publicKey) {
-
 
         // Paramètres du destinataire
         String subject = "Bugspointer - Confirmation d'inscription";
@@ -48,13 +52,38 @@ public class MailService {
         String htmlContent =
                 "<html>" +
                 "   <body>" +
-                "       <h1>Confirmation</h1><br>" +
-                "       <p>Merci de votre inscription à Bugspointer " +
-                "       <p>Afin de confirmer votre inscription, merci de cliquer sur le bouton ci-dessous:</p>" +
-                "       <table border='0' cellpadding='0' cellspacing='0' >" +
+                "       " +
+                "       " +
+                "       <table border='0' cellpadding='0' cellspacing='0'>" +
+                "           <tr>" +
+                "               <td align='center' style='padding: 10px;'>" +
+                "                   <h2>Confirmation</h2>" +
+                "               </td>" +
+                "           </tr>" +
+                "           <tr style='line-height:20px;'><td></td></tr>" +
+                "           <tr>" +
+                "               <td align='center' style='padding: 10px;'>" +
+                "                   <p>Votre tableau de bord tout neuf est entrain d'être finalisé, mais nous avons besoin de votre aide</p>" +
+                "               </td>" +
+                "           </tr>" +
+                "           <tr style='line-height:20px;'><td></td></tr>" +
+                "           <tr>" +
+                "               <td align='center' style='padding: 10px;'>" +
+                "                  <p>Afin de confirmer votre inscription, merci de cliquer sur le bouton ci-dessous:</p>" +
+                "               </td>" +
+                "           </tr>" +
+                "           <tr style='line-height:30px;'><td></td></tr>" +
                 "           <tr>" +
                 "               <td align='center' style='padding: 10px;'>" +
                 "                   <a href='"+ ADRESSE +"confirmRegister/"+ publicKey + "' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Confirmer</a>" +
+                "               </td>" +
+                "           </tr>" +
+                "        <tr style='line-height:20px;'><td></td></tr>" +
+                "        <tr><td>ou sur ce lien</td></tr>" +
+                "        <tr style='line-height:20px;'><td></td></tr>" +
+                "           <tr>" +
+                "               <td align='center' style='padding: 10px;'>" +
+                "                   <p><a href='"+ ADRESSE +"confirmRegister/"+ publicKey + "'>" + ADRESSE + "confirmRegister/" + publicKey + "</a></p>" +
                 "               </td>" +
                 "           </tr>" +
                 "       </table>" +
@@ -90,17 +119,22 @@ public class MailService {
             // Envoi du message
             Transport.send(message);
 
-            log.info("email register sent at : {}", to);
+            log.info("Email register sent at : {}", to);
             return new Response(EnumStatus.OK, null, "Nous vous avons envoyé un e-mail à l'adresse : " + to);
         } catch (MessagingException e) {
             e.printStackTrace();
-            log.info("error from mail sender : " + e.getMessage());
+            log.error("Error from mail sender : " + e.getMessage());
             return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
         }
     }
 
+    /**
+     * Envoie un mail sur un compte FREE, + de 30 jours depuis le dernier bug
+     * @param to
+     * @param newBug
+     * @return
+     */
     public Response sendMailNewBugDetail(String to, Bug newBug) {
-
 
         // Paramètres du destinataire
         String subject = "Bugspointer - Nouveau Bug";
@@ -110,14 +144,14 @@ public class MailService {
                 "<html>" +
                         "   <body>" +
                         "       <h1>Nouveau Bug</h1><br>" +
-                        "       <p>Un utilisateur vient de déclarer un nouveau bug sur votre site " +
+                        "       <p>Un utilisateur vient de déclarer un nouveau bug sur votre site :" +
                         "       <p>URL concernée : "+ newBug.getUrl() +"</p><br>" +
                         "       <p>Description du bug : <br>" + newBug.getDescription() +"</p><br>" +
-                        "       <p>Afin d'avoir plus d'informations sur ce bug, vous pouvez changer votre abonnement en cliquant sur le bouton ci-dessous:" +
+                        "       <p>Afin d'avoir plus de détails sur ce bug, vous pouvez changer votre abonnement en cliquant sur le bouton ci-dessous :" +
                         "       <table border='0' cellpadding='0' cellspacing='0' >" +
                         "           <tr>" +
                         "               <td align='center' style='padding: 10px;'>" +
-                        "                   <a href='"+ ADRESSE +"features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
+                        "                   <a href='" + ADRESSE + "features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
                         "               </td>" +
                         "           </tr>" +
                         "       </table>" +
@@ -164,6 +198,11 @@ public class MailService {
         }
     }
 
+    /**
+     * Envoie un mail sur un compte FREE, moins de 30 jours depuis le dernier bug
+     * @param to
+     * @return
+     */
     public Response sendMailNewBugNoDetail(String to) {
 
 
@@ -176,12 +215,12 @@ public class MailService {
                         "   <body>" +
                         "       <h1>Nouveau Bug</h1><br>" +
                         "       <p>Un utilisateur vient de déclarer un nouveau bug sur votre site " +
-                        "       <p>Vous avez atteint la limite gratuite d'un rapport de bug tout les 30 jours</p><br>" +
-                        "       <p>Afin de connaitre les informations sur ce bug, changer d'offre en cliquant sur le bouton ci-dessous:" +
+                        "       <p>Malheureusement, vous avez atteint la limite gratuite d'un rapport de bug tout les 30 jours</p><br>" +
+                        "       <p>Changer d'offre afin de voir toutes les informations sur ce bug :" +
                         "       <table border='0' cellpadding='0' cellspacing='0' >" +
                         "           <tr>" +
                         "               <td align='center' style='padding: 10px;'>" +
-                        "                   <a href='"+ ADRESSE +"features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
+                        "                   <a href='"+ ADRESSE +"features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Voir en détail</a>" +
                         "               </td>" +
                         "           </tr>" +
                         "       </table>" +
@@ -238,8 +277,8 @@ public class MailService {
                         "   <body>" +
                         "       <h1>Réinitialiser le mot de passe</h1><br>" +
                         "       <p>Bonjour,<br> " +
-                        "       <p>Vous avez oublié votre mot de passe ?</p><br>" +
-                        "       <p>Réinitialiser votre mot de passe en cliquant sur le bouton, ci-dessous:" +
+                        "       <p>Vous avez demandé à réinitialiser votre mot de passe.</p><br>" +
+                        "       <p>Choisissez en un autre en cliquant sur le bouton, ci-dessous:" +
                         "       <table border='0' cellpadding='0' cellspacing='0' >" +
                         "           <tr>" +
                         "               <td align='center' style='padding: 10px;'>" +
@@ -247,8 +286,8 @@ public class MailService {
                         "               </td>" +
                         "           </tr>" +
                         "       </table>" +
-                        "       <p>Ou copier et coller l'URL dans votre navigateur : </p>" +
-                        "       <a href='"+ ADRESSE +"resetPassword/"+ publicKey + "?token=" + token + "'>"+ ADRESSE +"resetPassword/"+ publicKey +"</a>" +
+                        "       <p>Ou cliquer sur ce lien : </p>" +
+                        "       <a target='_blank' href='"+ ADRESSE +"resetPassword/"+ publicKey + "?token=" + token + "'>"+ ADRESSE +"resetPassword/"+ publicKey +"</a>" +
                         "       <br>" +
                         "       <p>Si vous n'avez pas demandé un nouveau mot de passe, veuillez ignorer ce message" +
                         "   </body>" +
@@ -300,8 +339,8 @@ public class MailService {
 
         // Contenu HTML de l'email
         String htmlContent =
-                "<html style='background-color:#F0F1F3; font-size:16px' >" +
-                        "  <body >" +
+                "<html style=' font-size:16px'>" +
+                        "  <body>" +
                         "    <h1> Améliorez votre site web avec Bugspointer - Obtenez des détails approfondis sur vos rapports de bugs ! </h1>" +
                         "    <p>Cher utilisateur de Bugspointer, <br>" +
                         "    Nous avons bien reçu votre rapport de bug depuis la page de test de notre site bugspointer.com, et nous tenons à vous remercier pour votre intérêt</p><br><br>" +

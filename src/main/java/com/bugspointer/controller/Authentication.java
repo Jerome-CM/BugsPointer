@@ -69,12 +69,14 @@ public class Authentication {
                 }
                 model.addAttribute("notification", response.getMessage());
                 model.addAttribute("status", String.valueOf(response.getStatus()));
+                model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
                 return "public/registerConfirm";
             } else {
                 model.addAttribute("companyRegister", dtoRegister);
                 model.addAttribute("companyLogin", dtoLogin);
                 model.addAttribute("notification", response.getMessage());
                 model.addAttribute("status", String.valueOf(response.getStatus()));
+                model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
             }
         }
         return "public/authentication";
