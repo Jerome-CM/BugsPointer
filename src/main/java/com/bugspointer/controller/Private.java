@@ -58,7 +58,6 @@ public class Private {
     @GetMapping("notifications")
     String getNotifications(Model model, HttpServletRequest request){
         HttpSession session = request.getSession();
-        log.info("session mail : {}", session.getAttribute("mail"));
         model.addAttribute("company", preferencesService.getCompanyPreferenceDTO(companyService.getCompanyWithToken(request)));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/notifications";
@@ -87,7 +86,6 @@ public class Private {
     @GetMapping("account/delete")
     String getDelete(Model model, HttpServletRequest request){
         HttpSession session = request.getSession();
-        log.info("session mail : {}", session.getAttribute("mail"));
         model.addAttribute("company", companyService.getAccountDeleteDto(companyService.getCompanyWithToken(request)));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/deleteAccount";
@@ -117,7 +115,6 @@ public class Private {
     @GetMapping("account")
     String getAccount(Model model, HttpServletRequest request){
         HttpSession session = request.getSession();
-        log.info("session mail : {}", session.getAttribute("mail"));
         model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/account";

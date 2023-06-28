@@ -108,7 +108,8 @@ public class CompanyService implements ICompany {
         } else {
             return new Response(EnumStatus.ERROR, null, "Les mails ne sont pas identiques");
         }
-//TODO optimisation a faire entre les 2 recherches de company, besoin d'unicité pour le nom ???
+
+        //TODO optimisation à faire entre les 2 recherches de company, besoin d'unicité pour le nom ???
         Optional<Company> companyOptional = companyRepository.findByCompanyName(dto.getCompanyName());
         if (companyOptional.isPresent()){
             log.info("CompanyName is exist :  {}", dto.getCompanyName());
@@ -150,7 +151,7 @@ public class CompanyService implements ICompany {
     public Company getCompanyWithToken(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String token = (String) session.getAttribute("token");
-        log.info(token);
+
         String realToken = token.substring(7);
 
         Optional<Company> companyOptional = companyRepository.findByMail(jwtTokenUtil.getUsernameFromToken(realToken));
