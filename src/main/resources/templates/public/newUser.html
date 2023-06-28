@@ -1,13 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
-    <link th:href="@{/css/style.css}" rel="stylesheet" />
-    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+<div th:replace="~{include/head.html}"></div>
     <title>New User</title>
 </head>
 <body class="index" id="page-new-user">
