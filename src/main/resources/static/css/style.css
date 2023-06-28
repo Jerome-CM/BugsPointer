@@ -219,6 +219,19 @@ nav ul li a {
 
 /* Index */
 
+.citation{
+    width: 85%;
+    font-size: 19px;
+    color: var(--color-white);
+    font-style: italic;
+    text-align: center;
+}
+
+.citation img{
+    width: 130px;
+    height: 130px;
+    margin: 0 30px;
+}
 
 .slider {
     width: 450px;
