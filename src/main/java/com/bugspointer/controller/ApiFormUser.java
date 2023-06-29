@@ -41,7 +41,7 @@ public class ApiFormUser {
     RedirectView modal(@Valid ModalDTO dto, BindingResult result, HttpServletRequest request){
         if (!result.hasErrors()){
             String adresseIp = request.getRemoteAddr();
-            log.info("adresseIp : {}", adresseIp);
+            log.info("{} send a new bug", adresseIp);
             dto.setAdresseIp(adresseIp);
             modalService.saveModal(dto);
         }

@@ -131,9 +131,7 @@ public class CompanyService implements ICompany {
             preferences.setMailInactivity(true);
             try {
                 Company savedCompany = companyRepository.save(company);
-                log.info("\r -------  ");
-                log.info("New Company : #{} - {}", savedCompany.getCompanyId(), savedCompany.getCompanyName());
-                log.info("\r -------  ");
+                log.info("New Company register #{} - {}", savedCompany.getCompanyId(), savedCompany.getCompanyName());
                 CompanyPreferences savedPreferences = preferencesRepository.save(preferences);
 
                 // TODO BETA Auto connect joindre le mail a UserDetailsServiceJwt

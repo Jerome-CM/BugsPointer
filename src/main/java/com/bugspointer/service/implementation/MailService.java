@@ -54,7 +54,7 @@ public class MailService {
                 "   <body>" +
                 "       " +
                 "       " +
-                "       <table border='0' cellpadding='0' cellspacing='0'>" +
+                "       <table width='100%' align='center' border='0' cellpadding='0' cellspacing='0'>" +
                 "           <tr>" +
                 "               <td align='center' style='padding: 10px;'>" +
                 "                   <h2>Confirmation</h2>" +
@@ -78,8 +78,8 @@ public class MailService {
                 "                   <a href='"+ ADRESSE +"confirmRegister/"+ publicKey + "' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Confirmer</a>" +
                 "               </td>" +
                 "           </tr>" +
-                "        <tr style='line-height:20px;'><td></td></tr>" +
-                "        <tr><td>ou sur ce lien</td></tr>" +
+                "        <tr style='line-height:30px;'><td></td></tr>" +
+                "        <tr><td align='center'>ou sur ce lien</td></tr>" +
                 "        <tr style='line-height:20px;'><td></td></tr>" +
                 "           <tr>" +
                 "               <td align='center' style='padding: 10px;'>" +
@@ -339,12 +339,12 @@ public class MailService {
 
         // Contenu HTML de l'email
         String htmlContent =
-                "<html style=' font-size:16px'>" +
+                "<html style='font-size:16px'>" +
                         "  <body>" +
                         "    <h1> Améliorez votre site web avec Bugspointer - Obtenez des détails approfondis sur vos rapports de bugs ! </h1>" +
                         "    <p>Cher utilisateur de Bugspointer, <br>" +
                         "    Nous avons bien reçu votre rapport de bug depuis la page de test de notre site bugspointer.com, et nous tenons à vous remercier pour votre intérêt</p><br><br>" +
-                        "      <table width='65%' align='center' style='background-color: #FFFFFF;'>" +
+                        "      <table width='100%' align='center'>" +
                         "        <thead>" +
                         "        <tr>" +
                         "          <th>Voici un aperçu de ce que vous obtiendrez pour une utilisation gratuite :</th>" +

@@ -30,7 +30,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        log.info("--- Method onAuthenticationSuccess ---");
         /*Take the mail in the session after success login*/
 
         HttpSession session = request.getSession();
@@ -54,7 +53,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             try {
                 token = jwtTest.createAuthenticationToken(mail, authentication);
             } catch (Exception e) {
-                log.info("Impossible to create a token : {}", e.getMessage());
+                log.error("Impossible to create a token : {}", e.getMessage());
                 throw new RuntimeException(e);
             }
             session.setAttribute("token", token);
@@ -64,7 +63,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         company.setLastVisit(new Date());
         Company companySaved = companyService.companyTryUpdateLastVisit(company);
-        log.info("Dernière connexion company : {}", companySaved.getLastVisit());
+        log.info("Last visit for company #{}: {}", companySaved.getCompanyId(), companySaved.getLastVisit());
 
         if(company.getRole().equals("ROLE_ADMIN")){
             response.sendRedirect("app/admin/dashboard");
