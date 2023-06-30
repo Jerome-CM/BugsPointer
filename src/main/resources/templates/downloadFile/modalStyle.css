@@ -173,7 +173,7 @@
 }
 
 .bugspointer-pointed-balise { /* applique une couleur pour la balise sélectionnée par le pointer */
-     color: red !important;
+    color: red !important;
 }
 
 #bugspointer-message-success{
@@ -205,6 +205,12 @@
     font-size: 22px;
     background-color: orange;
     text-decoration: none;
+}
+
+/* Error message */
+
+#bugspointer-error-message{
+    display: none;
 }
 
 @media only screen and (max-width: 1280px) {

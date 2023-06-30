@@ -28,17 +28,31 @@
 
             <h2 class="h2-newUser">Suivez les étapes pour mettre en place Bugspointer sur votre site internet</h2>
 
+
+            <div class="btn-download newUser">
+                <div class="center center-in-card fs20">
+                    <span class="center">
+                        Connectez-vous
+                    </span>
+                    <div class="container-row">
+                        <a th:href="@{/authentication}" target="_blank" class="btn-action">Connexion</a>
+                    </div>
+                </div>
+                <img alt="clé" th:src="@{/css/img/utilisateur.gif}"/>
+            </div>
+
             <div class="w40" th:replace="~{include/btnDownload.html}"></div>
 
-            <div class="btn-download newUser ">
+            <div class="btn-download newUser">
                 <div class="center center-in-card fs20">
                     <span class="center">
                         Aller sur votre Dashboard puis dans Account
                         <br>Copier la Security Key et coller là dans le fichier modalControl.js, au début du fichier
                     </span>
                     <div class="container-row">
-                        <a th:href="@{/documentations}" target="_blank" class="btn-action">Documentation</a>
-                        <a th:href="@{/authentication}" target="_blank" class="submit">Dashboard</a>
+                        <a th:href="@{/documentations#key}" target="_blank" class="btn-action">Documentation</a>
+                        <a th:if="${isLoggedIn == false}" th:href="@{/authentication}" target="_blank" class="submit">Dashboard</a>
+                        <a th:if="${isLoggedIn == true}" th:href="@{/app/private/account#key}" target="_blank" class="submit">Account</a>
                     </div>
                 </div>
                 <img alt="clé" th:src="@{/css/img/icones/chiffrement.gif}"/>
@@ -48,7 +62,7 @@
                 <div class="center center-in-card fs20">
                     <span class="center">
                         Vous avez actuellement la version gratuite <br>
-                        Passer à Target Plan pour suivre vos rapports
+                        Passer à Target Plan pour suivre vos rapports efficacement
                     </span>
                     <div class="container-row">
                     <a th:href="@{/features#targetplan}" target="_blank" class="btn-action">Voir les avantages pour 15€/an</a>
@@ -63,7 +77,7 @@
                         Intégrer vos fichiers sur toutes les pages où vous souhaitez faire afficher le formulaire de bug
                     </span>
                     <div class="container-row">
-                        <a th:href="@{/documentations}" target="_blank" class="btn-action">Documentation</a>
+                        <a th:href="@{/documentations#implement}" target="_blank" class="btn-action">Documentation</a>
                     </div>
                 </div>
                 <img alt="transfert" th:src="@{/css/img/icones/transfert.gif}"/>

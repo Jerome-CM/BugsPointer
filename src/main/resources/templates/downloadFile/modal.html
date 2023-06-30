@@ -1,16 +1,19 @@
 <div class="bugspointer-popup" id="bugspointer_popup">
-    <form class="bugspointer-popup-container" method="post" action="https://www.bugspointer.com/api/user/modalControl">
+    <form class="bugspointer-popup-container" method="post" action="https://bugspointer.com/api/user/modalControl">
         <div class="bugspointer-popup-header">
             <span class="bugspointer-popup-titre">Signaler un nouveau bug</span>
             <span class="bugspointer-close-popup" id="bugspointer_close_popup">&times;</span>
         </div>
-        <div id="bugspointer-message-success"></div>
+        <div id="bugspointer-message-success">
+            <p>Merci infiniment pour votre envoi <br><br><br>Donnez votre avis et façonnez l'avenir de notre produit</p>
+            <a class="btn-action" target="_blank" id="bugspointer-lien-success">Evaluer en 3 questions</a>
+        </div>
+        <div id="bugspointer-error-message"><p>Oupsss ! Une erreur s'est produite, merci de recommencer</p></div>
         <div class="bugspointer-popup-content" id="bugspointer-affichage">
             <label for="bugspointer-urlPointed">Url avec ce bug</label>
             <input type="text" name="url" class="bugspointer-popup-content-texturl" id="bugspointer-urlPointed" value="" readonly>
 
-            <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-pointer" title="Cliquer sur la page à l'endroit du bug">Pointer le bug</button>
-
+            <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-pointer" title="Cliquez-ici avant d'envoyer le formulaire">Pointer le bug</button>
             <p class="bugspointer-popup-pointer-bug-text" id="bugspointer-popup-pointer-bug-text">Merci de sélectionner l'endroit contenant le bug en cliquant sur le bouton ci dessus</p>
 
             <textarea name="codeLocation" id="bugspointer-popup-pointer-bug" readonly hidden></textarea>
@@ -28,4 +31,3 @@
         </div>
     </form>
 </div>
-
