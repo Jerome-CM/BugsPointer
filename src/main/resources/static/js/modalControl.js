@@ -1,13 +1,14 @@
-const key = "C1estLaClePublicAModifier"; /*Ajoutez votre clé publique ici, entre les ""    YOUR_KEY_HERE*/
+const key = "WfvWjdAIFeXI3M5sbQUeLsoNp"; /*Ajoutez votre clé publique ici, entre les ""    YOUR_KEY_HERE*/
 window.addEventListener("DOMContentLoaded", function(){
 
-/* Variables document */
+    /* Variables document */
     let btnopen = document.querySelector('#bugspointer_open_popup');
     let btnopenlogo = document.querySelector('#bugspointer_logo');
     let btnclose = document.querySelector('#bugspointer_close_popup');
     let btnpointer = document.querySelector('#bugspointer-popup-btn-pointer');
     let form = document.querySelector('.bugspointer-popup-container');
     let messageElement = document.getElementById("bugspointer-message-success");
+    let errorMessage = document.getElementById("bugspointer-error-message");
     let lienElement = document.getElementById("bugspointer-lien-success");
     let section = document.getElementById("bugspointer-affichage");
     let url = document.getElementById("bugspointer-urlPointed");
@@ -20,7 +21,7 @@ window.addEventListener("DOMContentLoaded", function(){
     let textPointed = document.getElementById('bugspointer-popup-pointer-bug-text');
     const publicKey = document.getElementById("key");
 
-/* Autres variables */
+    /* Autres variables */
     const textValid = "Bug pointé correctement";
     const ADRESSE = "https://bugspointer.com/pollUser"
     // Texte pour le bouton envoyer un bug
@@ -44,11 +45,11 @@ window.addEventListener("DOMContentLoaded", function(){
         validEnvoi(); // On vérifie que le bug est pointé sinon on attend
     }, 20000); // 20 secondes (en millisecondes
 
-/* Valeurs document modifiées */
+    /* Valeurs document modifiées */
     /* url */
     url.value = urlPointed;
 
-/* Free Modal */
+    /* Free Modal */
 
     function afficher(){
         /* Lorsque la fonction est appelée, elle ouvre la popup contenant le formulaire de bug */
@@ -68,7 +69,14 @@ window.addEventListener("DOMContentLoaded", function(){
         section.style.display = "none";
     }
 
-/* User Agent Navigator */
+    function error_message(){
+        /* Affiche le message lors du clic sur le bouton envoi (même si un problème lors de l'enregistrement est survenu)
+        * et masque le formulaire, il ne reste que le bouton 'close' */
+        section.style.display = "none";
+        errorMessage.style.display = "block";
+    }
+
+    /* User Agent Navigator */
 
     function dimension(){
         /* Lors du 1er clic sur la modal */
@@ -100,7 +108,7 @@ window.addEventListener("DOMContentLoaded", function(){
 
     /* Récupère le navigateur de l'utilisateur */
     function get_browser() {
-         // Nouvelle méthode
+        // Nouvelle méthode
         if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
             /* brands récupère un tableau de 3 données, c'est la première qui nous intéresse ainsi que la version*/
             const firstBrand = navigator.userAgentData.brands[0];
@@ -130,7 +138,7 @@ window.addEventListener("DOMContentLoaded", function(){
         return 'undefined';
     }
 
-/* Point a bug */
+    /* Point a bug */
 
     function pointer(){
         /* Masque la popup pour aller sélectionner l'endroit où est le bug*/
@@ -201,7 +209,7 @@ window.addEventListener("DOMContentLoaded", function(){
 
                             /* si la balise <> de parent correspond à l'une de celle-ci alors on arrête la boucle (initialement on récupère balise). */
                             if (parent.tagName == "SECTION" || parent.tagName == "ARTICLE" || parent.tagName == "ASIDE"
-                                    || parent.tagName == "FOOTER" || parent.tagName == "HEADER" || parent.tagName == "NAV" || parent.tagName == "FROM") {
+                                || parent.tagName == "FOOTER" || parent.tagName == "HEADER" || parent.tagName == "NAV" || parent.tagName == "FROM") {
                                 break;
                             }
 
@@ -277,7 +285,7 @@ window.addEventListener("DOMContentLoaded", function(){
         }
     }
 
-/* Events Listener */
+    /* Events Listener */
     /* On vérifie que les boutons sont bien présents sur la page pour lancer les events d'affichage*/
     if (btnopen != null) {
         btnopen.addEventListener("click", afficher); // le clic sur le lien ouvre la popup
@@ -314,9 +322,9 @@ window.addEventListener("DOMContentLoaded", function(){
         submit.textContent = textEnvoiEnCours;
 
         /* Ajout des valeurs qui ne devront pas être changée */
-            /* key */
+        /* key */
         publicKey.value = key;
-            /* user agent */
+        /* user agent */
         os.value = platform;
         browser.value = browserWithVersion;
 
@@ -326,14 +334,17 @@ window.addEventListener("DOMContentLoaded", function(){
         // Envoi les données du formulaire à l'adresse correspondante
         fetch(this.action, {
             method: this.method,
-            body: formData
+            body: formData,
+            mode: 'no-cors'
         }).then(function (response){
             if (response.ok) {
                 message(); // Si l'envoi se fait alors le message apparait, sinon on reste sur le formulaire
+            } else {
+                message();
             }
         }).catch(function (error) {
+            error_message();
             console.error("Une erreur s'est produite lors de l'envoi du formulaire", error)
         })
     });
-
 });

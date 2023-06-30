@@ -43,7 +43,10 @@ public class ApiFormUser {
             String adresseIp = request.getRemoteAddr();
             log.info("{} send a new bug", adresseIp);
             dto.setAdresseIp(adresseIp);
-            modalService.saveModal(dto);
+            Response response = modalService.saveModal(dto);
+            if(response.getStatus().equals(EnumStatus.ERROR)){
+                log.info(response.getMessage());
+            }
         }
 
         return new RedirectView(dto.getUrl());

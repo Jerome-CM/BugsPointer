@@ -75,6 +75,8 @@ public class ModalService implements IModal {
 
             company = companyOptional.get();
             if (company.isEnable()){
+                log.info("url : {} // domaine : {} ", dto.getUrl(), company.getDomaine());
+                log.info("contains : {}", dto.getUrl().contains(company.getDomaine()));
                 if (company.getDomaine() != null && dto.getUrl().contains(company.getDomaine())) { //On vérifie que l'URL contient le nom de domaine (s'il est présent) où la modal est censé apparaitre.
                     key = true;
                 } else {
@@ -91,7 +93,7 @@ public class ModalService implements IModal {
 
         if (dto.getAdresseIp() != null && !test){
             //On récupère la liste des bugs reçus de cette adresse Ip
-            List<Bug> bugs =  bugRepository.findAllByAdresseIp(dto.getAdresseIp());
+            List<Bug> bugs = bugRepository.findAllByAdresseIp(dto.getAdresseIp());
 
             if (!bugs.isEmpty()){
                 int i = bugs.size()-1;

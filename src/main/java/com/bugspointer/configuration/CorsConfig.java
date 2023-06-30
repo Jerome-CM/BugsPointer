@@ -6,20 +6,29 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@EnableWebMvc
 public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
+        registry.addMapping("/**")/*
                 .allowedOrigins("*")
                 .allowedMethods("GET", "POST")
-                .allowedHeaders("*");
+                .allowedHeaders("*")*/;
     }
 
-    @Bean
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/css/**", "/js/**")
+                .addResourceLocations("classpath:/static/css/", "classpath:/static/js/");
+    }
+
+   /* @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.addAllowedOrigin("*");
@@ -31,5 +40,5 @@ public class CorsConfig implements WebMvcConfigurer {
         source.registerCorsConfiguration("/**", corsConfig);
 
         return new CorsFilter(source);
-    }
+    }*/
 }

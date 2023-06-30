@@ -112,6 +112,7 @@ public class Authentication {
                 model.addAttribute("notification", response.getMessage());
                 model.addAttribute("etat", "ok");
                 model.addAttribute("mail", companyMail);
+                model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
                 return "public/newUser";
             } else {
                 model.addAttribute("status", String.valueOf(response.getStatus()));

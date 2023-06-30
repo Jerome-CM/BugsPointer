@@ -341,8 +341,6 @@ public class CompanyService implements ICompany {
     }
 
     public Response delete(AccountDeleteDTO dto){
-
-
         Optional<Company> companyOptional=companyRepository.findByPublicKey(dto.getPublicKey());
         Company company;
         if (companyOptional.isPresent()){
@@ -394,7 +392,8 @@ public class CompanyService implements ICompany {
         }
 
         if (company != null){
-            company.setDomaine(dto.getDomaine());
+
+            company.setDomaine(dto.getDomaine().substring(4));
             return companyTryRegistration(company, "Nom de domaine enregistré");
         }
 
