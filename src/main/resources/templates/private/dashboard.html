@@ -12,10 +12,11 @@
     <h1>My Dashboard</h1>
 
     <div class="container">
-        <section th:name="sectionBugDashboard" th:object="${company}" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}">
+        <section th:name="sectionBugDashboard" th:object="${company}" >
             <h2 style="text-align: center">Report section</h2>
             <hr>
-            <div class="container-row">
+            <p th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">Pour gérer vos bugs, changer votre offre</p>
+            <div class="container-row" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}">
                 <a th:href="@{/app/private/bugList(state='new', publicKey=${company.getPublicKey()})}" class="cards">
                     <span class="number_cards new" th:field="*{nbNewBug}" id="nbNewBug" th:text="${company.getNbNewBug()}"></span>
                     <h3>New bug</h3>

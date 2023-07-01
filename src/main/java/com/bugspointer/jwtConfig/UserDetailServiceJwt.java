@@ -54,7 +54,6 @@ public class UserDetailServiceJwt implements UserDetailsService {
         for (GrantedAuthority authority : userDetails.getAuthorities()) {
             roles.add(authority.getAuthority());
         }
-        log.info("Roles : " + roles);
         return roles;
     }
 

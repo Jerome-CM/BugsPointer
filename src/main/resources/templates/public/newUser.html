@@ -17,7 +17,7 @@
                     <span class="small-text">(Ceci à des fins de sécurité lors de la réception des bugs )</span>
                 </span>
             <form class="container-row" action="#" th:object="${company}" method="post">
-                <input type="text" th:field="*{domaine}" id="domaine" placeholder="www.monsite.fr" th:value="${company.getDomaine()}">
+                <input type="text" th:field="*{domaine}" id="domaine" placeholder="monsite.extension" th:value="${company.getDomaine()}">
                 <input th:if="${company.getDomaine() == null}" class="btn-action" type="button" id="btn-envoi" value="Envoyer">
             </form>
             </div>
@@ -32,7 +32,7 @@
             <div class="btn-download newUser">
                 <div class="center center-in-card fs20">
                     <span class="center">
-                        Connectez-vous
+                        Connectez-vous à votre compte
                     </span>
                     <div class="container-row">
                         <a th:href="@{/authentication}" target="_blank" class="btn-action">Connexion</a>

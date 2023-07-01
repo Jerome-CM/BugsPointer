@@ -57,13 +57,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 throw new RuntimeException(e);
             }
             session.setAttribute("token", token);
-            session.setAttribute("role", company.getRole());
             session.setAttribute("mail", mail);
         }
 
         company.setLastVisit(new Date());
         Company companySaved = companyService.companyTryUpdateLastVisit(company);
-        log.info("Last visit for company #{}: {}", companySaved.getCompanyId(), companySaved.getLastVisit());
 
         if(company.getRole().equals("ROLE_ADMIN")){
             response.sendRedirect("app/admin/dashboard");

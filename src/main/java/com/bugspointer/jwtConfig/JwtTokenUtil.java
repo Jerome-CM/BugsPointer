@@ -87,10 +87,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String createAuthenticationToken(String username, Authentication auth) throws Exception {
-        log.info("--- Method createAuthenticationToken JWTUtil ---");
-
-        final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(username);
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return "Bearer " + generateToken(userDetails, auth);
     }
 

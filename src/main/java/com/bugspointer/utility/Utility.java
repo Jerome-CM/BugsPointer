@@ -27,7 +27,7 @@ public class Utility {
     }
 
     public static class domaineValidate{
-        private static final String DOMAINE_PATTERN="^[w]{3}([.][0-9a-zA-Z-_]+)*[.][a-z]{2,6}$";
+        private static final String DOMAINE_PATTERN="^[0-9a-zA-Z-_][.][a-z]{2,6}$";
 
         private static final Pattern pattern = Pattern.compile(DOMAINE_PATTERN);
 

@@ -331,7 +331,6 @@ public class CompanyService implements ICompany {
     public Company companyTryUpdateLastVisit(Company company) {
         try {
             Company savedCompany = companyRepository.save(company);
-            log.info("Company #{} connected at {}", savedCompany.getCompanyId(), savedCompany.getLastVisit());
             return savedCompany;
         }
         catch (Exception e){
@@ -388,7 +387,7 @@ public class CompanyService implements ICompany {
         boolean isValid = Utility.domaineValidate.isValid(dto.getDomaine());
 
         if (!isValid){
-            return new Response(EnumStatus.ERROR, null, "Le site renseigné ne correspond pas au format www.monsite.extension");
+            return new Response(EnumStatus.ERROR, null, "Le site renseigné ne correspond pas au format monsite.extension");
         }
 
         if (company != null){
