@@ -75,12 +75,9 @@ public class ModalService implements IModal {
 
             company = companyOptional.get();
             if (company.isEnable()){
-                log.info("url : {} // domaine : {} ", dto.getUrl(), company.getDomaine());
-                log.info("contains : {}", dto.getUrl().contains(company.getDomaine()));
                 if (company.getDomaine() != null && dto.getUrl().contains(company.getDomaine())) { //On vérifie que l'URL contient le nom de domaine (s'il est présent) où la modal est censé apparaitre.
                     key = true;
                 } else {
-                    log.info("URL ne correspondant pas au domaine transmis");
                     return new Response(EnumStatus.ERROR, null, "L'URL ne correspond pas au domaine transmis");
                 }
             } else {

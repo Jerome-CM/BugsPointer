@@ -15,7 +15,45 @@
         <section th:name="sectionBugDashboard" th:object="${company}" >
             <h2 style="text-align: center">Report section</h2>
             <hr>
-            <p th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">Pour gérer vos bugs, changer votre offre</p>
+
+            <section th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                <p class="center">Pour gérer vos bugs, changer votre offre</p>
+
+                <div class="container-row  dashboard">
+                    <div class="cards cards_promo">
+                        <h2>Change Plan</h2>
+                        <ul>
+                            <li th:replace="~{include/targetPlanContent.html}"></li>
+                        </ul>
+                        <a th:href="@{/features}">Details</a>
+
+                    </div>
+
+                    <div class="slider adjustPlan">
+                        <div class="slides">
+                            <div id="slide-1">
+                                <img th:src="@{/css/img/sliderPlan/dashboard.png}" alt="Preview of HTML content">
+                            </div>
+                            <div id="slide-2">
+                                <img th:src="@{/css/img/sliderPlan/newBug.png}" alt="New bug">
+                            </div>
+                            <div id="slide-3">
+                                <img th:src="@{/css/img/sliderPlan/userEnv.png}" alt="User Environment">
+                            </div>
+                            <div id="slide-4">
+                                <img th:src="@{/css/img/sliderPlan/invoice.png}" alt="Invoice">
+                            </div>
+                        </div>
+                        <div class="content-dotlink">
+                            <a class="slide" href="#slide-1">1</a>
+                            <a class="slide" href="#slide-2">2</a>
+                            <a class="slide" href="#slide-3">3</a>
+                            <a class="slide" href="#slide-4">4</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <div class="container-row" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}">
                 <a th:href="@{/app/private/bugList(state='new', publicKey=${company.getPublicKey()})}" class="cards">
                     <span class="number_cards new" th:field="*{nbNewBug}" id="nbNewBug" th:text="${company.getNbNewBug()}"></span>
@@ -47,41 +85,7 @@
             </div>
         </section>
         
-        <section th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
-            <div class="container-row  dashboard">
-                <div class="cards cards_promo">
-                    <h2>Change Plan</h2>
-                    <ul>
-                        <li th:replace="~{include/targetPlanContent.html}"></li>
-                    </ul>
-                    <a th:href="@{/features}">Details</a>
 
-                </div>
-
-                <div class="slider adjustPlan">
-                    <div class="slides">
-                        <div id="slide-1">
-                            <img th:src="@{/css/img/sliderPlan/dashboard.png}" alt="Preview of HTML content">
-                        </div>
-                        <div id="slide-2">
-                            <img th:src="@{/css/img/sliderPlan/newBug.png}" alt="New bug">
-                        </div>
-                        <div id="slide-3">
-                            <img th:src="@{/css/img/sliderPlan/userEnv.png}" alt="User Environment">
-                        </div>
-                        <div id="slide-4">
-                            <img th:src="@{/css/img/sliderPlan/invoice.png}" alt="Invoice">
-                        </div>
-                    </div>
-                    <div class="content-dotlink">
-                        <a class="slide" href="#slide-1">1</a>
-                        <a class="slide" href="#slide-2">2</a>
-                        <a class="slide" href="#slide-3">3</a>
-                        <a class="slide" href="#slide-4">4</a>
-                    </div>
-                </div>
-            </div>
-        </section>
         
     </div>
 

@@ -1,4 +1,4 @@
-const key = "YOUR_KEY_HERE"; /*Ajoutez votre clé publique ici, entre les "" */
+const key = "WfvWjdAIFeXI3M5sbQUeLsoNp"; /*Ajoutez votre clé publique ici, entre les ""    YOUR_KEY_HERE*/
 window.addEventListener("DOMContentLoaded", function(){
 
     /* Variables document */
@@ -23,7 +23,6 @@ window.addEventListener("DOMContentLoaded", function(){
 
     /* Autres variables */
     const textValid = "Bug pointé correctement";
-    const ADRESSE = "https://bugspointer.com/pollUser"
     // Texte pour le bouton envoyer un bug
     const textEnvoiNoValid = "Sélectionner le bug avec le bouton 'Pointer le bug'";
     const textEnvoiNoTime = "Merci de patienter";
@@ -65,15 +64,8 @@ window.addEventListener("DOMContentLoaded", function(){
         /* Affiche le message lors du clic sur le bouton envoi (même si un problème lors de l'enregistrement est survenu)
         * et masque le formulaire, il ne reste que le bouton 'close' */
         messageElement.style.display = "block";
-        lienElement.href = ADRESSE;
+        lienElement.href = "https://bugspointer.com/pollUser";
         section.style.display = "none";
-    }
-
-    function error_message(){
-        /* Affiche le message lors du clic sur le bouton envoi (même si un problème lors de l'enregistrement est survenu)
-        * et masque le formulaire, il ne reste que le bouton 'close' */
-        section.style.display = "none";
-        errorMessage.style.display = "block";
     }
 
     /* User Agent Navigator */
@@ -343,7 +335,6 @@ window.addEventListener("DOMContentLoaded", function(){
                 message();
             }
         }).catch(function (error) {
-            error_message();
             console.error("Une erreur s'est produite lors de l'envoi du formulaire", error)
         })
     });
