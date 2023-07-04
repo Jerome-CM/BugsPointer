@@ -66,7 +66,7 @@ public class ModalService implements IModal {
             return new Response(EnumStatus.ERROR, null, "Description incomplete");
         }
 
-        if (dto.getKey().equals("LaClefDeTest")) { //TODO: A modifier par la publicKey représentant la clé de la company test
+        if (dto.getKey().equals("LaClefDeTest")) {
             test = true;
         }
 
@@ -85,6 +85,7 @@ public class ModalService implements IModal {
             }
 
         } else {
+            log.error("Key {} isn't in bdd", dto.getKey());
             return new Response(EnumStatus.ERROR, null, "Erreur avec votre clé public, assurez-vous quelle soit identique à celle inscrit dans votre compte ( Dashboard > Account )");
         }
 

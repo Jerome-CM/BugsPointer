@@ -1,7 +1,10 @@
 <nav class="navCompany">
     <span class="title">Bugspointer <img class="flag-nav" src="/css/img/france.jpg" alt="Drapeau français"></span>
-    <button class="nav-toggler" id="nav-toggler">
+    <!--<button class="nav-toggler" id="nav-toggler">
         <span class="navCompany-toggler-icon"></span>
+    </button>-->
+    <button class="nav-toggler" id="nav-toggler">
+        <img src="/css/img/menu_burger.svg" alt="">
     </button>
     <ul class="nav-menu company" id="nav-menu">
         <li class="navCompany-item" th:if="${isLoggedIn == true}"><a th:href="@{/app/private/dashboard}">Dashboard</a></li>

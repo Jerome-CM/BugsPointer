@@ -18,6 +18,7 @@
     position: fixed;
     bottom: 2px;
     right: 4px;
+    z-index: 9999999999;
 }
 .bugspointer-logo:hover{
     cursor: pointer;
@@ -79,7 +80,7 @@
 
 .bugspointer-popup{
     position: fixed;
-    z-index: 99;
+    z-index: 99999999;
     left: 0;
     top: 0;
     width: 100%;
@@ -160,6 +161,10 @@
     margin-bottom: 25px;
 }
 
+.bugspointer-codeLocation{
+    display: none;
+}
+
 .bugspointer-popup-content-inputbot{
     visibility: hidden;
     height: 1px;
@@ -199,7 +204,7 @@
     font-size: 20px;
 }
 
-.btn-action{
+.bugspointer-btn-action{
     padding: 7px 20px;
     color: white;
     font-size: 22px;
@@ -240,14 +245,53 @@
         border: 0.3em solid var(--btn-logo-color);
     }
 
-    .span-desktop {
+    .bugspointer-span-desktop {
         display: none;
     }
 
-    .span-mobile {
+    .bugspointer-span-mobile {
         display: block;
         width: 38px;
         margin: 0 auto;
     }
 
+}
+
+
+/* Préfixes spécifiques pour les navigateurs */
+
+/* Safari et Chrome */
+@-webkit-keyframes bugspointer-spin {
+    /* ... */
+}
+
+/* Safari, Chrome et Opera */
+@media only screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+    .bugspointer-objet-ellispe {
+        -webkit-box-shadow: 0 0 5px grey;
+        box-shadow: 0 0 5px grey;
+    }
+}
+
+/* Edge */
+@supports (-ms-ime-align: auto) {
+    .bugspointer-popup-container {
+        -ms-width: 69%;
+    }
+}
+
+/* Mozilla */
+@-moz-document url-prefix() {
+    .bugspointer-popup-titre {
+        font-weight: bold;
+    }
+}
+
+/* Chrome, Firefox, Safari, Edge, Opera */
+@supports (-webkit-appearance: none) or (-moz-appearance: none) or (appearance: none) {
+    .bugspointer-popup-content-textdescription {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
 }

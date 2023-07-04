@@ -1,4 +1,5 @@
 window.addEventListener('DOMContentLoaded', function () {
+
     if (document.getElementById('page-new-user')) {
         let btnOpen = document.getElementById('btn-envoi');
         let btnClose = document.getElementById('btn-annulation');
@@ -9,14 +10,14 @@ window.addEventListener('DOMContentLoaded', function () {
 
         let enterPressed = false;
 
-        function afficher() {
+        function show() {
             /* Lorsque la fonction est appelée, elle ouvre la popup contenant le formulaire de bug */
             domaineConfirme.value = domaine.value;
             popup.style.display = "flex";
             enterPressed = true;
         }
 
-        function masquer() {
+        function hidden() {
             /* Lorsque la fonction est appelée, elle ferme la popup contenant le formulaire de bug */
             popup.style.display = "none";
             enterPressed = false;
@@ -31,11 +32,11 @@ window.addEventListener('DOMContentLoaded', function () {
                     } else {
                         enterPressed = true;
                         event.preventDefault();
-                        afficher();
+                        show();
                     }
                 }
             })
-            btnOpen.addEventListener("click", afficher);
+            btnOpen.addEventListener("click", show);
         } else {
             document.addEventListener("keydown", function (event) {
                 /* Vérifie si la touche pressée est Entrée */
@@ -45,26 +46,47 @@ window.addEventListener('DOMContentLoaded', function () {
             });
         }
         if (btnClose != null) {
-            btnClose.addEventListener("click", masquer);
+            btnClose.addEventListener("click", hidden);
         }
 
     }
+
+    /* Nav Burger menu */
+
     if (document.getElementById('nav-toggler') != null) {
         document.getElementById('nav-toggler').addEventListener('click', function () {
             document.getElementById('nav-menu').classList.toggle('show');
         });
     }
-    if (document.getElementById('navDashboard-toggler') != null) {
-        const menuToggle = document.getElementById('navDashboard-toggler');
+
+    /* Sous menu documentation */
+    if (document.getElementById('navDocumentation-toggler') != null) {
+        const menuToggle = document.getElementById('navDocumentation-toggler');
         const menu = document.getElementById('menu');
-            menuToggle.addEventListener('click', function (/*event*/) {
+
+        menuToggle.addEventListener('click', function (/*event*/) {
             /*event.preventDefault();*/
             menu.classList.toggle('show');
 
-            /*const toggleRect = menuToggle.getBoundingClientRect();
-            console.log(toggleRect);
+        });
+        menu.querySelectorAll('a').forEach(function (link){
+            link.addEventListener('click', function (){
+                menu.classList.remove('show');
+                /*menu.style.top = '0';*/
+            });
+        });
+    }
 
-            menu.style.top = -toggleRect.top + 'px';*/
+    /* Sous menu bug */
+    if (document.getElementById('navDashboard-toggler') != null && document.getElementById('content-nbr-report') != null) {
+        const menuToggle = document.getElementById('navDashboard-toggler');
+        const menu = document.getElementById('menu');
+        const reportBox = document.getElementById('content-nbr-report');
+
+            menuToggle.addEventListener('click', function (/*event*/) {
+            /*event.preventDefault();*/
+            menu.classList.toggle('show');
+            reportBox.classList.toggle("viewLargeMenu");
 
         });
         menu.querySelectorAll('a').forEach(function (link){

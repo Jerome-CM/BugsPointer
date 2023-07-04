@@ -41,6 +41,7 @@ html, body{
     top: 0;
     height: 100%;
     background-color: var(--color-body);
+    overflow-x: hidden;
 }
 
 body{
@@ -131,6 +132,7 @@ nav{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 9999;
 }
 
 nav .title{
@@ -178,7 +180,6 @@ nav ul li a {
     box-shadow: var(--shadow);
     /*position: relative;*/
     min-height: 50px;
-    z-index: 5;
 }
 
 .plan{
@@ -481,7 +482,13 @@ ul{
     padding-bottom: 20px;
 }
 
-/*CSS Logo*/
+.tryme-btn-index img{
+    width: 150px;
+    height: 150px;
+    border-radius: 25px;
+}
+
+/*CSS Logo
 .bugspointer-logo{
     background: none;
     border: none;
@@ -520,7 +527,7 @@ ul{
     box-shadow: 0 0 5px grey;
     margin: 0;
 }
-
+*/
 /* Authentication */
 
 .cancel-margin-top{
@@ -876,7 +883,7 @@ textarea{
     left: 0;
     position: sticky;
     overflow-y: auto;
-    z-index: 0;
+    z-index: 999;
 }
 
 .menu::-webkit-scrollbar-thumb {
@@ -1259,25 +1266,68 @@ pre code{
 
 /* Footer */
 
-
 footer{
     width: 100%;
-    min-height: 50px;
+    position: relative;
     bottom: 0;
-    margin-top: auto!important;
+    padding: 50px 5px 15px 5px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     font-family: "Raleway", sans-serif;
-    background-color: var(--color-grey-footer);
+    background: linear-gradient( transparent, 10%, var(--color-grey-footer));
     color: var(--color-white);
-    position: relative;
     z-index: 2;
+}
+
+footer .title{
+    color: var(--color-btn-green);
+    font-family: "Inter", sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    text-shadow: black 1px 0 3px;
+}
+
+footer .container-row{
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    margin: 20px auto;
+}
+
+.h-in-footer{
+    color: var(--color-white);
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    text-transform: initial;
 }
 
 footer a{
     color: var(--color-white);
 }
+
+footer .tierce_card a {
+    line-height: 30px;
+}
+
+.cta-facebook{
+    margin: -5px auto 15px auto;
+    padding: 15px 10px;
+    background-color: #3b5998;
+    display: flex;
+}
+
+.cta-facebook img{
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    margin-top: -3px;
+
+}
+
 .container-report-tablette{
     width: 80%;
 }
@@ -1404,7 +1454,7 @@ footer a{
 
 }
 
-@media only screen/* and (min-width: 700px)*/ and (max-width: 850px) {
+@media only screen and (max-width: 850px) {
 
     /* Index */
 
@@ -1422,31 +1472,31 @@ footer a{
         padding: 10px;
     }
 
-}
-@media only screen and (max-width: 850px){
-
     /* Nav */
     .nav-menu{
         display: none;
     }
     .nav-toggler{
         display: block;
-        margin: 5px 10px 5px 5px;
-    }
-    .nav-toggler-icon{
-        display: block;
-        width: 25px;
-        height: 3px;
-        background-color: var(--color-btn-green);
         margin: 5px 0;
-        z-index: 100;
+        background: none;
+        border: none;
+        position: relative;
+        z-index: 999999999;
+    }
+    .nav-toggler img{
+        width: 30px;
+        height: 30px;
+        z-index: 9999;
     }
     .nav-black{
         background-color: var(--background-index);
     }
+
     .nav-item{
         margin: 45px 0;
     }
+
     .nav-menu.show {
         position: absolute;
         top: 30px;
@@ -1458,6 +1508,7 @@ footer a{
         text-align: center;
         z-index: 100;
     }
+
     /* Nav Company */
 
     .navCompany-toggler-icon{
@@ -1474,27 +1525,53 @@ footer a{
         background-color: var(--color-orange);
     }
     /* Menu Interne */
-    .menu{
-        /*width: fit-content;*/
-        margin: -30px 0 0 0;
-        display: flex;
-        height: fit-content;
-        width: 100%;
-        align-items: baseline;
+
+    .menu-documentation{
+        width: 57px;
     }
+
+    .menu-rapport{
+        margin: 26px 0 0 0;
+    }
+
+    .content-nbr-report{
+        width: 75%;
+        display: flex;
+    }
+
+    .viewLargeMenu{
+        width: 100%!important;
+        display: block!important;
+    }
+
+    .menu-rapport img{
+        margin: -40px 0 0 0;
+    }
+
+    .menu{
+        margin: -32px 0 0 0;
+        display: flex;
+        height: 50px;
+        width: 100%;
+        background-color: var(--background-modal-color);
+    }
+
     .menu h2{
         font-size: 17px;
         display: none;
     }
+
     .bug-type{
         font-size: 15px;
         display: none;
     }
+
     .nbr-bug{
         font-size: 13px;
         height: 23px;
         margin: 5px 5px 5px 0;
     }
+
     .navDashboard-toggler-icon{
         display: block;
         width: 7px;
@@ -1502,9 +1579,11 @@ footer a{
         background-color: var(--color-orange);
         margin: 5px 0;
     }
+
     .body{
         position: relative;
     }
+
     .menu.show{
         position: absolute;
         top: 30px;
@@ -1513,9 +1592,12 @@ footer a{
         height: 100%;
         margin: 20px 0 0 0;
         background-color: var(--color-white);
-        z-index: 4;
+        z-index: 8;
         display: block;
+        border-right: 3px solid var(--color-orange);
     }
+
+
     .menu.show h2{
         display: block;
     }
@@ -1568,9 +1650,40 @@ footer a{
 @media only screen /*and (min-width: 320px) */and (max-width: 699px) /*and (orientation : portrait) */{
 
     /*Menu interne*/
-    .menu{
-        margin: -25px 0 0 0;
+    .menu-documentation{
+        position: fixed;
+        top: 94%;
+        left: 0;
+        width: 40px;
+        height: 40px;
+        background-color: var(--color-orange);
+        border-radius: 0 3px 3px 0;
+        border: none;
     }
+
+    .nav-toggler{
+        margin: 2px 0 0 -7px;
+        padding: 0 0 0 6px;
+    }
+
+    #navDocumentation-toggler img {
+        margin: -8px 0 0 1px!important;
+    }
+
+    .menu{
+        margin: -40px 0 0 0;
+    }
+
+    .menu-rapport{
+        margin-top: 24px!important;
+    }
+
+    .nav-toggler img{
+        width: 23px;
+        height: 23px;
+        border: none;
+    }
+
     /* Authentification */
     .container{
         width: 93%;
@@ -1698,11 +1811,6 @@ footer a{
     code{
         padding: 5px;
     }
-    /* Footer */
-    footer{
-        display: block;
-        min-height: max-content;
-    }
 
     /* Register */
     .btn-download{
@@ -1724,8 +1832,13 @@ footer a{
 @media only screen and (max-width: 449px){
     /*Menu interne*/
     .menu{
+        margin: -30px 0 0 0; /* -16px 0 0 0 */
+    }
 
-        margin: -16px 0 0 0;
+    /* Footer */
+    footer .tierce_card{
+        width: 100%;
+        align-items: normal;
     }
 
 }

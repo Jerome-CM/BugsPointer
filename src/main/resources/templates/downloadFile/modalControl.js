@@ -1,4 +1,4 @@
-const key = "WfvWjdAIFeXI3M5sbQUeLsoNp"; /*Ajoutez votre clé publique ici, entre les ""    YOUR_KEY_HERE*/
+const key = "YOUR_KEY_HERE"; /*Ajoutez votre clé publique ici, entre les "" */
 window.addEventListener("DOMContentLoaded", function(){
 
     /* Variables document */
@@ -8,7 +8,6 @@ window.addEventListener("DOMContentLoaded", function(){
     let btnpointer = document.querySelector('#bugspointer-popup-btn-pointer');
     let form = document.querySelector('.bugspointer-popup-container');
     let messageElement = document.getElementById("bugspointer-message-success");
-    let errorMessage = document.getElementById("bugspointer-error-message");
     let lienElement = document.getElementById("bugspointer-lien-success");
     let section = document.getElementById("bugspointer-affichage");
     let url = document.getElementById("bugspointer-urlPointed");
@@ -21,9 +20,9 @@ window.addEventListener("DOMContentLoaded", function(){
     let textPointed = document.getElementById('bugspointer-popup-pointer-bug-text');
     const publicKey = document.getElementById("key");
 
-    /* Autres variables */
+    /* Texte */
     const textValid = "Bug pointé correctement";
-    // Texte pour le bouton envoyer un bug
+    // Textes pour le bouton envoyer un bug
     const textEnvoiNoValid = "Sélectionner le bug avec le bouton 'Pointer le bug'";
     const textEnvoiNoTime = "Merci de patienter";
     const textEnvoiOk = "Envoyer le rapport";
@@ -42,7 +41,7 @@ window.addEventListener("DOMContentLoaded", function(){
     setTimeout(function () {
         okSubmit = true;
         validEnvoi(); // On vérifie que le bug est pointé sinon on attend
-    }, 20000); // 20 secondes (en millisecondes
+    }, 20000); // 20 secondes (en millisecondes )
 
     /* Valeurs document modifiées */
     /* url */

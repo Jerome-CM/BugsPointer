@@ -1,4 +1,4 @@
-const key = "WfvWjdAIFeXI3M5sbQUeLsoNp"; /*Ajoutez votre clé publique ici, entre les ""    YOUR_KEY_HERE*/
+const key = "TtmQt6rwVDoixOjtGXdZRiFdY"; /*Ajoutez votre clé publique ici, entre les "" */
 window.addEventListener("DOMContentLoaded", function(){
 
     /* Variables document */
@@ -21,7 +21,7 @@ window.addEventListener("DOMContentLoaded", function(){
     const publicKey = document.getElementById("key");
 
     /* Autres variables */
-    const textValid = "Bug pointé correctement";
+    const textValid = "Bug pointé !";
     // Texte pour le bouton envoyer un bug
     const textEnvoiNoValid = "Sélectionner le bug avec le bouton 'Pointer le bug'";
     const textEnvoiNoTime = "Merci de patienter";
@@ -315,6 +315,7 @@ window.addEventListener("DOMContentLoaded", function(){
         /* Ajout des valeurs qui ne devront pas être changée */
         /* key */
         publicKey.value = key;
+        console.log(key);
         /* user agent */
         os.value = platform;
         browser.value = browserWithVersion;

@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
     <title>BugsPointer</title>
+    <style>.bugspointer-logo{display:none;}</style>
 </head>
 <body class="index">
     <div th:replace="~{include/notifAlert.html}"></div>
@@ -117,22 +118,10 @@
             <h2 class="h-in-index">Testez-moi</h2>
             <p class="space center">Vous pouvez mettre sur votre site web notre logo ou simplement un lien où vous le voulez. Tout est personalisable</p>
             <div class="container-row">
-                <div class="margin-top-0 padding-bottom-20">
-                    <h4>Un lien dans votre pied de page</h4>
-                    <br>
-                    <a th:href="@{/testPage}" class="btn-action">Signaler un bug</a>
-                </div>
-                <div class="padding-bottom-20">
-                    <h4>Notre logo</h4>
-                    <a th:href="@{/testPage}" class="bugspointer-logo" id="bugspointer_logo">
-                        <div class="bugspointer-objet-logo">
-                            <div class="bugspointer-objet-ellispe"></div>
-                            <span class="bugspointer-objet-report">Signaler un bug</span>
-                        </div>
-                    </a>
-                </div>
+                <a class="tryme-btn-index center" target="_blank" th:href="@{/testPage}"><img src="/css/img/icones/essaie-moi.gif" alt="Test-moi"></a>
             </div>
         </section>
+
         <section>
             <h2 class="h-in-index">Made in<img src="/css/img/france.jpg" class="flag-nav" alt="Drapeau français"></h2>
             <div class="container-row" style="color:black;">
