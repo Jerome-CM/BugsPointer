@@ -4,7 +4,7 @@ import com.bugspointer.entity.EnumPlan;
 import lombok.Data;
 
 @Data
-public class CustomerDTO {
+public class CustomerDTO extends MetaDataMollieDTO{
 
     private String mail;
 

@@ -8,9 +8,12 @@
     <div th:replace="~{include/nav.html}"></div>
 
     <div class="container">
-        <div th:if="${page=='register' || page=='delete'}" class="btn-download welcome">
-            <img th:class="${page=='delete'} ? 'auRevoir' : ''" alt="welcome" id="gifElement" th:src="${page=='register'} ? @{/css/img/icones/accueillir.gif} : @{/css/img/icones/au-revoir.gif}"/>
+        <div th:if="${page=='delete'}" class="btn-download welcome">
+            <img th:class="${page=='delete'} ? 'auRevoir' : ''" alt="welcome" id="gifElement" th:src="@{/css/img/icones/au-revoir.gif}"/>
         </div>
+
+        <img style="width:60%; margin:0 auto;" th:if="${page=='register'}" th:src="@{/css/img/motion/welcome_motion.gif}" alt="Bienvenue">
+
         <h1 class="space" th:if="${page == 'register'}">Merci de nous avoir rejoints !</h1>
 
         <div th:if="${page == 'register'}" class="btn-download">

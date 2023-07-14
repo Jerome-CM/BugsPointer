@@ -1,8 +1,12 @@
 package com.bugspointer.service.implementation;
 
+import be.woutschoovaerts.mollie.exception.MollieException;
+import com.bugspointer.dto.CustomerDTO;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Bug;
+import com.bugspointer.entity.Customer;
+import com.bugspointer.entity.EnumPlan;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.HashMap;
 import java.util.Properties;
 
 @Service
@@ -33,8 +38,11 @@ public class MailService {
 
     private final BugService bugService;
 
-    public MailService(BugService bugService) {
+    private final CustomerService customerService;
+
+    public MailService(BugService bugService, CustomerService customerService) {
         this.bugService = bugService;
+        this.customerService = customerService;
     }
 
     /**
@@ -322,7 +330,7 @@ public class MailService {
             // Envoi du message
             Transport.send(message);
 
-            log.info("email new bug sent at : {}", to);
+            log.info("email reset password sent at : {}", to);
             return new Response(EnumStatus.OK, null, "Un mail valable 15 minutes pour réinitialiser votre mot de passe vient de vous êtes envoyé");
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -487,5 +495,151 @@ public class MailService {
             return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
         }
     }
+
+    public Response sendMailNewMandate(CustomerDTO customer) throws MollieException {
+
+        HashMap<String, String> contentData = customerService.getDataToMandateForCustomer(customer);
+        if(contentData.get("status").equals("OK")) {
+
+
+            // Paramètres du destinataire
+            String subject = "Bugspointer - Mandat de prélèvement SEPA";
+
+            // Contenu HTML de l'email
+            String htmlContent =
+                    "<html>" +
+                            "   <body>" +
+                            "       <h1>Confirmation mandat SEPA</h1><br>" +
+                            "       <p>Bonjour,<br> " +
+                            "       <p>Nous vous confirmons le mandat de prélèvement que vous venez de signer sur Bugspointer</p><br>" +
+                            "       <p>Voici le détail :" +
+                            "       <table border='0' cellpadding='0' cellspacing='0' >" +
+                            "           <tr>" +
+                            "               <td style='padding: 10px;'>Référence</td>" +
+                            "               <td style='padding: 10px;'>" + contentData.get("reference") + "</td>" +
+                            "           </tr>" +
+                            "           <tr>" +
+                            "               <td style='padding: 10px;'>IBAN</td>" +
+                            "               <td style='padding: 10px;'>" + contentData.get("iban") + "</td>" +
+                            "           </tr>" +
+                            "           <tr>" +
+                            "               <td style='padding: 10px;'>BIC</td>" +
+                            "               <td style='padding: 10px;'>" + contentData.get("bic") + "</td>" +
+                            "           </tr>" +
+                            "           <tr>" +
+                            "               <td style='padding: 10px;'>Date de signature</td>" +
+                            "               <td style='padding: 10px;'>" + contentData.get("dateSignature") + "</td>" +
+                            "           </tr>" +
+                            "           <tr>" +
+                            "               <td style='padding: 10px;'>Date du prochain paiement</td>" +
+                            "               <td style='padding: 10px;'>" + contentData.get("dateNextPayment") + "</td>" +
+                            "           </tr>" +
+                            "           <tr>" +
+                            "               <td style='padding: 10px;'>Mandat valide jusqu'au</td>" +
+                            "               <td style='padding: 10px;'>" + contentData.get("dateExpiration") + "</td>" +
+                            "           </tr>" +
+                            "       </table>" +
+                            "       <p>Vous pouvez révoquer ce mandat à tous moment dans la partie Account de votre Dashboard</p>" +
+                            "   </body>" +
+                            "</html>";
+
+
+            // Configuration des propriétés
+            Properties properties = new Properties();
+            properties.put("mail.smtp.host", host);
+            properties.put("mail.smtp.port", port);
+            properties.put("mail.smtp.auth", "true");
+            properties.put("mail.smtp.starttls.enable", "true");
+
+            // Création de l'authentificateur
+            Authenticator auth = new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(user, password);
+                }
+            };
+
+            // Création de la session
+            Session session = Session.getInstance(properties, auth);
+
+            try {
+                // Création du message
+                MimeMessage message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(user));
+                message.setRecipient(Message.RecipientType.TO, new InternetAddress(customer.getMail()));
+                message.setSubject(subject, "UTF-8");
+                message.setContent(htmlContent, "text/html; charset=UTF-8");
+
+                // Envoi du message
+                Transport.send(message);
+
+                log.info("email details mandate sent at : {}", customer.getMail());
+                return new Response(EnumStatus.OK, null, "Détail du mandat envoyer à " + customer.getMail());
+            } catch (MessagingException e) {
+                e.printStackTrace();
+                log.error("error from mail sender mandate details to : " + e.getMessage());
+                return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
+            }
+        }
+        log.error("error from mail sender mandate details to {}", customer.getCompanyName());
+        return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
+    }
+
+
+    public Response sendMailChangePlan(EnumPlan plan, String mail) {
+
+        // Paramètres du destinataire
+        String subject = "Bugspointer - Abonnement";
+
+        // Contenu HTML de l'email
+        String htmlContent =
+                "<html>" +
+                        "   <body>" +
+                        "       <table border='0' cellpadding='0' cellspacing='0' >" +
+                        "           <tr><td align='center'><img src='https://bugspointer.com/css/img/icones/merci.gif' alt='Logo merci' ></td></tr> " +
+                        "           <tr><td align='center' style='padding: 10px;'><h1>Merci</h1></td></tr> " +
+                        "           <tr><td align='center' style='padding: 10px;'><p>Mille mercis pour votre abonnement "+ plan +" pour " + plan.getValeur() +"€ par an</p></td></tr> " +
+                        "           <tr><td align='center'></td></tr> " +
+                        "       </table>" +
+                        "   </body>" +
+                        "</html>";
+
+
+        // Configuration des propriétés
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+
+        // Création de l'authentificateur
+        Authenticator auth = new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, password);
+            }
+        };
+
+        // Création de la session
+        Session session = Session.getInstance(properties, auth);
+
+        try {
+            // Création du message
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(mail));
+            message.setSubject(subject, "UTF-8");
+            message.setContent(htmlContent, "text/html; charset=UTF-8");
+
+            // Envoi du message
+            Transport.send(message);
+
+            log.info("email new subscribe sent at : {}", mail);
+            return new Response(EnumStatus.OK, null, "Un mail valable 15 minutes pour réinitialiser votre mot de passe vient de vous êtes envoyé");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            log.info("error from mail sender : " + e.getMessage());
+            return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
+        }
+    }
+
 }
 

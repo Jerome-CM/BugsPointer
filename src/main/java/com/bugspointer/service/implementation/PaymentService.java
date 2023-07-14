@@ -12,15 +12,13 @@ import be.woutschoovaerts.mollie.data.subscription.SubscriptionRequest;
 import be.woutschoovaerts.mollie.data.subscription.SubscriptionResponse;
 import be.woutschoovaerts.mollie.data.subscription.SubscriptionStatus;
 import be.woutschoovaerts.mollie.exception.MollieException;
-import com.bugspointer.dto.CustomerDTO;
-import com.bugspointer.dto.EnumStatus;
-import com.bugspointer.dto.Response;
-import com.bugspointer.dto.SubscriptionDTO;
+import com.bugspointer.dto.*;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.Customer;
 import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.repository.CustomerRepository;
+import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -39,14 +37,17 @@ public class PaymentService {
     private final CompanyRepository companyRepository;
     private final CompanyService companyService;
 
+    private final MailService mailService;
+
     private final CustomerRepository customerRepository;
 
     private final ModelMapper modelMapper;
 
 
-    public PaymentService(CompanyRepository companyRepository, CompanyService companyService, CustomerRepository customerRepository, ModelMapper modelMapper) {
+    public PaymentService(CompanyRepository companyRepository, CompanyService companyService, MailService mailService, CustomerRepository customerRepository, ModelMapper modelMapper) {
         this.companyRepository = companyRepository;
         this.companyService = companyService;
+        this.mailService = mailService;
         this.customerRepository = customerRepository;
         this.modelMapper = modelMapper;
     }
@@ -57,23 +58,27 @@ public class PaymentService {
 
     public Response createNewCustomer(CustomerDTO customerDTO) throws MollieException {
 
-        if (!customerDTO.isCguAccepted()){
+        Optional<Company> companyOptional = companyRepository.findByPublicKey(customerDTO.getPublicKey());
+
+        if (!customerDTO.isCguAccepted()) {
             return new Response(EnumStatus.ERROR, null, "Veuillez accepter les CGU pour procéder au paiement");
         }
-        if (customerDTO.getMail().trim().isEmpty() || customerDTO.getCompanyName().trim().isEmpty() || customerDTO.getAddress1().trim().isEmpty() || customerDTO.getCp().trim().isEmpty() || customerDTO.getCity().trim().isEmpty()){
+        if (customerDTO.getMail().trim().isEmpty() || customerDTO.getCompanyName().trim().isEmpty() || customerDTO.getAddress1().trim().isEmpty() || customerDTO.getCp().trim().isEmpty() || customerDTO.getCity().trim().isEmpty() || customerDTO.getCountry().trim().isEmpty()) {
             return new Response(EnumStatus.ERROR, null, "Veuillez compléter les champs obligatoires");
         }
 
-        Company companyCustomer;
+        if(customerDTO.getPlan().equals(companyOptional.get().getPlan())){
+            return new Response(EnumStatus.ERROR, null, "Vous avez déjà cette offre");
+        }
+
+
+        Company company;
         Customer customerBugspointer = null;
-        Optional<Company> companyOptional = companyRepository.findByPublicKey(customerDTO.getPublicKey());
-        if (companyOptional.isPresent()){
-            companyCustomer = companyOptional.get();
-            log.info("companyCustomer : {}", companyCustomer);
-            Optional<Customer> customerOptional = customerRepository.findByCompany_CompanyId(companyCustomer.getCompanyId());
+        if (companyOptional.isPresent()) {
+            company = companyOptional.get();
+            Optional<Customer> customerOptional = customerRepository.findByCompany_CompanyId(company.getCompanyId());
             if (customerOptional.isPresent()) {
                 customerBugspointer = customerOptional.get();
-                log.info("customer Bugspointer : {}", customerBugspointer);
             }
         } else {
             log.error("Company non trouvée");
@@ -99,43 +104,42 @@ public class PaymentService {
         customer.setMetadata(meta);
 
         //On vérifie que le client existe
-        if (customerBugspointer != null){
+        if (customerBugspointer != null) {
 
             //On récupère le customer de chez Mollie
-            CustomerResponse customerResponse = client.customers().getCustomer(companyCustomer.getCustomer().getCustomerId());
+            CustomerResponse customerResponse = client.customers().getCustomer(company.getCustomer().getCustomerId());
 
             //On modifie le customer avec les données saisies par le client
             CustomerResponse customerHandler = client.customers().updateCustomer(customerResponse.getId(), customer);
 
             log.info("\r -------  ");
-            log.info("Mollie customer : {} - {} - {} - {}", customerHandler.getName(),customerHandler.getEmail(),customerHandler.getId(),customerHandler.getMetadata());
+            log.info("Mollie customer : {} - {} - {} - {}", customerHandler.getName(), customerHandler.getEmail(), customerHandler.getId(), customerHandler.getMetadata());
             log.info("\r -------  ");
 
             log.info("\r -------  ");
             log.info("Bugspointer Customer : {} - {}", customerBugspointer.getId(), customerBugspointer.getCustomerId());
             log.info("\r -------  ");
 
-            //On vérifie la présence d'un mandat valide
+            //Sinon vérifie la présence d'un mandat valide
             List<MandateResponse> mandates = client.mandates().listMandates(customerBugspointer.getCustomerId()).getEmbedded().getMandates();
             log.info("liste mandates : {}", mandates);
-            if (!mandates.isEmpty()){
+            if (!mandates.isEmpty()) {
                 MandateResponse mandat = mandates.get(0);
                 log.info("\r -------  ");
                 log.info("Mollie Mandate : {} - {} - {}", customerBugspointer.getCompany(), mandat.getSignatureDate(), mandat.getId());
                 log.info("\r -------  ");
-                //Si le mandat a été signé il y a moins de 3 ans
-                if (mandat.getStatus()!=MandateStatus.INVALID && mandat.getSignatureDate().isAfter(LocalDate.now().minusYears(3))){
+                //Si le mandat a été signé il y a moins de 4 ans
+                if (mandat.getStatus() != MandateStatus.INVALID && mandat.getSignatureDate().isAfter(LocalDate.now().minusYears(4))) {
                     customerDTO.setIban(mandat.getDetails().getConsumerAccount().orElse(""));
                     customerDTO.setBic(mandat.getDetails().getConsumerBic().orElse(""));
                     if (mandat.getSignatureDate() != null) {
                         customerDTO.setSignature(true);
                     }
-                    return new Response(EnumStatus.OK, customerDTO, "Un mandat est déjà présent vous pouvez le valider ou modifier vos coordonnées bancaire pour créer un nouveau mandat");
+                    return new Response(EnumStatus.OK, customerDTO, "Un mandat est déjà présent. Vous pouvez le valider ou modifier vos coordonnées bancaire pour créer un nouveau mandat");
                 }
             }
             log.info("Pas de mandat enregistré");
             return new Response(EnumStatus.OK, customerBugspointer, null);
-
 
         } else {
 
@@ -145,18 +149,18 @@ public class PaymentService {
             //Si on récupère l'Id du customer de chez mollie on crée le customer chez nous
             if (customerHandler.getId() != null) {
                 log.info("\r -------  ");
-                log.info("New Mollie customer : {} - {} - {}", customerHandler.getName(),customerHandler.getEmail(),customerHandler.getId());
+                log.info("New Mollie customer : {} - {} - {}", customerHandler.getName(), customerHandler.getEmail(), customerHandler.getId());
                 log.info("\r -------  ");
                 customerBugspointer = new Customer();
 
                 customerBugspointer.setCustomerId(customerHandler.getId());
                 /*customerBugspointer.setCompany(companyRepository.findByCompanyName(customerDTO.getCompanyName()).get());*/
-                customerBugspointer.setCompany(companyCustomer);
+                customerBugspointer.setCompany(company);
 
                 try {
                     Customer returnCustomerSaved = customerRepository.save(customerBugspointer);
-                    companyCustomer.setCustomer(returnCustomerSaved);
-                    Company companySaveCustomer = companyRepository.save(companyCustomer);
+                    company.setCustomer(returnCustomerSaved);
+                    Company companySaveCustomer = companyRepository.save(company);
                     log.info("\r -------  ");
                     log.info("New Bugspointer Customer : {} - {}", returnCustomerSaved.getId(), returnCustomerSaved.getCustomerId());
                     log.info("\r -------  ");
@@ -176,44 +180,42 @@ public class PaymentService {
 
     public Response createMandate(CustomerDTO customerDTO) throws MollieException {
 
-        if (!customerDTO.isSignature()){
+        if (!customerDTO.isSignature()) {
             return new Response(EnumStatus.ERROR, customerDTO, "Veuillez signer le mandat pour valider votre abonnement");
         }
-        if (customerDTO.getIban().trim().isEmpty() || customerDTO.getBic().trim().isEmpty()){
+        if (customerDTO.getIban().trim().isEmpty() || customerDTO.getBic().trim().isEmpty()) {
             return new Response(EnumStatus.ERROR, customerDTO, "Veuillez compléter les champs obligatoires");
         }
 
         Customer customer;
         //On cherche la company à partir de la publicKey
         Optional<Company> companyOptional = companyRepository.findByPublicKey(customerDTO.getPublicKey());
-        if (companyOptional.isPresent()){
+        if (companyOptional.isPresent()) {
             //Si on retrouve la company on recherche le customer
             Optional<Customer> customerOptional = customerRepository.findByCompany_CompanyId(companyOptional.get().getCompanyId());
             if (customerOptional.isPresent()) {
                 customer = customerOptional.get();
             } else {
-                //Si le customer n'est pas présent alors il faut le créer TODO: retourne une erreur et renvoi vers la page de création
-                return new Response(EnumStatus.ERROR, null, "Une erreur est survenu");
+                //Si le customer n'est pas présent alors on arrête l'execution TODO Besoin de renvoyer vers la page recapPayment ??
+                return new Response(EnumStatus.ERROR, null, "Vous n'avez pas de profil client chez notre prestataire de paiement");
             }
         } else {
-            log.error("Company non trouvée");
-            return new Response(EnumStatus.ERROR, null, "Une erreur est survenu, merci de vous connecter");
+            log.error("Company {} non trouvée", customerDTO.getPublicKey());
+            return new Response(EnumStatus.ERROR, null, "Une erreur est survenue, merci de vous connecter");
         }
 
-        log.info("customer paiement : {}", customer);
-
-        //On vérifie si un mandat existe et qu'il est valide
         //On récupère la liste des mandats
-        //Pagination<MandateListResponse> mandateListResponses = client.mandates().listMandates(customer.getCustomerId());
         List<MandateResponse> mandates = client.mandates().listMandates(customer.getCustomerId()).getEmbedded().getMandates();
-        log.info("liste mandates : {}", mandates);
-        if (!mandates.isEmpty()){
+        log.info("liste mandates : {}", mandates); //TODO delete after debugg
+        if (!mandates.isEmpty()) {
+            //On récupère le plus récent
             MandateResponse mandat = mandates.get(0);
             log.info("\r -------  ");
-            log.info("Mollie Mandate : {} - {} - {}", customer.getCompany(), mandat.getSignatureDate(), mandat.getId());
+            log.info("Mollie Mandate found : {} - {} - {}", customer.getCompany(), mandat.getSignatureDate(), mandat.getId());
             log.info("\r -------  ");
-            if (mandat.getStatus()!=MandateStatus.INVALID){
-                if (mandat.getSignatureDate().isAfter(LocalDate.now().minusYears(3))){
+            if (mandat.getStatus() != MandateStatus.INVALID) {
+                // Si la date de signature est de moins de 4 an par rapport à maintenant
+                if (mandat.getSignatureDate().isBefore(LocalDate.now().minusYears(4))) {
                     if (customerDTO.getIban().equals(mandat.getDetails().getConsumerAccount().orElse("")) && customerDTO.getBic().equals(mandat.getDetails().getConsumerBic().orElse(""))) {
                         log.info("Mollie Mandate not modified");
                         return new Response(EnumStatus.OK, mandat, "Votre mandat a bien été gardé");
@@ -237,14 +239,20 @@ public class PaymentService {
         mandateRequest.setSignatureDate(Optional.of(LocalDate.now()));
         mandateRequest.setMandateReference(Optional.of(customer.getCustomerId() + "-" + customer.getCompany().getCompanyName() + "-Mandate-BugsPointer-directdebit-" + LocalDate.now()));
 
-        MandateResponse mandateHandler = client.mandates().createMandate(customer.getCustomerId(), mandateRequest);
+        try {
+            MandateResponse mandateResponse = client.mandates().createMandate(customer.getCustomerId(), mandateRequest);
 
-        if (!mandateHandler.getStatus().equals(MandateStatus.INVALID)){
-            log.info("\r -------  ");
-            log.info("New Mollie Mandate : {} - {} - {}", customer.getCompany(), mandateHandler.getSignatureDate(), mandateHandler.getId());
-            log.info("\r -------  ");
-            // TODO Envoie de mail pour indiquer la confirmation du mandat
-            return new Response(EnumStatus.OK, mandateHandler, ""); // Ne pas mettre de message car on passe directement à la méthode de subscrible
+            if (!mandateResponse.getStatus().equals(MandateStatus.INVALID)) {
+                log.info("\r -------  ");
+                log.info("New Mollie Mandate : Company #{} - {} - {}", customer.getCompany().getCompanyId(), mandateResponse.getSignatureDate(), mandateResponse.getId());
+                log.info("\r -------  ");
+
+                mailService.sendMailNewMandate(customerDTO);
+
+                return new Response(EnumStatus.OK, mandateResponse, ""); // Ne pas mettre de message, car on passe directement à la méthode de Subscription
+            }
+        } catch (MollieException ignored) {
+
         }
 
         return new Response(EnumStatus.ERROR, null, "Oups, le mandat est non valide, merci de vérifier");
@@ -253,23 +261,30 @@ public class PaymentService {
 
     public Response createSubscription(Response response, CustomerDTO customerDTO) throws MollieException {
 
+        log.info("Start create new subscribe : Response = {}", response);
         MandateResponse mandateResponse = (MandateResponse) response.getContent();
-        if (mandateResponse.getStatus()==MandateStatus.INVALID){
+        log.info("mandateResponse after cast => {}", mandateResponse);
+        if (mandateResponse.getStatus() == MandateStatus.INVALID) {
             return new Response(EnumStatus.ERROR, null, "Mandat invalide");
         }
+
         Customer customer;
         Company company;
         //On cherche la company à partir de la publicKey
         Optional<Company> companyOptional = companyRepository.findByPublicKey(customerDTO.getPublicKey());
-        if (companyOptional.isPresent()){
+        if (companyOptional.isPresent()) {
             company = companyOptional.get();
             //Si on retrouve la company on recherche le customer
             Optional<Customer> customerOptional = customerRepository.findByCompany_CompanyId(companyOptional.get().getCompanyId());
             if (customerOptional.isPresent()) {
                 customer = customerOptional.get();
+
+                if(customerDTO.getPlan().equals(company.getPlan())){
+                    return new Response(EnumStatus.ERROR, null, "Vous possédez déjà cette offre, pas besoin de vous ré-abonnez");
+                }
             } else {
                 //Si le customer n'est pas présent alors il faut le créer TODO: retourne une erreur et renvoi vers la page de création
-                return new Response(EnumStatus.ERROR, null, "Une erreur est survenu");
+                return new Response(EnumStatus.ERROR, null, "Une erreur est survenue");
             }
         } else {
             log.error("Company non trouvée");
@@ -277,14 +292,14 @@ public class PaymentService {
         }
 
         List<SubscriptionResponse> subscriptionResponses = client.subscriptions().listSubscriptions(customer.getCustomerId()).getEmbedded().getSubscriptions();
-        log.info("liste subscription : {}", subscriptionResponses);
-        if (!subscriptionResponses.isEmpty()){
+        log.info("subscription exist for customer {} : {}",customer.getCustomerId(), subscriptionResponses);
+        if (!subscriptionResponses.isEmpty()) {
             SubscriptionResponse subscriptionResponse = subscriptionResponses.get(0);
             if (mandateResponse.getId().equals(subscriptionResponse.getMandateId().orElse(""))) {
-                log.info("statut : {}", subscriptionResponse.getStatus());
+                log.info("Mandate statut : {}", subscriptionResponse.getStatus());
                 if (subscriptionResponse.getStatus().equals(SubscriptionStatus.ACTIVE) ||
                         subscriptionResponse.getStatus().equals(SubscriptionStatus.PENDING)) {
-                    if (String.valueOf(subscriptionResponse.getAmount().getValue()).equals(customerDTO.getPlan().getValeur())){
+                    if (String.valueOf(subscriptionResponse.getAmount().getValue()).equals(customerDTO.getPlan().getValeur())) {
                         log.info("\r -------  ");
                         log.info("Mollie Subscription : {} - {}", customer.getCustomerId(), subscriptionResponse.getDescription());
                         log.info("\r -------  ");
@@ -305,23 +320,20 @@ public class PaymentService {
                 }
             }
         } else {
-            log.info("Pas d'abonnement d'enregistré");
+            log.info("This customer does not have a subscription yet");
         }
 
-        String mandateId = mandateResponse.getId();
-        EnumPlan plan = customerDTO.getPlan();
-
-        return saveSubscription(plan, customer, company, mandateId);
+        return saveSubscription(customerDTO.getPlan(), customer, company, mandateResponse.getId());
     }
 
     public Response changeSubscription(SubscriptionDTO subscription) throws MollieException {
 
-        log.info("suscription actual : {}", subscription);
+        log.info("Change sub. Actual : {}", subscription);
         Customer customer;
         Company company;
         //On cherche la company à partir de la publicKey
         Optional<Company> companyOptional = companyRepository.findByPublicKey(subscription.getPublicKey());
-        if (companyOptional.isPresent()){
+        if (companyOptional.isPresent()) {
             company = companyOptional.get();
             //Si on retrouve la company on recherche le customer
             Optional<Customer> customerOptional = customerRepository.findByCompany_CompanyId(companyOptional.get().getCompanyId());
@@ -329,7 +341,7 @@ public class PaymentService {
                 customer = customerOptional.get();
             } else {
                 //Si le customer n'est pas présent alors il faut le créer TODO: retourne une erreur et renvoi vers la page de création
-                return new Response(EnumStatus.ERROR, null, "Une erreur est survenu");
+                return new Response(EnumStatus.ERROR, null, "Une erreur est survenue");
             }
         } else {
             log.error("Company non trouvée");
@@ -356,40 +368,105 @@ public class PaymentService {
 
         SubscriptionResponse subscriptionResponse = client.subscriptions().createSubscription(customer.getCustomerId(), subscriptionRequest);
 
-        if(subscriptionResponse.getStatus() == SubscriptionStatus.PENDING || subscriptionResponse.getStatus() == SubscriptionStatus.ACTIVE){
+        if (subscriptionResponse.getStatus() == SubscriptionStatus.PENDING || subscriptionResponse.getStatus() == SubscriptionStatus.ACTIVE) {
             log.info("\r -------  ");
             log.info("New Mollie Subscription : {} - {}", customer.getCustomerId(), subscriptionRequest.getDescription());
             log.info("\r -------  ");
 
-            // TODO Envoie de mail pour confirmer la souscription
+            mailService.sendMailChangePlan(plan, company.getMail());
 
             //Modification du plan de la company
             LocalDate dateLineFacture = subscriptionResponse.getStartDate().plusYears(1);
             Date dateLine = Date.from(dateLineFacture.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+            customer.setDateStartSubscribe(String.valueOf(subscriptionResponse.getStartDate()));
+            customer.setPlan(plan);
+            customerRepository.save(customer);
             Response responseUpdate = companyService.updatePlan(company, dateLine, plan);
 
-            if (responseUpdate.getStatus().equals(EnumStatus.ERROR)){
+            if (responseUpdate.getStatus().equals(EnumStatus.ERROR)) {
                 return new Response(EnumStatus.ERROR, responseUpdate, "Une erreur est survenu, merci de nous contacter à l'adresse mail ci-dessous");
             }
 
-            return new Response(EnumStatus.OK, null, "La souscription à "+ plan.name() +" Plan est validé");
+            return new Response(EnumStatus.OK, null, "La souscription à " + plan.name() + " Plan est validé");
         }
 
         return new Response(EnumStatus.ERROR, null, "Erreur lors de la souscription");
     }
 
-    public SubscriptionDTO getSubscriptionDTO(SubscriptionResponse subscriptionResponse){
+    public SubscriptionDTO getSubscriptionDTO(SubscriptionResponse subscriptionResponse) {
         log.info("SubscriptionDTO - response : {}", subscriptionResponse);
         SubscriptionDTO dto;
         dto = modelMapper.map(subscriptionResponse, SubscriptionDTO.class);
         log.info("SubscriptionDTO - dto : {}", dto);
 
-
-
         return dto;
     }
-}
 
+    public Response deleteSubscription(String customerId, String mandateId) throws MollieException {
+        SubscriptionResponse subscriptionResponse = client.subscriptions().cancelSubscription(customerId, mandateId);
+
+        if(subscriptionResponse.getStatus().equals(SubscriptionStatus.CANCELED)){
+            log.info("{} delete subscription", customerId);
+            return new Response(EnumStatus.OK, null, "");
+        }
+
+        return new Response(EnumStatus.ERROR, null, "Subscription none cancelled");
+    }
+
+    public Response getMandate(CustomerDTO customer) throws MollieException {
+        Company company = companyRepository.findByPublicKey(customer.getPublicKey()).get();
+
+        if(company != null) {
+            List<MandateResponse> mandates = client.mandates().listMandates(company.getCustomer().getCustomerId()).getEmbedded().getMandates();
+
+            Optional<MandateResponse> foundMandate = mandates.stream()
+                    .filter(mandate -> mandate.getDetails().getConsumerAccount().get().equals(customer.getIban())
+                            && mandate.getDetails().getConsumerBic().get().equals(customer.getBic()))
+                    .findFirst();
+
+            if(foundMandate.isPresent()){
+                return new Response(EnumStatus.OK, foundMandate.get(), null);
+            } else {
+                return new Response(EnumStatus.ERROR, null, "mandate not found");
+            }
+        }
+        return new Response(EnumStatus.ERROR, null, "Company not found");
+    }
+
+    public Response returnFreePlan(CustomerDTO customerDTO) throws MollieException {
+        // Si le client a un premium et reviens sur un free, on le change et on met à jour
+        Optional<Company> companyOptional = companyRepository.findByPublicKey(customerDTO.getPublicKey());
+
+        if(companyOptional.isPresent()){
+            Company company = companyOptional.get();
+            Optional<Customer> customerOptional = customerRepository.findByCompany_CompanyId(company.getCompanyId());
+            if(customerOptional.isPresent()){
+                // change customer informations
+                Customer custo = customerOptional.get();
+                custo.setPlan(customerDTO.getPlan());
+                custo.setDateStartSubscribe(null);
+
+                // Change company informations
+                company.setPlan(EnumPlan.FREE);
+
+                Response response = getMandate(customerDTO);
+                MandateResponse mandat = (MandateResponse) response.getContent();
+                try{
+                    companyRepository.save(company);
+                    customerRepository.save(custo);
+                    deleteSubscription(custo.getCustomerId(), mandat.getId());
+                    log.info("Company #{} return to Free plan", company.getCompanyId());
+                    return new Response(EnumStatus.OK, null, "Vous êtes maintenant avec l'offre gratuite");
+                } catch (Exception e){
+                    log.error("Impossible to save a Free plan : {}", e.getMessage());
+                    return new Response(EnumStatus.ERROR, null, "Erreur pour revenir sur un compte gratuit; Contactez-nous à contact@bugspointer.com");
+                }
+            }
+        }
+        return null;
+    }
+}
 
 
 

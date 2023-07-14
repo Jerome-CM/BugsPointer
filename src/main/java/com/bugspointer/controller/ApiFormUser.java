@@ -3,6 +3,10 @@ package com.bugspointer.controller;
 import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.*;
+import com.bugspointer.entity.Company;
+import com.bugspointer.entity.EnumPlan;
+import com.bugspointer.service.implementation.CompanyService;
+import com.bugspointer.service.implementation.CustomerService;
 import com.bugspointer.service.implementation.ModalService;
 import com.bugspointer.service.implementation.PaymentService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +32,17 @@ public class ApiFormUser {
 
     public final PaymentService paymentService;
 
+    public final CustomerService customerService;
+
+    private final CompanyService companyService;
+
     private  final UserAuthenticationUtil userAuthenticationUtil;
 
-    public ApiFormUser(ModalService modalService, PaymentService paymentService, UserAuthenticationUtil userAuthenticationUtil) {
+    public ApiFormUser(ModalService modalService, PaymentService paymentService, CustomerService customerService, CompanyService companyService, UserAuthenticationUtil userAuthenticationUtil) {
         this.modalService = modalService;
         this.paymentService = paymentService;
+        this.customerService = customerService;
+        this.companyService = companyService;
         this.userAuthenticationUtil = userAuthenticationUtil;
     }
 
@@ -53,9 +63,29 @@ public class ApiFormUser {
     }
 
     @PostMapping("/newCustomer")
-    String createNewCustomer(@Valid @ModelAttribute CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes) throws MollieException {
+    String createNewCustomer(@Valid @ModelAttribute CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes, Model model) throws MollieException {
 
         if (!result.hasErrors()) {
+
+            Company company = companyService.getCompanyByPublicKey(customer.getPublicKey());
+            if(customer.getPlan().equals(EnumPlan.FREE)){
+
+                if(company != null){
+                    if(customer.getPlan().equals(company.getPlan())){
+                        redirectAttributes.addFlashAttribute("status", EnumStatus.ERROR);
+                        redirectAttributes.addFlashAttribute("notification", "Vous êtes déjà en offre gratuite");
+                        return "redirect:/app/private/dashboard";
+                    }
+                }
+
+                Response response = paymentService.returnFreePlan(customer);
+                if(response.getStatus().equals(EnumStatus.OK)){
+                    redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+                    redirectAttributes.addFlashAttribute("notification", response.getMessage());
+                    return "redirect:/app/private/dashboard"; //TODO recapPayment plutot
+                }
+            }
+
             Response response = paymentService.createNewCustomer(customer);
             //On récupère l'objet envoyé dans la response
             Object content = response.getContent();
@@ -88,43 +118,57 @@ public class ApiFormUser {
     String createMandate(@Valid @ModelAttribute CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes) throws MollieException {
 
         if (!result.hasErrors()) {
-            Response response = paymentService.createMandate(customer);
+            // Iban isn't already find and valid
+            if(!customerService.haveAndValidMandateWithIban(customer)) {
+                Response response = paymentService.createMandate(customer);
 
-            redirectAttributes.addFlashAttribute("notification", response.getMessage());
-            redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+                redirectAttributes.addFlashAttribute("notification", response.getMessage());
+                redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
 
-            Object content = response.getContent();
-            if (content instanceof CustomerDTO) {
-                CustomerDTO customerResponse = (CustomerDTO) content;
-                customer.setIban(customerResponse.getIban());
-                customer.setBic(customerResponse.getBic());
+                Object content = response.getContent();
+                // If content is instanceOf customer, response create mandat contins error
+                if (content instanceof CustomerDTO) {
+                    CustomerDTO customerResponse = (CustomerDTO) content;
+                    customer.setIban(customerResponse.getIban());
+                    customer.setBic(customerResponse.getBic());
+                    redirectAttributes.addFlashAttribute("customer", customer);
+                    log.info("redirect/app/private/BankAccount");
+                    return "redirect:/app/private/BankAccount";
+                }
+
+                redirectAttributes.addFlashAttribute("response", response);
                 redirectAttributes.addFlashAttribute("customer", customer);
-                return "redirect:/app/private/BankAccount";
-            }
 
-            redirectAttributes.addFlashAttribute("response", response);
-            redirectAttributes.addFlashAttribute("customer", customer);
-
-            if (response.getStatus().equals(EnumStatus.OK)) {
+                if (response.getStatus().equals(EnumStatus.OK)) {
+                    return "redirect:/api/user/newSubscription";
+                } else {
+                    log.info("Create mandate is error, go to bankAccount");
+                    return "redirect:/app/private/BankAccount";
+                }
+                
+            } else {
+                Response response = paymentService.getMandate(customer);
+                log.info("response getMandate : {}", response);
+                redirectAttributes.addFlashAttribute("response", response);
+                redirectAttributes.addFlashAttribute("customer", customer);
                 return "redirect:/api/user/newSubscription";
             }
-
-            return "redirect:/app/private/dashboard";
         }
-        return "redirect:/";
+        return "redirect:/app/private/BankAccount";
     }
 
     @GetMapping("newSubscription")
     String createSubscription(Model model, @ModelAttribute("response") Response response, @ModelAttribute("customer") CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes) throws MollieException {
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+
         if (!result.hasErrors()) {
-            Response response1 = paymentService.createSubscription(response, customer);
-            Object content = response1.getContent();
+            Response responseSub = paymentService.createSubscription(response, customer);
+            Object content = responseSub.getContent();
 
-            redirectAttributes.addFlashAttribute("notification", response1.getMessage());
-            redirectAttributes.addFlashAttribute("status", String.valueOf(response1.getStatus()));
+            redirectAttributes.addFlashAttribute("notification", responseSub.getMessage());
+            redirectAttributes.addFlashAttribute("status", String.valueOf(responseSub.getStatus()));
 
-            if (response1.getStatus().equals(EnumStatus.OK)) {
+            if (responseSub.getStatus().equals(EnumStatus.OK)) {
                 if (content instanceof SubscriptionDTO){
                     SubscriptionDTO dto = (SubscriptionDTO) content;
                     redirectAttributes.addFlashAttribute("subscription", dto);
@@ -132,10 +176,21 @@ public class ApiFormUser {
                     return "redirect:/app/private/confirmSubscription";
                 }
 
-                return "redirect:/app/private/dashboard";
+                return "redirect:/app/private/thanks";
+            } else {
+                if(responseSub.getMessage().equals("Vous avez déjà souscrit à cet abonnement")){
+                    redirectAttributes.addFlashAttribute("notification", responseSub.getMessage());
+                    redirectAttributes.addFlashAttribute("status", "OK");
+
+                    return "redirect:/app/private/thanks";
+                }
             }
         }
-        return "redirect:/";
+
+        redirectAttributes.addFlashAttribute("notification", "Une erreur inattendue s'est produite, contacter : contact@bugspointer.com");
+        redirectAttributes.addFlashAttribute("status", "ERROR");
+
+        return "redirect:/app/private/dashboard";
     }
 
     @PostMapping("subscription")

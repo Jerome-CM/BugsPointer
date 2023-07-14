@@ -2,6 +2,8 @@ package com.bugspointer.utility;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,13 +29,33 @@ public class Utility {
     }
 
     public static class domaineValidate{
-        private static final String DOMAINE_PATTERN="^[0-9a-zA-Z-_][.][a-z]{2,6}$";
 
+        private static final String DOMAINE_PATTERN="^[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*[.][a-zA-Z]{2,6}$";
+                                                //accepte monsite.extension ou ssdomaine.monsite.extension
         private static final Pattern pattern = Pattern.compile(DOMAINE_PATTERN);
 
         public static boolean isValid(final String domaine) {
             Matcher matcher = pattern.matcher(domaine);
             return matcher.matches();
         }
+    }
+
+    /**
+     *
+     * @param dateHandler format "2023-07-25"
+     * @param nbr Année à rajouter
+     * @return Si +1 => 25/07/2024
+     */
+    public static String handlerDateForYear(String dateHandler, int nbr){
+
+        // Conversion de la chaîne en LocalDate
+        LocalDate date = LocalDate.parse(dateHandler);
+
+        // Formatage de la date en chaîne dans le nouveau format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        LocalDate datePlusYear = date.plusYears(nbr);
+        return datePlusYear.format(formatter);
+
     }
 }

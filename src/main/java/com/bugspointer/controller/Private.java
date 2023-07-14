@@ -1,14 +1,13 @@
 package com.bugspointer.controller;
 
+import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.*;
 import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
-import com.bugspointer.service.implementation.BugService;
-import com.bugspointer.service.implementation.CompanyPreferencesService;
-import com.bugspointer.service.implementation.CompanyService;
+import com.bugspointer.service.implementation.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,21 +31,27 @@ public class Private {
 
     private final CompanyPreferencesService preferencesService;
 
+    private final CustomerService customerService;
+
     private final JwtTokenUtil jwtTokenUtil;
 
     private final UserAuthenticationUtil userAuthenticationUtil;
+
+    private final PaymentService paymentService;
 
     @ModelAttribute("plans")
     public EnumPlan[] getPlans(){
         return EnumPlan.values();
     }
 
-    public Private(CompanyService companyService, BugService bugService, CompanyPreferencesService preferencesService, JwtTokenUtil jwtTokenUtil, UserAuthenticationUtil userAuthenticationUtil) {
+    public Private(CompanyService companyService, BugService bugService, CompanyPreferencesService preferencesService, CustomerService customerService, JwtTokenUtil jwtTokenUtil, UserAuthenticationUtil userAuthenticationUtil, PaymentService paymentService) {
         this.companyService = companyService;
         this.bugService = bugService;
         this.preferencesService = preferencesService;
+        this.customerService = customerService;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userAuthenticationUtil = userAuthenticationUtil;
+        this.paymentService = paymentService;
     }
 
     @GetMapping("invoices")
@@ -277,7 +282,7 @@ public class Private {
     }
 
     @GetMapping(value="recapPayment")
-    String getRecapPayment(@RequestParam("product") EnumPlan selectedProduct, Model model, HttpServletRequest request){
+    String getRecapPayment(@RequestParam("product") EnumPlan selectedProduct, Model model, HttpServletRequest request) throws MollieException {
 
         HttpSession session = request.getSession();
         Company company = companyService.getCompanyByMail(jwtTokenUtil.getUsernameFromToken(jwtTokenUtil.getTokenWithoutBearer((String) session.getAttribute("token"))));
@@ -286,22 +291,25 @@ public class Private {
         customer.setMail(company.getMail());
         customer.setCompanyName(company.getCompanyName());
         customer.setPublicKey(company.getPublicKey());
+        if(company.getCustomer() != null){
+            customer = customerService.getMetadata(customer, company.getCustomer().getCustomerId());
+        }
+
         model.addAttribute("product", selectedProduct);
         model.addAttribute("selectedProduct", selectedProduct);
-        log.info("product GetRecap : {}", selectedProduct);
         model.addAttribute("customer", customer);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/recapPayment";
     }
 
     @GetMapping(value = "BankAccount")
-    String getBankAccount(@ModelAttribute("customer") CustomerDTO customerDTO, Model model, HttpServletRequest request){
+    String getBankAccount(@ModelAttribute("customer") CustomerDTO customerDTO, Model model, HttpServletRequest request) throws MollieException {
 
         HttpSession session = request.getSession();
         Company company = companyService.getCompanyByMail(jwtTokenUtil.getUsernameFromToken(jwtTokenUtil.getTokenWithoutBearer((String) session.getAttribute("token"))));
 
         customerDTO.setPublicKey(company.getPublicKey());
-
+        customerDTO = customerService.getBankAccount(customerDTO, company.getCustomer().getCustomerId());
         log.info("customer : {}", customerDTO);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("customer", customerDTO);

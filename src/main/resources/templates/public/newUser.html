@@ -51,7 +51,7 @@
                     </span>
                     <div class="container-row">
                         <a th:href="@{/documentations#key}" target="_blank" class="btn-action">Documentation</a>
-                        <a th:if="${isLoggedIn == false}" th:href="@{/authentication}" target="_blank" class="submit">Dashboard</a>
+                        <a th:if="${isLoggedIn == false}" th:href="@{/app/private/dashboard}" target="_blank" class="submit">Dashboard</a> <!--TODO a surveiller si connexion avant, le app/private/dash ne fait pas une 401-->
                         <a th:if="${isLoggedIn == true}" th:href="@{/app/private/account#key}" target="_blank" class="submit">Account</a>
                     </div>
                 </div>

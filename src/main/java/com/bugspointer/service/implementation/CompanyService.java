@@ -392,7 +392,7 @@ public class CompanyService implements ICompany {
 
         if (company != null){
 
-            company.setDomaine(dto.getDomaine().substring(4));
+            company.setDomaine(dto.getDomaine());
             return companyTryRegistration(company, "Nom de domaine enregistré");
         }
 

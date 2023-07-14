@@ -19,8 +19,8 @@
             <div class="cards cards_detail w40 margin_auto">
                 <h3>IBAN / BIC</h3>
                 <form class="form" action="#" th:action="@{/api/user/newMandate}" th:object="${customer}" method="post">
-                    <input type="text" th:field="*{iban}" placeholder="IBAN : FR76 1254 8029 9898 7654 3210 917" required>
-                    <input type="text" th:field="*{bic}" placeholder="BIC : CCOPFRPP" required>
+                    <input type="text" th:field="*{iban}" placeholder="IBAN : FR76 1254 8029 9898 7654 3210 917" th:value="${customer.getIban()}" required>
+                    <input type="text" th:field="*{bic}" placeholder="BIC : CCOPFRPP" th:value="${customer.getBic()}" required>
                     <input type="hidden" th:field="*{publicKey}" th:value="${customer.publicKey}" readonly>
                     <input type="hidden" th:field="*{plan}" th:value="${customer.plan}" readonly>
                     <p style="height: fit-content;"><input type="checkbox" th:field="*{signature}" required> Je signe le mandat de prélèvement SEPA autorisant Bugspointer à prélever la somme de <span class="tarif" th:text="*{plan.getValeur()}"></span>€ une fois par an</p>

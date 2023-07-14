@@ -1,10 +1,12 @@
 package com.bugspointer.controller;
 
+import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Poll;
 import com.bugspointer.service.implementation.MailService;
+import com.bugspointer.service.implementation.PaymentService;
 import com.bugspointer.service.implementation.PollService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,7 @@ public class Home {
     private final UserAuthenticationUtil userAuthenticationUtil;
 
     private final PollService pollService;
+
 
     public Home(MailService mailService, UserAuthenticationUtil userAuthenticationUtil, PollService pollService) {
         this.mailService = mailService;
