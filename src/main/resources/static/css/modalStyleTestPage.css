@@ -1,0 +1,297 @@
+/*Colors*/
+:root {
+    --btn-logo-color: #00E676;
+    --btn-text-logo-color: white;
+    --modal-color: #FFA903;
+    --modal-title-color: white;
+    --modal-text-submit-color: white;
+    --background-modal-color: #F0F1F3;
+    --font:'DM Sans', sans-serif;
+}
+
+/*CSS Logo*/
+.bugspointer-logo{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    bottom: 2px;
+    right: 4px;
+    z-index: 9999999999;
+}
+.bugspointer-logo:hover{
+    cursor: pointer;
+}
+
+.bugspointer-objet-logo{
+    display: flex;
+    justify-content:center;
+    flex-direction:column;
+    width:112px;
+    height:100px;
+}
+
+.bugspointer-objet-ellispe{
+    margin:0 auto;
+    width: 65px;
+    height: 65px;
+    border-radius:100%;
+    border: 0.5em solid var(--btn-logo-color);
+    background-image: url(img/chercher.gif);
+    background-size: contain;
+    box-shadow: 0 0 5px grey;
+}
+
+.bugspointer-objet-report{
+    color:var(--btn-text-logo-color);
+    background-color: var(--btn-logo-color);
+    border-radius:3px;
+    padding:2px 3px;
+    font-size:15px;
+    box-shadow: 0 0 5px grey;
+    margin: 0;
+}
+
+.span-desktop {
+    display: block;
+}
+
+.span-mobile {
+    display: none;
+}
+
+/*CSS modal*/
+.bugspointer-open-popup:hover{
+    cursor: pointer;
+}
+
+.bugspointer-popup-btn-submit{
+    background-color: var(--modal-color);
+    color: var(--modal-text-submit-color);
+    padding: 14px 20px;
+    margin: 15px auto;
+    border: none;
+    display: block;
+    text-transform: uppercase;
+    font-size: 18px;
+    box-shadow: 0 3px 8px #80808075;
+}
+
+.bugspointer-popup{
+    position: fixed;
+    z-index: 99999999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.2);
+    padding-top: 60px;
+    display: none;
+    font-family: var(--font);
+    color: black;
+}
+
+.bugspointer-popup-container{
+    background-color: var(--background-modal-color);
+    border: 3px solid var(--modal-color);
+    margin: 1% auto 10% auto;
+    width: 50%;
+    border-radius: 20px;
+    overflow: auto;
+    padding-bottom: 10px;
+    height: fit-content;
+}
+.bugspointer-popup-header{
+    text-align: center;
+    top: 0;
+    background-color : var(--modal-color);
+    border-radius: 0;
+    position: relative;
+    color : var(--modal-title-color);
+    padding: 4px;
+}
+.bugspointer-popup-titre{
+    font-size: 28px;
+}
+
+.bugspointer-close-popup{
+    position: absolute;
+    top: -4px;
+    right: 12px;
+    color: var(--modal-title-color);
+    font-size: 30px;
+    font-weight: 700;
+}
+.bugspointer-close-popup:hover{
+    cursor: pointer;
+}
+.bugspointer-popup-content{
+    padding: 15px 30px 0;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bugspointer-popup-content label{
+    text-align: center;
+    font-weight: 500;
+    margin: 5px;
+    text-transform: uppercase;
+}
+
+.bugspointer-popup-content-texturl{
+    width : 100%;
+    padding : 5px 0 5px 5px;
+    box-sizing: border-box;
+}
+
+.bugspointer-popup-content-textdescription{
+    width: 100%;
+    block-size: auto;
+    display: inline-block;
+    box-sizing: border-box;
+    min-height: 50px;
+    height: 150px;
+    padding: 5px;
+    font-family: var(--font);
+    border: 1px solid lightgrey;
+    margin-bottom: 25px;
+}
+
+.bugspointer-codeLocation{
+    display: none;
+}
+
+.bugspointer-popup-content-inputbot{
+    visibility: hidden;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    margin: 0;
+}
+
+.bugspointer-popup-content p {
+    font-style: italic;
+}
+
+.bugspointer-pointed-balise { /* applique une couleur pour la balise sélectionnée par le pointer */
+    color: red !important;
+}
+
+#bugspointer-message-success{
+    text-align: center;
+    padding: 15px 0 10px 0;
+    display: none;
+}
+
+#bugspointer-popup-pointer-bug-text{
+    color: red;
+}
+
+#bugspointer-mail-test{
+    text-align: center;
+}
+/* After send */
+
+#bugspointer-message-success p{
+    font-size: 20px;
+}
+
+#bugspointer-message-success a{
+    font-size: 20px;
+}
+
+.bugspointer-btn-action{
+    padding: 7px 20px;
+    color: white;
+    font-size: 22px;
+    background-color: orange;
+    text-decoration: none;
+}
+
+@media only screen and (max-width: 1280px) {
+    .bugspointer-logo{
+        bottom: 0;
+        right: 4px;
+    }
+
+    .bugspointer-popup-container{
+        width: 69%;
+    }
+}
+@media only screen and (max-width: 599px){
+    .bugspointer-popup-container {
+        width: 95%;
+    }
+    .bugspointer-popup-titre{
+        font-size: 21px;
+    }
+    .bugspointer-popup-content {
+        padding: 15px 10px 0;
+    }
+
+    /* Logo */
+
+    .bugspointer-logo{
+        right: -17px;
+    }
+    .bugspointer-objet-ellispe {
+        margin: 0 auto;
+        width: 50px;
+        height: 50px;
+        border: 0.3em solid var(--btn-logo-color);
+    }
+
+    .bugspointer-span-desktop {
+        display: none;
+    }
+
+    .bugspointer-span-mobile {
+        display: block;
+        width: 38px;
+        margin: 0 auto;
+    }
+
+}
+
+
+/* Préfixes spécifiques pour les navigateurs */
+
+/* Safari et Chrome */
+@-webkit-keyframes bugspointer-spin {
+    /* ... */
+}
+
+/* Safari, Chrome et Opera */
+@media only screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+    .bugspointer-objet-ellispe {
+        -webkit-box-shadow: 0 0 5px grey;
+        box-shadow: 0 0 5px grey;
+    }
+}
+
+/* Edge */
+@supports (-ms-ime-align: auto) {
+    .bugspointer-popup-container {
+        -ms-width: 69%;
+    }
+}
+
+/* Mozilla */
+@-moz-document url-prefix() {
+    .bugspointer-popup-titre {
+        font-weight: bold;
+    }
+}
+
+/* Chrome, Firefox, Safari, Edge, Opera */
+@supports (-webkit-appearance: none) or (-moz-appearance: none) or (appearance: none) {
+    .bugspointer-popup-content-textdescription {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+}
