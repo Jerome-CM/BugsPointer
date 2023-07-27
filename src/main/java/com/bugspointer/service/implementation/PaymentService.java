@@ -407,10 +407,10 @@ public class PaymentService {
         SubscriptionResponse subscriptionResponse = client.subscriptions().cancelSubscription(customerId, mandateId);
 
         if(subscriptionResponse.getStatus().equals(SubscriptionStatus.CANCELED)){
-            log.info("{} delete subscription", customerId);
+            log.info("Customer #{} delete subscription", customerId);
             return new Response(EnumStatus.OK, null, "");
         }
-
+        log.error("Customer #{} can't delete subscription", customerId);
         return new Response(EnumStatus.ERROR, null, "Subscription none cancelled");
     }
 
@@ -459,7 +459,7 @@ public class PaymentService {
                     log.info("Company #{} return to Free plan", company.getCompanyId());
                     return new Response(EnumStatus.OK, null, "Vous êtes maintenant avec l'offre gratuite");
                 } catch (Exception e){
-                    log.error("Impossible to save a Free plan : {}", e.getMessage());
+                    log.error("Company #{} : Impossible return to Free plan : {}", company.getCompanyId(), e.getMessage());
                     return new Response(EnumStatus.ERROR, null, "Erreur pour revenir sur un compte gratuit; Contactez-nous à contact@bugspointer.com");
                 }
             }
