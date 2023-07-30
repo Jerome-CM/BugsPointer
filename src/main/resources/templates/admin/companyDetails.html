@@ -1,0 +1,35 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{include/head.html}"></div>
+<title>Companies List</title>
+
+</head>
+<body>
+
+    <div th:replace="~{include/notifAlert.html}"></div>
+        <div th:replace="~{include/navCompany.html}"></div>
+
+    <h1>Companies List</h1>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Company name</th>
+                    <th>Creation</th>
+                    <th>Last visit</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="company : ${companies}">
+                    <td th:text="${company.getCompanyName()}"></td>
+                    <td th:text="${company.getCreationDate}"></td>
+                    <td th:text="${company.getLastVisit()}"></td>
+                    <td><a target="_blank" th:href="@{/app/admin/companyDetails/{id}(id=${company.getCompanyId()})}">Details</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
