@@ -2,6 +2,9 @@ package com.bugspointer.service.implementation;
 
 import com.bugspointer.dto.*;
 import com.bugspointer.entity.*;
+import com.bugspointer.entity.enumLogger.Action;
+import com.bugspointer.entity.enumLogger.Adjective;
+import com.bugspointer.entity.enumLogger.What;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
 import com.bugspointer.repository.BugRepository;
 import com.bugspointer.repository.CompanyPreferencesRepository;
@@ -135,7 +138,7 @@ public class CompanyService implements ICompany {
                 CompanyPreferences savedPreferences = preferencesRepository.save(preferences);
 
                 // TODO BETA Auto connect joindre le mail a UserDetailsServiceJwt
-
+                Utility.saveLog(savedCompany.getCompanyId(), Action.CREATE, What.ACCOUNT, null, null, null);
                 return new Response(EnumStatus.OK, null, "Compte enregistré, merci. Vous pouvez maintenant vous connecter");
             }
             catch (Exception e){
@@ -290,6 +293,8 @@ public class CompanyService implements ICompany {
                 try {
                     Company savedCompany = companyRepository.save(company);
                     CompanyPreferences savedPreference = preferencesRepository.save(preferences);
+                    Utility.saveLog(savedCompany.getCompanyId(), Action.UPDATE, What.PHONE, null, null , null);
+                    Utility.saveLog(savedCompany.getCompanyId(), Action.UPDATE, What.NOTIFICATION, "for sms", null , null);
                     return new Response(EnumStatus.OK, null, "Préférences mises à jour");
                 }
                 catch (Exception e){
@@ -320,6 +325,7 @@ public class CompanyService implements ICompany {
         try {
             Company savedCompany = companyRepository.save(company);
             log.info("Company #{} - {}", savedCompany.getCompanyId(), message);
+            Utility.saveLog(savedCompany.getCompanyId(), Action.VOID, What.VOID, " - "+message, null, null);
             return new Response(EnumStatus.OK, null, message);
         }
         catch (Exception e){
@@ -392,6 +398,10 @@ public class CompanyService implements ICompany {
 
         if (company != null){
 
+            if(dto.getDomaine().startsWith("www.")){
+                dto.setDomaine(dto.getDomaine().substring(4));
+            }
+
             company.setDomaine(dto.getDomaine());
             return companyTryRegistration(company, "Nom de domaine enregistré");
         }
@@ -459,6 +469,22 @@ public class CompanyService implements ICompany {
         company.setDateLineFacturePlan(dateLine);
 
         return companyTryRegistration(company, "Offre modifié avec succès");
+    }
 
+    public void addDateForDownload(Long id){
+        Optional<Company> companyOpt = companyRepository.findById(id);
+
+        if(companyOpt.isPresent()){
+            Company company = companyOpt.get();
+            company.setDateDownload(new Date());
+
+            try{
+                companyRepository.save(company);
+                log.info("Company #{} download zip",company.getCompanyId());
+                Utility.saveLog(company.getCompanyId(), Action.VOID, What.VOID, "download zip", null, null);
+            } catch (Exception e){
+                log.error("Impossible to update dateDownload : {}", e.getMessage());
+            }
+        }
     }
 }

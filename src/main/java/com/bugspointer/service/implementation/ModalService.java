@@ -7,9 +7,14 @@ import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumEtatBug;
 import com.bugspointer.entity.EnumPlan;
+import com.bugspointer.entity.enumLogger.Action;
+import com.bugspointer.entity.enumLogger.Adjective;
+import com.bugspointer.entity.enumLogger.Raison;
+import com.bugspointer.entity.enumLogger.What;
 import com.bugspointer.repository.BugRepository;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.service.IModal;
+import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -148,6 +153,7 @@ public class ModalService implements IModal {
                     Bug savedBug = new Bug();
                     try{
                         savedBug = bugRepository.save(bug);
+                        Utility.saveLog(bug.getCompany().getCompanyId(), Action.SAVE, What.BUG, "#"+ savedBug.getId(), null, null);
                         log.info("Company #{} save a new bug #{}",savedBug.getCompany().getCompanyId(), savedBug.getId());
                     } catch (Exception e){
                         log.error("Impossible to save a bug for company#{} : {}", bug.getCompany().getCompanyId(), e.getMessage());

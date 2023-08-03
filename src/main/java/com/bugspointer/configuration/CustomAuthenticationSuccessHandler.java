@@ -2,8 +2,12 @@ package com.bugspointer.configuration;
 
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumMotif;
+import com.bugspointer.entity.HomeLogger;
+import com.bugspointer.entity.enumLogger.Action;
+import com.bugspointer.entity.enumLogger.Raison;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
 import com.bugspointer.service.implementation.CompanyService;
+import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -27,6 +31,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Autowired
     private CompanyService companyService;
+
+
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

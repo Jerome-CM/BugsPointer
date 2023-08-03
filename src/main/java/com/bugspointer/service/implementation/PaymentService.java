@@ -16,6 +16,10 @@ import com.bugspointer.dto.*;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.Customer;
 import com.bugspointer.entity.EnumPlan;
+import com.bugspointer.entity.enumLogger.Action;
+import com.bugspointer.entity.enumLogger.Adjective;
+import com.bugspointer.entity.enumLogger.Raison;
+import com.bugspointer.entity.enumLogger.What;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.repository.CustomerRepository;
 import com.bugspointer.utility.Utility;
@@ -165,6 +169,7 @@ public class PaymentService {
                     log.info("New Bugspointer Customer : {} - {}", returnCustomerSaved.getId(), returnCustomerSaved.getCustomerId());
                     log.info("\r -------  ");
                     log.info("company get customer : {}", companySaveCustomer.getCustomer());
+                    Utility.saveLog(companySaveCustomer.getCompanyId(), Action.SAVE, What.CUSTOMER, companySaveCustomer.getCustomer().getCustomerId(), null, null);
                     return new Response(EnumStatus.OK, customerBugspointer, null);
                 } catch (Exception e) {
                     log.error("Impossible to save a new customer : {}", e.getMessage());
@@ -248,7 +253,7 @@ public class PaymentService {
                 log.info("\r -------  ");
 
                 mailService.sendMailNewMandate(customerDTO);
-
+                Utility.saveLog(customer.getCompany().getCompanyId(), Action.CREATE, What.MANDATE, mandateResponse.getId() + ",signature date at " + mandateResponse.getSignatureDate(), null, null);
                 return new Response(EnumStatus.OK, mandateResponse, ""); // Ne pas mettre de message, car on passe directement à la méthode de Subscription
             }
         } catch (MollieException ignored) {
@@ -388,6 +393,7 @@ public class PaymentService {
                 return new Response(EnumStatus.ERROR, responseUpdate, "Une erreur est survenu, merci de nous contacter à l'adresse mail ci-dessous");
             }
 
+            Utility.saveLog(customer.getCompany().getCompanyId(), Action.UPDATE, What.SUBSCRIPTION, subscriptionResponse.getId(), null, null);
             return new Response(EnumStatus.OK, null, "La souscription à " + plan.name() + " Plan est validé");
         }
 
@@ -406,8 +412,11 @@ public class PaymentService {
     public Response deleteSubscription(String customerId, String mandateId) throws MollieException {
         SubscriptionResponse subscriptionResponse = client.subscriptions().cancelSubscription(customerId, mandateId);
 
+        Customer customer = customerRepository.findByCustomerId(customerId).get();
+
         if(subscriptionResponse.getStatus().equals(SubscriptionStatus.CANCELED)){
             log.info("Customer #{} delete subscription", customerId);
+            Utility.saveLog(customer.getCompany().getCompanyId(), Action.DELETE, What.SUBSCRIPTION, subscriptionResponse.getId(),null, null);
             return new Response(EnumStatus.OK, null, "");
         }
         log.error("Customer #{} can't delete subscription", customerId);
@@ -457,6 +466,7 @@ public class PaymentService {
                     customerRepository.save(custo);
                     deleteSubscription(custo.getCustomerId(), mandat.getId());
                     log.info("Company #{} return to Free plan", company.getCompanyId());
+                    Utility.saveLog(company.getCompanyId(), Action.DELETE, What.PLAN, null, Adjective.TO, Raison.FREE);
                     return new Response(EnumStatus.OK, null, "Vous êtes maintenant avec l'offre gratuite");
                 } catch (Exception e){
                     log.error("Company #{} : Impossible return to Free plan : {}", company.getCompanyId(), e.getMessage());

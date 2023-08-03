@@ -7,8 +7,13 @@ import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumEtatBug;
+import com.bugspointer.entity.enumLogger.Action;
+import com.bugspointer.entity.enumLogger.Adjective;
+import com.bugspointer.entity.enumLogger.Raison;
+import com.bugspointer.entity.enumLogger.What;
 import com.bugspointer.repository.BugRepository;
 import com.bugspointer.repository.CompanyRepository;
+import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -123,6 +128,7 @@ public class BugService {
                 bug.setEtatBug(EnumEtatBug.PENDING);
                 try{
                     Bug bugSaved = bugRepository.save(bug);
+                    Utility.saveLog(bug.getCompany().getCompanyId(), Action.UPDATE, What.BUG, "#"+ bug.getId(), Adjective.FOR , Raison.PENDING);
                     log.info("Bug #{} change state to {} at {}", bugSaved.getId(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
                 } catch (Exception e){
                     log.error("Impossible to update a pending bug #{}: {}", idBug, e.getMessage());
@@ -140,6 +146,8 @@ public class BugService {
                 bug.setEtatBug(EnumEtatBug.SOLVED);
                 try{
                     Bug bugSaved = bugRepository.save(bug);
+                    Utility.saveLog(bug.getCompany().getCompanyId(), Action.UPDATE, What.BUG, "#"+ bug.getId(), Adjective.FOR , Raison.SOLVED);
+
                     log.info("Bug #{} change state to {} at {}", bugSaved.getId(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
                 } catch (Exception e){
                     log.error("Impossible to update a solved bug : {}", e.getMessage());
@@ -164,6 +172,7 @@ public class BugService {
                 bug.setEtatBug(EnumEtatBug.IGNORED);
                 try{
                     Bug bugSaved = bugRepository.save(bug);
+                    Utility.saveLog(bug.getCompany().getCompanyId(), Action.UPDATE, What.BUG, "#"+ bug.getId(), Adjective.FOR , Raison.IGNORED);
                     log.info("Bug #{} change state to {} at {}", bugSaved.getId(), bugSaved.getEtatBug().name(), bugSaved.getDateView());
                 } catch (Exception e){
                     log.error("Impossible to update to ignored bug : {}", e.getMessage());

@@ -7,6 +7,11 @@ import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.Customer;
 import com.bugspointer.entity.EnumPlan;
+import com.bugspointer.entity.enumLogger.Action;
+import com.bugspointer.entity.enumLogger.Adjective;
+import com.bugspointer.entity.enumLogger.Raison;
+import com.bugspointer.entity.enumLogger.What;
+import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -128,7 +133,7 @@ public class MailService {
             Transport.send(message);
 
             log.info("Email register sent at : {}", to);
-            return new Response(EnumStatus.OK, null, "Nous vous avons envoyé un e-mail à l'adresse : " + to);
+            return new Response(EnumStatus.OK, null, "Nous vous avons envoyé un e-mail de confirmation à l'adresse : " + to);
         } catch (MessagingException e) {
             e.printStackTrace();
             log.error("Error from mail sender : " + e.getMessage());

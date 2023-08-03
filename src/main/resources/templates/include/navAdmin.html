@@ -1,0 +1,17 @@
+<nav class="navCompany">
+    <span class="title">Bugspointer <img class="flag-nav" src="/css/img/france.jpg" alt="Drapeau français"></span>
+    <!--<button class="nav-toggler" id="nav-toggler">
+        <span class="navCompany-toggler-icon"></span>
+    </button>-->
+    <button class="nav-toggler" id="nav-toggler">
+        <img src="/css/img/menu_burger.svg" alt="">
+    </button>
+    <ul class="nav-menu company" id="nav-menu">
+        <li class="navCompany-item"><a th:href="@{/app/admin/dashboard}">Dashboard</a></li>
+        <li class="navCompany-item"><a th:href="@{/app/admin/metrics}">Metrics</a></li>
+        <li class="navCompany-item"><a th:href="@{/app/admin/companiesList}">CompaniesList</a></li>
+        <li class="navCompany-item"><a th:href="@{/app/admin/addBilling}">Add billing</a></li>
+        <li class="navCompany-item"><a th:href="@{/app/admin/settings}">Settings</a></li>
+        <li class="navCompany-item"><a th:href="@{/logout}">Déconnexion</a></li>
+    </ul>
+</nav>

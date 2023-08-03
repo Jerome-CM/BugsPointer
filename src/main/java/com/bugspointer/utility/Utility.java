@@ -1,15 +1,32 @@
 package com.bugspointer.utility;
 
+import com.bugspointer.entity.HomeLogger;
+import com.bugspointer.entity.enumLogger.Action;
+import com.bugspointer.entity.enumLogger.Adjective;
+import com.bugspointer.entity.enumLogger.Raison;
+import com.bugspointer.entity.enumLogger.What;
+import com.bugspointer.repository.HomeLoggerRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@Slf4j
 public class Utility {
+
+    private static HomeLoggerRepository homeLoggerRepository = null;
+
+    public Utility(HomeLoggerRepository homeLoggerRepository) {
+        this.homeLoggerRepository = homeLoggerRepository;
+    }
+
 
     public String createPublicKey(int nbCar) {
         String[] chars = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
@@ -56,6 +73,34 @@ public class Utility {
 
         LocalDate datePlusYear = date.plusYears(nbr);
         return datePlusYear.format(formatter);
+
+    }
+
+    public static void saveLog(Long companyId, Action action, What what, String identifier, Adjective adjective, Raison raison) {
+
+        HomeLogger logging = new HomeLogger();
+
+        logging.setCompanyId(companyId);
+        logging.setAction(action);
+        logging.setWhat(what);
+        logging.setIdentifier(identifier);
+        logging.setAdjective(adjective);
+        logging.setRaison(raison);
+
+        try{
+            homeLoggerRepository.save(logging);
+        } catch (Exception e){
+            log.error("Error when save a new HomeLogging : {}",e);
+        }
+    }
+
+    public static String dateFormator(Date date, String format){
+        if(date == null){
+            return "--";
+        } else {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            return simpleDateFormat.format(date);
+        }
 
     }
 }

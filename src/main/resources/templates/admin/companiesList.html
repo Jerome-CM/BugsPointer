@@ -1,9 +1,49 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-    <div th:replace="~{include/head.html}"></div>
-    <title>Bugs Pointer</title>
+<div th:replace="~{include/head.html}"></div>
+<title>Companies List</title>
+
 </head>
 <body>
-    <h2>dashboard ADMIN !</h2>
+
+    <div th:replace="~{include/notifAlert.html}"></div>
+        <div th:replace="~{include/navAdmin.html}"></div>
+
+    <h1>Companies List</h1>
+
+    <div class="container">
+
+        <table class="companiesList">
+            <thead>
+                <tr>
+                    <th>Company name</th>
+                    <th>Creation</th>
+                    <th>Valide</th>
+                    <th>Download</th>
+                    <th>Received</th>
+                    <th>Solved</th>
+                    <th>Plan</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="company : ${companies}">
+                    <td th:text="${company.getCompanyName()}"></td>
+                    <td th:text="${company.getCreationDate}"></td>
+                    <td>
+                        <span class="enclosure solved" th:if="${company.motifEnable.equals('Validate')}" th:text="${company.motifEnable}"></span>
+                        <span class="enclosure ignored" th:if="${company.motifEnable.equals('Confirmation')}" th:text="${company.motifEnable}"></span>
+                        <span class="enclosure pending" th:if="${company.motifEnable.equals('Suppression')}" th:text="${company.motifEnable}"></span>
+                        <span class="enclosure new" th:if="${company.motifEnable.equals('Admin')}" th:text="${company.motifEnable}"></span>
+                    </td>
+                    <td><span th:class="${company.getDateDownload() != '--'} ? enclosure : ''" th:classappend="${company.getDateDownload() != '--'} ? solved : ''" th:text="${company.getDateDownload()}"></span></td>
+                    <td th:text="${company.getNbrTotalBug()}"></td>
+                    <td th:text="${company.getNbrSolved()}"></td>
+                    <td><span th:classappend="${(!company.getPlan().equals('Free') ? 'gold ' : '') + (!company.getPlan().equals('Free') ? 'enclosure' : '')}" th:text="${company.getPlan()}"></span></td>
+                    <td><a target="_blank" th:href="@{/app/admin/companyDetails/{id}(id=${company.getCompanyId()})}">Details</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

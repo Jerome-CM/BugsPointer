@@ -1,4 +1,4 @@
-    <a class="btn-download" th:href="@{/downloadableZip/Bugspointer_V1.0.0.zip}" download="Bugspointer_V1.0.0.zip">
+    <a class="btn-download" th:href="@{/downloadableZip/Bugspointer_V1.0.0.zip}" download="Bugspointer_V1.0.0.zip" th:data-companyId="${companyId}" onclick="downloadFile(this)">
         <img alt="bouton de téléchargement" th:src="@{/css/img/telecharger.gif}"/>
         <span class="center" >Télécharger les fichiers</span>
     </a>

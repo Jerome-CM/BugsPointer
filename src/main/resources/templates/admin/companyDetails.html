@@ -7,29 +7,81 @@
 <body>
 
     <div th:replace="~{include/notifAlert.html}"></div>
-        <div th:replace="~{include/navCompany.html}"></div>
+        <div th:replace="~{include/navAdmin.html}"></div>
 
-    <h1>Companies List</h1>
+    <h1 th:text="${company.getCompanyName()}" style="margin-top: 0; margin-bottom: 0;"></h1>
+
 
     <div class="container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Company name</th>
-                    <th>Creation</th>
-                    <th>Last visit</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="company : ${companies}">
-                    <td th:text="${company.getCompanyName()}"></td>
-                    <td th:text="${company.getCreationDate}"></td>
-                    <td th:text="${company.getLastVisit()}"></td>
-                    <td><a target="_blank" th:href="@{/app/admin/companyDetails/{id}(id=${company.getCompanyId()})}">Details</a></td>
-                </tr>
-            </tbody>
-        </table>
+        <br>
+        <h3 th:text="${company.getDomaine()}" style="margin-top: 0; margin-bottom: 0;"></h3>
+        <div class="container-row w90" style="align-items: initial;">
+            <div class="aside w20">
+                <div class="component compo-admin">
+                    <h2>Date Register</h2>
+                    <span class="indicator" th:text="${company.getDateCreation()}"></span>
+
+                    <span class="status-company solved" th:if="${company.motifEnable.equals('VALIDATE')}" th:text="${company.motifEnable}"></span>
+                    <span class="status-company ignored" th:if="${company.motifEnable.equals('CONFIRMATION')}" th:text="${company.motifEnable}"></span>
+                    <span class="status-company pending" th:if="${company.motifEnable.equals('SUPPRESSION')}" th:text="${company.motifEnable}"></span>
+                    <span class="status-company new" th:if="${company.motifEnable.equals('ADMIN')}" th:text="${company.motifEnable}"></span>
+
+                    <h2>Last Visit</h2>
+                    <span class="indicator" th:text="${company.getLastVisit()}"></span>
+
+                    <h2>Last report</h2>
+                    <span class="indicator" th:text="${company.getLastReport()}"></span>
+
+                    <h2>Plan</h2>
+                    <span class="indicator"  th:text="${company.getPlan()}"></span>
+
+                    <h2>Profit</h2>
+                    <span class="indicator">0€</span>
+                </div>
+
+                <div class="component compo-admin" th:if="${company.getCustomerId() != null}">
+                    <h2>Customer ID</h2>
+                    <span class="indicator" th:text="${company.getCustomerId()}"></span>
+
+                    <h2>Mandate</h2>
+                    <div class="component-mandate" th:each="mandate : ${company.getMandatesList()}">
+                        <div class="led-company-details" th:classappend="${mandate.getStatus().equals('VALID')} ? solved : new"></div>
+                        <div class="container-info-mandate">
+                            <span th:text="${mandate.getMandateId()}"></span>
+                            <span th:text="${mandate.getSignatureDate()}"></span>
+                        </div>
+                    </div>
+
+                   <!-- <h2>Date subscribe</h2>
+                    <span class="indicator" th:text="${company.getLastReport()}"></span>-->
+
+                </div>
+
+                <div class="lock" th:classappend="${!company.getMotifEnable().equals('ADMIN')} ? new : pending"><a th:href="@{/app/admin/lockCompany/{id}(id=${company.getCompanyId()})}" th:text="${company.isEnable()} ? Lock : Unlock"></a></div>
+            </div>
+
+            <div class="container fix-css-details">
+
+                <div class="component dataBugs" style="flex-direction:row;">
+                    <span class="number_cards new" th:text="${company.getNbNewBug()}"></span>
+                    <span class="number_cards pending" th:text="${company.getNbPendingBug()}"></span>
+                    <span class="number_cards solved" th:text="${company.getNbSolvedBug()}"></span>
+                    <span class="number_cards ignored" th:text="${company.getNbIgnoredBug()}"></span>
+                </div>
+
+                <table>
+                    <tbody>
+                    <tr th:each="log : ${logs}">
+                        <td class="lockedPoint"><svg width="8" height="30" viewBox="0 0 8 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="4" x2="4" y2="30" stroke="black" stroke-width="2"/>
+                            <circle cx="4" cy="15" r="4" fill="black"/></svg></td>
+                        <td th:text="${log.getDate()}"></td>
+                        <td th:text="${log.getLog()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </body>
 </html>

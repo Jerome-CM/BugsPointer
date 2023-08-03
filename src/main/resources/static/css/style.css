@@ -7,6 +7,7 @@
     --color-body: #F0F1F3;
     --color-new-bug:#FF0000;
     --color-ignored:#6100FF;
+    --color-gold: #ffe91f;
     --color-notification: #4de124;
     --color-alert: #e50000;
 
@@ -655,6 +656,10 @@ ul{
     text-transform: initial;
 }
 
+.w20 {
+    width: 20%;
+}
+
 .w40{
     width: 50%;
 }
@@ -849,6 +854,12 @@ textarea{
 
 .ignored{
     background-color: var(--color-ignored);
+}
+
+.gold{
+    background-color: var(--color-gold);
+    color:black!important;
+    box-shadow: 0 0 5px #fff000;
 }
 
 /* Documentation */
@@ -1158,7 +1169,6 @@ code{
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     background-color: var(--color-white);
-
 }
 
 .component h2{
@@ -1331,6 +1341,199 @@ footer .tierce_card a {
 .container-report-tablette{
     width: 80%;
 }
+
+/* Dashboard Admin */
+.first-report{
+    width: 100%;
+}
+.form-first-report{
+    width: 100%;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin: 5px auto;
+    padding: 5px;
+    height: 40px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    background-color: white;
+}
+
+.form-first-report a{
+    color: black;
+    padding: 5px 10px;
+    background-color: #bbbbbb;
+    font-weight: bold;
+    border-radius: var(--radius);
+}
+
+.form-first-report input[type="text"]{
+    width: 60%;
+    padding: 5px;
+    border:none;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.form-first-report input[type="checkbox"]{
+    margin-left: 5px;
+}
+
+.form-first-report input[type="submit"]{
+    width: fit-content;
+    border:none;
+    padding: 5px 15px;
+    background-color: var(--color-btn-green);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    cursor:pointer;
+}
+
+
+
+.companiesList {
+    width: 95%;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border-spacing: 0;
+    text-align: center;
+    overflow: hidden;
+}
+
+.companiesList thead tr{
+    font-family: "Raleway", serif;
+    background-color: var(--color-orange);
+    line-height: 35px;
+    color: white;
+}
+
+.companiesList tbody tr:nth-child(odd) {
+    background-color: #d7d7d7;
+}
+
+.companiesList tbody tr {
+    font-family: "Inter", sans-serif;
+    border-bottom:1px solid #d2d2d2;
+    color:black;
+    line-height: 30px;
+}
+
+.companiesList tbody tr:hover{
+    background-color: #dbf6d9;
+}
+
+.companiesList a{
+    color: black;
+    text-decoration: none;
+}
+
+.enclosure{
+    border-radius: 25px;
+    padding: 4px 9px;
+    font-size: 14px;
+    color: white;
+}
+
+        /* details */
+
+.compo-admin h2{
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+.compo-admin span{
+    font-family: "Inter", sans-serif;
+    margin-bottom: 20px;
+    margin-top: 4px;
+    color: #575757;
+
+}
+
+.status-company{
+    font-size: 22px;
+    padding: 5px 20px;
+    margin-bottom: 8px;
+    color: white!important;
+    border-radius:25px;
+    box-shadow: var(--shadow);
+    font-weight: lighter;
+}
+
+.component-mandate{
+    width: 100%;
+    display: flex;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin: 5px auto;
+}
+
+.container-info-mandate{
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+}
+
+.container-info-mandate span{
+    margin-bottom: 0;
+    margin-top: 5px;
+}
+
+.led-company-details{
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+.lock{
+    border-radius: 25px;
+    box-shadow: var(--shadow);
+    padding: 5px 20px;
+    width: fit-content;
+    font-size: 23px;
+}
+
+.lock a{
+    color: white;
+    font-weight: bold;
+}
+
+.fix-css-details{
+    width: 75%!important;
+    margin-top: 0;
+}
+
+.dataBugs{
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 25px!important;
+}
+
+.dataBugs span{
+    margin-bottom:0;
+}
+
+.fix-css-details table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    margin-left: initial;
+    font-family: "Inter", sans-serif;
+}
+
+.fix-css-details table tr{
+    height: 30px;
+}
+
+.fix-css-details table tr td{
+    padding: 0 3px;
+    vertical-align : middle;
+    line-height: 0;
+    text-align: left;
+}
+
+.lockedPoint{
+    width: 20px;
+}
+
 @media only screen and (max-width: 1280px) {
 
     /* Index*/

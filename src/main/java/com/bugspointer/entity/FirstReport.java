@@ -1,6 +1,5 @@
 package com.bugspointer.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,6 +16,8 @@ public class FirstReport {
     private Long companyId;
 
     private String companyName;
+
+    private String domaine;
 
     private Date dateConfirm;
 

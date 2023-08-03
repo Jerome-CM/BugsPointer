@@ -1,12 +1,12 @@
 package com.bugspointer.controller;
 
-import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Poll;
+import com.bugspointer.jwtConfig.JwtTokenUtil;
+import com.bugspointer.service.implementation.CompanyService;
 import com.bugspointer.service.implementation.MailService;
-import com.bugspointer.service.implementation.PaymentService;
 import com.bugspointer.service.implementation.PollService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,20 +14,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @Slf4j
 public class Home {
+
+    private final CompanyService companyService;
 
     private final MailService mailService;
 
     private final UserAuthenticationUtil userAuthenticationUtil;
 
+    private final JwtTokenUtil jwtTokenUtil;
+
     private final PollService pollService;
 
 
-    public Home(MailService mailService, UserAuthenticationUtil userAuthenticationUtil, PollService pollService) {
+    public Home(CompanyService companyService, MailService mailService, UserAuthenticationUtil userAuthenticationUtil, JwtTokenUtil jwtTokenUtil, PollService pollService) {
+        this.companyService = companyService;
         this.mailService = mailService;
         this.userAuthenticationUtil = userAuthenticationUtil;
+        this.jwtTokenUtil = jwtTokenUtil;
         this.pollService = pollService;
     }
 
@@ -39,10 +47,11 @@ public class Home {
     }
 
     @GetMapping("download")
-    String getDownloadPage(Model model){
+    String getDownloadPage(Model model, HttpServletRequest request){
 
         if(userAuthenticationUtil.isUserLoggedIn()){
             model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+            model.addAttribute("companyId", companyService.getCompanyWithToken(request).getCompanyId());
             return "public/download";
         } else {
             return "redirect:authentication?status=ERROR&message=Merci de vous connecter";

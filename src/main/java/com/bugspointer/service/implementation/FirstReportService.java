@@ -14,9 +14,9 @@ import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -54,7 +54,7 @@ public class FirstReportService {
 
     public Response saveReportSended(FirstReportDTO firstReportDTO){
 
-        Optional<FirstReport> firstReportOptional = firstReportRepository.findById(firstReportDTO.getCompanyId());
+        Optional<FirstReport> firstReportOptional = firstReportRepository.findById(firstReportDTO.getId());
 
         if(firstReportOptional.isPresent()){
             FirstReport firstReport = firstReportOptional.get();
@@ -81,12 +81,70 @@ public class FirstReportService {
         return new Response(EnumStatus.ERROR, null, "Impossible to save a firstReport state");
     }
 
-    /*public List<FirstReportDTO> getCandidateForFirstReport(){
 
-        Date dateNow = new Date();
+    public List<FirstReportDTO> getCandidateForFirstReport(){
 
-        List<FirstReport> listCandidates = firstReportRepository.findFirstCandidates();
+        List<FirstReportDTO> listCandidatesFormatted = new ArrayList<>();
 
-    }*/
+        Date date = new Date();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        calendar.add(Calendar.DAY_OF_MONTH, -3);
+        String dateLessThreeDay = dateFormat.format(calendar.getTime());
+
+        calendar.add(Calendar.DAY_OF_MONTH, -10);
+        String dateLessTenDay = dateFormat.format(calendar.getTime());
+
+        List<FirstReport> listCandidates = firstReportRepository.findFirstCandidates(dateLessTenDay, dateLessThreeDay);
+        log.info("jointure : {}", listCandidates);
+
+        for (FirstReport first : listCandidates){
+            FirstReportDTO dto = new FirstReportDTO();
+            dto.setId(first.getId());
+            dto.setCompanyId(first.getCompanyId());
+            dto.setCompanyName(first.getCompanyName());
+            dto.setDomaine("http://www."+first.getDomaine());
+            dto.setSendIsChecked(first.isFirstReport());
+            dto.setDescription(first.getFirstDescription());
+            listCandidatesFormatted.add(dto);
+        }
+        return listCandidatesFormatted;
+    }
+
+
+    public List<FirstReportDTO> getCandidateForSecondReport(){
+
+        List<FirstReportDTO> listCandidatesFormatted = new ArrayList<>();
+
+        Date date = new Date();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        calendar.add(Calendar.DAY_OF_MONTH, -15);
+        String dateLessThreeDay = dateFormat.format(calendar.getTime());
+
+        calendar.add(Calendar.DAY_OF_MONTH, -25);
+        String dateLessTenDay = dateFormat.format(calendar.getTime());
+
+        List<FirstReport> listCandidates = firstReportRepository.findFirstCandidates(dateLessTenDay, dateLessThreeDay);
+        log.info("jointure : {}", listCandidates);
+
+        for (FirstReport first : listCandidates){
+            FirstReportDTO dto = new FirstReportDTO();
+            dto.setId(first.getId());
+            dto.setCompanyId(first.getCompanyId());
+            dto.setCompanyName(first.getCompanyName());
+            dto.setDomaine("http://www."+first.getDomaine());
+            dto.setSendIsChecked(first.isFirstReport());
+            dto.setDescription(first.getFirstDescription());
+            listCandidatesFormatted.add(dto);
+        }
+        return listCandidatesFormatted;
+    }
 
 }

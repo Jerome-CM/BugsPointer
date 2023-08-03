@@ -42,6 +42,8 @@ public class Company {
 
     private Date lastVisit = new Date();
 
+    private Date dateDownload;
+
     private boolean isEnable; //Compte actif ou non ?
 
     private EnumMotif motifEnable; //Si isEnable = true => motifEnable = VALIDATE, Sinon indiquer le motif

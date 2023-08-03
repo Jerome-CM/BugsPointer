@@ -68,7 +68,7 @@
                     <h3>Solved bug</h3>
                 </a>
                 <a th:href="@{/app/private/bugList(state='ignored', publicKey=${company.getPublicKey()})}" class="cards">
-                    <span class="number_cards ignored" th:field="*{nbIgnoredBug}" id="nbIgnoredBug" th:text="${company.getNbIgnoredBug()}">1</span>
+                    <span class="number_cards ignored" th:field="*{nbIgnoredBug}" id="nbIgnoredBug" th:text="${company.getNbIgnoredBug()}"></span>
                     <h3>Ignored bug</h3>
                 </a>
             </div>

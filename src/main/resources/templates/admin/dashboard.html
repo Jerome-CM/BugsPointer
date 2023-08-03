@@ -1,9 +1,46 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-    <div th:replace="~{include/head.html}"></div>
-    <title>Bugs Pointer</title>
+<div th:replace="~{include/head.html}"></div>
+<title>Dashboard Administrator</title>
+
 </head>
 <body>
-    <h2>dashboard ADMIN !</h2>
+
+<div th:replace="~{include/notifAlert.html}"></div>
+<div th:replace="~{include/navAdmin.html}"></div>
+    <h1>My Dashboard</h1>
+
+    <div class="container">
+        <section th:if="${firstReports.size() > 0}">
+            <h3>First report</h3>
+            <hr>
+            <div class="first-report" th:each="first : ${firstReports}">
+                <form action="#" th:action="@{/api/saveFirstReport}" method="post" th:object="${firstReportDTO}" class="form-first-report">
+                    <a target="_blank" th:href="@{${first.domaine}}" th:text="${first.companyName}"></a>
+                    First : <input type="checkbox" th:field="*{sendIsChecked}">
+                    <input type="text" th:field="*{description}" placeholder="Description du bug signalé">
+                    <input type="hidden" name="id" th:value="${first.getId()}">
+                    <input type="submit" value="➔">
+                </form>
+            </div>
+        </section>
+        <br>
+        <section th:if="${secondReports.size() > 0}">
+            <h3>Second report</h3>
+            <hr>
+            <div class="first-report" th:each="second : ${secondReports}">
+                <form action="#" th:action="@{/api/saveFirstReport}" method="post" th:object="${firstReportDTO}" class="form-first-report">
+                    <a target="_blank" th:href="@{${second.domaine}}" th:text="${second.companyName}"></a>
+                    Second : <input type="checkbox" th:field="*{sendIsChecked}">
+                    <input type="text" th:field="*{description}" placeholder="Description du bug signalé">
+                    <input type="hidden" name="id" th:value="${second.getId()}">
+                    <input type="submit" value="➔">
+                </form>
+            </div>
+        </section>
+
+
+    </div>
+
 </body>
 </html>

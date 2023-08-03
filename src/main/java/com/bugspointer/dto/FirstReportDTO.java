@@ -7,16 +7,19 @@ import java.util.Date;
 @Data
 public class FirstReportDTO {
 
+    private Long id;
+
     private Long companyId;
 
     private String companyName;
+    private String domaine;
 
-    private Date dateConfirm;
+    private Date dateConfirm = new Date();
 
-    private boolean sendIsChecked;
+    private boolean sendIsChecked = false;
 
-    private String description;
+    private String description = null;
 
-    private Date send;
+    private Date send = null;
 
 }

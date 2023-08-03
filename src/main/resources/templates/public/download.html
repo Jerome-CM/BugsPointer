@@ -19,5 +19,16 @@
         <a th:href="@{/documentations}" class="btn-action">Voir la documentation</a>
     </div>
     <div th:replace="~{include/footer.html}"></div>
+    <script th:inline="javascript">
+        function downloadFile(link) {
+            // Récupérer l'ID de l'entreprise à partir de l'attribut th:data
+            var companyId = link.getAttribute('data-companyId');
+
+            // Effectuer l'appel API à votre endpoint en utilisant l'ID de l'entreprise
+            fetch('api/user/addDateDownload/' + companyId, {
+                method: 'GET'
+            });
+        }
+    </script>
 </body>
 </html>

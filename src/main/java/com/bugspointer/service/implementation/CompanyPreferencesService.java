@@ -5,8 +5,11 @@ import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.CompanyPreferences;
+import com.bugspointer.entity.enumLogger.Action;
+import com.bugspointer.entity.enumLogger.What;
 import com.bugspointer.repository.CompanyPreferencesRepository;
 import com.bugspointer.service.ICompanyPreferences;
+import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -65,6 +68,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
 
             try {
                 CompanyPreferences savedPreferences = preferencesRepository.save(preferences);
+                Utility.saveLog(savedPreferences.getCompany().getCompanyId(), Action.UPDATE, What.NOTIFICATION, null, null , null);
                 log.info("Preferences after updated for company #{}, MNB:{}, MI:{}, MF:{}, SMSNB:{}, SMSI:{}, SMSF:{}", savedPreferences.getCompany().getCompanyId(), savedPreferences.isMailNewBug(), savedPreferences.isMailInactivity(), savedPreferences.isMailNewFeature(), savedPreferences.isSmsNewBug(), savedPreferences.isSmsInactivity(), savedPreferences.isSmsNewFeature());
                 return new Response(EnumStatus.OK, null, "Préférences enregistrées avec succès");
             }
