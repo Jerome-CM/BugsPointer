@@ -9,7 +9,7 @@
 name: Java CI with Maven
 
 env:
-      DB_DATABASE: bugspointerTest
+      DB_DATABASE: bugspointertest
       DB_USER: root
       DB_PASSWORD: Java-Mysql3306
 
@@ -29,7 +29,7 @@ jobs:
         image: mysql:latest
         env:
           MYSQL_ROOT_PASSWORD: Java-Mysql3306
-          MYSQL_DATABASE: bugspointerTest
+          MYSQL_DATABASE: bugspointertest
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -48,7 +48,7 @@ jobs:
         run: mysqladmin ping -h 127.0.0.1 -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --silent
       
       - name: Configurer les variables d'environnement pour les tests
-        run: echo "DB_URL=jdbc:mysql://127.0.0.1:3306/bugspointerTest" >> $GITHUB_ENV
+        run: echo "DB_URL=jdbc:mysql://127.0.0.1:3306/bugspointertest" >> $GITHUB_ENV
         
       - name: Build
         run: mvn clean install
