@@ -2,6 +2,7 @@ package com.bugspointer.crudTest;
 
 import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.Company;
+import com.bugspointer.entity.EnumEtatBug;
 import com.bugspointer.repository.BugRepository;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.service.IModal;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,7 +40,14 @@ public class modalCrudTest {
         Company company = companyRepository.findByCompanyName("CompanyTest1").get();
         bug.setCompany(company);
         bug.setUrl("https://www.sitedetest.com/pageErreur");
+        bug.setDateCreation(new Date());
         bug.setDescription("La vidéo ne se lance pas");
+        bug.setEtatBug(EnumEtatBug.NEW);
+        bug.setCodeLocation("<div><h1>Mon titre</h1><div>");
+        bug.setAdresseIp("192.168.0.1");
+        bug.setScreenSize("1920 x 1080");
+        bug.setBrowser("Chromium v113");
+        bug.setOs("MacOS");
 
         bug = bugRepository.save(bug);
 

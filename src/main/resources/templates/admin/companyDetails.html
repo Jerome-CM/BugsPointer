@@ -21,10 +21,10 @@
                     <h2>Date Register</h2>
                     <span class="indicator" th:text="${company.getDateCreation()}"></span>
 
-                    <span class="status-company solved" th:if="${company.motifEnable.equals('VALIDATE')}" th:text="${company.motifEnable}"></span>
-                    <span class="status-company ignored" th:if="${company.motifEnable.equals('CONFIRMATION')}" th:text="${company.motifEnable}"></span>
-                    <span class="status-company pending" th:if="${company.motifEnable.equals('SUPPRESSION')}" th:text="${company.motifEnable}"></span>
-                    <span class="status-company new" th:if="${company.motifEnable.equals('ADMIN')}" th:text="${company.motifEnable}"></span>
+                    <span class="status-company solved" th:if="${company.motifEnable != null && company.motifEnable.equals('VALIDATE')}" th:text="${company.motifEnable}"></span>
+                    <span class="status-company ignored" th:if="${company.motifEnable != null && company.motifEnable.equals('CONFIRMATION')}" th:text="${company.motifEnable}"></span>
+                    <span class="status-company pending" th:if="${company.motifEnable != null && company.motifEnable.equals('SUPPRESSION')}" th:text="${company.motifEnable}"></span>
+                    <span class="status-company new" th:if="${company.motifEnable != null && company.motifEnable.equals('ADMIN')}" th:text="${company.motifEnable}"></span>
 
                     <h2>Last Visit</h2>
                     <span class="indicator" th:text="${company.getLastVisit()}"></span>
@@ -57,7 +57,7 @@
 
                 </div>
 
-                <div class="lock" th:classappend="${!company.getMotifEnable().equals('ADMIN')} ? new : pending"><a th:href="@{/app/admin/lockCompany/{id}(id=${company.getCompanyId()})}" th:text="${company.isEnable()} ? Lock : Unlock"></a></div>
+                <div class="lock" th:classappend="${company.getMotifEnable() != null && !company.getMotifEnable().equals('ADMIN')} ? new : pending"><a th:href="@{/app/admin/lockCompany/{id}(id=${company.getCompanyId()})}" th:text="${company.isEnable()} ? Lock : Unlock"></a></div>
             </div>
 
             <div class="container fix-css-details">
