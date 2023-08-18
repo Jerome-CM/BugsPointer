@@ -3,12 +3,10 @@ package com.bugspointer.controller;
 import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
+import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.entity.Poll;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
-import com.bugspointer.service.implementation.BugService;
-import com.bugspointer.service.implementation.CompanyService;
-import com.bugspointer.service.implementation.MailService;
-import com.bugspointer.service.implementation.PollService;
+import com.bugspointer.service.implementation.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,14 +31,17 @@ public class Home {
 
     private final PollService pollService;
 
+    private final ViewCounterService viewCounterService;
 
-    public Home(CompanyService companyService, MailService mailService, BugService bugService, UserAuthenticationUtil userAuthenticationUtil, JwtTokenUtil jwtTokenUtil, PollService pollService) {
+
+    public Home(CompanyService companyService, MailService mailService, BugService bugService, UserAuthenticationUtil userAuthenticationUtil, JwtTokenUtil jwtTokenUtil, PollService pollService, ViewCounterService viewCounterService) {
         this.companyService = companyService;
         this.mailService = mailService;
         this.bugService = bugService;
         this.userAuthenticationUtil = userAuthenticationUtil;
         this.jwtTokenUtil = jwtTokenUtil;
         this.pollService = pollService;
+        this.viewCounterService = viewCounterService;
     }
 
 
@@ -50,6 +51,7 @@ public class Home {
         model.addAttribute("nbrBugReported", 1000 ); // bugService.getNbrBugReportedForIndex());
         model.addAttribute("averageBugByCompany", 4 ); //bugService.getAverageNbrBugByCompanyForIndex());
         model.addAttribute("averageSatisfyingUser", pollService.getAverageSatisfyingUserForIndex());
+        viewCounterService.addVisit(EnumViewCounterPage.INDEX);
         return "index";
     }
 
@@ -59,6 +61,7 @@ public class Home {
         if(userAuthenticationUtil.isUserLoggedIn()){
             model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
             model.addAttribute("companyId", companyService.getCompanyWithToken(request).getCompanyId());
+            viewCounterService.addVisit(EnumViewCounterPage.DOWNLOAD);
             return "public/download";
         } else {
             return "redirect:authentication?status=ERROR&message=Merci de vous connecter";
@@ -105,6 +108,7 @@ public class Home {
     @GetMapping("testPage")
     String getTestPage(Model model){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        viewCounterService.addVisit(EnumViewCounterPage.TESTPAGE);
         return "public/testPage";
     }
 
@@ -115,6 +119,7 @@ public class Home {
         model.addAttribute("ranks", ranks);
         model.addAttribute("user", "yes");
         model.addAttribute("pollUser", new Poll());
+        viewCounterService.addVisit(EnumViewCounterPage.POLLUSER);
         return "public/poll";
     }
 
