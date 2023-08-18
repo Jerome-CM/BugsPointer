@@ -502,10 +502,11 @@ public class MailService {
     }
 
     public Response sendMailNewMandate(CustomerDTO customer) throws MollieException {
+        log.warn("customer in mail new mandate (besoin de : ", customer);
 
         HashMap<String, String> contentData = customerService.getDataToMandateForCustomer(customer);
+        log.warn("contentDataResponse : {}", contentData);
         if(contentData.get("status").equals("OK")) {
-
 
             // Paramètres du destinataire
             String subject = "Bugspointer - Mandat de prélèvement SEPA";

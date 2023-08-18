@@ -262,4 +262,21 @@ public class BugService {
         }
         return new Response(EnumStatus.ERROR, null, "La compagnie ou l'état du bug n'est pas bon");
     }
+
+    public Long getNbrBugReportedForIndex(){
+
+        return bugRepository.allBugCounted();
+    }
+
+    public int getAverageNbrBugByCompanyForIndex(){
+
+        Long nbrbug = getNbrBugReportedForIndex();
+
+        Long nbrCompany = companyRepository.allCompanyCounted();
+
+        double average = (double) nbrbug / nbrCompany;
+
+        return (int) Math.ceil(average);
+    }
+
 }

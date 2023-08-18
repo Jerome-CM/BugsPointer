@@ -71,6 +71,7 @@
                 <h3>Type of plan</h3>
                 <span th:text="${company.getPlan()}"></span>
                 <a class="submit" th:href="@{/features#targetPlan}">Change</a>
+                <span th:if="${company.getPlan() != 'FREE'}">Pour arrêter un abonnement, choisissez le plan Free</span>
             </div>
         </section>
 

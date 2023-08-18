@@ -3,6 +3,7 @@ package com.bugspointer.repository;
 import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumEtatBug;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,5 +21,8 @@ public interface BugRepository extends CrudRepository<Bug, Long> {
 
     //Liste des bugs selon l'adresse Ip
     List<Bug> findAllByAdresseIp(String adresseIp);
+
+    @Query(value="SELECT COUNT(*) FROM bug;", nativeQuery = true)
+    Long allBugCounted();
 
 }

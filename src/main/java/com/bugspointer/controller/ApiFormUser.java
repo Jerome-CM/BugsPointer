@@ -67,6 +67,7 @@ public class ApiFormUser {
             Company company = companyService.getCompanyByPublicKey(customer.getPublicKey());
             if(customer.getPlan().equals(EnumPlan.FREE)){
 
+                // Si le customer demande le même plan qu'il a déjà
                 if(company != null){
                     if(customer.getPlan().equals(company.getPlan())){
                         redirectAttributes.addFlashAttribute("status", EnumStatus.ERROR);
@@ -79,7 +80,7 @@ public class ApiFormUser {
                 if(response.getStatus().equals(EnumStatus.OK)){
                     redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
                     redirectAttributes.addFlashAttribute("notification", response.getMessage());
-                    return "redirect:/app/private/dashboard"; //TODO recapPayment plutot
+                    return "redirect:/app/private/dashboard";
                 }
             }
 
@@ -97,14 +98,12 @@ public class ApiFormUser {
             log.info("customer response : {}", customer);
             redirectAttributes.addFlashAttribute("response", response);
 
-
             if (response.getStatus().equals(EnumStatus.OK)){
                 return "redirect:/app/private/BankAccount";
             }
             redirectAttributes.addFlashAttribute("product", customer.getPlan().name());
             redirectAttributes.addFlashAttribute("notification", response.getMessage());
             redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
-            log.info("message {}", response.getMessage());
             return "redirect:/app/private/recapPayment?product="+customer.getPlan().name();
         }
 

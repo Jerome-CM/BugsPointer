@@ -5,6 +5,7 @@ import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Poll;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
+import com.bugspointer.service.implementation.BugService;
 import com.bugspointer.service.implementation.CompanyService;
 import com.bugspointer.service.implementation.MailService;
 import com.bugspointer.service.implementation.PollService;
@@ -24,6 +25,8 @@ public class Home {
 
     private final MailService mailService;
 
+    private final BugService bugService;
+
     private final UserAuthenticationUtil userAuthenticationUtil;
 
     private final JwtTokenUtil jwtTokenUtil;
@@ -31,9 +34,10 @@ public class Home {
     private final PollService pollService;
 
 
-    public Home(CompanyService companyService, MailService mailService, UserAuthenticationUtil userAuthenticationUtil, JwtTokenUtil jwtTokenUtil, PollService pollService) {
+    public Home(CompanyService companyService, MailService mailService, BugService bugService, UserAuthenticationUtil userAuthenticationUtil, JwtTokenUtil jwtTokenUtil, PollService pollService) {
         this.companyService = companyService;
         this.mailService = mailService;
+        this.bugService = bugService;
         this.userAuthenticationUtil = userAuthenticationUtil;
         this.jwtTokenUtil = jwtTokenUtil;
         this.pollService = pollService;
@@ -43,6 +47,9 @@ public class Home {
     @GetMapping("/")
     String getHome(Model model){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        model.addAttribute("nbrBugReported", 1000 ); // bugService.getNbrBugReportedForIndex());
+        model.addAttribute("averageBugByCompany", 4 ); //bugService.getAverageNbrBugByCompanyForIndex());
+        model.addAttribute("averageSatisfyingUser", pollService.getAverageSatisfyingUserForIndex());
         return "index";
     }
 

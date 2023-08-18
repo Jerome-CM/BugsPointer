@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
     <title>BugsPointer</title>
+    <script type="text/javascript" th:src="@{/js/index.js}"></script>
     <style>.bugspointer-logo{display:none;}</style>
 </head>
 <body class="index">
@@ -11,27 +12,28 @@
     <h1>Pensé pour votre entreprise, pensé pour vos utilisateurs</h1>
     <div class="container">
 
-        <h2 class="space">Utilisez BugsPointer gratuitement pour avoir un site web parfait</h2>
+        <h2 class="space green">Utilisez BugsPointer gratuitement pour avoir un site web parfait</h2>
 
-        <div class="container-row citation">
+        <div class="container-row">
+            <img class="space" style="width: 80%;" th:src="@{/css/img/motion/intro.gif}" alt="Description de la facilité d'intégratioin et d'utilisation">
+            <a th:href="@{/authentication}" style="margin-top: auto;" class="btn-try transition-index-btn-tryme"><img style="width:100px; height:100px; border-radius:20%;" th:src="@{/css/img/icones/essaie-moi.gif}" alt="Try me">Essayer maintenant</a>
+
+        </div>
+
+        <div class="container-row citation space">
             <img src="/css/img/left-quote.svg" alt=""><p>J'ai été frappé par une constatation alarmante : la moitié des sites que j'avais visités ce matin présentaient un dysfonctionnement.
             Les propriétaires de ces sites n'en étaient pas forcément conscients. Je me devais de proposer une solution permettant à tous d'avoir un site internet irréprochable !
             <br><br> Jérôme, Fondateur de BugsPointer</p><img src="/css/img/right-quote.svg" alt="">
         </div>
 
-        <div class="cadre rotation green">
-            <div class="rotation-none">
-                <h2 class="h-in-index">Signaler un bug, facilement</h2>
-                <p>BugsPointer est un formulaire simple</p>
-                <p>Facile à intégrer</p>
-                <p>Facile à personnaliser</p>
-                <a th:href="@{/authentication}" class="btn-try"><img style="width:100px; height:100px; border-radius:20%;" th:src="@{/css/img/icones/essaie-moi.gif}" alt="Try me">Essayer maintenant</a>
-            </div>
-        </div>
+
         <section>
             <h2 class="h-in-index">Comment ça fonctionne ?</h2>
-            <h4 class="h-in-index">Pour votre entreprise</h4>
-            <div class="container-row align-stretch">
+            <div id="guidelineMotionDiv" style="text-align: center;">
+                <img id="guidelineMotion" style="margin:0 auto; width:60%;" th:src="@{/css/img/motion/guideline.gif}" alt="">
+            </div>
+
+           <!-- <div class="container-row align-stretch">
                 <div class="cards cards_detail tierce_card">
                     <h3>Ajoutez les fichiers dans votre projet</h3>
                 </div>
@@ -53,7 +55,7 @@
                 <div class="cards cards_detail tierce_card">
                     <h3>Profiteront d'un site web parfait</h3>
                 </div>
-            </div>
+            </div>-->
         </section>
 
         <section>
@@ -61,13 +63,22 @@
             <div class="cadre rotation-none green">
                 <div class="container-row rotation">
                     <ul class="ul-index">
-                        <li class="h-in-index">Syntaxe</li>
-                        <li class="h-in-index">Chemin de fichier</li>
-                        <li class="h-in-index">Design</li>
-                        <li class="h-in-index">Erreur du système</li>
-                        <li class="h-in-index">Document obligatoire manquant</li>
+                        <li class="h-in-index li-what-signal active-li">Orthographe</li>
+                        <li class="h-in-index li-what-signal active-li">Syntaxe</li>
+                        <li class="h-in-index li-what-signal">Chemin de fichier</li>
+                        <li class="h-in-index li-what-signal">Design</li>
+                        <li class="h-in-index li-what-signal">Erreur du système</li>
                     </ul>
-                    <div class="slider sliderIndex">
+
+                    <div class="container-slider-index">
+                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/Orthographe.jpg}" alt="Erreur d'orthographe">
+                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/Indeed - Bugs synthaxe.jpg}" alt="Erreur de synthaxe">
+                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/error_path.png}" alt="Erreur de chemin">
+                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/CAF - Bug btn connexion.jpg}" alt="Erreur de design">
+                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/error_server.png}" alt="Erreur du système">
+
+                    </div>
+                    <!--<div class="slider sliderIndex">
                         <div class="slides">
                             <div id="slide-1">
                                 <img th:src="@{/css/img/sliderIndex/Orthographe.jpg}" alt="Preview of HTML content">
@@ -84,15 +95,15 @@
                             <a class="slide slide-index" href="#slide-2">2</a>
                             <a class="slide slide-index" href="#slide-3">3</a>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </section>
         <section id="pricing">
-            <h2 class="h-in-index">Prix</h2>
             <div class="container-row">
                 <div class="cards cards_detail">
-                    <h3 class="margin-bottom">Free</h3>
+                    <img class="img-in-price-card" th:src="@{/css/img/icones/e-mail.gif}" alt="">
+                    <h3 class="h-in-price-card margin-bottom">Free</h3>
                     Recevez un rapport par mail contenant :<br><br>
                     <ul>
                         <li>L'Url de la page</li>
@@ -101,22 +112,56 @@
                     </ul>
                     <a th:href="@{/authentication}" class="btn-action">Essayer maintenant</a>
                 </div>
-                <div class="cards cards_detail">
-                    <h3 class="margin-bottom">Target Plan</h3>
-                    Recevez un rapport sur notre dashboard avec : <br><br>
+                <div class="cards cards_detail halo-green">
+                    <img class="img-in-price-card" th:src="@{/css/img/icones/cible.gif}" alt="">
+                    <h3 class="h-in-price-card margin-bottom">Target</h3>
+                    Recevez un rapport sur votre dashboard avec : <br><br>
                     <ul>
                         <li>L'Url de la page</li>
                         <li>Une simple description</li>
                         <li th:replace="~{include/targetPlanContent.html}"></li>
                     </ul>
+                    <span class="price-in-card">15€ / an</span>
                     <a th:href="@{/features#targetplan}" class="btn-action">Details</a>
+                </div>
+                <!--<div class="cards cards_detail">
+                    <img class="img-in-price-card" th:src="@{/css/img/icones/base-de-donnees.gif}" alt="">
+                    <h3 class="h-in-price-card margin-bottom">Ultimate</h3>
+                    Target Plan <br><br> + <br><br>
+                    <ul>
+                        <li>L'Url de la page</li>
+                        <li>Une simple description</li>
+                        <li th:replace="~{include/targetPlanContent.html}"></li>
+                    </ul>
+                    <span class="price-in-card">50€ / an</span>
+                    <a th:href="@{/features#ultimateplan}" class="btn-action">Details</a>
+                </div>-->
+            </div>
+        </section>
+
+        <section class="space" id="numbers-bar">
+            <div class="container-row numbers-index">
+                <div class="tierce_card">
+                    <!--TODO afficher le nombre reel de bug <span th:text="${nbrBugReported}" id="bugCounter"></span>-->
+                    <span class="big-number" id="counterDisplay"></span><br>
+                    <span>bugs signalés</span>
+                </div>
+
+                <div class="tierce_card">
+                    <span class="big-number" th:text="${averageBugByCompany}"></span> bug<span th:if="${averageBugByCompany > 1}" th:text="s"></span><br>
+                    <span>en moyenne par entreprise</span>
+                </div>
+
+                <div class="tierce_card">
+                    <span class="big-number"><span th:text="${averageSatisfyingUser}"></span>/10</span><br>
+                    <span>de satisfaction clients</span>
                 </div>
             </div>
         </section>
 
         <section>
             <h2 class="h-in-index">Testez-moi</h2>
-            <p class="space center">Vous pouvez mettre sur votre site web notre logo ou simplement un lien où vous le voulez. Tout est personalisable</p>
+            <p class="space center">Utilisez notre page de test pour voir la puissance de notre outil. Juger par vous-même !</p>
             <div class="container-row">
                 <a class="tryme-btn-index center" target="_blank" th:href="@{/testPage}"><img src="/css/img/icones/essaie-moi.gif" alt="Test-moi"></a>
             </div>

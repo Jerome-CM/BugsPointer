@@ -449,6 +449,8 @@ nav ul li a {
 }
 
 .btn-try{
+    display: flex;
+    flex-direction: column;
     margin-top: 30px;
     padding: 7px 20px;
     width: fit-content;
@@ -457,6 +459,21 @@ nav ul li a {
     font-size: 22px;
     border-radius: var(--radius);
     text-align: center;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.transition-index-btn-tryme{
+    position: relative;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in-out 5s forwards;
 }
 
 ul{
@@ -475,6 +492,52 @@ ul{
     list-style: none;
 }
 
+.li-what-signal{
+    box-shadow: 0 0 5px grey;
+    padding: 15px 30px;
+    color: black;
+    background-color: #FFFFFF;
+    border-radius: var(--radius);
+    text-align: center;
+    font-weight: initial;
+    transition: left 1s ease-in-out;
+}
+
+.active-li {
+    position: relative;
+    left: 50px;
+
+}
+
+.container-slider-index {
+    box-shadow: 0 14px 27px -8px rgba(0,0,0,0.3);
+    border-radius: var(--radius);
+    width: 480px;
+    height: 300px;
+    position: relative;
+    top: -32px;
+    overflow: hidden;
+}
+
+.img-slider-index {
+    width: 480px;
+    height: 300px;
+    opacity: 0;
+    display: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#numbers-bar{
+    display: none;
+}
+
+.big-number{
+    font-family: "Inter", sans-serif;
+    font-size: 50px;
+    color:var(--color-btn-green);
+    font-weight: bold;
+}
+
 .text-green {
     color: var(--color-btn-green);
 }
@@ -487,6 +550,27 @@ ul{
     width: 150px;
     height: 150px;
     border-radius: 25px;
+}
+.img-in-price-card{
+    width: 125px!important;
+}
+
+.h-in-price-card{
+    font-size: 50px!important;
+    font-family: Impact, sans-serif!important;
+}
+
+.price-in-card{
+    padding: 12px 50px;
+    margin: 20px auto 0 auto;
+    font-size: 35px;
+    font-family: Impact, sans-serif;
+    border: 1px solid darkgrey;
+    border-radius: 25px;
+}
+
+.halo-green{
+    box-shadow: 0 0 20px 10px #00E676;
 }
 
 /*CSS Logo
@@ -529,6 +613,7 @@ ul{
     margin: 0;
 }
 */
+
 /* Authentication */
 
 .cancel-margin-top{

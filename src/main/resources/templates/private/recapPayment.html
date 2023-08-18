@@ -36,7 +36,7 @@
                 <input type="text" th:field="*{city}" placeholder="Ville" required>
                 <input type="text" th:field="*{country}" placeholder="Pays" th:value="France" required>
                 <input type="hidden" th:field="*{publicKey}" th:value="${customer.getPublicKey()}" readonly>
-                <p><input type="checkbox" th:field="*{cguAccepted}" required> J'accepter les <a style="color: black;" th:href="@{/cgv}">CGV</a></p>
+                <p><input type="checkbox" th:field="*{cguAccepted}" required> J'accepter les <a style="color: black; text-decoration: underline;" th:href="@{/cgv}">CGV</a></p>
 
                 <input class="btn-action cancel-margin-top" type="submit"  value="Passer au paiement">
 

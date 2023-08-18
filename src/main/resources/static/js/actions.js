@@ -96,5 +96,6 @@ window.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
 });
 

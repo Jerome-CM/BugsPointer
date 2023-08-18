@@ -70,14 +70,16 @@ public class CustomerService implements ICustomer {
 
                 } else {
                     contentData.put("status", "ERROR");
-
                 }
+
+            } else {
                 contentData.put("status", "ERROR");
             }
 
+        } else {
             contentData.put("status", "ERROR");
-
         }
+
         return contentData;
     }
 

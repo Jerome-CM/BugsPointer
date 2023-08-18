@@ -267,8 +267,13 @@ public class PaymentService {
     public Response createSubscription(Response response, CustomerDTO customerDTO) throws MollieException {
 
         log.info("Start create new subscribe : Response = {}", response);
+        if (response.getStatus() == EnumStatus.ERROR) {
+            return new Response(EnumStatus.ERROR, null, "Aucun mandat trouvable pour faire la souscription");
+        }
+
         MandateResponse mandateResponse = (MandateResponse) response.getContent();
         log.info("mandateResponse after cast => {}", mandateResponse);
+
         if (mandateResponse.getStatus() == MandateStatus.INVALID) {
             return new Response(EnumStatus.ERROR, null, "Mandat invalide");
         }
@@ -410,6 +415,7 @@ public class PaymentService {
     }
 
     public Response deleteSubscription(String customerId, String mandateId) throws MollieException {
+        log.warn("in deleteSub method");
         SubscriptionResponse subscriptionResponse = client.subscriptions().cancelSubscription(customerId, mandateId);
 
         Customer customer = customerRepository.findByCustomerId(customerId).get();
@@ -427,29 +433,63 @@ public class PaymentService {
         Company company = companyRepository.findByPublicKey(customer.getPublicKey()).get();
 
         if(company != null) {
+            log.warn("getMandate - company finded ; {}", company);
+
+
             List<MandateResponse> mandates = client.mandates().listMandates(company.getCustomer().getCustomerId()).getEmbedded().getMandates();
+log.warn("mandates brute before stream : {}", mandates);
 
-            Optional<MandateResponse> foundMandate = mandates.stream()
-                    .filter(mandate -> mandate.getDetails().getConsumerAccount().get().equals(customer.getIban())
-                            && mandate.getDetails().getConsumerBic().get().equals(customer.getBic()))
-                    .findFirst();
 
-            if(foundMandate.isPresent()){
-                return new Response(EnumStatus.OK, foundMandate.get(), null);
-            } else {
-                return new Response(EnumStatus.ERROR, null, "mandate not found");
+            log.warn("DTO : iban : {} ; bic : {}", customer.getIban(), customer.getBic());
+            log.warn("MOLLIE iban : {} ; bic : {}", mandates.get(0).getDetails().getConsumerAccount().get(), mandates.get(0).getDetails().getConsumerBic().get());
+
+            if(mandates.size() > 0){
+                MandateResponse foundMandate = null;
+                for(MandateResponse mandate: mandates){
+                    if(mandate.getDetails().getConsumerAccount().get().equals(customer.getIban())
+                            && mandate.getDetails().getConsumerBic().get().equals(customer.getBic())){
+                        foundMandate = mandate;
+                    }
+                };
+
+                log.warn("foundMandate after first loop : {}", foundMandate);
+                if(foundMandate == null){
+                    for(MandateResponse mandate: mandates){
+                        if(mandate.getStatus().equals(MandateStatus.VALID)){
+                            foundMandate = mandate;
+                        }
+                    };
+                }
+
+            /*Optional<MandateResponse> foundMandate = mandates.stream()
+                    .filter(mandate ->
+                            Objects.equals(mandate.getDetails().getConsumerAccount().get(), customer.getIban())
+                                    && Objects.equals(mandate.getDetails().getConsumerBic().get(), customer.getBic()))
+                    .findFirst();*/
+
+                log.info(" fond mandates : {}", foundMandate);
+                if(foundMandate != null){
+                    return new Response(EnumStatus.OK, foundMandate, null);
+                } else {
+                    return new Response(EnumStatus.ERROR, null, "mandate not found");
+                }
             }
+
+
         }
         return new Response(EnumStatus.ERROR, null, "Company not found");
     }
 
     public Response returnFreePlan(CustomerDTO customerDTO) throws MollieException {
+        log.warn("in returnToFree");
         // Si le client a un premium et reviens sur un free, on le change et on met à jour
         Optional<Company> companyOptional = companyRepository.findByPublicKey(customerDTO.getPublicKey());
+log.warn("returnToFree - companyOptional : {}", companyOptional);
 
         if(companyOptional.isPresent()){
             Company company = companyOptional.get();
             Optional<Customer> customerOptional = customerRepository.findByCompany_CompanyId(company.getCompanyId());
+            log.warn("returnToFree - customerOptional : {}", customerOptional);
             if(customerOptional.isPresent()){
                 // change customer informations
                 Customer custo = customerOptional.get();
@@ -459,8 +499,11 @@ public class PaymentService {
                 // Change company informations
                 company.setPlan(EnumPlan.FREE);
 
+                // Recupère le dernier mandat qui correspond à l'iban et au bic du customer
                 Response response = getMandate(customerDTO);
+                log.warn("returnToFree - response getMandate : {}", response);
                 MandateResponse mandat = (MandateResponse) response.getContent();
+                log.warn("returnToFree - mandat : {}", mandat);
                 try{
                     companyRepository.save(company);
                     customerRepository.save(custo);
