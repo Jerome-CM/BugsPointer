@@ -388,7 +388,6 @@ public class ChartService {
         Dataset datasetNewUsers = getValuesForNewUsers(daysToSubtract, "New",allDataResponse, labelsForXaxis);
         Dataset datasetAllUsers = getValuesForAllUsers(daysToSubtract, "All",allDataResponse, labelsForXaxis);
 
-
         datasets.add(datasetNewUsers);
         datasets.add(datasetAllUsers);
 
@@ -405,7 +404,7 @@ public class ChartService {
     /* ********* *\
     *    Notice   *
     \* ********* */
-    
+
     /*
     Créer une methode pour avoir les données de la base
     Créer une methode pour un Dataset

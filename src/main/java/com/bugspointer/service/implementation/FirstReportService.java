@@ -99,7 +99,6 @@ public class FirstReportService {
         String dateLessTenDay = dateFormat.format(calendar.getTime());
 
         List<FirstReport> listCandidates = firstReportRepository.findFirstCandidates(dateLessTenDay, dateLessThreeDay);
-        log.info("jointure : {}", listCandidates);
 
         for (FirstReport first : listCandidates){
             FirstReportDTO dto = new FirstReportDTO();
@@ -113,7 +112,6 @@ public class FirstReportService {
         }
         return listCandidatesFormatted;
     }
-
 
     public List<FirstReportDTO> getCandidateForSecondReport(){
 
@@ -132,7 +130,6 @@ public class FirstReportService {
         String dateLessTenDay = dateFormat.format(calendar.getTime());
 
         List<FirstReport> listCandidates = firstReportRepository.findFirstCandidates(dateLessTenDay, dateLessThreeDay);
-        log.info("jointure : {}", listCandidates);
 
         for (FirstReport first : listCandidates){
             FirstReportDTO dto = new FirstReportDTO();
