@@ -1,0 +1,156 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{include/head.html}"></div>
+<title>Metrics</title>
+
+</head>
+<body>
+
+    <div th:replace="~{include/notifAlert.html}"></div>
+        <div th:replace="~{include/navAdmin.html}"></div>
+
+    <h1>Metrics</h1>
+
+    <div class="choose-duration" id="fixedDiv">
+        <p>Period :</p>
+        <a th:href="@{?dayOpt=7}" class="btn-choose-duration">7</a>
+        <a th:href="@{?dayOpt=15}" class="btn-choose-duration">15</a>
+        <a th:href="@{?dayOpt=21}" class="btn-choose-duration">21</a>
+        <a th:href="@{?dayOpt=30}" class="btn-choose-duration">1 mois</a>
+        <a th:href="@{?dayOpt=60}" class="btn-choose-duration">2 mois</a>
+        <a th:href="@{?dayOpt=90}" class="btn-choose-duration">3 mois</a>
+        <a th:href="@{?dayOpt=180}" class="btn-choose-duration">6 mois</a>
+        <a th:href="@{?dayOpt=365}" class="btn-choose-duration">1 an</a>
+        <p>Du <input type="date" name=""> au <input type="date" name=""></p>
+    </div>
+
+
+    <div class="container">
+        <h2>Visits</h2>
+        <div class="chart-container"><canvas id="visits"></canvas></div>
+
+        <h2 class="space">Users</h2>
+        <div class="chart-container"><canvas id="newUser"></canvas></div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--Visits-->
+    <script th:inline="javascript">
+
+        const options = {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0 // Nombre de décimales à afficher (0 pour des valeurs entières)
+                    }
+                }
+            }
+        }
+        const visits = document.getElementById('visits');
+
+        const dataFromSpringForVisits = [[${nbrVisit}]];
+
+        let labelsForVisits = dataFromSpringForVisits.labels;
+
+
+        // Spécifier la largeur et la hauteur souhaitées du canvas
+        visits.width = (window.innerWidth * 80) / 100; // 80% de la taille de l'écran
+        visits.height = window.innerHeight / 3; // Hauteur en pixels
+
+        new Chart(visits, {
+            type: 'line',
+            data: {
+                labels: labelsForVisits,
+                datasets: [
+                    {
+                    label: dataFromSpringForVisits.datasets[0].nameOfData,
+                    data: dataFromSpringForVisits.datasets[0].value,
+                    borderWidth: 3,
+                    fill: false,
+                    borderColor: 'rgb(187,187,187)',
+                    tension: 0.3
+                    },
+                    {
+                        label: dataFromSpringForVisits.datasets[1].nameOfData,
+                        data: dataFromSpringForVisits.datasets[1].value,
+                        borderWidth: 3,
+                        fill: false,
+                        borderColor: 'rgb(43,163,255)',
+                        tension: 0.3
+                    },
+                    {
+                        label: dataFromSpringForVisits.datasets[2].nameOfData,
+                        data: dataFromSpringForVisits.datasets[2].value,
+                        borderWidth: 3,
+                        fill: false,
+                        borderColor: 'rgb(106,12,255)',
+                        tension: 0.3
+                    },
+                    {
+                        label: dataFromSpringForVisits.datasets[3].nameOfData,
+                        data: dataFromSpringForVisits.datasets[3].value,
+                        borderWidth: 3,
+                        fill: false,
+                        borderColor: 'rgb(155,250,253)',
+                        tension: 0.3
+                    },
+                    {
+                        label: dataFromSpringForVisits.datasets[4].nameOfData,
+                        data: dataFromSpringForVisits.datasets[4].value,
+                        borderWidth: 3,
+                        fill: false,
+                        borderColor: 'rgb(253,229,155)',
+                        tension: 0.3
+                    },
+                    {
+                        label: dataFromSpringForVisits.datasets[5].nameOfData,
+                        data: dataFromSpringForVisits.datasets[5].value,
+                        borderWidth: 3,
+                        fill: false,
+                        borderColor: 'rgb(0, 255, 0)',
+                        tension: 0.3
+                    },
+                ]
+            },
+            options: options
+        });
+
+
+        const users = document.getElementById('newUser');
+
+        const dataFromSpringForUser = [[${nbrUser}]];
+
+        let labelsForUsers = dataFromSpringForUser.labels;
+
+        // Spécifier la largeur et la hauteur souhaitées du canvas
+        users.width = (window.innerWidth * 80) / 100; // 80% de la taille de l'écran
+        users.height = window.innerHeight / 3; // Hauteur en pixels
+
+        new Chart(users, {
+            type: 'line',
+            data: {
+                labels: labelsForUsers,
+                datasets: [
+                    {
+                        label: dataFromSpringForUser.datasets[0].nameOfData,
+                        data: dataFromSpringForUser.datasets[0].value,
+                        borderWidth: 3,
+                        fill: false,
+                        borderColor: 'rgb(253,229,155)',
+                        tension: 0.3
+                    },
+                    {
+                        label: dataFromSpringForUser.datasets[1].nameOfData,
+                        data: dataFromSpringForUser.datasets[1].value,
+                        borderWidth: 3,
+                        fill: false,
+                        borderColor: 'rgb(0, 255, 0)',
+                        tension: 0.3
+                    }]
+            },
+            options: options
+        });
+    </script>
+</body>
+</html>

@@ -97,5 +97,17 @@ window.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    /* fix nav to the top */
+
+    const fixedDiv = document.getElementById("fixedDiv");
+    const offset = fixedDiv.offsetTop;
+
+    window.addEventListener("scroll", function() {
+        if (window.scrollY >= offset) {
+            fixedDiv.classList.add("fixed");
+        } else {
+            fixedDiv.classList.remove("fixed");
+        }
+    });
 });
 

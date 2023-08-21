@@ -48,7 +48,7 @@ public class Home {
     @GetMapping("/")
     String getHome(Model model){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        model.addAttribute("nbrBugReported", 1000 ); // bugService.getNbrBugReportedForIndex());
+        model.addAttribute("nbrBugReported", 277 ); // bugService.getNbrBugReportedForIndex());
         model.addAttribute("averageBugByCompany", 4 ); //bugService.getAverageNbrBugByCompanyForIndex());
         model.addAttribute("averageSatisfyingUser", pollService.getAverageSatisfyingUserForIndex());
         viewCounterService.addVisit(EnumViewCounterPage.INDEX);

@@ -1,5 +1,6 @@
 package com.bugspointer.utility;
 
+import com.bugspointer.configuration.CustomExceptions;
 import com.bugspointer.entity.HomeLogger;
 import com.bugspointer.entity.enumLogger.Action;
 import com.bugspointer.entity.enumLogger.Adjective;
@@ -9,6 +10,7 @@ import com.bugspointer.repository.HomeLoggerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -101,6 +103,48 @@ public class Utility {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
             return simpleDateFormat.format(date);
         }
+    }
+
+    public static LocalDate dateFormatToLocalDate(Date dateBefore, String dateBeforeOnStringType, String formatOrigin) throws CustomExceptions.GetLocalDateException, ParseException {
+
+        Date date = dateBefore;
+        String dateOnStringFormat = dateBeforeOnStringType;
+
+        if(date != null && formatOrigin != null){
+
+            if(formatOrigin.equals("yyyy-MM-dd")){
+                String[] arrayTime = String.valueOf(dateBefore).split("-");
+
+                int year = Integer.parseInt(arrayTime[0]);
+                int month = Integer.parseInt(arrayTime[1]);
+                int day = Integer.parseInt(arrayTime[2]);
+
+                return LocalDate.of(year,month,day);
+            }
+
+            if(formatOrigin.equals("yyyy-MM-dd HH:mm:ss")){
+                String[] arrayTimeDayHours = String.valueOf(dateBefore).split(" ");
+
+                String[] arrayTime = String.valueOf(arrayTimeDayHours[0]).split("-");
+
+                int year = Integer.parseInt(arrayTime[0]);
+                int month = Integer.parseInt(arrayTime[1]);
+                int day = Integer.parseInt(arrayTime[2]);
+
+                return LocalDate.of(year,month,day);
+            }
+
+        } else if(dateOnStringFormat != null && formatOrigin != null){
+            if(formatOrigin.equals("dd/MM")){
+                SimpleDateFormat inputDateFormat = new SimpleDateFormat("dd/MM");
+                return LocalDate.of(LocalDate.now().getYear(), inputDateFormat.parse(dateOnStringFormat).getMonth() + 1, inputDateFormat.parse(dateOnStringFormat).getDate());
+            }
+
+        } else{
+            throw new CustomExceptions.GetLocalDateException("Erreur liée à la date");
+        }
+
+        return null;
 
     }
 }

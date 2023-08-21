@@ -1,18 +1,20 @@
 package com.bugspointer.controller;
 
 import be.woutschoovaerts.mollie.exception.MollieException;
-import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.FirstReportDTO;
-import com.bugspointer.dto.Response;
+import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.service.implementation.AdminService;
+import com.bugspointer.service.implementation.ChartService;
 import com.bugspointer.service.implementation.FirstReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.text.ParseException;
 
 @Controller
 @RequestMapping("app/admin")
@@ -22,9 +24,12 @@ public class Admin {
 
     private final FirstReportService firstReportService;
 
-    public Admin(AdminService adminService, FirstReportService firstReportService) {
+    private final ChartService chartService;
+
+    public Admin(AdminService adminService, FirstReportService firstReportService, ChartService chartService) {
         this.adminService = adminService;
         this.firstReportService = firstReportService;
+        this.chartService = chartService;
     }
 
     @GetMapping("dashboard")
@@ -41,7 +46,13 @@ public class Admin {
     }
 
     @GetMapping("metrics")
-    String getMetrics(Model model){
+    String getMetrics(Model model,@RequestParam(required = false) String dayOpt) throws ParseException {
+        int day = 30;
+        if(dayOpt != null){
+            day = Integer.parseInt(dayOpt);
+        }
+        model.addAttribute("nbrVisit", chartService.getDataForViewForLastestXdaysForVisits(day));
+        model.addAttribute("nbrUser", chartService.getDataForViewForLastestXdaysForUsers(day));
         return "admin/metrics";
     }
 

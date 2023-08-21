@@ -15,6 +15,7 @@ public class ViewCounter {
 
     private EnumViewCounterPage page;
 
+    @Temporal(TemporalType.DATE)
     private Date dateView = new Date();
 
     public ViewCounter(EnumViewCounterPage page, Date dateView) {
