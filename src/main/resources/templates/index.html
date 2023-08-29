@@ -11,10 +11,11 @@
     <h1>Pensé pour votre entreprise, pensé pour vos utilisateurs</h1>
     <div class="container">
 
-        <h2 class="space green">Utilisez BugsPointer gratuitement pour avoir un site web parfait</h2>
+        <h2 class="space green-pill">Utilisez BugsPointer gratuitement pour avoir un site web parfait</h2>
 
         <div class="container-row">
-            <img class="space" style="width: 80%;" th:src="@{/css/img/motion/intro.gif}" alt="Description de la facilité d'intégratioin et d'utilisation">
+            <img class="space intro" th:src="@{/css/img/motion/intro.gif}" alt="Description de la facilité d'intégratioin et d'utilisation">
+            <img class="space intro_mobile" th:src="@{/css/img/motion/intro_mobile.gif}" alt="Description de la facilité d'intégratioin et d'utilisation">
             <a th:href="@{/authentication}" style="margin-top: auto;" class="btn-try transition-index-btn-tryme"><img style="width:100px; height:100px; border-radius:20%;" th:src="@{/css/img/icones/essaie-moi.gif}" alt="Try me">Essayer maintenant</a>
 
         </div>
@@ -29,7 +30,7 @@
         <section>
             <h2 class="h-in-index">Comment ça fonctionne ?</h2>
             <div id="guidelineMotionDiv" style="text-align: center;">
-                <img id="guidelineMotion" style="margin:0 auto; width:60%;" th:src="@{/css/img/motion/guideline.gif}" alt="">
+                <img id="guidelineMotion" th:src="@{/css/img/motion/guideline.gif}" alt="">
             </div>
 
            <!-- <div class="container-row align-stretch">
@@ -63,7 +64,7 @@
                 <div class="container-row rotation">
                     <ul class="ul-index">
                         <li class="h-in-index li-what-signal active-li">Orthographe</li>
-                        <li class="h-in-index li-what-signal active-li">Syntaxe</li>
+                        <li class="h-in-index li-what-signal ">Syntaxe</li>
                         <li class="h-in-index li-what-signal">Chemin de fichier</li>
                         <li class="h-in-index li-what-signal">Design</li>
                         <li class="h-in-index li-what-signal">Erreur du système</li>
@@ -234,8 +235,23 @@
         showImage(currentIndex);
         setInterval(nextImage, 3000);
 
+        let mobil;
+        if( navigator.userAgent.match(/iPhone/i)
+            || navigator.userAgent.match(/Android/i)
+            || navigator.userAgent.match(/iPod/i)
+            || navigator.userAgent.match(/Windows Phone/i)
+        ){
+            mobil = true;
+        } else {
+            mobil = false;
+        }
 
-        displayBlockToScroll("numbers-bar", 2300);
+        if(mobil){
+            displayBlockToScroll("numbers-bar", 2000);
+        } else {
+            displayBlockToScroll("numbers-bar", 2300);
+        }
+
         const bugCounter = document.getElementById('counterDisplay');
         const startValue = 0;
         var targetValue = [[${nbrBugReported}]];
