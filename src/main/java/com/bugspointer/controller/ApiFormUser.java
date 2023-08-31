@@ -214,6 +214,15 @@ public class ApiFormUser {
         return "redirect:/";
     }
 
+    @GetMapping("/{idCompany}/{idCustomer}/deleteMandate/{idMandate}")
+    public String deleteMandate(@PathVariable("idCompany") Long idCompany, @PathVariable("idCustomer") String idCustomer, @PathVariable("idMandate") String idMandate, RedirectAttributes redirectAttributes) throws MollieException {
+        Response response = customerService.deleteMandate(idCompany, idCustomer, idMandate);
+
+        redirectAttributes.addFlashAttribute("notification", response.getMessage());
+        redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+        return "redirect:/app/private/account";
+    }
+
     @GetMapping("/addDateDownload/{id}")
     public String addDateDownload(@PathVariable("id") Long id){
         companyService.addDateForDownload(id);

@@ -75,6 +75,30 @@
             </div>
         </section>
 
+        <section th:if="${mandates.size() > 0}" >
+            <div class="cards account">
+                <h3>Mandats</h3>
+                <div class="cards-mandate">
+                    <table class="content-info-mandat">
+                        <tbody>
+                            <tr class="th">
+                                <th>Iban</th>
+                                <th>Bic</th>
+                                <th>Validité</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr class="tr" th:each="mandate :${mandates}">
+                                <td class="iban" th:text="${mandate.getIban()}"></td>
+                                <td class="bic" th:text="${mandate.getBic()}"></td>
+                                <td class="validity" th:text="${mandate.getValidDate()}"></td>
+                                <td class="action center"><a class="submit align_in_container_row new" th:href="@{/api/user/{idCompany}/{idCustomer}/deleteMandate/{idMandate}(idCompany=${company.getId()} ,idCustomer=${mandate.getCustomerId()}, idMandate=${mandate.getMandateId()})}">x</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
         <section>
             <form class="cards account" th:object="${company}" method="get">
                 <h3>Public Key</h3>

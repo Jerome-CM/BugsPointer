@@ -3,12 +3,19 @@ package com.bugspointer.service.implementation;
 import be.woutschoovaerts.mollie.Client;
 import be.woutschoovaerts.mollie.ClientBuilder;
 import be.woutschoovaerts.mollie.data.customer.CustomerResponse;
+import be.woutschoovaerts.mollie.data.mandate.MandateRequest;
 import be.woutschoovaerts.mollie.data.mandate.MandateResponse;
 import be.woutschoovaerts.mollie.data.mandate.MandateStatus;
 import be.woutschoovaerts.mollie.exception.MollieException;
+import com.bugspointer.configuration.CustomExceptions;
 import com.bugspointer.dto.CustomerDTO;
+import com.bugspointer.dto.EnumStatus;
+import com.bugspointer.dto.MandateDTO;
+import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.Customer;
+import com.bugspointer.entity.enumLogger.Action;
+import com.bugspointer.entity.enumLogger.What;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.service.ICustomer;
 import com.bugspointer.utility.Utility;
@@ -16,9 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -151,4 +159,61 @@ public class CustomerService implements ICustomer {
         }
         return false;
     }
+
+    public List<MandateDTO> getMandateList(Company company) throws MollieException {
+
+        List<MandateDTO> mandatesListDTO = new ArrayList<>();
+        if (company != null) {
+            List<MandateResponse> mandates = client.mandates().listMandates(company.getCustomer().getCustomerId()).getEmbedded().getMandates();
+
+            mandatesListDTO = mandates.stream()
+                    .map(mandateResponse -> {
+                        LocalDate dateSignature = mandateResponse.getSignatureDate();
+                        LocalDate dateValid = dateSignature.plusYears(4);
+                        Date date = Date.from(dateValid.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+                        MandateDTO mandateDTO = new MandateDTO();
+                        mandateDTO.setMandateId(mandateResponse.getId());
+                        mandateDTO.setCustomerId(company.getCustomer().getCustomerId());
+                        mandateDTO.setValidDate(Utility.dateFormator(date, "dd/MM/yyyy"));
+                        mandateDTO.setStatus(String.valueOf(mandateResponse.getStatus()));
+                        mandateDTO.setIban(String.valueOf(mandateResponse.getDetails().getConsumerAccount().orElse("")));
+                        mandateDTO.setBic(String.valueOf(mandateResponse.getDetails().getConsumerBic().orElse("")));
+
+                        if(mandateDTO.getMandateId() != null && mandateDTO.getCustomerId() != null){
+                            return mandateDTO;
+                        } else {
+                             try {
+                                throw new CustomExceptions.GetDeleteMandateException("Il manque le customerId ou mandateId pour supprimer le mandat");
+                            } catch (CustomExceptions.GetDeleteMandateException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    })
+                    .collect(Collectors.toList());
+        }
+        return mandatesListDTO;
+    }
+
+    public Response deleteMandate(Long idCompany, String idCustomer, String idMandate) throws MollieException {
+
+        List<MandateResponse> mandatesBefore = client.mandates().listMandates(idCustomer).getEmbedded().getMandates();
+
+        int sizeBefore = mandatesBefore.size();
+        client.mandates().revokeMandate(idCustomer, idMandate);
+
+        List<MandateResponse> mandatesAfter = client.mandates().listMandates(idCustomer).getEmbedded().getMandates();
+
+        int sizeAfter = mandatesAfter.size();
+
+        if(sizeBefore > sizeAfter){
+            Utility.saveLog(idCompany, Action.DELETE, What.MANDATE, idMandate, null, null);
+            log.info("Company #{} delete the mandate {}", idCompany, idMandate);
+            return new Response(EnumStatus.OK, null, "Mandat supprimer avec succès");
+        } else {
+            return new Response(EnumStatus.ERROR, null, "Erreur lors de la suppression du mandat");
+        }
+
+    }
+
 }

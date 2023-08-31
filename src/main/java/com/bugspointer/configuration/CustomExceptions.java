@@ -10,6 +10,12 @@ public class CustomExceptions extends Exception{
         }
     }
 
+    public static class GetDeleteMandateException extends Exception {
+        public GetDeleteMandateException(String message) {
+            super(message);
+        }
+    }
+
     public static class OtherCustomException extends RuntimeException {
         public OtherCustomException(String message) {
             super(message);

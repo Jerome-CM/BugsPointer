@@ -946,19 +946,19 @@ textarea{
 }
 
 .new{
-    background-color: var(--color-new-bug);
+    background-color: var(--color-new-bug)!important;
 }
 
 .pending{
-    background-color: var(--color-orange);
+    background-color: var(--color-orange)!important;
 }
 
 .solved{
-    background-color: var(--color-btn-green);
+    background-color: var(--color-btn-green)!important;
 }
 
 .ignored{
-    background-color: var(--color-ignored);
+    background-color: var(--color-ignored)!important;
 }
 
 .gold{
@@ -1081,7 +1081,7 @@ code{
 /* Account*/
 
 .account {
-    width: 50%;
+    width: 70%;
     text-align: center;
 }
 
@@ -1139,6 +1139,57 @@ code{
     width: 80%;
 }
 
+.cards-mandate{
+    width: calc(100% - 30px);
+    margin: 10px auto;
+    padding: 10px;
+}
+
+.content-info-mandat{
+    width: 100%;
+    border-collapse: collapse;
+    text-transform: inherit;
+}
+
+.content-info-mandat .th{
+    line-height: 35px;
+}
+
+.content-info-mandat .tr{
+    line-height: 25px;
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
+}
+
+.content-info-mandat .iban{
+    width: 40%;
+}
+
+.content-info-mandat .bic{
+    width: 25%;
+}
+
+.content-info-mandat .validity{
+    width: 20%;
+}
+
+.content-info-mandat .action{
+    width: 10%;
+}
+
+.content-info-mandat th{
+    font-size: 15px;
+    text-align: center;
+}
+
+.content-info-mandat td{
+    font-size: 18px;
+    text-align: left;
+    background-color: rgba(0, 0, 0, 0.02);
+    font-family: "Inter", sans-serif;
+    padding: 0 20px;
+}
+
 .submit{
     background-color: var(--color-orange);
     color: var(--color-white);
@@ -1166,7 +1217,6 @@ code{
 }
 
 .delete {
-
     width: fit-content;
     background-color: var(--color-new-bug);
     color: var(--color-white);

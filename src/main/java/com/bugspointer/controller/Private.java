@@ -118,9 +118,10 @@ public class Private {
     }
 
     @GetMapping("account")
-    String getAccount(Model model, HttpServletRequest request){
+    String getAccount(Model model, HttpServletRequest request) throws MollieException {
         HttpSession session = request.getSession();
         model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
+        model.addAttribute("mandates", customerService.getMandateList(companyService.getCompanyWithToken(request)));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/account";
     }
