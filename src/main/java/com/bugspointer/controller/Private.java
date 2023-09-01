@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -40,9 +41,12 @@ public class Private {
     private final PaymentService paymentService;
 
     @ModelAttribute("plans")
-    public EnumPlan[] getPlans(){
-        return EnumPlan.values();
+    public EnumPlan[] getFilteredPlans(){
+        return Arrays.stream(EnumPlan.values())
+                .filter(plan -> plan != EnumPlan.FREE)
+                .toArray(EnumPlan[]::new);
     }
+
 
     public Private(CompanyService companyService, BugService bugService, CompanyPreferencesService preferencesService, CustomerService customerService, JwtTokenUtil jwtTokenUtil, UserAuthenticationUtil userAuthenticationUtil, PaymentService paymentService) {
         this.companyService = companyService;
@@ -309,6 +313,8 @@ public class Private {
         HttpSession session = request.getSession();
         Company company = companyService.getCompanyByMail(jwtTokenUtil.getUsernameFromToken(jwtTokenUtil.getTokenWithoutBearer((String) session.getAttribute("token"))));
 
+        customerDTO.setMail(company.getMail());
+        customerDTO.setCompanyName(company.getCompanyName()); // A DELETE ? up and here
         customerDTO.setPublicKey(company.getPublicKey());
         customerDTO = customerService.getBankAccount(customerDTO, company.getCustomer().getCustomerId());
         log.info("customer : {}", customerDTO);

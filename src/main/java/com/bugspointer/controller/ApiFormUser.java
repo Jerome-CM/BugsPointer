@@ -75,13 +75,6 @@ public class ApiFormUser {
                         return "redirect:/app/private/dashboard";
                     }
                 }
-
-                Response response = paymentService.returnFreePlan(customer);
-                if(response.getStatus().equals(EnumStatus.OK)){
-                    redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
-                    redirectAttributes.addFlashAttribute("notification", response.getMessage());
-                    return "redirect:/app/private/dashboard";
-                }
             }
 
             Response response = paymentService.createNewCustomer(customer);
@@ -214,10 +207,17 @@ public class ApiFormUser {
         return "redirect:/";
     }
 
+    @GetMapping("/{idCompany}/{idCustomer}/stopSubscribe")
+    public String stopSubscribe(@PathVariable("idCompany") Long idCompany, @PathVariable("idCustomer") String idCustomer, RedirectAttributes redirectAttributes) throws MollieException {
+        Response response = paymentService.returnFreePlan(idCompany, idCustomer);
+        redirectAttributes.addFlashAttribute("notification", response.getMessage());
+        redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+        return "redirect:/app/private/account";
+    }
+
     @GetMapping("/{idCompany}/{idCustomer}/deleteMandate/{idMandate}")
     public String deleteMandate(@PathVariable("idCompany") Long idCompany, @PathVariable("idCustomer") String idCustomer, @PathVariable("idMandate") String idMandate, RedirectAttributes redirectAttributes) throws MollieException {
-        Response response = customerService.deleteMandate(idCompany, idCustomer, idMandate);
-
+        Response response = paymentService.deleteMandate(idCompany, idCustomer, idMandate);
         redirectAttributes.addFlashAttribute("notification", response.getMessage());
         redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
         return "redirect:/app/private/account";

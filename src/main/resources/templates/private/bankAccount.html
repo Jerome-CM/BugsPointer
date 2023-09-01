@@ -24,6 +24,7 @@
                     <input type="text" th:field="*{bic}" placeholder="BIC : CCOPFRPP" th:value="${customer.getBic()}" required>
                     <input type="hidden" th:field="*{publicKey}" th:value="${customer.publicKey}" readonly>
                     <input type="hidden" th:field="*{plan}" th:value="${customer.plan}" readonly>
+                    <input type="hidden" th:field="*{mail}" th:value="${customer.mail}" readonly>
                     <p style="height: fit-content;"><input type="checkbox" th:field="*{signature}" required> Je signe le mandat de prélèvement SEPA autorisant Bugspointer à prélever la somme de <span class="tarif" th:text="*{plan.getValeur()}"></span>€ une fois par an</p>
                     <input class="btn-action cancel-margin-top" type="submit" value="Souscrire">
                 </form>

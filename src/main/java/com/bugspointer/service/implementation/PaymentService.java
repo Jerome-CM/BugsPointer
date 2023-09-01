@@ -26,6 +26,7 @@ import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -211,7 +212,6 @@ public class PaymentService {
 
         //On récupère la liste des mandats
         List<MandateResponse> mandates = client.mandates().listMandates(customer.getCustomerId()).getEmbedded().getMandates();
-        log.info("liste mandates : {}", mandates); //TODO delete after debugg
         if (!mandates.isEmpty()) {
             //On récupère le plus récent
             MandateResponse mandat = mandates.get(0);
@@ -414,21 +414,6 @@ public class PaymentService {
         return dto;
     }
 
-    public Response deleteSubscription(String customerId, String mandateId) throws MollieException {
-        log.warn("in deleteSub method");
-        SubscriptionResponse subscriptionResponse = client.subscriptions().cancelSubscription(customerId, mandateId);
-
-        Customer customer = customerRepository.findByCustomerId(customerId).get();
-
-        if(subscriptionResponse.getStatus().equals(SubscriptionStatus.CANCELED)){
-            log.info("Customer #{} delete subscription", customerId);
-            Utility.saveLog(customer.getCompany().getCompanyId(), Action.DELETE, What.SUBSCRIPTION, subscriptionResponse.getId(),null, null);
-            return new Response(EnumStatus.OK, null, "");
-        }
-        log.error("Customer #{} can't delete subscription", customerId);
-        return new Response(EnumStatus.ERROR, null, "Subscription none cancelled");
-    }
-
     public Response getMandate(CustomerDTO customer) throws MollieException {
         Company company = companyRepository.findByPublicKey(customer.getPublicKey()).get();
 
@@ -437,7 +422,7 @@ public class PaymentService {
 
 
             List<MandateResponse> mandates = client.mandates().listMandates(company.getCustomer().getCustomerId()).getEmbedded().getMandates();
-log.warn("mandates brute before stream : {}", mandates);
+            log.warn("mandates brute before stream : {}", mandates);
 
 
             log.warn("DTO : iban : {} ; bic : {}", customer.getIban(), customer.getBic());
@@ -479,35 +464,30 @@ log.warn("mandates brute before stream : {}", mandates);
         }
         return new Response(EnumStatus.ERROR, null, "Company not found");
     }
-
-    public Response returnFreePlan(CustomerDTO customerDTO) throws MollieException {
+    @Transactional
+    public Response returnFreePlan(Long idCompany, String idCustomer) throws MollieException {
         log.warn("in returnToFree");
         // Si le client a un premium et reviens sur un free, on le change et on met à jour
-        Optional<Company> companyOptional = companyRepository.findByPublicKey(customerDTO.getPublicKey());
-log.warn("returnToFree - companyOptional : {}", companyOptional);
+        Optional<Company> companyOptional = companyRepository.findById(idCompany);
+        log.warn("returnToFree - companyOptional : {}", companyOptional);
 
         if(companyOptional.isPresent()){
             Company company = companyOptional.get();
             Optional<Customer> customerOptional = customerRepository.findByCompany_CompanyId(company.getCompanyId());
             log.warn("returnToFree - customerOptional : {}", customerOptional);
             if(customerOptional.isPresent()){
-                // change customer informations
+                // Change customer informations
                 Customer custo = customerOptional.get();
-                custo.setPlan(customerDTO.getPlan());
+                custo.setPlan(EnumPlan.FREE);
                 custo.setDateStartSubscribe(null);
 
                 // Change company informations
                 company.setPlan(EnumPlan.FREE);
 
-                // Recupère le dernier mandat qui correspond à l'iban et au bic du customer
-                Response response = getMandate(customerDTO);
-                log.warn("returnToFree - response getMandate : {}", response);
-                MandateResponse mandat = (MandateResponse) response.getContent();
-                log.warn("returnToFree - mandat : {}", mandat);
                 try{
                     companyRepository.save(company);
                     customerRepository.save(custo);
-                    deleteSubscription(custo.getCustomerId(), mandat.getId());
+                    deleteSubscribe(company.getCompanyId(), custo.getCustomerId());
                     log.info("Company #{} return to Free plan", company.getCompanyId());
                     Utility.saveLog(company.getCompanyId(), Action.DELETE, What.PLAN, null, Adjective.TO, Raison.FREE);
                     return new Response(EnumStatus.OK, null, "Vous êtes maintenant avec l'offre gratuite");
@@ -517,6 +497,60 @@ log.warn("returnToFree - companyOptional : {}", companyOptional);
                 }
             }
         }
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public Response deleteMandate(Long idCompany, String idCustomer, String idMandate) throws MollieException {
+
+        List<MandateResponse> mandatesBefore = client.mandates().listMandates(idCustomer).getEmbedded().getMandates();
+
+        int sizeBefore = mandatesBefore.size();
+        client.mandates().revokeMandate(idCustomer, idMandate);
+
+        List<MandateResponse> mandatesAfter = client.mandates().listMandates(idCustomer).getEmbedded().getMandates();
+
+        int sizeAfter = mandatesAfter.size();
+
+        if(sizeBefore > sizeAfter){
+            Utility.saveLog(idCompany, Action.DELETE, What.MANDATE, idMandate, null, null);
+            log.info("Company #{} delete the mandate {}", idCompany, idMandate);
+            return new Response(EnumStatus.OK, null, "Mandat supprimer avec succès");
+        } else {
+            return new Response(EnumStatus.ERROR, null, "Erreur lors de la suppression du mandat");
+        }
+    }
+
+    public Response deleteSubscribe(Long idCompany, String idCustomer)throws MollieException {
+
+        List<SubscriptionResponse> subListBefore = client.subscriptions().listSubscriptions(idCustomer).getEmbedded().getSubscriptions();
+
+        if(subListBefore.size() > 0){
+            SubscriptionResponse sub = subListBefore.get(0);
+
+            // Delete
+            client.subscriptions().cancelSubscription(idCustomer, sub.getId());
+
+            List<SubscriptionResponse> subListafter = client.subscriptions().listSubscriptions(idCustomer).getEmbedded().getSubscriptions();
+
+            if(subListafter.size() < subListBefore.size()){
+
+                return new Response(EnumStatus.OK, null, "Votre souscription à bien été arrêté");
+            }
+        }
+        log.info("sublist : {}", subListBefore);
         return null;
     }
 }

@@ -71,7 +71,6 @@ public class AdminService {
 
             companiesDTO.add(compDTO);
         }
-        log.debug("{}", companiesDTO);
         return companiesDTO;
 
     }
@@ -148,20 +147,23 @@ public class AdminService {
 
             List<MandateResponse> mandates = client.mandates().listMandates(company.getCustomer().getCustomerId()).getEmbedded().getMandates();
 
-            // Add date last mandate
-            finalDTO.setDateLastMandate(String.valueOf(mandates.get(0).getSignatureDate()));
+            if(mandates.size() > 0){
+                // Add date last mandate
+                finalDTO.setDateLastMandate(String.valueOf(mandates.get(0).getSignatureDate()));
 
-            // Add mandatesList
-            List<MandateDTO> mandateListDTO = new ArrayList<>();
-            for (MandateResponse mandate : mandates) {
-                MandateDTO mandateDTO = new MandateDTO();
-                mandateDTO.setMandateId(mandate.getId());
-                mandateDTO.setStatus(String.valueOf(mandate.getStatus()));
-                mandateDTO.setSignatureDate(String.valueOf(mandate.getSignatureDate()));
-                mandateListDTO.add(mandateDTO);
+                // Add mandatesList
+                List<MandateDTO> mandateListDTO = new ArrayList<>();
+                for (MandateResponse mandate : mandates) {
+                    MandateDTO mandateDTO = new MandateDTO();
+                    mandateDTO.setMandateId(mandate.getId());
+                    mandateDTO.setStatus(String.valueOf(mandate.getStatus()));
+                    mandateDTO.setSignatureDate(String.valueOf(mandate.getSignatureDate()));
+                    mandateListDTO.add(mandateDTO);
+                }
+
+                finalDTO.setMandatesList(mandateListDTO);
             }
 
-            finalDTO.setMandatesList(mandateListDTO);
         }
         return finalDTO;
     }

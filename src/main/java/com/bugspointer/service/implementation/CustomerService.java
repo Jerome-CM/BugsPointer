@@ -6,6 +6,8 @@ import be.woutschoovaerts.mollie.data.customer.CustomerResponse;
 import be.woutschoovaerts.mollie.data.mandate.MandateRequest;
 import be.woutschoovaerts.mollie.data.mandate.MandateResponse;
 import be.woutschoovaerts.mollie.data.mandate.MandateStatus;
+import be.woutschoovaerts.mollie.data.subscription.SubscriptionListResponse;
+import be.woutschoovaerts.mollie.data.subscription.SubscriptionResponse;
 import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.configuration.CustomExceptions;
 import com.bugspointer.dto.CustomerDTO;
@@ -163,7 +165,7 @@ public class CustomerService implements ICustomer {
     public List<MandateDTO> getMandateList(Company company) throws MollieException {
 
         List<MandateDTO> mandatesListDTO = new ArrayList<>();
-        if (company != null) {
+        if (company != null && company.getCustomer() != null) {
             List<MandateResponse> mandates = client.mandates().listMandates(company.getCustomer().getCustomerId()).getEmbedded().getMandates();
 
             mandatesListDTO = mandates.stream()
@@ -193,27 +195,6 @@ public class CustomerService implements ICustomer {
                     .collect(Collectors.toList());
         }
         return mandatesListDTO;
-    }
-
-    public Response deleteMandate(Long idCompany, String idCustomer, String idMandate) throws MollieException {
-
-        List<MandateResponse> mandatesBefore = client.mandates().listMandates(idCustomer).getEmbedded().getMandates();
-
-        int sizeBefore = mandatesBefore.size();
-        client.mandates().revokeMandate(idCustomer, idMandate);
-
-        List<MandateResponse> mandatesAfter = client.mandates().listMandates(idCustomer).getEmbedded().getMandates();
-
-        int sizeAfter = mandatesAfter.size();
-
-        if(sizeBefore > sizeAfter){
-            Utility.saveLog(idCompany, Action.DELETE, What.MANDATE, idMandate, null, null);
-            log.info("Company #{} delete the mandate {}", idCompany, idMandate);
-            return new Response(EnumStatus.OK, null, "Mandat supprimer avec succès");
-        } else {
-            return new Response(EnumStatus.ERROR, null, "Erreur lors de la suppression du mandat");
-        }
-
     }
 
 }

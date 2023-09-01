@@ -1,5 +1,6 @@
 package com.bugspointer.dto;
 
+import com.bugspointer.entity.Customer;
 import com.bugspointer.entity.EnumIndicatif;
 import com.bugspointer.entity.EnumPlan;
 import lombok.Data;
@@ -8,6 +9,8 @@ import lombok.Data;
 public class AccountDTO {
 
     private Long id;
+
+    private String customerId;
 
     private String mail;
 

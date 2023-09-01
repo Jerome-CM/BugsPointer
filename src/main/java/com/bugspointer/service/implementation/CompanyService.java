@@ -166,6 +166,9 @@ public class CompanyService implements ICompany {
     public AccountDTO getAccountDto(Company company) {
         AccountDTO dto;
         dto = modelMapper.map(company, AccountDTO.class);
+        if(company.getCustomer() != null){
+            dto.setCustomerId(company.getCustomer().getCustomerId());
+        }
         return dto;
     }
 

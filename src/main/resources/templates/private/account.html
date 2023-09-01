@@ -69,16 +69,19 @@
         <section>
             <div class="cards account">
                 <h3>Type of plan</h3>
-                <span th:text="${company.getPlan()}"></span>
-                <a class="submit" th:href="@{/features#targetPlan}">Change</a>
-                <span th:if="${company.getPlan() != 'FREE'}">Pour arrêter un abonnement, choisissez le plan Free</span>
+                <span style="margin-top:22px;" th:text="${company.getPlan()}"></span>
+                <div class="container-row">
+                    <a class="submit solved" th:href="@{/features}">Change plan</a>
+                    <a class="submit new" style="margin:15px 0 0 15px;" th:href="@{/api/user/{idCompany}/{idCustomer}/stopSubscribe(idCompany=${company.getId()}, idCustomer=${company.getCustomerId()})}" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}">Stop my subscribe</a>
+                </div>
             </div>
         </section>
 
-        <section th:if="${mandates.size() > 0}" >
+        <section>
             <div class="cards account">
                 <h3>Mandats</h3>
-                <div class="cards-mandate">
+                <p th:if="${mandates.size() == 0}">Vous n'avez pas encore de mandat de prélèvement</p>
+                <div class="cards-mandate" th:if="${mandates.size() > 0}">
                     <table class="content-info-mandat">
                         <tbody>
                             <tr class="th">
@@ -108,7 +111,7 @@
         <br>
         <form id="key" class="account" action="#" th:action="@{/app/private/account/delete}" th:object="${company}" method="post">
             <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
-            <button class="delete" type="submit">Supprimer le compte</button>
+            <button class="delete" type="submit">Clôturer mon compte</button>
         </form>
     </div>
 

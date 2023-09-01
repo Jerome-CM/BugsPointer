@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -59,7 +60,7 @@ public class MailService {
     public Response sendMailRegister(String to, String publicKey) {
 
         // Paramètres du destinataire
-        String subject = "Bugspointer - Confirmation d'inscription";
+        String subject = "BugsPointer - Confirmer votre inscription";
 
         // Contenu HTML de l'email
         String htmlContent =
@@ -124,7 +125,7 @@ public class MailService {
         try {
             // Création du message
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user));
+            message.setFrom(new InternetAddress(user, "BugsPointer"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject(subject, "UTF-8");
             message.setContent(htmlContent, "text/html; charset=UTF-8");
@@ -138,6 +139,8 @@ public class MailService {
             e.printStackTrace();
             log.error("Error from mail sender : " + e.getMessage());
             return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -192,7 +195,7 @@ public class MailService {
         try {
             // Création du message
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user));
+            message.setFrom(new InternetAddress(user, "BugsPointer"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject(subject, "UTF-8");
             message.setContent(htmlContent, "text/html; charset=UTF-8");
@@ -204,7 +207,7 @@ public class MailService {
             log.info("email new bug sent at : {}", to);
             return new Response(EnumStatus.OK, null, "Mail gratuit avec détails envoyé");
 
-        } catch (MessagingException e) {
+        } catch (MessagingException | UnsupportedEncodingException e) {
             e.printStackTrace();
             log.info("error from mail sender : " + e.getMessage());
             return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
@@ -261,7 +264,7 @@ public class MailService {
         try {
             // Création du message
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user));
+            message.setFrom(new InternetAddress(user, "BugsPointer"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject(subject, "UTF-8");
             message.setContent(htmlContent, "text/html; charset=UTF-8");
@@ -276,6 +279,8 @@ public class MailService {
             e.printStackTrace();
             log.info("error from mail sender : " + e.getMessage());
             return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -327,7 +332,7 @@ public class MailService {
         try {
             // Création du message
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user));
+            message.setFrom(new InternetAddress(user, "BugsPointer"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject(subject, "UTF-8");
             message.setContent(htmlContent, "text/html; charset=UTF-8");
@@ -341,6 +346,8 @@ public class MailService {
             e.printStackTrace();
             log.info("error from mail sender : " + e.getMessage());
             return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -482,7 +489,7 @@ public class MailService {
         try {
             // Création du message
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user));
+            message.setFrom(new InternetAddress(user, "BugsPointer"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject(subject, "UTF-8");
             message.setContent(htmlContent, "text/html; charset=UTF-8");
@@ -498,11 +505,13 @@ public class MailService {
             e.printStackTrace();
             log.info("error from mail sender : " + e.getMessage());
             return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public Response sendMailNewMandate(CustomerDTO customer) throws MollieException {
-        log.warn("customer in mail new mandate (besoin de : ", customer);
+        log.warn("customer in mail new mandate (besoin de : {}", customer);
 
         HashMap<String, String> contentData = customerService.getDataToMandateForCustomer(customer);
         log.warn("contentDataResponse : {}", contentData);
@@ -570,7 +579,7 @@ public class MailService {
             try {
                 // Création du message
                 MimeMessage message = new MimeMessage(session);
-                message.setFrom(new InternetAddress(user));
+                message.setFrom(new InternetAddress(user, "BugsPointer"));
                 message.setRecipient(Message.RecipientType.TO, new InternetAddress(customer.getMail()));
                 message.setSubject(subject, "UTF-8");
                 message.setContent(htmlContent, "text/html; charset=UTF-8");
@@ -584,6 +593,8 @@ public class MailService {
                 e.printStackTrace();
                 log.error("error from mail sender mandate details to : " + e.getMessage());
                 return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
             }
         }
         log.error("error from mail sender mandate details to {}", customer.getCompanyName());
@@ -630,7 +641,7 @@ public class MailService {
         try {
             // Création du message
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user));
+            message.setFrom(new InternetAddress(user, "BugsPointer"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(mail));
             message.setSubject(subject, "UTF-8");
             message.setContent(htmlContent, "text/html; charset=UTF-8");
@@ -644,6 +655,8 @@ public class MailService {
             e.printStackTrace();
             log.info("error from mail sender : " + e.getMessage());
             return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 
