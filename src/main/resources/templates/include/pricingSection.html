@@ -1,0 +1,39 @@
+<section id="pricing">
+    <div class="container-row">
+        <div class="cards cards_detail">
+            <img class="img-in-price-card" th:src="@{/css/img/icones/e-mail.gif}" alt="">
+            <h3 class="h-in-price-card margin-bottom">Free</h3>
+            Recevez un rapport par mail contenant :<br><br>
+            <ul>
+                <li>L'Url de la page</li>
+                <li>Une simple description</li>
+                <li>Un rapport maximum par mois</li>
+            </ul>
+            <a th:href="@{/authentication}" class="btn-action">Essayer maintenant</a>
+        </div>
+        <div class="cards cards_detail halo-green">
+            <img class="img-in-price-card" th:src="@{/css/img/icones/cible.gif}" alt="">
+            <h3 class="h-in-price-card margin-bottom">Target</h3>
+            Recevez un rapport sur votre dashboard avec : <br><br>
+            <ul>
+                <li>L'Url de la page</li>
+                <li>Une simple description</li>
+                <li th:replace="~{include/targetPlanContent.html}"></li>
+            </ul>
+            <span class="price-in-card">15€ / an</span>
+            <a th:href="@{/features#targetplan}" class="btn-action">Details</a>
+        </div>
+        <!--<div class="cards cards_detail">
+            <img class="img-in-price-card" th:src="@{/css/img/icones/base-de-donnees.gif}" alt="">
+            <h3 class="h-in-price-card margin-bottom">Ultimate</h3>
+            Target Plan <br><br> + <br><br>
+            <ul>
+                <li>L'Url de la page</li>
+                <li>Une simple description</li>
+                <li th:replace="~{include/targetPlanContent.html}"></li>
+            </ul>
+            <span class="price-in-card">50€ / an</span>
+            <a th:href="@{/features#ultimateplan}" class="btn-action">Details</a>
+        </div>-->
+    </div>
+</section>

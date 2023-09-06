@@ -14,94 +14,132 @@
     <div class="container">
         <h2 class="space green-pill">Profiter des avantages d'un site web, sans bug</h2>
 
-        <section>
-            <div class="container-row">
-                <div class="cards cards_detail demi_card">
-                    <h3>URL complète</h3><br><br>
-                    <p>Le rapport contient l'URL complète. Cela permet de savoir sur quelle page est le bug,
-                    ou sur quel produit si l'URL contient son nom</p>
-                </div>
-
-                <div class="cards cards_detail demi_card">
-                    <h3>Description</h3><br><br>
-                    <p>Une description pour décrire rapidement où est le bug, comment il s'est produit, ce qui manque sur le site, ...</p>
-                </div>
-            </div>
-        </section>
-            <div class="cadre rotation gray">
-                <div class="rotation-none" id="targetplan">
-                        <a th:href="@{/authentication}" class="btn-try"><img style="width:100px; height:100px; border-radius:20%;" th:src="@{/css/img/icones/essaie-moi.gif}" alt="Try me">Essayer maintenant gratuitement</a>
-                </div>
-            </div>
-        <section>
-            <h1 class="h-in-features">Avec le Target Plan</h1> <!-- TODO Warning space class has delete -->
-            <div class="cards cards_detail">
-                <h3>Un aperçu de la sélection HTML</h3>
-                <p>Un extrait HTML de votre code est joint dans le rapport où le bug a été signalé</p>
-                <div class="container-row">
-                    <div class="left"><img alt="Nos solutions" th:src="@{/css/img/Nos solutions.png}"></div>
-                    <div class="right"><img alt="Capture d'écran de ligne de code" th:src="@{/css/img/Capture écran.png}"></div>
-                </div>
-            </div>
-            <br>
-            <div class="cards cards_detail">
-                <h3>Un tableau de bord simple et clair</h3>
-                <div class="container-row">
-                    <div class="left">
-                        <p>Un tableau de bord simple et intuitif pour gérer efficacement vos bugs</p>
-                        <p>Gérez également votre méthode d'alerte préférée, personnalisez votre interface et les données de votre compte</p>
-                    </div>
-                    <div class="right"><img th:src="@{/css/img/sliderPlan/dashboard.png}" alt="Preview of HTML content"></div>
-
-                </div>
-            </div>
-            <br>
-            <div class="cards cards_detail">
-                <h3>Données de l'environnement utilisateur</h3>
-                <div class="container-row">
-                    <div class="left"><img th:src="@{/css/img/sliderPlan/userEnv.png}" alt="User Environment"></div>
-
-                    <div class="right">
-                        <p>Recevoir les variables d'environnement utilisateur.</p>
-                        <p>Cela permet de savoir dans quelle condition le bug apparaît à l'utilisateur.</p>
-                        <p>Son client web, la taille de son écran ainsi que la version de l'OS peuvent vous aider à corriger le bug reçu.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <div class="cadre rotation gray">
-           <div class="rotation-none" id="ultimateplan">
-               <a href="app/private/recapPayment?product=TARGET" class="btn-action">Souscrire</a>
-           </div>
-       </div>
-     <!--     <section>
-
-            <h1 class="h-in-features space">Avec Ultimate Plan</h1>
-            <div class="cards cards_detail">
-                <h3>Contient tous les avantages du Target Plan</h3>
-            </div>
-            <br>
-            <div class="cards cards_detail">
-                <h3>Connectez-vous à votre compte GitHub</h3><br><br>
-                <p>Lorsqu'un utilisateur signale un nouveau bug sur votre site, une issue GitHub est créé sur votre projet pour mieux suivre les bugs.</p>
-                <p>L'état du bug est synchronisé avec l'état de l'issue GitHub.</p><br><br>
-                <p>Concentrer tous vos rapports d'erreur en un seul et même endroit</p>
-            </div>
-            <br>
-            <div class="cards cards_detail">
-                <h3>Mettre sur une liste de surveillance</h3><br><br>
-                <p>Enregistrez certains bugs sur une liste de surveillance.
-                   S'il y a trop de signalement pour cette URL, vous pouvez être averti du trop grand nombre de signalements.</p>
-            </div>
-            <br>
-            <div class="center space">
-                <a th:href="@{#}" class="btn-action">50€ / year</a>
-            </div>
-        </section>-->
+        <div th:replace="~{include/pricingSection.html}"></div>
     </div>
 
+    <div class="headband">
+        <h2>Free</h2>
+        <a th:href="@{/authentication}" class="btn-action" style="margin-top: 10px!important;">S'inscrire</a>
+    </div>
+
+    <div class="container">
+
+
+
+        <div class="container container-row space-feature feature-transition">
+            <div class="left feature_name">Contenu du rapport</div>
+            <div class="right feature_description">
+                <p>Votre rapport contient : <br><br> L'URL complète de la page contenant le bug
+                <br><br> Une brève description laisser par l'utilisateur</p>
+            </div>
+        </div>
+
+        <div class="grey-form1"></div>
+
+        <div class="container container-row space-feature feature-transition">
+            <div class="left feature_description text-after-title">
+                <p>Vous pouvez modifier les couleurs et certain texte pour intégrer notre outil à 100% avec votre charte graphique</p>
+            </div>
+            <div class="right feature_name ">Customisation</div>
+        </div>
+
+        <!--<div class="container container-row space-feature feature-transition">
+            <div class="right feature_name">CrawlScan</div>
+            <div class="left feature_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br> Consectetur delectus ea labore. Cum esse explicabo nam porro quas, sed? Consequuntur expedita ipsam
+                <br> magni possimus quae quos reprehenderit soluta voluptatem voluptatum.</div>
+        </div>
+
+        <div class="container container-row space-feature feature-transition">
+            <div class="right feature_description">Avec la version gratuite, vous ne pouvez pas recevoir plus d'un rapport de bug en 30 jours.
+                <br><br> Passer à la version TARGET pour voir un nombre illimité de rapports</div>
+            <div class="left feature_name">Nombre de rapport limité</div>
+        </div>-->
+
+        <div class="green-form green-form-right"></div>
+
+        <div class="container container-row space-feature feature-transition">
+            <div class="left feature_name">Nombre de rapport limité</div>
+            <div class="right feature_description">
+                <p>Avec la version gratuite, vous ne pouvez pas recevoir plus d'un rapport de bug en 30 jours.
+                <br><br> Passer à la version TARGET pour voir un nombre illimité de rapports</p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="headband">
+        <h2>Target</h2>
+        <a href="app/private/recapPayment?product=TARGET" class="btn-action" style="margin-top: 10px!important;">15€ / an</a>
+    </div>
+
+    <div class="container">
+
+        <div class="container container-row space-feature feature-transition">
+            <div class="left feature_name">Dashboard</div>
+            <div class="right feature_description"><p>Administrer tous vos rapports sur un tableau de bord clair et intuitif</p>
+                <img class="img-description-feature" th:src="@{/css/img/sliderPlan/dashboard.png}" alt="Preview of dashboard">
+            </div>
+        </div>
+
+        <div class="grey-form2"></div>
+
+        <div class="container container-row space-feature feature-transition">
+           <div class="container-row left text-after-title">
+               <div class="feature_description">
+                   <p>Obtenez des données de l'appareil de l'utilisateur comme la taille d'écran ou son navigateur pour comprendre dans quelle circonstance le bug est apparu chez lui</p>
+                   <img class="img-description-feature" th:src="@{/css/img/sliderPlan/userEnv.png}" alt="Preview of user environment">
+               </div>
+           </div>
+            <div class="right feature_name">Environnement de l'utilisateur</div>
+        </div>
+
+        <div class="green-form green-form-left"></div>
+
+        <div class="container container-row space-feature feature-transition">
+            <div class="left feature_name">Dashboard</div>
+            <div class="right feature_description">
+                <p>Administrer tous vos rapports sur un tableau de bord clair et intuitif</p>
+                <img class="img-description-feature" th:src="@{/css/img/sliderPlan/dashboard.png}" alt="Preview of dashboard">
+            </div>
+        </div>
+
+        <div class="container container-row space-feature feature-transition">
+            <div class="left feature_description text-after-title"><p>Vous n'avez plus de limite de rapport, recevez instantanément tous les rapports que vos utilisateurs envois dans votre dashboard</p></div>
+            <div class="right feature_name">Rapports illimités</div>
+        </div>
+    </div>
+
+
+    <!--<div class="headband">
+        <h2>Ultimate</h2>
+        <a href="app/private/recapPayment?product=ULTIMATE" class="btn-action" style="margin-top: 10px!important;">50€ / an</a>
+    </div>-->
+
+
 <div th:replace="~{include/footer.html}"></div>
+    <script>
+
+        const heightScreen = window.innerHeight - 100;
+        // Sélectionnez les éléments en dehors de la fonction handleScroll
+        const featureElements = document.querySelectorAll('.feature-transition');
+
+        // Fonction pour activer la transition lorsque l'élément est à 1000px du haut de la fenêtre
+        function handleScroll() {
+            featureElements.forEach(function(element) {
+                const elementTopPosition = element.getBoundingClientRect().top;
+
+                if (elementTopPosition <= heightScreen) {
+                    element.style.opacity="1";
+                }
+            });
+        }
+
+        // Écouteur d'événement pour le défilement de la fenêtre
+        setInterval(function() {
+            handleScroll()
+        },100);
+
+    </script>
 </body>
 </html>
