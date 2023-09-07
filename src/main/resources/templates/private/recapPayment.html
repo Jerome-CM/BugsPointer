@@ -10,25 +10,23 @@
     <div th:replace="~{include/nav.html}"></div>
 
     <div class="container">
-        <h1 class="h-in-black space">Récapitulatif du produit</h1>
-        <!--<p>
-            Vous êtes sur le point de souscrire à l'abonnement : <span th:text="${selectedProduct}"></span> pour <span th:text="${selectedProduct.getValeur()}"></span>€/an, renouvelable automatiquement à partir du paiement
+        <h1 class="h-in-black space">Offre sélectionnée</h1>
+        <h2 class="h-in-black productName" style="text-transform: uppercase" th:text="${product.name()}"></h2>
 
-            <br><br>
+        <section class="w60 margin_auto">
+            <hr class="hr-step">
+            <div class="step-payment container-row">
+                <div class="step finish-step">Choix du plan</div>
+                <div class="step pending-step">Coordonnées</div>
+                <div class="step futur-step">Paiement</div>
+            </div>
+        </section>
 
-            Merci de completer les informations vous concernant :
-        </p>-->
-        <div class="cards cards_detail w40 margin_auto space">
-            <h3>Adresse de facturation</h3>
+        <div class="cards cards_detail w40 margin_auto space" style="min-width: fit-content;">
+            <h3>Coordonnés de facturation</h3>
+            <br>
             <form action="#" th:action="@{/api/user/newCustomer}" method="post" class="form" th:object="${customer}">
-                <p>Souscrire à l'abonnement :
-                    <select name="plan">
-                        <option th:each="plan : ${plans}" th:value="${plan}" th:selected="${plan == selectedProduct}">
-                            <span th:text="${plan.name()}"></span> pour <span th:text="${plan.getValeur()}"></span>€/an
-                        </option>
-                    </select>
-                     renouvelable automatiquement
-                </p>
+
                 <input type="text" th:field="*{mail}" placeholder="Votre e-mail" th:value="${customer.getMail()}" required>
                 <input type="text" th:field="*{companyName}" placeholder="Nom de l'entreprise" th:value="${customer.getCompanyName()}" required>
                 <input type="text" th:field="*{address1}" placeholder="Adresse 1" required>
@@ -37,9 +35,10 @@
                 <input type="text" th:field="*{city}" placeholder="Ville" required>
                 <input type="text" th:field="*{country}" placeholder="Pays" th:value="France" required>
                 <input type="hidden" th:field="*{publicKey}" th:value="${customer.getPublicKey()}" readonly>
-                <p><input type="checkbox" th:field="*{cguAccepted}" required> J'accepter les <a style="color: black; text-decoration: underline;" th:href="@{/cgv}">CGV</a></p>
+                <input type="hidden" th:field="*{plan}" th:value="${product}" readonly>
+                <p><input type="checkbox" th:field="*{cguAccepted}" required> J'accepte les <a style="color: black; text-decoration: underline;" target="_blank" th:href="@{/cgv}">CGV</a> et <a style="color: black; text-decoration: underline;" target="_blank" th:href="@{/cgu}">CGU</a></p>
 
-                <input class="btn-action cancel-margin-top" type="submit"  value="Passer au paiement">
+                <input class="btn-action cancel-margin-top" type="submit" th:value="'Passer au paiement de ' + ${product.getValeur()} + '€ / an'">
 
             </form>
         </div>

@@ -1,5 +1,7 @@
 package com.bugspointer.utility;
 
+import be.woutschoovaerts.mollie.Client;
+import be.woutschoovaerts.mollie.ClientBuilder;
 import com.bugspointer.configuration.CustomExceptions;
 import com.bugspointer.entity.HomeLogger;
 import com.bugspointer.entity.enumLogger.Action;
@@ -8,6 +10,7 @@ import com.bugspointer.entity.enumLogger.Raison;
 import com.bugspointer.entity.enumLogger.What;
 import com.bugspointer.repository.HomeLoggerRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -29,6 +32,8 @@ public class Utility {
         this.homeLoggerRepository = homeLoggerRepository;
     }
 
+    @Value("${mollie.key}")
+    private static String mollieKey;
 
     public String createPublicKey(int nbCar) {
         String[] chars = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
@@ -146,5 +151,13 @@ public class Utility {
 
         return null;
 
+    }
+
+    private static Client getmollieClient(){
+        Client client = new ClientBuilder()
+                .withApiKey(mollieKey)
+                .build();
+
+        return client;
     }
 }

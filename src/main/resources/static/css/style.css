@@ -789,7 +789,7 @@ ul{
 }
 
 .form input[type=submit]{
-    width: 50%;
+    width: fit-content;
 }
 
 /* Download Page */
@@ -867,6 +867,10 @@ ul{
 
 .w40{
     width: 50%;
+}
+
+.w60{
+    width: 60%;
 }
 
 .w90{
@@ -1359,8 +1363,56 @@ code{
 }
 
 /* Payment */
+.productName{
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    color: var(--btn-logo-color);
+    font-size: 40px;
+    font-weight: bold;
+    font-family: "RalewayBold", sans-serif;
+}
+
 .tarif{
     font-weight: bold;
+}
+
+.hr-step{
+    position: relative;
+    width: 75%;
+    top: calc(100% - 53%);
+}
+
+.step-payment{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.step{
+    width: fit-content;
+    padding: 8px 8px;
+    border-radius: var(--radius);
+    z-index: 2;
+    font-size: 20px;
+    font-family: "Raleway", sans-serif;
+}
+
+.finish-step{
+    background-color: #00E676;
+    border: 2px solid var(--color-btn-green);
+    color: white;
+}
+
+.pending-step{
+    color: black;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-white);
+}
+
+.futur-step{
+    color: white;
+    background-color: var(--background-index);
+    border: 2px solid var(--color-white);
 }
 
 /* Bug report */
@@ -2188,6 +2240,12 @@ footer .tierce_card a {
     .dashboard{
         flex-direction: column;
     }
+
+    /* Payment */
+
+    .w60{
+        width: 100%;
+    }
 }
 
 @media only screen and (max-width: 699px){
@@ -2419,6 +2477,12 @@ footer .tierce_card a {
     }
     .newUser a{
         margin-top: 20px;
+    }
+
+    /* Payment */
+
+    .w60{
+        display: none;
     }
 }
 

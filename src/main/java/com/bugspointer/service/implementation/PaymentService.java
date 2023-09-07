@@ -25,6 +25,7 @@ import com.bugspointer.repository.CustomerRepository;
 import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,9 +59,9 @@ public class PaymentService {
     }
 
     Client client = new ClientBuilder()
-            .withApiKey("test_upURPW9vMxSv3M5MzEEC6c2yywuKwe")
+            .withApiKey("test_v6adWpq2Uke8cJbtkDvkqCeaUPwBv9")
             .build();
-
+    
     public Response createNewCustomer(CustomerDTO customerDTO) throws MollieException {
 
         Optional<Company> companyOptional = companyRepository.findByPublicKey(customerDTO.getPublicKey());
@@ -185,6 +186,7 @@ public class PaymentService {
     }
 
     public Response createMandate(CustomerDTO customerDTO) throws MollieException {
+          
 
         if (!customerDTO.isSignature()) {
             return new Response(EnumStatus.ERROR, customerDTO, "Veuillez signer le mandat pour valider votre abonnement");
@@ -266,6 +268,7 @@ public class PaymentService {
 
     public Response createSubscription(Response response, CustomerDTO customerDTO) throws MollieException {
 
+
         log.info("Start create new subscribe : Response = {}", response);
         if (response.getStatus() == EnumStatus.ERROR) {
             return new Response(EnumStatus.ERROR, null, "Aucun mandat trouvable pour faire la souscription");
@@ -337,6 +340,7 @@ public class PaymentService {
     }
 
     public Response changeSubscription(SubscriptionDTO subscription) throws MollieException {
+         
 
         log.info("Change sub. Actual : {}", subscription);
         Customer customer;
@@ -367,6 +371,7 @@ public class PaymentService {
     }
 
     private Response saveSubscription(EnumPlan plan, Customer customer, Company company, String mandateId) throws MollieException {
+         
 
         SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
 
@@ -399,7 +404,7 @@ public class PaymentService {
             }
 
             Utility.saveLog(customer.getCompany().getCompanyId(), Action.UPDATE, What.SUBSCRIPTION, subscriptionResponse.getId(), null, null);
-            return new Response(EnumStatus.OK, null, "La souscription à " + plan.name() + " Plan est validé");
+            return new Response(EnumStatus.OK, null, "La souscription au plan : " + plan.name() + " est validé");
         }
 
         return new Response(EnumStatus.ERROR, null, "Erreur lors de la souscription");
@@ -415,10 +420,12 @@ public class PaymentService {
     }
 
     public Response getMandate(CustomerDTO customer) throws MollieException {
+         
+
         Company company = companyRepository.findByPublicKey(customer.getPublicKey()).get();
 
         if(company != null) {
-            log.warn("getMandate - company finded ; {}", company);
+            log.warn("getMandate - company found ; {}", company);
 
 
             List<MandateResponse> mandates = client.mandates().listMandates(company.getCustomer().getCustomerId()).getEmbedded().getMandates();
@@ -514,6 +521,7 @@ public class PaymentService {
 
 
     public Response deleteMandate(Long idCompany, String idCustomer, String idMandate) throws MollieException {
+         
 
         List<MandateResponse> mandatesBefore = client.mandates().listMandates(idCustomer).getEmbedded().getMandates();
 
@@ -534,6 +542,7 @@ public class PaymentService {
     }
 
     public Response deleteSubscribe(Long idCompany, String idCustomer)throws MollieException {
+         
 
         List<SubscriptionResponse> subListBefore = client.subscriptions().listSubscriptions(idCustomer).getEmbedded().getSubscriptions();
 

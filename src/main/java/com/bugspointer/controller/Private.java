@@ -296,12 +296,13 @@ public class Private {
         customer.setMail(company.getMail());
         customer.setCompanyName(company.getCompanyName());
         customer.setPublicKey(company.getPublicKey());
+        customer.setPlan(selectedProduct);
         if(company.getCustomer() != null){
             customer = customerService.getMetadata(customer, company.getCustomer().getCustomerId());
         }
 
         model.addAttribute("product", selectedProduct);
-        model.addAttribute("selectedProduct", selectedProduct);
+        /*model.addAttribute("selectedProduct", selectedProduct);*/
         model.addAttribute("customer", customer);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/recapPayment";

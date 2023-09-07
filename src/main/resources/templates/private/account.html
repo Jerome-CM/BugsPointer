@@ -72,7 +72,7 @@
                 <span style="margin-top:22px;" th:text="${company.getPlan()}"></span>
                 <div class="container-row">
                     <a class="submit solved" th:href="@{/features}">Change plan</a>
-                    <a class="submit new" style="margin:15px 0 0 15px;" th:href="@{/api/user/{idCompany}/{idCustomer}/stopSubscribe(idCompany=${company.getId()}, idCustomer=${company.getCustomerId()})}" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}">Stop my subscribe</a>
+                    <a type="button" class="submit new" style="margin:15px 0 0 15px;" id="confirmationButtonClosePlan" th:href="@{/api/user/{idCompany}/{idCustomer}/stopSubscribe(idCompany=${company.getId()}, idCustomer=${company.getCustomerId()})}" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}">Stop my subscribe</a>
                 </div>
             </div>
         </section>
@@ -116,5 +116,27 @@
     </div>
 
     <div th:replace="~{include/footer.html}"></div>
+    <script th:inline="javascript">
+
+        const btnStop = document.getElementById('confirmationButtonClosePlan');
+        /* Account close plan confirme */
+        btnStop.onclick = function(event) {
+
+
+            // Demander la confirmation de l'utilisateur
+            const url = btnStop.getAttribute("href");
+            const confirmation = window.confirm("Êtes-vous sûr de vouloir stopper votre abonnement ?");
+
+            // Vérifier la réponse de l'utilisateur
+            if (confirmation) {
+                // Si l'utilisateur a confirmé, joignez l'URL finale
+                window.location.href = url;
+            } else {
+                event.preventDefault();
+            }
+        }
+    </script>
+
 </body>
 </html>
+};

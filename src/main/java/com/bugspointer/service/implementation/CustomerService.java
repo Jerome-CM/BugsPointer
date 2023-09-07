@@ -3,26 +3,22 @@ package com.bugspointer.service.implementation;
 import be.woutschoovaerts.mollie.Client;
 import be.woutschoovaerts.mollie.ClientBuilder;
 import be.woutschoovaerts.mollie.data.customer.CustomerResponse;
-import be.woutschoovaerts.mollie.data.mandate.MandateRequest;
 import be.woutschoovaerts.mollie.data.mandate.MandateResponse;
 import be.woutschoovaerts.mollie.data.mandate.MandateStatus;
-import be.woutschoovaerts.mollie.data.subscription.SubscriptionListResponse;
-import be.woutschoovaerts.mollie.data.subscription.SubscriptionResponse;
 import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.configuration.CustomExceptions;
 import com.bugspointer.dto.CustomerDTO;
-import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.MandateDTO;
-import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.Customer;
-import com.bugspointer.entity.enumLogger.Action;
-import com.bugspointer.entity.enumLogger.What;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.service.ICustomer;
 import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -44,7 +40,7 @@ public class CustomerService implements ICustomer {
     }
 
     Client client = new ClientBuilder()
-            .withApiKey("test_upURPW9vMxSv3M5MzEEC6c2yywuKwe")
+            .withApiKey("test_v6adWpq2Uke8cJbtkDvkqCeaUPwBv9")
             .build();
 
     public CustomerDTO getCustomerDTO(Customer customer) {
@@ -117,8 +113,6 @@ public class CustomerService implements ICustomer {
                 ? (String) customerResponse.getMetadata().get("country")
                 : null);
 
-
-        log.info("Customer before return {}", customer);
         return customer;
 
     }

@@ -5,13 +5,7 @@ import com.bugspointer.dto.CustomerDTO;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Bug;
-import com.bugspointer.entity.Customer;
 import com.bugspointer.entity.EnumPlan;
-import com.bugspointer.entity.enumLogger.Action;
-import com.bugspointer.entity.enumLogger.Adjective;
-import com.bugspointer.entity.enumLogger.Raison;
-import com.bugspointer.entity.enumLogger.What;
-import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -605,7 +599,7 @@ public class MailService {
     public Response sendMailChangePlan(EnumPlan plan, String mail) {
 
         // Paramètres du destinataire
-        String subject = "Bugspointer - Abonnement";
+        String subject = "Bugspointer - Confirmation de l'abonnement";
 
         // Contenu HTML de l'email
         String htmlContent =
@@ -614,7 +608,7 @@ public class MailService {
                         "       <table border='0' cellpadding='0' cellspacing='0' >" +
                         "           <tr><td align='center'><img src='https://bugspointer.com/css/img/icones/merci.gif' alt='Logo merci' ></td></tr> " +
                         "           <tr><td align='center' style='padding: 10px;'><h1>Merci</h1></td></tr> " +
-                        "           <tr><td align='center' style='padding: 10px;'><p>Mille mercis pour votre abonnement "+ plan +" pour " + plan.getValeur() +"€ par an</p></td></tr> " +
+                        "           <tr><td align='center' style='padding: 10px;'><p>Mille mercis pour votre abonnement "+ plan +"</p></td></tr> " +
                         "           <tr><td align='center'></td></tr> " +
                         "       </table>" +
                         "   </body>" +

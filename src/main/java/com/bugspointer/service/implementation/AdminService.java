@@ -16,6 +16,7 @@ import com.bugspointer.repository.HomeLoggerRepository;
 import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
@@ -44,6 +45,9 @@ public class AdminService {
         this.modelMapper = modelMapper;
     }
 
+    Client client = new ClientBuilder()
+            .withApiKey("test_v6adWpq2Uke8cJbtkDvkqCeaUPwBv9")
+            .build();
 
     public List<CompanyListDTO> getAllCompanyForList(){
 
@@ -110,9 +114,6 @@ public class AdminService {
 
     public CompanyDetailsDTO getCompanyInfo(Long companyId) throws MollieException {
 
-        Client client = new ClientBuilder()
-                .withApiKey("test_upURPW9vMxSv3M5MzEEC6c2yywuKwe")
-                .build();
 
         CompanyDetailsDTO finalDTO = new CompanyDetailsDTO();
 
