@@ -6,6 +6,7 @@ import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.EnumPlan;
+import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -359,15 +360,15 @@ public class MailService {
                         "    <p>Cher utilisateur de Bugspointer, <br>" +
                         "    Nous avons bien reçu votre rapport de bug depuis la page de test de notre site bugspointer.com, et nous tenons à vous remercier pour votre intérêt</p><br><br>" +
                         "      <table width='100%' align='center'>" +
-                        "        <thead>" +
+                        /*"        <thead>" +
                         "        <tr>" +
                         "          <th>Voici un aperçu de ce que vous obtiendrez pour une utilisation gratuite :</th>" +
                         "          </tr>" +
-                        "        </thead>" +
+                        "        </thead>" +*/
                         "        <tbody>" +
                         "        <tr>" +
                         "          <td>" +
-                        "            <h1>Nouveau Bug</h1><br>" +
+                        "            <h1>Version gratuite : Nouveau bug</h1><br>" +
                         "            <p>Un utilisateur vient de déclarer un nouveau bug sur votre site " +
                         "            <p>URL concernée : "+ bugTest.getUrl() +"</p><br>" +
                         "            <p>Description du bug : <br>" + bugTest.getDescription() +"</p><br>" +
@@ -375,23 +376,16 @@ public class MailService {
                         "            <table border='0' cellpadding='0' cellspacing='0' align='center'>" +
                         "              <tr>" +
                         "                <td align='center' style='padding: 10px;'>" +
-                        "                  <a href='"+ ADRESSE +"features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
+                        "                  <a href='"+ ADRESSE +"features' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
                         "                </td>" +
                         "              </tr>" +
                         "            </table>" +
                         "          </td>" +
                         "        </tr>" +
                         "        <tr>" +
-                        "        </tbody>" +
-                        "        <thead>" +
-                        "            <tr>" +
-                        "              <th>Voici un aperçu de ce que vous obtiendrez en mettant à niveau votre abonnement : </th>" +
-                        "          </tr>" +
-                        "         </thead>" +
-                        "          <tbody>" +
                         "            <tr>" +
                         "               <td>" +
-                        "                   <h1>Nouveau Bug</h1>" +
+                        "                   <h1>Version payante : Nouveau bug</h1>" +
                         "                   <table>" +
                         "                       <tr>" +
                                 "                <th width='170px' text-align='right'>URL concernée : </th>" +
@@ -399,7 +393,7 @@ public class MailService {
                                 "              </tr>" +
                                 "              <tr>" +
                                 "                <th width='170px' text-align='right'>Date du rapport : </th>" +
-                                "                <td>"+ bugTest.getDateCreation() +"</td>" +
+                                "                <td>"+ Utility.dateFormator(bugTest.getDateCreation(), "dd/MM/yyyy HH:mm:ss") +"</td>" +
                                 "              </tr>" +
                                 "              <tr>" +
                                 "                <th width='170px' text-align='right'>Description du bug : </th>" +
@@ -418,11 +412,11 @@ public class MailService {
                                 "                <td>"  + bugTest.getScreenSize() +"</td>" +
                                 "              </tr>" +
                                 "              <tr>" +
+                                "               <th colspan=2>La balise pointé par vos soins est maintenant identifiable par la classe : bugspointer-pointed-balise</th>" +
+                                "              </tr>" +
+                                "              <tr>" +
                                 "                <th width='170px' text-align='right'>Code HTML sélectionné : </th>" +
                                 "                <td><pre><code>"  + bugService.codeBlockFormatter(bugTest.getCodeLocation()) +"</code></pre></td>" +
-                                "              </tr>" +
-                                "               <tr>" +
-                                "               <th colspan=2>La balise pointé par vos soins est maintenant identifiable par la classe : bugspointer-pointed-balise</th>" +
                                 "              </tr>" +
                                 "            </table>" +
                                 "            <p>Imaginez la valeur que vous pourriez obtenir en ayant accès à ces détails précis pour tous vos rapports de bugs. Notre offre payante vous permettra de prendre des décisions éclairées, d'améliorer rapidement votre site et de fournir une expérience utilisateur exceptionnelle. <br><br>" +
@@ -430,7 +424,7 @@ public class MailService {
                                 "            <table align='center' border='0' cellpadding='0' cellspacing='0' >" +
                                 "              <tr>" +
                                 "                <td align='center' style='padding: 10px;'>" +
-                                "                  <a href='"+ ADRESSE +"app/private/dashboard' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Voir mon Dashboard</a>" +
+                                "                  <a href='"+ ADRESSE +"authentication' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Voir mon Dashboard</a>" +
                                 "                </td>" +
                                 "              </tr><br><br>" +
                                 "              <tr>" +
