@@ -142,6 +142,7 @@ nav .title{
     font-weight: bold;
     font-size: 22px;
     text-transform: uppercase;
+    text-decoration: none;
 }
 
 .flag-nav{
