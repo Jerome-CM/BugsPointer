@@ -36,7 +36,7 @@
                 <input type="text" th:field="*{country}" placeholder="Pays" th:value="France" required>
                 <input type="hidden" th:field="*{publicKey}" th:value="${customer.getPublicKey()}" readonly>
                 <input type="hidden" th:field="*{plan}" th:value="${product}" readonly>
-                <p><input type="checkbox" th:field="*{cguAccepted}" required> J'accepte les <a style="color: black; text-decoration: underline;" target="_blank" th:href="@{/cgv}">CGV</a> et <a style="color: black; text-decoration: underline;" target="_blank" th:href="@{/cgu}">CGU</a></p>
+                <p><input type="checkbox" th:field="*{cguAccepted}" required> Je reconnais avoir pris connaissance des <a style="color: black; text-decoration: underline;" target="_blank" th:href="@{/cgv}">CGV</a> et des <a style="color: black; text-decoration: underline;" target="_blank" th:href="@{/cgu}">CGU</a></p>
 
                 <input class="btn-action cancel-margin-top" type="submit" th:value="'Passer au paiement de ' + ${product.getValeur()} + '€ / an'">
 
