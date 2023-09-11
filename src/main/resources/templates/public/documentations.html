@@ -35,6 +35,13 @@
             <ul>
                 <li><a href="#findBug">Comment déclarer un bug</a></li>
             </ul>
+            <h4><a href="#manageBug">Gestion des bugs</a></h4>
+            <ul>
+                <li><a href="#newBug">Nouveau bug</a></li>
+                <li><a href="#pendingBug">Bug en cours</a></li>
+                <li><a href="#solvedBug">Bug résolu</a></li>
+                <li><a href="#ignoredBug">Bug ignoré</a></li>
+            </ul>
         </div>
 
         <div class="container anti-margin">
@@ -54,7 +61,13 @@
             <hr style="color: black;width: 100%;margin-bottom: 30px;">
 
             <div class="text_align_left">
-                <h2 id="integration">Intégration</h2>
+                 <h2 class="space" id="integration">Intégration</h2>
+
+                <div class="warning border-orange">
+                    <img th:src="@{/css/img/icones/camera.gif}" alt="Caméra">
+                    <span>Une vidéo tuto est bientôt prévue pour cette section</span>
+                </div>
+                
                 <h3 id="download" class="h3_documentation">Télécharger les fichiers</h3>
                 <div class="card_doc"><p>Pour télécharger le projet rendez-vous sur l’url : <a target="_blank" th:href="@{/download}">https://www.bugspointer.com/download</a> <br>
                     Vous devez avoir un compte valide pour obtenir les différents fichiers</p>
@@ -87,7 +100,12 @@
 
                 </div>
 
-                <h2 id="configuration">Configuration</h2>
+                 <h2 class="space" id="configuration">Configuration</h2>
+
+                <div class="warning border-orange">
+                    <img th:src="@{/css/img/icones/camera.gif}" alt="Caméra">
+                    <span>Une vidéo tuto est bientôt prévue pour cette section</span>
+                </div>
 
                 <h3 id="key" class="h3_documentation">Renseigner votre clé public</h3>
                 <div class="card_doc">
@@ -112,7 +130,12 @@
                     <span>L'intégration de votre clé publique et de votre nom de domaine est obligatoire pour recevoir vos rapports de bugs</span>
                 </div>
 
-                <h2 id="customisation">Customisation</h2>
+                 <h2 class="space" id="customisation">Customisation</h2>
+
+                <div class="warning border-orange">
+                    <img th:src="@{/css/img/icones/camera.gif}" alt="Caméra">
+                    <span>Une vidéo tuto est bientôt prévue pour cette section</span>
+                </div>
 
                 <h3 id="link" class="h3_documentation">Lien sur votre page</h3>
                 <div class="card_doc">
@@ -135,7 +158,11 @@
                     <span>Changer les classes et les ids originales nuira au bon fonctionnement de l'application</span>
                 </div>
 
-                <h2 id="reportBug">Déclarer un bug</h2>
+                 <h2 class="space" id="reportBug">Déclarer un bug</h2>
+
+                <div class="center"><a class="btn-action btn-access-video" href="https://www.youtube.com/watch?v=T4ReMfM1xKU" target="_blank">
+                    <img th:src="@{/css/img/icones/video-blanche.png}" alt="camera">
+                    Voir le guide vidéo</a></div>
 
                 <h3 id="findBug" class="h3_documentation">Comment déclarer un bug</h3>
                 <div class="card_doc">
@@ -145,6 +172,58 @@
                     Cette fenêtre est constituée de l'url de la page sur laquelle vous êtes, un bouton permettant de pointer l'endroit de la page où le bug se situe et une description
                         <br><br>
                     Pointer un bug, ainsi qu'une description de minimum 10 caractères est nécessaire pour l'envoi d'un rapport de bug</p>
+                </div>
+
+                 <h2 class="space" id="manageBug">Gestion des bugs</h2>
+
+                <div class="warning border-orange">
+                    <img th:src="@{/css/img/icones/camera.gif}" alt="Caméra">
+                    <span>Une vidéo tuto est bientôt prévue pour cette section</span>
+                </div>
+
+                <h3 id="newBug" class="h3_documentation">Nouveau bug</h3>
+
+                <div class="card_doc">
+                    <p>Lors du signalement d'un bug sur votre site par votre utilisateur, un nouveau bug vous est ajouté dans votre Dashboard.
+                        <br>
+                        Suivant vos préférences de notifications, vous allez ( ou non ) recevoir un mail à la réception du bug.
+                        <br>
+                        Vous le retrouverez ensuite dans la tuile rouge "new bug".
+                        <br><br>
+                        Une fois sur la page du bug, vous pouvez le classer en 3 catégories :
+
+                        <ul>
+                            <li>En cours</li>
+                            <li>Résolu</li>
+                            <li>Ignoré</li>
+                        </ul>
+                    </p>
+                </div>
+
+                <h3 id="pendingBug" class="h3_documentation">Bug en cours</h3>
+
+                <div class="card_doc">
+                    <p>Lorsque vous classez un bug dans la catégorie "en cours", il lui est ajouté l'heure à laquelle vous l'avez vu afin de confirmer son déplacement dans cette catégorie.
+                        <br><br> Corriger ce bug et confirmer sa résolution</p>
+                </div>
+
+                <h3 id="solvedBug" class="h3_documentation">Bug résolu</h3>
+
+                <div class="card_doc">
+                    <p>Une fois un bug résolu, il sera déplacé dans cette catégorie afin de servir d'archive pour garder une trace de tous les bugs reçus dans votre Dashboard.
+
+                    <br><br>
+
+                    Toutefois, si vous vous apercevez que le bug n'est pas résolu, vous pouvez le réouvrir, ce qui le placera automatiquement dans la catégorie "en cours".</p>
+                </div>
+
+                <h3 id="ignoredBug" class="h3_documentation">Bug ignoré</h3>
+
+                <div class="card_doc">
+                    <p>Si un utilisateur vous a signalé un bug que vous connaissiez déjà, ou bien que ce n'est pas un bug pour vous, vous pouvez ignorer ce bug.
+                        <br><br>
+                    Comme un bug résolu, il sera gardé en archive. <br>
+                    Toutefois, si vous jugez que ce n'est plus un bug à ignorer, vous pouvez annuler l'ignorance, dans ce cas, le bug sera reclassé dans la catégorie "en cours".</p>
                 </div>
             </div>
         </div>
