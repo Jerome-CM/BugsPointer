@@ -3,15 +3,11 @@ package com.bugspointer.service.implementation;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.ModalDTO;
 import com.bugspointer.dto.Response;
-import com.bugspointer.entity.Bug;
-import com.bugspointer.entity.Company;
-import com.bugspointer.entity.EnumEtatBug;
-import com.bugspointer.entity.EnumPlan;
+import com.bugspointer.entity.*;
 import com.bugspointer.entity.enumLogger.Action;
-import com.bugspointer.entity.enumLogger.Adjective;
-import com.bugspointer.entity.enumLogger.Raison;
 import com.bugspointer.entity.enumLogger.What;
 import com.bugspointer.repository.BugRepository;
+import com.bugspointer.repository.CompanyPreferencesRepository;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.service.IModal;
 import com.bugspointer.utility.Utility;
@@ -33,10 +29,13 @@ public class ModalService implements IModal {
     private final CompanyRepository companyRepository;
     private final MailService mailService;
 
-    public ModalService(BugRepository bugRepository, CompanyRepository companyRepository, MailService mailService) {
+    private final CompanyPreferencesRepository companyPreferencesRepository;
+
+    public ModalService(BugRepository bugRepository, CompanyRepository companyRepository, MailService mailService, CompanyPreferencesRepository companyPreferencesRepository) {
         this.bugRepository = bugRepository;
         this.companyRepository = companyRepository;
         this.mailService = mailService;
+        this.companyPreferencesRepository = companyPreferencesRepository;
     }
 
 
@@ -51,6 +50,7 @@ public class ModalService implements IModal {
         Date dateDernierEnvoi = null;
         Date dateIpEnvoi;
         long timeSeconde = 60;
+        boolean wantNewBugNotif = false;
 
         if (dto.getBot().isEmpty())
         {
@@ -159,23 +159,34 @@ public class ModalService implements IModal {
                         log.error("Impossible to save a bug for company#{} : {}", bug.getCompany().getCompanyId(), e.getMessage());
                     }
 
-                    /* Vérification du compte gratuit, si oui → si dernier envoi date de +30jours → envoi du mail avec détail
-                     *   Si -30 jours, mail sans détails avec 'abonnez-vous pour le voir' */
-                    if (company.getPlan().equals(EnumPlan.FREE) && envoi && savedBug.getEtatBug() != null) {
+                    // Notification new mail si notification activée
+                    Optional<CompanyPreferences> notifOpt = companyPreferencesRepository.findByCompany(company);
 
-                        Response response = mailService.sendMailNewBugDetail(company.getMail(), savedBug);
-                        if (response.getStatus().equals(EnumStatus.OK)) {
-                            log.info("mail gratuit envoyé avec détails");
-                        }
-                    } else if (company.getPlan().equals(EnumPlan.FREE)) {
+                    if(notifOpt.isPresent()){
+                        CompanyPreferences notif = notifOpt.get();
+                        wantNewBugNotif = notif.isMailNewBug();
+                    }
 
-                        Response response = mailService.sendMailNewBugNoDetail(company.getMail());
-                        if (response.getStatus().equals(EnumStatus.OK)) {
-                            log.info("mail envoyer sans détail");
+                    if(wantNewBugNotif){
+                        /* Vérification du compte gratuit, si oui → si dernier envoi date de +30jours → envoi du mail avec détail
+                         *   Si -30 jours, mail sans détails avec 'abonnez-vous pour le voir' */
+                        if (company.getPlan().equals(EnumPlan.FREE) && envoi && savedBug.getEtatBug() != null) {
+
+                            Response response = mailService.sendMailNewBugDetail(company.getMail(), savedBug);
+                            if (response.getStatus().equals(EnumStatus.OK)) {
+                                log.info("Mail gratuit envoyé avec détails");
+                            }
+                        } else if (company.getPlan().equals(EnumPlan.FREE)) {
+
+                            Response response = mailService.sendMailNewBugNoDetail(company.getMail());
+                            if (response.getStatus().equals(EnumStatus.OK)) {
+                                log.info("Mail gratuit envoyé sans détails");
+                            }
+                        } else {
+                            Response response = mailService.sendMailNewBugForNotification(company.getMail());
+                            log.info("Mail new bug avec offre envoyé");
+
                         }
-                    } else {
-                        //TODO: envoyer mail lié au compte payant
-                        log.error("TODO: envoyer mail lié au compte payant");
                     }
 
                 } else {

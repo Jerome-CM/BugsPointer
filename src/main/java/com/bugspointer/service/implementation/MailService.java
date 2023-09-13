@@ -638,7 +638,85 @@ public class MailService {
             Transport.send(message);
 
             log.info("email new subscribe sent at : {}", mail);
-            return new Response(EnumStatus.OK, null, "Un mail valable 15 minutes pour réinitialiser votre mot de passe vient de vous êtes envoyé");
+            return new Response(EnumStatus.OK, null, "Votre souscription a bien été prise en compte, merci");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            log.info("error from mail sender : " + e.getMessage());
+            return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public Response sendMailNewBugForNotification(String mail) {
+
+        // Paramètres du destinataire
+        String subject = "Bugspointer - Nouveau bug signalé";
+
+        // Contenu HTML de l'email
+        String htmlContent =
+                "<html>" +
+                        "    <body>" +
+                        "        <div style='width:100%; background-color:#000000;padding: 20px 0;'>" +
+                        "            <table align='center' cellpadding='0' cellspacing='0' style='border:4px solid #00E676; color:#000000; border-radius:25px; width: 50%; max-width: 90%; box-sizing: border-box; margin: 0 auto; background-color:#FFFFFF;padding: 0 10px 20px 10px;'>" +
+                        "                <tr>" +
+                        "                    <td align='center'><h1 style='font-size:35px;'>Vous avez un nouveau bug </h1></td>" +
+                        "                </tr>" +
+                        "                <tr>" +
+                        "                    <td style='padding: 20px 0;'></td>" +
+                        "                </tr>" +
+                        "                <tr>" +
+                        "                    <td align='center'><p style='font-size:18px;'>Un utilisateur vient de signaler un bug sur votre site</p></td>" +
+                        "                </tr>" +
+                        "                <tr>" +
+                        "                    <td style='padding: 20px 0;'></td>" +
+                        "                </tr>" +
+                        "                <tr>" +
+                        "                    <td  align='center'><a href='"+ ADRESSE +"authentication' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: #00E676; box-shadow: 0 0 5px lightgrey;'>Voir le bug</a></td>" +
+                        "                </tr>" +
+                        "                <tr>" +
+                        "                    <td style='padding: 20px 0;'></td>" +
+                        "                </tr>" +
+                        "                <tr>" +
+                        "                    <td style='font-size:14px;font-style:italic;text-align:center;'>Si vous ne souhaitez plus recevoir de mail pour les nouveaux bugs, vous pouvez désactiver les notifications dans votre Dashboard > Notifications</td>" +
+                        "                </tr>" +
+                        "            </table>" +
+                        "        </div>" +
+                        "    </body>" +
+                        "</html>";
+
+
+        // Configuration des propriétés
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+
+        // Création de l'authentificateur
+        Authenticator auth = new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, password);
+            }
+        };
+
+        // Création de la session
+        Session session = Session.getInstance(properties, auth);
+
+        try {
+            // Création du message
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user, "BugsPointer"));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(mail));
+            message.setSubject(subject, "UTF-8");
+            message.setContent(htmlContent, "text/html; charset=UTF-8");
+
+            // Envoi du message
+            Transport.send(message);
+
+            log.info("email new bug report sent at : {}", mail);
+            return new Response(EnumStatus.OK, null, "");
         } catch (MessagingException e) {
             e.printStackTrace();
             log.info("error from mail sender : " + e.getMessage());
