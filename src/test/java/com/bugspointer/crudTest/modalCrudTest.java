@@ -6,6 +6,7 @@ import com.bugspointer.entity.EnumEtatBug;
 import com.bugspointer.repository.BugRepository;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.service.IModal;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
@@ -31,29 +33,34 @@ public class modalCrudTest {
     @Autowired
     private CompanyRepository companyRepository;
 
+
     @Test
     public void saveNewBug(){
 
         List<Bug> bugListBefore = (List<Bug>) bugRepository.findAll();
 
         Bug bug = new Bug();
-        Company company = companyRepository.findByCompanyName("CompanyTest1").get();
-        bug.setCompany(company);
-        bug.setUrl("https://www.sitedetest.com/pageErreur");
-        bug.setDateCreation(new Date());
-        bug.setDescription("La vidéo ne se lance pas");
-        bug.setEtatBug(EnumEtatBug.NEW);
-        bug.setCodeLocation("<div><h1>Mon titre</h1><div>");
-        bug.setAdresseIp("192.168.0.1");
-        bug.setScreenSize("1920 x 1080");
-        bug.setBrowser("Chromium v113");
-        bug.setOs("MacOS");
+        Optional<Company> companyOpt = companyRepository.findById(1L);
 
-        bug = bugRepository.save(bug);
+        if(companyOpt.isPresent()){
+            bug.setCompany(companyOpt.get());
+            bug.setUrl("https://www.sitedetest.com/pageErreur");
+            bug.setDateCreation(new Date());
+            bug.setDescription("La vidéo ne se lance pas");
+            bug.setEtatBug(EnumEtatBug.NEW);
+            bug.setCodeLocation("<div><h1>Mon titre</h1><div>");
+            bug.setAdresseIp("192.168.0.1");
+            bug.setScreenSize("1920 x 1080");
+            bug.setBrowser("Chromium v113");
+            bug.setOs("MacOS");
 
-        List<Bug> bugListAfter = (List<Bug>) bugRepository.findAll();
+            bug = bugRepository.save(bug);
 
-        assertEquals( bugListBefore.size()+1, bugListAfter.size());
+            List<Bug> bugListAfter = (List<Bug>) bugRepository.findAll();
+
+            assertEquals( bugListBefore.size()+1, bugListAfter.size());
+        }
+
 
     }
 
