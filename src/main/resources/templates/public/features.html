@@ -17,7 +17,7 @@
         <div th:replace="~{include/pricingSection.html}"></div>
     </div>
 
-    <div class="headband">
+    <div class="headband" id="free">
         <h2>Free</h2>
         <a th:href="@{/authentication}" class="btn-action" style="margin-top: 10px!important;">S'inscrire</a>
     </div>
@@ -68,7 +68,7 @@
     </div>
 
 
-    <div class="headband">
+    <div class="headband" id="targetplan">
         <h2>Target</h2>
         <a href="app/private/recapPayment?product=TARGET" class="btn-action" style="margin-top: 10px!important;">15€ / an</a>
     </div>

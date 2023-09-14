@@ -197,7 +197,17 @@ nav ul li a {
 }
 
 .nav ul li:last-child a{
-    color: var(--color-btn-green);
+    display: inline-flex;
+    height: 37px;
+    padding: 10px 10px 10px 0;
+    margin-left: 10px;
+    background-color: var(--color-btn-green);
+    border-radius: var(--radius);
+    align-items: center;
+}
+
+.nav ul li:last-child a img{
+    width: 30px;
 }
 
 .navCompany-toggler{
@@ -1475,6 +1485,32 @@ code{
     justify-content: flex-start;
     margin: initial;
 }
+
+.decalage{
+    position: relative;
+    left: -10px;
+}
+
+#trick-find img{
+    width: 70px;
+    height: 70px;
+    margin-left: 30px;
+}
+
+#cmd{
+    width: 20px!important;
+    height: 20px!important;
+    padding: 4px;
+    top: 4px;
+    margin: 0!important;
+}
+
+.btn-raccourcis{
+    border-radius: 3px;
+    border: 1px solid black;
+    padding: 0 3px;
+}
+
 .menu h2{
     font-family: "RalewayBold", sans-serif;
     font-size: 23px;
@@ -2000,6 +2036,10 @@ footer .tierce_card a {
 
     .order3{
         order: 3;
+    }
+
+    .decalage{
+        left: 0;
     }
 }
 
@@ -2568,7 +2608,6 @@ footer .tierce_card a {
     }
 
     /* Features */
-    /* feature */
     .space-feature {
         margin: 50px auto;
     }
@@ -2602,6 +2641,11 @@ footer .tierce_card a {
         left: -230px;
         top: 228px;
         margin-top: -400px;
+    }
+
+    /* BugReport */
+    #trick-find img{
+        margin-left: 5px;
     }
 
 }

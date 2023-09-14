@@ -97,7 +97,7 @@ window.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /* fix nav to the top */
+    /*/!* fix nav to the top *!/
 
     const fixedDiv = document.getElementById("fixedDiv");
     const offset = fixedDiv.offsetTop;
@@ -108,6 +108,46 @@ window.addEventListener('DOMContentLoaded', function () {
         } else {
             fixedDiv.classList.remove("fixed");
         }
-    });
+    });*/
+
+    const cmd = document.getElementById("cmd");
+    const ctrl = document.getElementById("ctrl");
+    const encart = document.getElementById("trick-find");
+    const divDetection = document.getElementById("div-detection-os");
+    const divNoDetection = document.getElementById("no-detection-os");
+
+    /* Récupère la plateforme (os) de l'utilisateur */
+    function get_platform() {
+
+        let os = null;
+        // 2022 way of detecting. Note : this userAgentData feature is available only in secure contexts (HTTPS)
+        if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
+            os = navigator.userAgentData.platform;
+            return os;
+        }
+        // Deprecated but still works for most of the browser
+        if (typeof navigator.platform !== 'undefined') {
+            if (typeof navigator.userAgent !== 'undefined' && /android/.test(navigator.userAgent.toLowerCase())) {
+                // android device’s navigator.platform is often set as 'linux', so let’s use userAgent for them
+                os = 'android';
+                return os;
+            }
+            os = navigator.platform;
+            return os;
+        }
+        os = 'unknown';
+        return os;
+    }
+
+    let os = get_platform();
+
+    if(os === "macOS"){
+        ctrl.style.display="none";
+    } else if(os === "Win32"){
+        cmd.style.display="none";
+    } else {
+        encart.style.display="none";
+    }
+
 });
 

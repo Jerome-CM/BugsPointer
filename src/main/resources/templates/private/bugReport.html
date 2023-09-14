@@ -19,7 +19,7 @@
         <h1 th:text="${title}"></h1>
 
         <div class="container-report">
-            <div class="aside order2">
+            <div class="aside decalage order2">
                 <div class="component">
                     <h2>Chronologie</h2>
                     <span class="indicator">Signalé</span>
@@ -54,8 +54,12 @@
                     <p th:text="${bug.getDescription() != null ? bug.getDescription() : ''}"></p>
                     <hr>
 
-                    <p><strong>La balise pointée par l'utilisateur est celle ayant la classe : bugspointer-pointed-balise</strong></p>
-                    
+                    <div class="warning border-orange" id="trick-find">
+                        <img th:src="@{/css/img/icones/facile-a-utiliser.gif}" alt="">
+                        <div id="div-detection-os"><span>Pour trouver la balise que l'utilisateur a pointé : <br> Utilisez </span><span class="btn-raccourcis"><img id="cmd" th:src="@{/css/img/icones/cmd.png}" alt="cmd"><span id="ctrl">Ctrl</span></span> <span> + <span class="btn-raccourcis">F</span>  et tapez : <strong>bugspointer-pointed-balise</strong></span></div>
+                        <div id="no-detection-os"><p><strong>La balise pointée par l'utilisateur est celle ayant la classe : bugspointer-pointed-balise</strong></p></div>
+                    </div>
+
                     <pre style="padding: 0; margin:0;">
                         <code class="language-html">
                             <div th:text="${code}"></div>
