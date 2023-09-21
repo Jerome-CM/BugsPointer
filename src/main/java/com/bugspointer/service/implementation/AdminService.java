@@ -46,7 +46,7 @@ public class AdminService {
     }
 
     Client client = new ClientBuilder()
-            .withApiKey("test_v6adWpq2Uke8cJbtkDvkqCeaUPwBv9")
+            .withApiKey("live_4HRJ7xc4sD6fs48QJusHmrhyuFAU9m")
             .build();
 
     public List<CompanyListDTO> getAllCompanyForList(){
@@ -114,7 +114,6 @@ public class AdminService {
 
     public CompanyDetailsDTO getCompanyInfo(Long companyId) throws MollieException {
 
-
         CompanyDetailsDTO finalDTO = new CompanyDetailsDTO();
 
         Company company = companyRepository.findById(companyId).get();
@@ -178,7 +177,7 @@ public class AdminService {
             if(company.isEnable() == true){
                 company.setEnable(false);
                 company.setMotifEnable(EnumMotif.ADMIN);
-                motifLog = "for isenable, Account disable by ADMIN"; // TODO peut-être mettre un vrai raison ?
+                motifLog = "for isEnable, Account disable by ADMIN"; // TODO peut-être mettre un vrai raison ?
             } else {
                 company.setEnable(true);
                 company.setMotifEnable(EnumMotif.VALIDATE); //TODO peux-être mettre CONFIRMATION pour que le compte sois reconfirmer

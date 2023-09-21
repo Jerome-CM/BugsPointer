@@ -558,6 +558,11 @@ ul{
     transition: opacity 0.3s ease-in-out;
 }
 
+.processus img{
+    width: 80%;
+    margin: 0 7% 0 auto;
+}
+
 #numbers-bar{
     display: none;
 }
@@ -2496,6 +2501,11 @@ footer .tierce_card a {
         font-size: 20px;
     }
 
+    .processus img{
+        width: 100%;
+        margin: 0 3%;
+    }
+
     .numbers-index .tierce_card{
         margin: 40px auto;
     }
@@ -2594,6 +2604,10 @@ footer .tierce_card a {
 
     .container-slider-index {
         width: 87%;
+    }
+
+    .processus{
+        display: none;
     }
 
     /*Menu interne*/

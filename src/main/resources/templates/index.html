@@ -102,6 +102,11 @@
             </div>
         </section>
 
+        <section class="processus">
+            <h2 class="h-in-index">Un processus unique</h2>
+            <img id="processus" th:src="@{/css/img/isometrie/processus.gif}" alt="Processus d'envoi et de traitement des bugs">
+        </section>
+
         <div th:replace="~{include/pricingSection.html}"></div>
 
         <section class="space" id="numbers-bar">
@@ -214,9 +219,12 @@
         if(mobil){
             displayBlockToScroll("numbers-bar", 2000);
         } else {
-            displayBlockToScroll("numbers-bar", 2300);
+            displayBlockToScroll("numbers-bar", 2800);
         }
 
+        displayBlockToScroll("processus", 1900);
+
+        /* Counter*/
         const bugCounter = document.getElementById('counterDisplay');
         const startValue = 0;
         var targetValue = [[${nbrBugReported}]];
@@ -238,6 +246,8 @@
             }
         },100);
     });
+
+
 </script>
 </body>
 </html>

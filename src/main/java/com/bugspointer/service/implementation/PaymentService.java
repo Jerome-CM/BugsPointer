@@ -59,7 +59,7 @@ public class PaymentService {
     }
 
     Client client = new ClientBuilder()
-            .withApiKey("test_v6adWpq2Uke8cJbtkDvkqCeaUPwBv9")
+            .withApiKey("live_4HRJ7xc4sD6fs48QJusHmrhyuFAU9m")
             .build();
     
     public Response createNewCustomer(CustomerDTO customerDTO) throws MollieException {
