@@ -1,0 +1,16 @@
+[Unit]
+Description=BugsPointer Staging
+After=network.target
+
+[Service]
+Type=simple
+User=jerome
+WorkingDirectory=/home/jerome/apps/bugspointer/staging
+EnvironmentFile=/etc/bugspointer/staging.env
+ExecStart=/usr/bin/java -jar /home/jerome/apps/bugspointer/staging/bugspointer.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

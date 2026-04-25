@@ -1,0 +1,65 @@
+name: CI
+
+env:
+  BUGSPOINTER_TEST_DB_URL: jdbc:mysql://127.0.0.1:3306/bugspointertest?allowPublicKeyRetrieval=true&serverTimezone=UTC&useSSL=false
+  BUGSPOINTER_TEST_DB_USER: root
+  BUGSPOINTER_TEST_DB_PASSWORD: ci-test-password
+  BUGSPOINTER_TEST_JWT_SECRET: ci-test-jwt-secret
+  BUGSPOINTER_TEST_SMTP_HOST: smtp.example.invalid
+  BUGSPOINTER_TEST_SMTP_PORT: 587
+  BUGSPOINTER_TEST_SMTP_USER: ci@example.invalid
+  BUGSPOINTER_TEST_SMTP_PASSWORD: ci-test-mail-password
+  BUGSPOINTER_TEST_MOLLIE_API_KEY: test_mollie_placeholder
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+      - master
+  pull_request:
+    branches:
+      - develop
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ci-test-password
+          MYSQL_DATABASE: bugspointertest
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pci-test-password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "11"
+          cache: maven
+
+      - name: Run tests
+        run: ./mvnw test
+
+      - name: Package jar
+        run: ./mvnw -DskipTests package
+
+      - name: Upload jar artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bugspointer-jar
+          path: target/bugspointer-0.0.1-SNAPSHOT.jar
+          if-no-files-found: error
