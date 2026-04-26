@@ -18,6 +18,7 @@ jobs:
     env:
       DEPLOY_PATH: /home/${{ secrets.VPS_USER }}/apps/bugspointer/prod
       SERVICE_NAME: bugspointer
+      SSH_OPTS: -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=yes
 
     steps:
       - uses: actions/checkout@v4
@@ -39,18 +40,23 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
 
+      - name: Validate SSH connectivity
+        run: |
+          ssh -v ${{ env.SSH_OPTS }} -i ~/.ssh/id_ed25519 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            "echo SSH connectivity OK"
+
       - name: Ensure release directory exists
         run: |
-          ssh -i ~/.ssh/id_ed25519 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+          ssh ${{ env.SSH_OPTS }} -i ~/.ssh/id_ed25519 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             "mkdir -p '${{ env.DEPLOY_PATH }}'"
 
       - name: Upload jar
         run: |
-          scp -i ~/.ssh/id_ed25519 \
+          scp ${{ env.SSH_OPTS }} -i ~/.ssh/id_ed25519 \
             target/bugspointer-0.0.1-SNAPSHOT.jar \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ env.DEPLOY_PATH }}/bugspointer.jar"
 
       - name: Restart production service
         run: |
-          ssh -i ~/.ssh/id_ed25519 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+          ssh ${{ env.SSH_OPTS }} -i ~/.ssh/id_ed25519 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             "sudo systemctl restart '${{ env.SERVICE_NAME }}' && sudo systemctl --no-pager --full status '${{ env.SERVICE_NAME }}'"
