@@ -2,7 +2,7 @@ name: CI
 
 env:
   BUGSPOINTER_TEST_DB_URL: jdbc:mysql://127.0.0.1:3306/bugspointertest?allowPublicKeyRetrieval=true&serverTimezone=UTC&useSSL=false
-  BUGSPOINTER_TEST_DB_USER: root
+  BUGSPOINTER_TEST_DB_USER: bugspointer_ci
   BUGSPOINTER_TEST_DB_PASSWORD: ci-test-password
   BUGSPOINTER_TEST_JWT_SECRET: ci-test-jwt-secret
   BUGSPOINTER_TEST_SMTP_HOST: smtp.example.invalid
@@ -33,6 +33,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: ci-test-password
           MYSQL_DATABASE: bugspointertest
+          MYSQL_USER: bugspointer_ci
+          MYSQL_PASSWORD: ci-test-password
         ports:
           - 3306:3306
         options: >-
