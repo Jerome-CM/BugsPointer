@@ -133,7 +133,7 @@ nav{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 9999;
+    z-index: 99;
 }
 
 nav .title{
@@ -166,6 +166,16 @@ nav ul li{
 
 nav ul li a {
     color: var(--color-white);
+    font-family: "RalewayBold", sans-serif;
+    font-size: 20px;
+    padding: 0 10px;
+}
+
+nav ul li button {
+    background: none;
+    border: none;
+    color: var(--color-white);
+    cursor: pointer;
     font-family: "RalewayBold", sans-serif;
     font-size: 20px;
     padding: 0 10px;
@@ -378,7 +388,7 @@ nav ul li a {
 
 .container-row{
     display: flex;
-    flex-direction: row;
+    flex-direction: row!important;
     justify-content: space-around;
     align-items: center;
     text-align: center;
@@ -886,7 +896,7 @@ ul{
 }
 
 .w60{
-    width: 60%;
+    width: 60%!important;
 }
 
 .w90{
@@ -1419,6 +1429,12 @@ code{
     text-align: left;
 }
 
+/* CrawlScan */
+
+.justify-around{
+    justify-content: space-around!important;
+}
+
 /* Payment */
 .productName{
     text-transform: uppercase;
@@ -1596,6 +1612,25 @@ code{
     padding: 6px 0;
     margin: 7px auto;
     text-align: center;
+}
+
+.content-btn-action form {
+    width: 100%;
+}
+
+.content-btn-action button {
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
+    color: var(--color-white);
+    font-family: "RalewayBold", sans-serif;
+    font-size: 21px;
+    padding: 6px 0;
+    margin: 7px auto;
+    text-align: center;
+    text-transform: uppercase;
 }
 
 .component hr{
@@ -1884,6 +1919,15 @@ footer .tierce_card a {
 
 .lock a{
     color: white;
+    font-weight: bold;
+}
+
+.lock button{
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 23px;
     font-weight: bold;
 }
 

@@ -40,9 +40,16 @@
                 </div>
                 <div class="component content-btn-action">
                     <a th:href="@{/app/private/dashboard}" class="pending">Retour</a>
-                    <a th:if="${bug.getEtatBug().name() != 'IGNORED' && bug.getEtatBug().name() != 'SOLVED'}" th:href="@{/app/private/confirmBug/{id}(id=${bug.getId()})}" class="solved" th:text="${bug.getEtatBug().name == 'PENDING' ? 'Résoudre' : 'Confirmer'}">Confirmer</a>
-                    <a th:if="${bug.getEtatBug().name == 'SOLVED' || bug.getEtatBug().name() == 'IGNORED'}" th:href="@{/app/private/confirmBug/{id}(id=${bug.getId()})}" class="new">Réouvrir</a>
-                    <a th:if="${bug.getEtatBug().name() != 'IGNORED' && bug.getEtatBug().name() != 'SOLVED'}" th:href="@{/app/private/ignoredBug/{id}(id=${bug.getId()})}" class="ignored">Ignorer</a></div>
+                    <form th:if="${bug.getEtatBug().name() != 'IGNORED' && bug.getEtatBug().name() != 'SOLVED'}" th:action="@{/app/private/confirmBug/{id}(id=${bug.getId()})}" method="post">
+                        <button type="submit" class="solved" th:text="${bug.getEtatBug().name == 'PENDING' ? 'Résoudre' : 'Confirmer'}">Confirmer</button>
+                    </form>
+                    <form th:if="${bug.getEtatBug().name == 'SOLVED' || bug.getEtatBug().name() == 'IGNORED'}" th:action="@{/app/private/confirmBug/{id}(id=${bug.getId()})}" method="post">
+                        <button type="submit" class="new">Réouvrir</button>
+                    </form>
+                    <form th:if="${bug.getEtatBug().name() != 'IGNORED' && bug.getEtatBug().name() != 'SOLVED'}" th:action="@{/app/private/ignoredBug/{id}(id=${bug.getId()})}" method="post">
+                        <button type="submit" class="ignored">Ignorer</button>
+                    </form>
+                </div>
             </div>
             <div class="aside w85 w100 order1">
                 <div class="component">

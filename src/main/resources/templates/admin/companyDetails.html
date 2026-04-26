@@ -57,7 +57,9 @@
 
                 </div>
 
-                <div class="lock" th:classappend="${company.getMotifEnable() != null && !company.getMotifEnable().equals('ADMIN')} ? new : pending"><a th:href="@{/app/admin/lockCompany/{id}(id=${company.getCompanyId()})}" th:text="${company.isEnable()} ? Lock : Unlock"></a></div>
+                <form class="lock" th:classappend="${company.getMotifEnable() != null && !company.getMotifEnable().equals('ADMIN')} ? new : pending" th:action="@{/app/admin/lockCompany/{id}(id=${company.getCompanyId()})}" method="post">
+                    <button type="submit" th:text="${company.isEnable()} ? Lock : Unlock"></button>
+                </form>
             </div>
 
             <div class="container fix-css-details">

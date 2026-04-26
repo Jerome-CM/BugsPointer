@@ -31,7 +31,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -45,7 +44,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-       httpSecurity.csrf().disable()
+       httpSecurity
+                .cors()
+                .and()
+                .csrf()
+                .ignoringAntMatchers("/api/user/modalControl")
+                .and()
+                .headers()
+                .httpStrictTransportSecurity()
+                .includeSubDomains(true)
+                .preload(true)
+                .maxAgeInSeconds(31536000)
+                .and()
+                .contentTypeOptions()
+                .and()
+                .frameOptions().sameOrigin()
+                .and()
                 .authorizeRequests()
                 // restricted url
                 .antMatchers("/app/admin/**").hasRole("ADMIN")
@@ -63,6 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/registerConfirm").permitAll()
                 .antMatchers("/confirmRegister/*").permitAll()
                 .antMatchers("/newUser/*").permitAll()//TODO: demande de connexion puis redirection vers newUser ?
+                .antMatchers(HttpMethod.POST, "/newUser/*/verify").permitAll()
                 .antMatchers("/pwLost").permitAll()
                 .antMatchers("/resetPassword/*/*").permitAll()
                 .antMatchers("/features").permitAll()
@@ -70,6 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/cgu").permitAll()
                 .antMatchers("/cgv").permitAll()
                 .antMatchers("/mentions").permitAll()
+                .antMatchers("/download").permitAll()
                 .antMatchers("/app/private/thanks").permitAll()
                 .antMatchers(HttpMethod.GET,"/modal").permitAll()
                 .anyRequest().authenticated()
@@ -81,13 +97,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
                 .and()
-                .rememberMe()
+                .rememberMe().disable()
+                .sessionManagement()
+                .sessionFixation().migrateSession()
+                .invalidSessionUrl("/authentication?status=ERROR&message=Session expirée")
                 .and()
-                .logout().logoutUrl("/logout")
+                .logout()
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
                 .deleteCookies("JSESSIONID", "remember-me")
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
+
                 //.and()
                 //.sessionManagement()
                 // make sure we use stateless session; session won't be used to store user's state.

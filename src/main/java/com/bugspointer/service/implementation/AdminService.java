@@ -1,7 +1,6 @@
 package com.bugspointer.service.implementation;
 
 import be.woutschoovaerts.mollie.Client;
-import be.woutschoovaerts.mollie.ClientBuilder;
 import be.woutschoovaerts.mollie.data.common.Pagination;
 import be.woutschoovaerts.mollie.data.mandate.MandateListResponse;
 import be.woutschoovaerts.mollie.data.mandate.MandateResponse;
@@ -16,7 +15,6 @@ import com.bugspointer.repository.HomeLoggerRepository;
 import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
@@ -38,16 +36,15 @@ public class AdminService {
 
     private final ModelMapper modelMapper;
 
-    public AdminService(CompanyRepository companyRepository, HomeLoggerRepository homeLoggerRepository, BugRepository bugRepository, ModelMapper modelMapper) {
+    private final Client client;
+
+    public AdminService(CompanyRepository companyRepository, HomeLoggerRepository homeLoggerRepository, BugRepository bugRepository, ModelMapper modelMapper, Client client) {
         this.companyRepository = companyRepository;
         this.homeLoggerRepository = homeLoggerRepository;
         this.bugRepository = bugRepository;
         this.modelMapper = modelMapper;
+        this.client = client;
     }
-
-    Client client = new ClientBuilder()
-            .withApiKey("live_4HRJ7xc4sD6fs48QJusHmrhyuFAU9m")
-            .build();
 
     public List<CompanyListDTO> getAllCompanyForList(){
 

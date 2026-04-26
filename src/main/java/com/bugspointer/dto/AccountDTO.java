@@ -29,4 +29,6 @@ public class AccountDTO {
     private EnumPlan plan;
 
     private String domaine;
+
+    private boolean domainVerified;
 }

@@ -15,10 +15,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.IDN;
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -392,24 +399,117 @@ public class CompanyService implements ICompany {
     public Response registerDomaine(AccountDTO dto){
 
         Company company = getCompanyByPublicKey(dto.getPublicKey());
+        return registerDomaine(company, dto);
+    }
 
-        boolean isValid = Utility.domaineValidate.isValid(dto.getDomaine());
+    public Response registerDomaine(Company company, AccountDTO dto){
 
-        if (!isValid){
-            return new Response(EnumStatus.ERROR, null, "Le site renseigné ne correspond pas au format monsite.extension");
+        String normalizedDomain = normalizeDomain(dto.getDomaine());
+
+        if (normalizedDomain == null || !Utility.domaineValidate.isValid(normalizedDomain) || !isPublicDomain(normalizedDomain)){
+            return new Response(EnumStatus.ERROR, null, "Le site renseigné ne correspond pas à un domaine public valide");
         }
 
         if (company != null){
-
-            if(dto.getDomaine().startsWith("www.")){
-                dto.setDomaine(dto.getDomaine().substring(4));
-            }
-
-            company.setDomaine(dto.getDomaine());
+            company.setDomaine(normalizedDomain);
+            company.setDomainVerified(false);
+            company.setDomainVerifiedAt(null);
             return companyTryRegistration(company, "Nom de domaine enregistré");
         }
 
         return new Response(EnumStatus.ERROR, null, "Erreur inconnue");
+    }
+
+    public Response verifyDomainInstallation(String publicKey) {
+        Company company = getCompanyByPublicKey(publicKey);
+        return verifyDomainInstallation(company);
+    }
+
+    public Response verifyDomainInstallation(Company company) {
+        if (company == null || company.getDomaine() == null || company.getDomaine().trim().isEmpty()) {
+            return new Response(EnumStatus.ERROR, null, "Aucun domaine n'est enregistré pour ce compte");
+        }
+
+        String normalizedDomain = normalizeDomain(company.getDomaine());
+        if (normalizedDomain == null || !isPublicDomain(normalizedDomain)) {
+            return new Response(EnumStatus.ERROR, null, "Le domaine enregistré n'est pas valide");
+        }
+
+        String url = "https://" + normalizedDomain;
+        try {
+            Connection.Response response = Jsoup.connect(url)
+                    .timeout(5000)
+                    .followRedirects(false)
+                    .ignoreContentType(true)
+                    .userAgent("Bugspointer domain verification")
+                    .execute();
+
+            if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                return new Response(EnumStatus.ERROR, null, "Le site ne répond pas correctement en HTTPS");
+            }
+
+            String page = response.body();
+            if (page != null && page.contains(company.getPublicKey()) && page.toLowerCase(Locale.ROOT).contains("bugspointer")) {
+                company.setDomaine(normalizedDomain);
+                company.setDomainVerified(true);
+                company.setDomainVerifiedAt(new Date());
+                return companyTryRegistration(company, "Installation Bugspointer vérifiée");
+            }
+
+            return new Response(EnumStatus.ERROR, null, "Le script Bugspointer avec votre clé publique n'a pas été détecté sur la page d'accueil");
+        } catch (Exception e) {
+            log.warn("Domain verification failed for {}: {}", normalizedDomain, e.getMessage());
+            return new Response(EnumStatus.ERROR, null, "Impossible de vérifier le domaine pour le moment");
+        }
+    }
+
+    private String normalizeDomain(String rawDomain) {
+        if (rawDomain == null) {
+            return null;
+        }
+
+        String value = rawDomain.trim().toLowerCase(Locale.ROOT);
+        if (value.isEmpty()) {
+            return null;
+        }
+
+        try {
+            if (!value.startsWith("http://") && !value.startsWith("https://")) {
+                value = "https://" + value;
+            }
+            URI uri = URI.create(value);
+            String host = uri.getHost();
+            if (host == null || host.trim().isEmpty()) {
+                return null;
+            }
+            host = IDN.toASCII(host.toLowerCase(Locale.ROOT));
+            if (host.startsWith("www.")) {
+                host = host.substring(4);
+            }
+            if (host.endsWith(".")) {
+                host = host.substring(0, host.length() - 1);
+            }
+            return host;
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    private boolean isPublicDomain(String domain) {
+        if (domain == null || domain.equals("localhost") || !domain.contains(".")) {
+            return false;
+        }
+
+        try {
+            InetAddress address = InetAddress.getByName(domain);
+            return !address.isAnyLocalAddress()
+                    && !address.isLoopbackAddress()
+                    && !address.isLinkLocalAddress()
+                    && !address.isSiteLocalAddress()
+                    && !address.isMulticastAddress();
+        } catch (UnknownHostException e) {
+            return true;
+        }
     }
 
     public Response updateDomaine(AccountDTO dto){
@@ -417,7 +517,15 @@ public class CompanyService implements ICompany {
         Company company = getCompanyByPublicKey(dto.getPublicKey());
 
         if (passwordEncoder.matches(dto.getPassword(), company.getPassword())){
-            return registerDomaine(dto);
+            return registerDomaine(company, dto);
+        } else {
+            return new Response(EnumStatus.ERROR, null, "Erreur de mot de passe");
+        }
+    }
+
+    public Response updateDomaine(Company company, AccountDTO dto){
+        if (company != null && passwordEncoder.matches(dto.getPassword(), company.getPassword())){
+            return registerDomaine(company, dto);
         } else {
             return new Response(EnumStatus.ERROR, null, "Erreur de mot de passe");
         }
@@ -479,6 +587,20 @@ public class CompanyService implements ICompany {
 
         if(companyOpt.isPresent()){
             Company company = companyOpt.get();
+            company.setDateDownload(new Date());
+
+            try{
+                companyRepository.save(company);
+                log.info("Company #{} download zip",company.getCompanyId());
+                Utility.saveLog(company.getCompanyId(), Action.VOID, What.VOID, "download zip", null, null);
+            } catch (Exception e){
+                log.error("Impossible to update dateDownload : {}", e.getMessage());
+            }
+        }
+    }
+
+    public void addDateForDownload(Company company){
+        if(company != null){
             company.setDateDownload(new Date());
 
             try{

@@ -4,179 +4,205 @@
     <meta name="description" content="Votre site web parfait grâce à BugsPointer et à vos utilisateurs. Télécharger notre outil de rapport de bug gratuitement.">
     <meta name="keywords" content="rapport de bug, signalement de problème, outil de rapport, amélioration de site, expérience utilisateur, site web sans erreur">
     <meta name="robots" content="all">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D',
+                            paper: '#F6F8F5'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
     <style>.bugspointer-logo{display:none;}</style>
 </head>
-<body class="index">
+<body class="index home-modern bg-pointer-ink text-white">
     <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/nav.html}"></div>
 
-    <h1>Pensé pour votre entreprise, pensé pour vos utilisateurs</h1>
-    <div class="container">
-
-        <h2 class="space green-pill">Utilisez BugsPointer gratuitement pour avoir un site web parfait</h2>
-
-        <div class="container-row">
-            <img class="space intro" th:src="@{/css/img/motion/intro.gif}" alt="Description de la facilité d'intégratioin et d'utilisation">
-            <img class="space intro_mobile" th:src="@{/css/img/motion/intro_mobile.gif}" alt="Description de la facilité d'intégratioin et d'utilisation">
-            <a th:href="@{/authentication}" style="margin-top: auto;" class="btn-try transition-index-btn-tryme"><img style="width:100px; height:100px; border-radius:20%;" th:src="@{/css/img/icones/essaie-moi.gif}" alt="Try me">Essayer maintenant</a>
-
-        </div>
-
-        <div class="container-row citation space">
-            <img src="/css/img/left-quote.svg" alt=""><p>J'ai été frappé par une constatation alarmante : la moitié des sites que j'avais visités ce matin présentaient un dysfonctionnement.
-            Les propriétaires de ces sites n'en étaient pas forcément conscients. Je me devais de proposer une solution permettant à tous d'avoir un site internet irréprochable !
-            <br><br> Jérôme, Fondateur de BugsPointer</p><img src="/css/img/right-quote.svg" alt="">
-        </div>
-
-
-        <section>
-            <h2 class="h-in-index">Comment ça fonctionne ?</h2>
-            <div id="guidelineMotionDiv" style="text-align: center;">
-                <img id="guidelineMotion" th:src="@{/css/img/motion/guideline.gif}" alt="">
-            </div>
-
-           <!-- <div class="container-row align-stretch">
-                <div class="cards cards_detail tierce_card">
-                    <h3>Ajoutez les fichiers dans votre projet</h3>
-                </div>
-                <div class="cards cards_detail tierce_card">
-                    <h3>Bugs reçus dans votre tableau de bord</h3>
-                </div>
-                <div class="cards cards_detail tierce_card">
-                    <h3>Résolvez-le !</h3>
-                </div>
-            </div>
-            <h4 class="h-in-index">Pour vos utilisateurs</h4>
-            <div class="container-row align-stretch">
-                <div class="cards cards_detail tierce_card">
-                    <h3>Ils voient le bug sur votre page</h3>
-                </div>
-                <div class="cards cards_detail tierce_card">
-                    <h3>Ils montrent un bug avec un formulaire simple</h3>
-                </div>
-                <div class="cards cards_detail tierce_card">
-                    <h3>Profiteront d'un site web parfait</h3>
-                </div>
-            </div>-->
-        </section>
-
-        <section>
-            <h2 class="h-in-index">Qu'est-ce que BugsPointer peut signaler ?</h2>
-            <div class="cadre rotation-none green">
-                <div class="container-row rotation">
-                    <ul class="ul-index">
-                        <li class="h-in-index li-what-signal active-li">Orthographe</li>
-                        <li class="h-in-index li-what-signal ">Syntaxe</li>
-                        <li class="h-in-index li-what-signal">Chemin de fichier</li>
-                        <li class="h-in-index li-what-signal">Design</li>
-                        <li class="h-in-index li-what-signal">Erreur du système</li>
-                    </ul>
-
-                    <div class="container-slider-index">
-                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/Orthographe.jpg}" alt="Erreur d'orthographe">
-                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/Indeed - Bugs synthaxe.jpg}" alt="Erreur de synthaxe">
-                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/error_path.png}" alt="Erreur de chemin">
-                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/CAF - Bug btn connexion.jpg}" alt="Erreur de design">
-                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/error_server.png}" alt="Erreur du système">
-
+    <main class="overflow-hidden">
+        <section class="relative min-h-[calc(100vh-72px)] px-5 pb-12 pt-5 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1fr_0.92fr]">
+                <div class="relative z-10 max-w-3xl">
+                    <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                        Feedback utilisateur en temps réel
+                    </p>
+                    <h1 class="text-left font-display text-5xl leading-[0.96] tracking-normal text-white sm:text-6xl lg:text-7xl">
+                        Transformez chaque bug visible en action claire.
+                    </h1>
+                    <p class="mt-7 max-w-2xl text-lg leading-8 text-white/72 sm:text-xl">
+                        BugsPointer ajoute un point de contact simple sur votre site: vos visiteurs signalent ce qui bloque, votre équipe reçoit le contexte, et votre expérience progresse sans friction.
+                    </p>
+                    <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+                        <a th:href="@{/authentication}" class="home-btn home-btn-primary">
+                            Essayer gratuitement
+                        </a>
+                        <a th:href="@{/testPage}" target="_blank" class="home-btn home-btn-secondary">
+                            Voir la page de test
+                        </a>
                     </div>
-                    <!--<div class="slider sliderIndex">
-                        <div class="slides">
-                            <div id="slide-1">
-                                <img th:src="@{/css/img/sliderIndex/Orthographe.jpg}" alt="Preview of HTML content">
-                            </div>
-                            <div id="slide-2">
-                                <img th:src="@{/css/img/sliderIndex/Indeed - Bugs synthaxe.jpg}" alt="Preview of HTML content">
-                            </div>
-                            <div id="slide-3">
-                                <img th:src="@{/css/img/sliderIndex/CAF - Bug btn connexion.jpg}" alt="Preview of HTML content">
-                            </div>
+                    <div class="mt-10 grid max-w-2xl grid-cols-3 gap-3">
+                        <div class="home-metric">
+                            <strong id="counterDisplay">0</strong>
+                            <span>bugs signalés</span>
                         </div>
-                        <div class="content-dotlink">
-                            <a class="slide slide-index" href="#slide-1">1</a>
-                            <a class="slide slide-index" href="#slide-2">2</a>
-                            <a class="slide slide-index" href="#slide-3">3</a>
+                        <div class="home-metric">
+                            <strong th:text="${averageBugByCompany}">4</strong>
+                            <span>par entreprise</span>
                         </div>
-                    </div>-->
+                        <div class="home-metric">
+                            <strong><span th:text="${averageSatisfyingUser}">9</span>/10</strong>
+                            <span>satisfaction</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative z-10">
+                    <div class="home-product-card">
+                        <div class="home-card-toolbar">
+                            <span></span><span></span><span></span>
+                            <p>bugs-pointer.js</p>
+                        </div>
+                        <img class="intro home-hero-motion" th:src="@{/css/img/motion/intro.gif}" alt="Demonstration d'integration et d'utilisation de BugsPointer">
+                        <img class="intro_mobile home-hero-motion" th:src="@{/css/img/motion/intro_mobile.gif}" alt="Demonstration mobile de BugsPointer">
+                        <div class="home-floating-panel">
+                            <span class="home-status-dot"></span>
+                            Rapport prêt à traiter
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="processus">
-            <h2 class="h-in-index">Un processus unique</h2>
-            <img id="processus" th:src="@{/css/img/isometrie/processus.gif}" alt="Processus d'envoi et de traitement des bugs">
-        </section>
-
-        <div th:replace="~{include/pricingSection.html}"></div>
-
-        <section class="space" id="numbers-bar">
-            <div class="container-row numbers-index">
-                <div class="tierce_card">
-                    <!--TODO afficher le nombre reel de bug <span th:text="${nbrBugReported}" id="bugCounter"></span>-->
-                    <span class="big-number" id="counterDisplay"></span><br>
-                    <span>bugs signalés</span>
+        <section class="px-5 py-16 sm:px-8 lg:px-12">
+            <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.82fr_1fr] lg:items-center">
+                <div>
+                    <p class="home-kicker">Comment ça fonctionne</p>
+                    <h2 class="home-section-title">Un parcours court, compréhensible, actionnable.</h2>
+                    <p class="home-section-copy">
+                        Vous intégrez le bouton BugsPointer, vos utilisateurs pointent le problème, puis vos équipes reçoivent un rapport exploitable dans leur tableau de bord ou par mail.
+                    </p>
                 </div>
-
-                <div class="tierce_card">
-                    <span class="big-number" th:text="${averageBugByCompany}"></span> bug<span th:if="${averageBugByCompany > 1}" th:text="s"></span><br>
-                    <span>en moyenne par entreprise</span>
-                </div>
-
-                <div class="tierce_card">
-                    <span class="big-number"><span th:text="${averageSatisfyingUser}"></span>/10</span><br>
-                    <span>de satisfaction clients</span>
+                <div id="guidelineMotionDiv" class="home-demo-frame">
+                    <img id="guidelineMotion" th:src="@{/css/img/motion/guideline.gif}" alt="Parcours de signalement d'un bug">
                 </div>
             </div>
         </section>
 
-        <section>
-            <h2 class="h-in-index">Testez-moi !</h2>
-            <p class="space center">Utilisez notre page de test pour voir la puissance de notre outil. Juger par vous-même !</p>
-            <div class="container-row">
-                <a class="tryme-btn-index center" target="_blank" th:href="@{/testPage}"><img src="/css/img/icones/essaie-moi.gif" alt="Test-moi"></a>
+        <section class="px-5 py-16 sm:px-8 lg:px-12">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-9 max-w-3xl">
+                    <p class="home-kicker">Cas détectés</p>
+                    <h2 class="home-section-title">Du petit détail visible au vrai blocage utilisateur.</h2>
+                </div>
+                <div class="home-signal-panel">
+                    <ul class="ul-index home-signal-tabs">
+                        <li class="li-what-signal active-li">Orthographe</li>
+                        <li class="li-what-signal">Syntaxe</li>
+                        <li class="li-what-signal">Chemin de fichier</li>
+                        <li class="li-what-signal">Design</li>
+                        <li class="li-what-signal">Erreur système</li>
+                    </ul>
+                    <div class="container-slider-index home-signal-preview">
+                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/Orthographe.jpg}" alt="Erreur d'orthographe">
+                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/Indeed - Bugs synthaxe.jpg}" alt="Erreur de syntaxe">
+                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/error_path.png}" alt="Erreur de chemin de fichier">
+                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/CAF - Bug btn connexion.jpg}" alt="Erreur de design">
+                        <img class="img-slider-index" th:src="@{/css/img/sliderIndex/error_server.png}" alt="Erreur système">
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section>
-            <h2 class="h-in-index">Made in<img src="/css/img/france.jpg" class="flag-nav" alt="Drapeau français"></h2>
-            <div class="container-row" style="color:black;">
-                <div class="cards cards_detail tierce_card"><img style="width:100px; height:100px;" src="/css/img/icones/reglage.gif" alt="Construction">
+        <section class="px-5 py-16 sm:px-8 lg:px-12">
+            <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_0.82fr] lg:items-center">
+                <div class="processus home-demo-frame">
+                    <img id="processus" th:src="@{/css/img/isometrie/processus.gif}" alt="Processus d'envoi et de traitement des bugs">
+                </div>
+                <div>
+                    <p class="home-kicker">Processus unique</p>
+                    <h2 class="home-section-title">Le signalement arrive avec le bon niveau de contexte.</h2>
+                    <p class="home-section-copy">
+                        L'utilisateur n'a pas à comprendre votre stack. Il montre ce qui ne va pas, BugsPointer structure la remontée, et vous priorisez ce qui dégrade réellement l'expérience.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="px-5 py-16 sm:px-8 lg:px-12">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-9 max-w-3xl">
+                    <p class="home-kicker">Tarifs</p>
+                    <h2 class="home-section-title">Commencez sans friction, passez au dashboard quand le volume augmente.</h2>
+                </div>
+                <div class="home-pricing">
+                    <div th:replace="~{include/pricingSection.html}"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="px-5 py-16 sm:px-8 lg:px-12">
+            <div class="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
+                <article class="home-trust-card">
+                    <img src="/css/img/icones/reglage.gif" alt="Conception">
+                    <h3>Conçu en France</h3>
                     <p>Bugspointer a été pensé et conçu entre Rouen et Blois.</p>
-                </div>
-                <div class="cards cards_detail tierce_card"><img style="width:100px; height:100px;" src="/css/img/icones/base-de-donnees.gif" alt="Base de données">
-                    <p>Les données sont hébergées en France, entre Paris et Lille.</p>
-                </div>
-                <div class="cards cards_detail tierce_card"><img style="width:100px; height:100px;" src="/css/img/icones/eco.gif" alt="Economies d'énergie">
-                    <p>Gestion des données respectueuse de l'environnement.</p>
-                </div>
+                </article>
+                <article class="home-trust-card">
+                    <img src="/css/img/icones/base-de-donnees.gif" alt="Base de données">
+                    <h3>Données hébergées en France</h3>
+                    <p>Les données sont hébergées entre Paris et Lille.</p>
+                </article>
+                <article class="home-trust-card">
+                    <img src="/css/img/icones/eco.gif" alt="Gestion responsable">
+                    <h3>Gestion responsable</h3>
+                    <p>Une approche attentive aux données et à l'impact environnemental.</p>
+                </article>
             </div>
         </section>
-    </div>
+
+        <section id="numbers-bar" class="home-number-trigger" aria-hidden="true"></section>
+    </main>
+
     <div th:replace="~{include/footer.html}"></div>
-<script th:inline="javascript" >
+<script th:inline="javascript">
 
     window.addEventListener('DOMContentLoaded', function () {
 
         function displayBlockToScroll(id, pixToScroll) {
-            // Affiche la guideLine sur l'index
             const domElement = document.getElementById(id);
+            if (!domElement) {
+                return;
+            }
 
-            const pixelsToScroll = pixToScroll; // Le nombre de pixels à défiler avant d'afficher l'image
+            domElement.style.opacity = id === 'numbers-bar' ? '0' : domElement.style.opacity;
 
-            domElement.style.display = "none";
-
-            setInterval(function() {
-                // .index == body
-                if (document.querySelector('.index').scrollTop > pixelsToScroll) {
-                    domElement.style.display = "block";
+            function revealOnScroll() {
+                if (window.scrollY > pixToScroll) {
+                    domElement.style.display = 'block';
+                    domElement.style.opacity = '1';
                 }
+            }
 
-            },100);
+            revealOnScroll();
+            window.addEventListener('scroll', revealOnScroll, { passive: true });
         }
 
-        displayBlockToScroll("guidelineMotionDiv", 300);
+        displayBlockToScroll("guidelineMotionDiv", 260);
 
-        // Affiche le slider de l'index
         const images = document.querySelectorAll('.img-slider-index');
         const listItems = document.querySelectorAll('.li-what-signal');
 
@@ -189,11 +215,7 @@
             });
 
             listItems.forEach((li, i) => {
-                if (i === index) {
-                    li.classList.add('active-li');
-                } else {
-                    li.classList.remove('active-li');
-                }
+                li.classList.toggle('active-li', i === index);
             });
         }
 
@@ -202,51 +224,39 @@
             showImage(currentIndex);
         }
 
-        showImage(currentIndex);
-        setInterval(nextImage, 3000);
-
-        let mobil;
-        if( navigator.userAgent.match(/iPhone/i)
-            || navigator.userAgent.match(/Android/i)
-            || navigator.userAgent.match(/iPod/i)
-            || navigator.userAgent.match(/Windows Phone/i)
-        ){
-            mobil = true;
-        } else {
-            mobil = false;
+        if (images.length > 0) {
+            showImage(currentIndex);
+            setInterval(nextImage, 3000);
         }
 
-        if(mobil){
-            displayBlockToScroll("numbers-bar", 2000);
-        } else {
-            displayBlockToScroll("numbers-bar", 2800);
-        }
+        displayBlockToScroll("numbers-bar", 500);
+        displayBlockToScroll("processus", 900);
 
-        displayBlockToScroll("processus", 1900);
-
-        /* Counter*/
         const bugCounter = document.getElementById('counterDisplay');
-        const startValue = 0;
-        var targetValue = [[${nbrBugReported}]];
-        bugCounter.textContent = startValue;
-        let currentValue = targetValue - 50;
+        const targetValue = [[${nbrBugReported}]];
+        let currentValue = Math.max(0, targetValue - 50);
+        let counterStarted = false;
 
-        setInterval(function() {
-
-            if (document.getElementById("numbers-bar").style.display === "block") {
-                function updateCounter() {
-                    if (currentValue < targetValue) {
-                        currentValue++;
-                        bugCounter.textContent = currentValue;
-                    } else {
-                        bugCounter.textContent = currentValue;
-                    }
-                }
-                updateCounter();
+        function updateCounter() {
+            if (!bugCounter || counterStarted || window.scrollY < 120) {
+                return;
             }
-        },100);
-    });
 
+            counterStarted = true;
+            const counterInterval = setInterval(function() {
+                if (currentValue < targetValue) {
+                    currentValue++;
+                    bugCounter.textContent = currentValue;
+                } else {
+                    bugCounter.textContent = currentValue;
+                    clearInterval(counterInterval);
+                }
+            }, 35);
+        }
+
+        updateCounter();
+        window.addEventListener('scroll', updateCounter, { passive: true });
+    });
 
 </script>
 </body>

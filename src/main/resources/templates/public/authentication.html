@@ -14,7 +14,7 @@
         <section>
             <div class="cards cards_detail w90 w95">
                 <h3>S'inscrire</h3>
-                <form class="form" action="#" th:action="@{/register}" th:object="${companyRegister}" method="post">
+                <form action="#" th:action="@{/register}" th:object="${companyRegister}" method="post">
                     <input type="text" th:field="*{companyName}" id="companyName" placeholder="Nom de votre entreprise" required>
                     <input type="text" th:field="*{mail}" id="registerMail" placeholder="E-mail" required>
                     <input type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmation de l'e-mail" required>

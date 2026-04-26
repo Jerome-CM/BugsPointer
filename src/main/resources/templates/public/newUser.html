@@ -22,7 +22,7 @@
                 <input th:if="${company.getDomaine() == null}" class="btn-action" type="button" id="btn-envoi" value="Envoyer">
             </form>
             </div>
-            <img th:if="${company.getDomaine() != null}" alt="valide" th:src="@{/css/img/icones/verifie.gif}">
+            <img th:if="${company.getDomaine() != null && company.isDomainVerified()}" alt="valide" th:src="@{/css/img/icones/verifie.gif}">
         </div>
 
         <div th:if="${company.getDomaine() != null}" style="width: 100%">
@@ -82,6 +82,21 @@
                     </div>
                 </div>
                 <img alt="transfert" th:src="@{/css/img/icones/transfert.gif}"/>
+            </div>
+
+            <div class="btn-download newUser">
+                <div class="center center-in-card fs20">
+                    <span class="center" th:if="${company.isDomainVerified()}">
+                        Installation Bugspointer détectée sur votre domaine
+                    </span>
+                    <span class="center" th:if="${!company.isDomainVerified()}">
+                        Installation Bugspointer non encore détectée sur votre domaine
+                    </span>
+                    <form class="container-row" th:if="${!company.isDomainVerified()}" th:action="@{/newUser/{publicKey}/verify(publicKey=${publicKey})}" method="post">
+                        <button class="btn-action" type="submit">Vérifier l'installation</button>
+                    </form>
+                </div>
+                <img alt="clé" th:src="@{/css/img/icones/verifie.gif}"/>
             </div>
 
             <p class="center space">Pour tous soucis, suggestions ou remarques, écrivez-nous à : <br>
