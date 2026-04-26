@@ -1,9 +1,6 @@
 name: CI
 
 env:
-  BUGSPOINTER_TEST_DB_URL: jdbc:mysql://127.0.0.1:3306/bugspointertest?allowPublicKeyRetrieval=true&serverTimezone=UTC&useSSL=false
-  BUGSPOINTER_TEST_DB_USER: bugspointer_ci
-  BUGSPOINTER_TEST_DB_PASSWORD: ci-test-password
   BUGSPOINTER_TEST_JWT_SECRET: ci-test-jwt-secret
   BUGSPOINTER_TEST_SMTP_HOST: smtp.example.invalid
   BUGSPOINTER_TEST_SMTP_PORT: 587
@@ -26,23 +23,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: ci-test-password
-          MYSQL_ROOT_HOST: '%'
-          MYSQL_DATABASE: bugspointertest
-          MYSQL_USER: bugspointer_ci
-          MYSQL_PASSWORD: ci-test-password
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pci-test-password"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
 
     steps:
       - uses: actions/checkout@v4
