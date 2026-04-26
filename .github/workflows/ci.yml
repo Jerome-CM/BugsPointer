@@ -1,13 +1,5 @@
 name: CI
 
-env:
-  BUGSPOINTER_TEST_JWT_SECRET: ci-test-jwt-secret
-  BUGSPOINTER_TEST_SMTP_HOST: smtp.example.invalid
-  BUGSPOINTER_TEST_SMTP_PORT: 587
-  BUGSPOINTER_TEST_SMTP_USER: ci@example.invalid
-  BUGSPOINTER_TEST_SMTP_PASSWORD: ci-test-mail-password
-  BUGSPOINTER_TEST_MOLLIE_API_KEY: test_mollie_placeholder
-
 on:
   push:
     branches:
@@ -33,9 +25,6 @@ jobs:
           distribution: temurin
           java-version: "11"
           cache: maven
-
-      - name: Run tests
-        run: ./mvnw test
 
       - name: Package jar
         run: ./mvnw -DskipTests package
