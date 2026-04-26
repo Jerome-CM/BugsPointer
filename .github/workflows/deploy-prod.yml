@@ -1,10 +1,12 @@
 name: Deploy Production
 
 on:
-  push:
+  pull_request:
     branches:
       - main
       - master
+    types:
+      - closed
   workflow_dispatch:
 
 concurrency:
@@ -13,6 +15,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop')
     runs-on: ubuntu-latest
     environment: production
     env:
@@ -39,6 +42,13 @@ jobs:
         run: |
           ssh ${{ env.SSH_OPTS }} -i ~/.ssh/id_ed25519 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             "mkdir -p '${{ env.DEPLOY_PATH }}'"
+
+      - name: Validate promoted staging revision
+        if: github.event_name == 'pull_request'
+        run: |
+          EXPECTED_SHA="${{ github.event.pull_request.head.sha }}"
+          ACTUAL_SHA="$(ssh ${{ env.SSH_OPTS }} -i ~/.ssh/id_ed25519 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "cat '${{ env.STAGING_PATH }}/bugspointer.commit_sha'")"
+          test "$ACTUAL_SHA" = "$EXPECTED_SHA"
 
       - name: Promote staging jar to production
         run: |
