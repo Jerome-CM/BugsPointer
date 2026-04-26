@@ -28,10 +28,3 @@ jobs:
 
       - name: Package jar
         run: ./mvnw -DskipTests package
-
-      - name: Upload jar artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: bugspointer-jar
-          path: target/bugspointer-0.0.1-SNAPSHOT.jar
-          if-no-files-found: error

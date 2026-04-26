@@ -18,6 +18,7 @@ jobs:
       DEPLOY_PATH: /home/${{ secrets.VPS_USER }}/apps/bugspointer/staging
       SERVICE_NAME: bugspointer-staging
       SSH_OPTS: -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=yes
+      JAR_PATH: target/bugspointer-0.0.1-SNAPSHOT.jar
 
     steps:
       - uses: actions/checkout@v4
@@ -53,10 +54,17 @@ jobs:
       - name: Upload jar
         run: |
           scp ${{ env.SSH_OPTS }} -i ~/.ssh/id_ed25519 \
-            target/bugspointer-0.0.1-SNAPSHOT.jar \
+            "${{ env.JAR_PATH }}" \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ env.DEPLOY_PATH }}/bugspointer.jar"
 
       - name: Restart staging service
         run: |
           ssh ${{ env.SSH_OPTS }} -i ~/.ssh/id_ed25519 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             "sudo -n /usr/bin/systemctl restart '${{ env.SERVICE_NAME }}' && /usr/bin/systemctl --no-pager --full status '${{ env.SERVICE_NAME }}'"
+
+      - name: Store staging release metadata
+        run: |
+          LOCAL_SHA="$(sha256sum "${{ env.JAR_PATH }}" | awk '{print $1}')"
+          ssh ${{ env.SSH_OPTS }} -i ~/.ssh/id_ed25519 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            "printf '%s\n' '${{ github.sha }}' > '${{ env.DEPLOY_PATH }}/bugspointer.commit_sha' && \
+             printf '%s\n' '$LOCAL_SHA' > '${{ env.DEPLOY_PATH }}/bugspointer.jar.sha256'"

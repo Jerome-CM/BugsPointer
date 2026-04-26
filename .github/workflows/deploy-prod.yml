@@ -16,23 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
+      STAGING_PATH: /home/${{ secrets.VPS_USER }}/apps/bugspointer/staging
       DEPLOY_PATH: /home/${{ secrets.VPS_USER }}/apps/bugspointer/prod
       SERVICE_NAME: bugspointer
       SSH_OPTS: -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=yes
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "11"
-          cache: maven
-
-      - name: Package jar
-        run: ./mvnw -DskipTests package
-
       - name: Configure SSH
         run: |
           install -m 700 -d ~/.ssh
@@ -51,11 +40,19 @@ jobs:
           ssh ${{ env.SSH_OPTS }} -i ~/.ssh/id_ed25519 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             "mkdir -p '${{ env.DEPLOY_PATH }}'"
 
-      - name: Upload jar
+      - name: Promote staging jar to production
         run: |
-          scp ${{ env.SSH_OPTS }} -i ~/.ssh/id_ed25519 \
-            target/bugspointer-0.0.1-SNAPSHOT.jar \
-            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ env.DEPLOY_PATH }}/bugspointer.jar"
+          ssh ${{ env.SSH_OPTS }} -i ~/.ssh/id_ed25519 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            "test -f '${{ env.STAGING_PATH }}/bugspointer.jar' && \
+             test -f '${{ env.STAGING_PATH }}/bugspointer.commit_sha' && \
+             test -f '${{ env.STAGING_PATH }}/bugspointer.jar.sha256' && \
+             cp '${{ env.STAGING_PATH }}/bugspointer.jar' '${{ env.DEPLOY_PATH }}/bugspointer.jar' && \
+             cmp -s '${{ env.STAGING_PATH }}/bugspointer.jar' '${{ env.DEPLOY_PATH }}/bugspointer.jar' && \
+             cp '${{ env.STAGING_PATH }}/bugspointer.commit_sha' '${{ env.DEPLOY_PATH }}/bugspointer.commit_sha' && \
+             cp '${{ env.STAGING_PATH }}/bugspointer.jar.sha256' '${{ env.DEPLOY_PATH }}/bugspointer.jar.sha256' && \
+             printf 'Promoted staging jar to production\n' && \
+             if [ -f '${{ env.DEPLOY_PATH }}/bugspointer.commit_sha' ]; then printf 'Commit: '; cat '${{ env.DEPLOY_PATH }}/bugspointer.commit_sha'; fi && \
+             if [ -f '${{ env.DEPLOY_PATH }}/bugspointer.jar.sha256' ]; then printf 'SHA256: '; cat '${{ env.DEPLOY_PATH }}/bugspointer.jar.sha256'; fi"
 
       - name: Restart production service
         run: |
