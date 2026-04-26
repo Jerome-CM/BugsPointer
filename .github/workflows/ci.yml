@@ -32,6 +32,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: ci-test-password
+          MYSQL_ROOT_HOST: '%'
           MYSQL_DATABASE: bugspointertest
           MYSQL_USER: bugspointer_ci
           MYSQL_PASSWORD: ci-test-password
