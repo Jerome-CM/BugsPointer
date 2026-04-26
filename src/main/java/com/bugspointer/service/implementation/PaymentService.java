@@ -1,7 +1,6 @@
 package com.bugspointer.service.implementation;
 
 import be.woutschoovaerts.mollie.Client;
-import be.woutschoovaerts.mollie.ClientBuilder;
 import be.woutschoovaerts.mollie.data.common.Amount;
 import be.woutschoovaerts.mollie.data.customer.CustomerRequest;
 import be.woutschoovaerts.mollie.data.customer.CustomerResponse;
@@ -25,7 +24,6 @@ import com.bugspointer.repository.CustomerRepository;
 import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,22 +47,25 @@ public class PaymentService {
 
     private final ModelMapper modelMapper;
 
+    private final Client client;
 
-    public PaymentService(CompanyRepository companyRepository, CompanyService companyService, MailService mailService, CustomerRepository customerRepository, ModelMapper modelMapper) {
+    public PaymentService(CompanyRepository companyRepository, CompanyService companyService, MailService mailService, CustomerRepository customerRepository, ModelMapper modelMapper, Client client) {
         this.companyRepository = companyRepository;
         this.companyService = companyService;
         this.mailService = mailService;
         this.customerRepository = customerRepository;
         this.modelMapper = modelMapper;
+        this.client = client;
     }
-
-    Client client = new ClientBuilder()
-            .withApiKey("live_4HRJ7xc4sD6fs48QJusHmrhyuFAU9m")
-            .build();
     
     public Response createNewCustomer(CustomerDTO customerDTO) throws MollieException {
 
         Optional<Company> companyOptional = companyRepository.findByPublicKey(customerDTO.getPublicKey());
+
+        if (!companyOptional.isPresent()) {
+            log.error("Company non trouvée");
+            return new Response(EnumStatus.ERROR, null, "Une erreur est survenue, merci de vous connecter");
+        }
 
         if (!customerDTO.isCguAccepted()) {
             return new Response(EnumStatus.ERROR, null, "Veuillez accepter les CGU pour procéder au paiement");
@@ -80,15 +81,10 @@ public class PaymentService {
 
         Company company;
         Customer customerBugspointer = null;
-        if (companyOptional.isPresent()) {
-            company = companyOptional.get();
-            Optional<Customer> customerOptional = customerRepository.findByCompany_CompanyId(company.getCompanyId());
-            if (customerOptional.isPresent()) {
-                customerBugspointer = customerOptional.get();
-            }
-        } else {
-            log.error("Company non trouvée");
-            return new Response(EnumStatus.ERROR, null, "Un erreur est survenu, merci de vous connecter");
+        company = companyOptional.get();
+        Optional<Customer> customerOptional = customerRepository.findByCompany_CompanyId(company.getCompanyId());
+        if (customerOptional.isPresent()) {
+            customerBugspointer = customerOptional.get();
         }
 
         //On crée le customer qui sera créé ou modifié chez Mollie
@@ -474,6 +470,9 @@ public class PaymentService {
     @Transactional
     public Response returnFreePlan(Long idCompany, String idCustomer) throws MollieException {
         log.warn("in returnToFree");
+        if (idCompany == null || idCustomer == null || idCustomer.trim().isEmpty()) {
+            return new Response(EnumStatus.ERROR, null, "Action non autorisée");
+        }
         // Si le client a un premium et reviens sur un free, on le change et on met à jour
         Optional<Company> companyOptional = companyRepository.findById(idCompany);
         log.warn("returnToFree - companyOptional : {}", companyOptional);
@@ -485,6 +484,9 @@ public class PaymentService {
             if(customerOptional.isPresent()){
                 // Change customer informations
                 Customer custo = customerOptional.get();
+                if (!idCustomer.equals(custo.getCustomerId())) {
+                    return new Response(EnumStatus.ERROR, null, "Action non autorisée");
+                }
                 custo.setPlan(EnumPlan.FREE);
                 custo.setDateStartSubscribe(null);
 
@@ -504,7 +506,7 @@ public class PaymentService {
                 }
             }
         }
-        return null;
+        return new Response(EnumStatus.ERROR, null, "Action non autorisée");
     }
 
 
@@ -522,6 +524,14 @@ public class PaymentService {
 
     public Response deleteMandate(Long idCompany, String idCustomer, String idMandate) throws MollieException {
          
+        if (idCompany == null || idCustomer == null || idMandate == null || idCustomer.trim().isEmpty() || idMandate.trim().isEmpty()) {
+            return new Response(EnumStatus.ERROR, null, "Action non autorisée");
+        }
+
+        Optional<Customer> customerOptional = customerRepository.findByCompany_CompanyId(idCompany);
+        if (!customerOptional.isPresent() || !idCustomer.equals(customerOptional.get().getCustomerId())) {
+            return new Response(EnumStatus.ERROR, null, "Action non autorisée");
+        }
 
         List<MandateResponse> mandatesBefore = client.mandates().listMandates(idCustomer).getEmbedded().getMandates();
 
@@ -563,9 +573,6 @@ public class PaymentService {
         return null;
     }
 }
-
-
-
 
 
 

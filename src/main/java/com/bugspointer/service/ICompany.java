@@ -24,6 +24,10 @@ public interface ICompany {
     Response delete(AccountDeleteDTO dto);
     Response validateRegister(String publicKey);
     Response registerDomaine(AccountDTO dto);
+    Response registerDomaine(Company company, AccountDTO dto);
+    Response verifyDomainInstallation(String publicKey);
+    Response verifyDomainInstallation(Company company);
+    Response updateDomaine(Company company, AccountDTO dto);
     Response sendPwLost(AccountDTO dto);
     Response resetPassword(String publicKey, AccountDTO dto, String token);
     Response updatePlan(Company company, Date dateLine, EnumPlan plan);

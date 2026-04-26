@@ -103,6 +103,8 @@ public class Private {
     @PostMapping("account/delete/confirm")
     String deleteAccount(@Valid AccountDeleteDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        Company currentCompany = companyService.getCompanyWithToken(request);
+        dto.setPublicKey(currentCompany.getPublicKey());
         if (!result.hasErrors()) {
             Response response = companyService.delete(dto);
             if (response.getStatus().equals(EnumStatus.OK)) {
@@ -136,6 +138,7 @@ public class Private {
                   Model model,
                   HttpServletRequest request) {
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        dto.setPublicKey(companyService.getCompanyWithToken(request).getPublicKey());
         if (!result.hasErrors()) {
             model.addAttribute("company", companyService.getAccountDeleteDto(companyService.getCompanyWithToken(request)));
             return "private/deleteAccount";
@@ -155,6 +158,8 @@ public class Private {
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         if (!result.hasErrors()) {
             Response response;
+            Company currentCompany = companyService.getCompanyWithToken(request);
+            dto.setPublicKey(currentCompany.getPublicKey());
             if ("updateMail".equals(action)){
                 response = companyService.mailUpdate(dto);
                 if (response.getStatus().equals(EnumStatus.OK)) {
@@ -172,7 +177,7 @@ public class Private {
             } else if ("updateSms".equals(action)) {
                 response = companyService.smsUpdate(dto);
             } else if ("updateDomaine".equals(action)) {
-                response = companyService.updateDomaine(dto);
+                response = companyService.updateDomaine(currentCompany, dto);
             } else {
                 response = new Response(EnumStatus.ERROR, null, "Error to click of button");
             }
@@ -227,7 +232,7 @@ public class Private {
         }
     }
 
-    @GetMapping("confirmBug/{id}")
+    @PostMapping("confirmBug/{id}")
     String getConfirmeBug(@PathVariable Long id, HttpServletRequest request){
         DashboardDTO company = companyService.getDashboardDto(companyService.getCompanyWithToken(request));
         Long idCompany = company.getId();
@@ -237,7 +242,7 @@ public class Private {
         return "redirect:/app/private/bugReport/{id}";
     }
 
-    @GetMapping("ignoredBug/{id}")
+    @PostMapping("ignoredBug/{id}")
     String getIgnoredBug(@PathVariable Long id, HttpServletRequest request){
         DashboardDTO company = companyService.getDashboardDto(companyService.getCompanyWithToken(request));
         Long idCompany = company.getId();
@@ -249,9 +254,10 @@ public class Private {
 
     @GetMapping("bugList")
     String getbugList(Model map,@RequestParam("publicKey") String publicKey, @RequestParam("state") String state, HttpServletRequest request){
+        Company currentCompany = companyService.getCompanyWithToken(request);
         map.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        map.addAttribute("dataBug", companyService.getDashboardDto(companyService.getCompanyWithToken(request)));
-        Response responseBugList = bugService.getBugDTOByCompanyAndState(publicKey, state);
+        map.addAttribute("dataBug", companyService.getDashboardDto(currentCompany));
+        Response responseBugList = bugService.getBugDTOByCompanyAndState(currentCompany.getPublicKey(), state);
         List<BugDTO> bugDTOList = (List<BugDTO>) responseBugList.getContent();
 
         if(responseBugList.getContent() == null){
@@ -261,13 +267,13 @@ public class Private {
         if(bugDTOList.size() == 1){
             map.addAttribute("title", bugService.getTitle(state, false));
             map.addAttribute("state", bugDTO.getEtatBug());
-            map.addAttribute("publicKey", publicKey);
-            return "redirect:bugReport/"+bugDTO.getId()+"?publicKey="+publicKey;
+            map.addAttribute("publicKey", currentCompany.getPublicKey());
+            return "redirect:bugReport/"+bugDTO.getId();
         } else {
             map.addAttribute("title", bugService.getTitle(state, true));
             map.addAttribute("bugList", bugDTOList);
             map.addAttribute("state", bugDTO.getEtatBug());
-            map.addAttribute("publicKey", publicKey);
+            map.addAttribute("publicKey", currentCompany.getPublicKey());
 
             return "private/bugList";
         }

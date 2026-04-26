@@ -1,7 +1,6 @@
 package com.bugspointer.service.implementation;
 
 import be.woutschoovaerts.mollie.Client;
-import be.woutschoovaerts.mollie.ClientBuilder;
 import be.woutschoovaerts.mollie.data.customer.CustomerResponse;
 import be.woutschoovaerts.mollie.data.mandate.MandateResponse;
 import be.woutschoovaerts.mollie.data.mandate.MandateStatus;
@@ -16,9 +15,6 @@ import com.bugspointer.service.ICustomer;
 import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -34,14 +30,13 @@ public class CustomerService implements ICustomer {
 
     private final ModelMapper modelMapper;
 
-    public CustomerService(CompanyRepository companyRepository, ModelMapper modelMapper) {
+    private final Client client;
+
+    public CustomerService(CompanyRepository companyRepository, ModelMapper modelMapper, Client client) {
         this.companyRepository = companyRepository;
         this.modelMapper = modelMapper;
+        this.client = client;
     }
-
-    Client client = new ClientBuilder()
-            .withApiKey("live_4HRJ7xc4sD6fs48QJusHmrhyuFAU9m")
-            .build();
 
     public CustomerDTO getCustomerDTO(Customer customer) {
         CustomerDTO dto;

@@ -28,6 +28,10 @@ public class Company {
 
     private String domaine;
 
+    private boolean domainVerified;
+
+    private Date domainVerifiedAt;
+
     private EnumPlan plan = EnumPlan.FREE;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -69,6 +73,7 @@ public class Company {
                     ", indicatif=" + indicatif +
                     ", phoneNumber='" + phoneNumber + '\'' +
                     ", domaine='" + domaine + '\'' +
+                    ", domainVerified=" + domainVerified +
                     ", plan=" + plan +
                     ", dateLineFacturePlan=" + dateLineFacturePlan +
                     ", publicKey='" + publicKey + '\'' +
@@ -90,6 +95,7 @@ public class Company {
                     ", indicatif=" + indicatif +
                     ", phoneNumber='" + phoneNumber + '\'' +
                     ", domaine='" + domaine + '\'' +
+                    ", domainVerified=" + domainVerified +
                     ", plan=" + plan +
                     ", dateLineFacturePlan=" + dateLineFacturePlan +
                     ", publicKey='" + publicKey + '\'' +

@@ -72,7 +72,9 @@
                 <span style="margin-top:22px;" th:text="${company.getPlan()}"></span>
                 <div class="container-row">
                     <a class="submit solved" th:href="@{/features}">Change plan</a>
-                    <a type="button" class="submit new" style="margin:15px 0 0 15px;" id="confirmationButtonClosePlan" th:href="@{/api/user/{idCompany}/{idCustomer}/stopSubscribe(idCompany=${company.getId()}, idCustomer=${company.getCustomerId()})}" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}">Stop my subscribe</a>
+                    <form th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}" th:action="@{/api/user/{idCompany}/{idCustomer}/stopSubscribe(idCompany=${company.getId()}, idCustomer=${company.getCustomerId()})}" method="post" id="confirmationFormClosePlan">
+                        <button type="submit" class="submit new" style="margin:15px 0 0 15px;">Stop my subscribe</button>
+                    </form>
                 </div>
             </div>
         </section>
@@ -94,7 +96,11 @@
                                 <td class="iban" th:text="${mandate.getIban()}"></td>
                                 <td class="bic" th:text="${mandate.getBic()}"></td>
                                 <td class="validity" th:text="${mandate.getValidDate()}"></td>
-                                <td class="action center"><a class="submit align_in_container_row new" th:href="@{/api/user/{idCompany}/{idCustomer}/deleteMandate/{idMandate}(idCompany=${company.getId()} ,idCustomer=${mandate.getCustomerId()}, idMandate=${mandate.getMandateId()})}">x</a></td>
+                                <td class="action center">
+                                    <form th:action="@{/api/user/{idCompany}/{idCustomer}/deleteMandate/{idMandate}(idCompany=${company.getId()} ,idCustomer=${mandate.getCustomerId()}, idMandate=${mandate.getMandateId()})}" method="post">
+                                        <button type="submit" class="submit align_in_container_row new">x</button>
+                                    </form>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -118,21 +124,17 @@
     <div th:replace="~{include/footer.html}"></div>
     <script th:inline="javascript">
 
-        const btnStop = document.getElementById('confirmationButtonClosePlan');
+        const formStop = document.getElementById('confirmationFormClosePlan');
         /* Account close plan confirme */
-        btnStop.onclick = function(event) {
-
-
+        if (formStop) {
+            formStop.onsubmit = function(event) {
             // Demander la confirmation de l'utilisateur
-            const url = btnStop.getAttribute("href");
             const confirmation = window.confirm("Êtes-vous sûr de vouloir stopper votre abonnement ?");
 
             // Vérifier la réponse de l'utilisateur
-            if (confirmation) {
-                // Si l'utilisateur a confirmé, joignez l'URL finale
-                window.location.href = url;
-            } else {
+            if (!confirmation) {
                 event.preventDefault();
+            }
             }
         }
     </script>

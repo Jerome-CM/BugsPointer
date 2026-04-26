@@ -4,7 +4,6 @@ import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import com.bugspointer.entity.Company;
@@ -93,7 +92,11 @@ public class Authentication {
     @GetMapping("newUser/{publicKey}")//TODO: ajouter des variables dans l'url pour identifier la company et sécuriser ?
     String getNewUser(@PathVariable("publicKey") String publicKey,  Model model){
         Company company = companyService.getCompanyByPublicKey(publicKey);
+        if (company == null) {
+            return "redirect:/authentication";
+        }
         model.addAttribute("company", company);
+        model.addAttribute("publicKey", publicKey);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/newUser";
     }
@@ -105,6 +108,7 @@ public class Authentication {
                         Model model){
         if (!result.hasErrors()) {
             String companyMail = dto.getMail();
+            dto.setPublicKey(publicKey);
             Response response = companyService.registerDomaine(dto);
             if (response.getStatus().equals(EnumStatus.OK)) {
                 model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey)));
@@ -122,6 +126,22 @@ public class Authentication {
         }
         model.addAttribute("publicKey", publicKey);
         model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey)));
+        return "public/newUser";
+    }
+
+    @PostMapping("newUser/{publicKey}/verify")
+    String verifyNewUserDomain(@PathVariable("publicKey") String publicKey,
+                               Model model){
+        Company company = companyService.getCompanyByPublicKey(publicKey);
+        if (company == null) {
+            return "redirect:/authentication";
+        }
+        Response response = companyService.verifyDomainInstallation(company);
+        model.addAttribute("status", String.valueOf(response.getStatus()));
+        model.addAttribute("notification", response.getMessage());
+        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey)));
+        model.addAttribute("publicKey", publicKey);
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/newUser";
     }
 
@@ -184,13 +204,6 @@ public class Authentication {
         redirectAttributes.addAttribute("publicKey", publicKey);
         redirectAttributes.addAttribute("token", token);
         return "redirect:/resetPassword/{publicKey}/{token}";
-    }
-
-    @GetMapping("/logout")
-    String logout(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        session.invalidate();
-        return "index";
     }
 
     @GetMapping("/denied")

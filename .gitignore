@@ -34,3 +34,11 @@ build/
 
 ### App ###
 /src/main/resources/application.properties
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+secrets/

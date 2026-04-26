@@ -60,11 +60,12 @@ public class ApiFormUser {
     }
 
     @PostMapping("/newCustomer")
-    String createNewCustomer(@Valid @ModelAttribute CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes, Model model) throws MollieException {
+    String createNewCustomer(@Valid @ModelAttribute CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes, Model model, HttpServletRequest request) throws MollieException {
 
         if (!result.hasErrors()) {
 
-            Company company = companyService.getCompanyByPublicKey(customer.getPublicKey());
+            Company company = companyService.getCompanyWithToken(request);
+            customer.setPublicKey(company.getPublicKey());
             if(customer.getPlan().equals(EnumPlan.FREE)){
 
                 // Si le customer demande le même plan qu'il a déjà
@@ -104,9 +105,11 @@ public class ApiFormUser {
     }
 
     @PostMapping("/newMandate")
-    String createMandate(@Valid @ModelAttribute CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes) throws MollieException {
+    String createMandate(@Valid @ModelAttribute CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes, HttpServletRequest request) throws MollieException {
 
         if (!result.hasErrors()) {
+            Company company = companyService.getCompanyWithToken(request);
+            customer.setPublicKey(company.getPublicKey());
             // Iban isn't already find and valid
             if(!customerService.haveAndValidMandateWithIban(customer)) {
                 Response response = paymentService.createMandate(customer);
@@ -147,10 +150,12 @@ public class ApiFormUser {
     }
 
     @GetMapping("newSubscription")
-    String createSubscription(Model model, @ModelAttribute("response") Response response, @ModelAttribute("customer") CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes) throws MollieException {
+    String createSubscription(Model model, @ModelAttribute("response") Response response, @ModelAttribute("customer") CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes, HttpServletRequest request) throws MollieException {
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
 
         if (!result.hasErrors()) {
+            Company company = companyService.getCompanyWithToken(request);
+            customer.setPublicKey(company.getPublicKey());
             Response responseSub = paymentService.createSubscription(response, customer);
             Object content = responseSub.getContent();
 
@@ -194,6 +199,8 @@ public class ApiFormUser {
             if ("annuler".equals(action)){
                 return "redirect:/app/private/dashboard";
             }
+            Company company = companyService.getCompanyWithToken(request);
+            subscription.setPublicKey(company.getPublicKey());
 
             Response response = paymentService.changeSubscription(subscription);
 
@@ -207,25 +214,27 @@ public class ApiFormUser {
         return "redirect:/";
     }
 
-    @GetMapping("/{idCompany}/{idCustomer}/stopSubscribe")
-    public String stopSubscribe(@PathVariable("idCompany") Long idCompany, @PathVariable("idCustomer") String idCustomer, RedirectAttributes redirectAttributes) throws MollieException {
-        Response response = paymentService.returnFreePlan(idCompany, idCustomer);
+    @PostMapping("/{idCompany}/{idCustomer}/stopSubscribe")
+    public String stopSubscribe(@PathVariable("idCompany") Long idCompany, @PathVariable("idCustomer") String idCustomer, RedirectAttributes redirectAttributes, HttpServletRequest request) throws MollieException {
+        Company company = companyService.getCompanyWithToken(request);
+        Response response = paymentService.returnFreePlan(company.getCompanyId(), company.getCustomer() != null ? company.getCustomer().getCustomerId() : null);
         redirectAttributes.addFlashAttribute("notification", response.getMessage());
         redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
         return "redirect:/app/private/account";
     }
 
-    @GetMapping("/{idCompany}/{idCustomer}/deleteMandate/{idMandate}")
-    public String deleteMandate(@PathVariable("idCompany") Long idCompany, @PathVariable("idCustomer") String idCustomer, @PathVariable("idMandate") String idMandate, RedirectAttributes redirectAttributes) throws MollieException {
-        Response response = paymentService.deleteMandate(idCompany, idCustomer, idMandate);
+    @PostMapping("/{idCompany}/{idCustomer}/deleteMandate/{idMandate}")
+    public String deleteMandate(@PathVariable("idCompany") Long idCompany, @PathVariable("idCustomer") String idCustomer, @PathVariable("idMandate") String idMandate, RedirectAttributes redirectAttributes, HttpServletRequest request) throws MollieException {
+        Company company = companyService.getCompanyWithToken(request);
+        Response response = paymentService.deleteMandate(company.getCompanyId(), company.getCustomer() != null ? company.getCustomer().getCustomerId() : null, idMandate);
         redirectAttributes.addFlashAttribute("notification", response.getMessage());
         redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
         return "redirect:/app/private/account";
     }
 
-    @GetMapping("/addDateDownload/{id}")
-    public String addDateDownload(@PathVariable("id") Long id){
-        companyService.addDateForDownload(id);
+    @PostMapping("/addDateDownload/{id}")
+    public String addDateDownload(@PathVariable("id") Long id, HttpServletRequest request){
+        companyService.addDateForDownload(companyService.getCompanyWithToken(request));
         return "public/download";
     }
 

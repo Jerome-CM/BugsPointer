@@ -26,10 +26,15 @@
         function downloadFile(link) {
             // Récupérer l'ID de l'entreprise à partir de l'attribut th:data
             var companyId = link.getAttribute('data-companyId');
+            var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
             // Effectuer l'appel API à votre endpoint en utilisant l'ID de l'entreprise
             fetch('api/user/addDateDownload/' + companyId, {
-                method: 'GET'
+                method: 'POST',
+                headers: {
+                    [csrfHeader]: csrfToken
+                }
             });
         }
     </script>

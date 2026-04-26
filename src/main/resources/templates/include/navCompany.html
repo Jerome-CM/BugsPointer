@@ -12,6 +12,10 @@
         <li class="navCompany-item"><a th:href="@{/documentations}">Documentations</a></li>
         <li class="navCompany-item"><a class="plan" th:href="@{/features}">Offres</a></li>
         <li class="navCompany-item" th:if="${isLoggedIn == false}"><a th:href="@{/authentication}">Connexion</a></li>
-        <li class="navCompany-item" th:if="${isLoggedIn == true}"><a th:href="@{/logout}">Déconnexion</a></li>
+        <li class="navCompany-item" th:if="${isLoggedIn == true}">
+            <form th:action="@{/logout}" method="post">
+                <button type="submit">Déconnexion</button>
+            </form>
+        </li>
     </ul>
 </nav>
