@@ -38,6 +38,8 @@ public class CompanyPreferencesService implements ICompanyPreferences {
         } else {
             dto = modelMapper.map(company, CompanyPreferenceDTO.class);
         }
+        dto.setCompanyPublicKey(company.getPublicKey());
+        dto.setCompanyPhoneNumber(company.getPhoneNumber());
         return dto;
     }
 
@@ -53,7 +55,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
                 preferences.setMailInactivity(dto.isMailInactivity());
                 preferences.setMailNewFeature(dto.isMailNewFeature());
             } else if (action.equals("updateSms")) {
-                if (dto.getCompanyPhoneNumber().isEmpty()){
+                if (dto.getCompanyPhoneNumber() == null || dto.getCompanyPhoneNumber().isEmpty()){
                     preferences.setSmsNewBug(false);
                     preferences.setSmsInactivity(false);
                     preferences.setSmsNewFeature(false);

@@ -70,7 +70,10 @@
                     </div>
 
                     <div class="flex flex-col gap-5 lg:flex-row lg:items-center">
-                        <form class="flex w-full flex-col gap-4 md:flex-row lg:w-9/12" action="#" th:object="${company}" method="post">
+                        <form class="flex w-full flex-col gap-4 md:flex-row lg:w-9/12" action="#" th:action="@{/newUser/{publicKey}(publicKey=${publicKey})}" th:object="${company}" method="post">
+                            <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                                <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                            </div>
                             <label class="w-full md:w-8/12">
                                 <span class="mb-2 block text-sm font-bold text-white/72">Domaine du site</span>
                                 <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{domaine}" id="domaine" placeholder="monsite.fr" th:value="${company.getDomaine()}">
@@ -190,6 +193,9 @@
 
     <div class="popup fixed inset-0 z-[2000] hidden items-center justify-center bg-black/70 px-5 backdrop-blur" id="popup" th:if="${company.getDomaine() == null}">
         <form class="flex w-full max-w-xl flex-col gap-5 rounded-lg border border-pointer-green/25 bg-[#08110D] p-6 shadow-[0_30px_100px_rgba(0,230,118,0.18)]" action="#" id="form-confirmation" th:action="@{/newUser/{publicKey}(publicKey=${publicKey})}" th:object="${company}" method="post">
+            <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+            </div>
             <div>
                 <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Confirmation du domaine</p>
                 <h2 class="mt-2 text-3xl font-black leading-none text-white">Confirmez votre nom de domaine</h2>
@@ -213,7 +219,7 @@
             var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
             var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-            fetch('api/user/addDateDownload/' + companyId, {
+            fetch('/api/user/addDateDownload/' + companyId, {
                 method: 'POST',
                 headers: {
                     [csrfHeader]: csrfToken

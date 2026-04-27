@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -56,11 +57,11 @@ public class ApiFormUser {
             }
         }
 
-        return new RedirectView(dto.getUrl());
+        return new RedirectView(dto.getUrl() != null ? dto.getUrl() : "/");
     }
 
     @PostMapping("/newCustomer")
-    String createNewCustomer(@Valid @ModelAttribute CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes, Model model, HttpServletRequest request) throws MollieException {
+    String createNewCustomer(@Validated(CustomerDTO.Billing.class) @ModelAttribute("customer") CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes, Model model, HttpServletRequest request) throws MollieException {
 
         if (!result.hasErrors()) {
 
@@ -101,11 +102,15 @@ public class ApiFormUser {
             return "redirect:/app/private/recapPayment?product="+customer.getPlan().name();
         }
 
-        return "redirect:/";
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        model.addAttribute("product", customer.getPlan());
+        model.addAttribute("status", "ERROR");
+        model.addAttribute("notification", "Merci de corriger les champs indiqués.");
+        return "private/recapPayment";
     }
 
     @PostMapping("/newMandate")
-    String createMandate(@Valid @ModelAttribute CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes, HttpServletRequest request) throws MollieException {
+    String createMandate(@Validated(CustomerDTO.Mandate.class) @ModelAttribute("customer") CustomerDTO customer, BindingResult result, RedirectAttributes redirectAttributes, Model model, HttpServletRequest request) throws MollieException {
 
         if (!result.hasErrors()) {
             Company company = companyService.getCompanyWithToken(request);
@@ -146,7 +151,10 @@ public class ApiFormUser {
                 return "redirect:/api/user/newSubscription";
             }
         }
-        return "redirect:/app/private/BankAccount";
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        model.addAttribute("status", "ERROR");
+        model.addAttribute("notification", "Merci de corriger les champs indiqués.");
+        return "private/bankAccount";
     }
 
     @GetMapping("newSubscription")
@@ -188,9 +196,10 @@ public class ApiFormUser {
     }
 
     @PostMapping("subscription")
-    String subscription(@Valid @ModelAttribute SubscriptionDTO subscription,
+    String subscription(@Validated(SubscriptionDTO.Change.class) @ModelAttribute("subscription") SubscriptionDTO subscription,
                         BindingResult result,
                         RedirectAttributes redirectAttributes,
+                        Model model,
                         HttpServletRequest request) throws MollieException {
         String action = request.getParameter("action");
         log.info("action : {}", action);
@@ -211,7 +220,10 @@ public class ApiFormUser {
                 return "redirect:/app/private/thanks";
             }
         }
-        return "redirect:/";
+        model.addAttribute("status", "ERROR");
+        model.addAttribute("notification", "Merci de corriger les champs indiqués.");
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "private/confirmSubscription";
     }
 
     @PostMapping("/{idCompany}/{idCustomer}/stopSubscribe")

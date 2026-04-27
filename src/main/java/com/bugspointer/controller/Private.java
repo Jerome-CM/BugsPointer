@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
@@ -73,7 +74,7 @@ public class Private {
     }
 
     @PostMapping("notifications")
-    String updateNotifications(@Valid CompanyPreferenceDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
+    String updateNotifications(@Valid @ModelAttribute("company") CompanyPreferenceDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
         String action = request.getParameter("action");
         log.info("buttonName : {}", action);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
@@ -87,9 +88,11 @@ public class Private {
                 model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());
             }
+        } else {
+            model.addAttribute("status", "ERROR");
+            model.addAttribute("notification", "Merci de corriger les champs indiqués.");
         }
-        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
-        return "redirect:account";
+        return "private/notifications";
     }
 
     @GetMapping("account/delete")
@@ -101,7 +104,7 @@ public class Private {
     }
 
     @PostMapping("account/delete/confirm")
-    String deleteAccount(@Valid AccountDeleteDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
+    String deleteAccount(@Validated(AccountDTO.Delete.class) @ModelAttribute("company") AccountDeleteDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         Company currentCompany = companyService.getCompanyWithToken(request);
         dto.setPublicKey(currentCompany.getPublicKey());
@@ -118,9 +121,17 @@ public class Private {
                 model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());
             }
+        } else {
+            model.addAttribute("status", "ERROR");
+            model.addAttribute("notification", "Merci de saisir votre mot de passe.");
         }
-        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
-        return "private/account";
+        AccountDeleteDTO current = companyService.getAccountDeleteDto(companyService.getCompanyWithToken(request));
+        dto.setMail(current.getMail());
+        dto.setPublicKey(current.getPublicKey());
+        dto.setNbNewBug(current.getNbNewBug());
+        dto.setNbPendingBug(current.getNbPendingBug());
+        dto.setDateLineFacturePlan(current.getDateLineFacturePlan());
+        return "private/deleteAccount";
     }
 
     @GetMapping("account")
@@ -133,7 +144,7 @@ public class Private {
     }
 
     @PostMapping("account/delete")
-    String delete(@Valid AccountDTO dto,
+    String delete(@Valid @ModelAttribute("company") AccountDTO dto,
                   BindingResult result,
                   Model model,
                   HttpServletRequest request) {
@@ -148,7 +159,7 @@ public class Private {
     }
 
     @PostMapping("account")
-    String update(@Valid AccountDTO dto,
+    String update(@Valid @ModelAttribute("company") AccountDTO dto,
                   BindingResult result,
                   Model model,
                   RedirectAttributes redirectAttributes,

@@ -13,10 +13,12 @@ import com.bugspointer.service.implementation.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -50,13 +52,16 @@ public class Authentication {
     }
 
     @PostMapping("/register")
-    String register(@Valid AuthRegisterCompanyDTO dto, BindingResult result, Model model, AuthRegisterCompanyDTO dtoRegister, AuthLoginCompanyDTO dtoLogin){
+    String register(@Valid @ModelAttribute("companyRegister") AuthRegisterCompanyDTO dto,
+                    BindingResult result,
+                    Model model,
+                    AuthLoginCompanyDTO dtoLogin){
+        model.addAttribute("companyLogin", dtoLogin);
 
         if(!result.hasErrors()){
             Response response;
             response = companyService.saveCompany(dto);
             if(response.getStatus() == EnumStatus.OK){
-                model.addAttribute("companyRegister", dtoRegister);
                 model.addAttribute("companyLogin", dtoLogin);
                 model.addAttribute("page", "register");
                 //Mail à modifier pour envoi forcé sinon dto.getMail()
@@ -71,12 +76,13 @@ public class Authentication {
                 model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
                 return "public/registerConfirm";
             } else {
-                model.addAttribute("companyRegister", dtoRegister);
-                model.addAttribute("companyLogin", dtoLogin);
                 model.addAttribute("notification", response.getMessage());
                 model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
             }
+        } else {
+            model.addAttribute("status", "ERROR");
+            model.addAttribute("notification", "Merci de corriger les champs indiqués.");
         }
         return "public/authentication";
     }
@@ -103,7 +109,7 @@ public class Authentication {
 
     @PostMapping("newUser/{publicKey}")
     String registerSite(@PathVariable("publicKey") String publicKey,
-                        @Valid AccountDTO dto,
+                        @Validated(AccountDTO.Domain.class) @ModelAttribute("company") AccountDTO dto,
                         BindingResult result,
                         Model model){
         if (!result.hasErrors()) {
@@ -123,9 +129,18 @@ public class Authentication {
                 model.addAttribute("notification", response.getMessage());
                 model.addAttribute("etat", "error");
             }
+        } else {
+            Company company = companyService.getCompanyByPublicKey(publicKey);
+            AccountDTO current = companyService.getAccountDto(company);
+            dto.setId(current.getId());
+            dto.setMail(current.getMail());
+            dto.setPlan(current.getPlan());
+            dto.setDomainVerified(current.isDomainVerified());
+            dto.setPublicKey(publicKey);
+            model.addAttribute("status", "ERROR");
+            model.addAttribute("notification", "Merci de corriger les champs indiqués.");
         }
         model.addAttribute("publicKey", publicKey);
-        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey)));
         return "public/newUser";
     }
 
@@ -154,7 +169,7 @@ public class Authentication {
     }
 
     @PostMapping("pwLost")
-    String passwordLost(@Valid AccountDTO dto, BindingResult result, Model model){
+    String passwordLost(@Validated(AccountDTO.PasswordLost.class) @ModelAttribute("company") AccountDTO dto, BindingResult result, Model model){
         if(!result.hasErrors()){
             Response response;
             try {
@@ -166,6 +181,9 @@ public class Authentication {
             model.addAttribute("status", String.valueOf(response.getStatus()));
             model.addAttribute("notification", response.getMessage());
             model.addAttribute("etat", "ok");
+        } else {
+            model.addAttribute("status", "ERROR");
+            model.addAttribute("notification", "Merci de saisir un e-mail valide.");
         }
 
         return "public/pwLost";
@@ -188,9 +206,10 @@ public class Authentication {
     @PostMapping("resetPassword/{publicKey}/{token}")
     String resetPassword(@PathVariable("publicKey") String publicKey,
                          @PathVariable("token") String token,
-                         @Valid AccountDTO dto,
+                         @Validated(AccountDTO.ResetPassword.class) @ModelAttribute("company") AccountDTO dto,
                          BindingResult result,
-                         RedirectAttributes redirectAttributes){
+                         RedirectAttributes redirectAttributes,
+                         Model model){
         log.info("token : {}", token);
         if (!result.hasErrors()){
 
@@ -201,9 +220,12 @@ public class Authentication {
                 return "redirect:/authentication";
             }
         }
-        redirectAttributes.addAttribute("publicKey", publicKey);
-        redirectAttributes.addAttribute("token", token);
-        return "redirect:/resetPassword/{publicKey}/{token}";
+        model.addAttribute("publicKey", publicKey);
+        model.addAttribute("token", token);
+        model.addAttribute("status", "ERROR");
+        model.addAttribute("notification", "Merci de corriger les champs indiqués.");
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "public/resetPw";
     }
 
     @GetMapping("/denied")

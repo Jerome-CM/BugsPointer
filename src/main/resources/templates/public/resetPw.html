@@ -55,6 +55,9 @@
                     </div>
 
                     <form class="flex flex-col gap-4" action="#" th:action="@{/resetPassword/{publicKey}/{token}(publicKey=${publicKey}, token=${token})}" th:object="${company}" method="post">
+                        <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                            <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                        </div>
                         <label>
                             <span class="mb-2 block text-sm font-bold text-white/72">Nouveau mot de passe</span>
                             <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" placeholder="Mot de passe">

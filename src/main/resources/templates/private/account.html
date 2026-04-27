@@ -14,6 +14,9 @@
     <div class="container">
         <section>
             <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
+                <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                    <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                </div>
                 <h3>E-mail</h3>
                 <input type="text" th:field="*{mail}" id="mail" name="mail" th:value="${company.getMail()}" placeholder="E-mail">
                 <input type="password" th:field="*{password}" id="password" name="password" placeholder="Password">
@@ -27,6 +30,9 @@
 
         <section>
             <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
+                <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                    <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                </div>
                 <h3>Password</h3>
                 <input type="password" th:field="*{password}" id="actualPassword" placeholder="Actual password">
                 <input type="password" th:field="*{newPassword}" id="newPassword" placeholder="New password">
@@ -58,6 +64,9 @@
 
         <section id="domain">
             <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
+                <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                    <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                </div>
                 <h3>Domaine</h3>
                 <input type="text" th:field="*{domaine}" id="domaine" th:value="${company.getDomaine()}" placeholder="Indiquez le domaine du site contenant la modal de rapport de bug">
                 <input type="password" th:field="*{password}" placeholder="Password">

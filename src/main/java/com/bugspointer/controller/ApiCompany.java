@@ -62,12 +62,17 @@ public class ApiCompany {
     }
 
     @PostMapping("/api/saveFirstReport")
-    public String saveFirstReport(@Valid FirstReportDTO firstReportDTO, BindingResult result){
+    public String saveFirstReport(@Valid @ModelAttribute("firstReportDTO") FirstReportDTO firstReportDTO, BindingResult result, Model model){
         if(!result.hasErrors()){
             log.info("in post : {}", firstReportDTO);
             firstReportService.saveReportSended(firstReportDTO);
+            return "redirect:/app/admin/dashboard";
         }
-        return "/admin/dashboard";
+        model.addAttribute("firstReports", firstReportService.getCandidateForFirstReport());
+        model.addAttribute("secondReports", firstReportService.getCandidateForSecondReport());
+        model.addAttribute("status", "ERROR");
+        model.addAttribute("notification", "Merci de corriger les champs indiqués.");
+        return "admin/dashboard";
     }
 
 

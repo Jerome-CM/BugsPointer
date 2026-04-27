@@ -240,6 +240,28 @@ nav ul li button {
     background-color: var(--color-alert);
 }
 
+.form-errors {
+    display: grid;
+    gap: 6px;
+    width: 100%;
+    margin: 0 0 14px;
+    padding: 12px 14px;
+    border: 1px solid rgba(229, 0, 0, 0.32);
+    border-radius: 8px;
+    color: #ff9b9b;
+    background: rgba(229, 0, 0, 0.08);
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.45;
+}
+
+.field-error {
+    color: #ff8b8b;
+    font-size: 0.85rem;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
 /* Index */
 
 .messageOnNav{

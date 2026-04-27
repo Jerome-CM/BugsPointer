@@ -15,11 +15,14 @@
     <div class="cards cards_detail w40 margin_auto">
         <h3>Conflit d'abonnement</h3><!--TODO: ajouter une protection avec le jwt si publickey est changée ? Pour ne pas permettre le plvt sur un autre compte-->
         <form action="#" th:action="@{/api/user/subscription}" method="post" class="form" th:object="${subscription}">
-            <p class="space">Votre abonnement actuel : <span th:text="${produit.toString()}"></span> Plan pour <span th:text="${subscription.getAmount().getValue()}"></span> € par an
+            <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+            </div>
+            <p class="space" th:if="${subscription.getAmount() != null}">Votre abonnement actuel : <span th:text="${produit.toString()}"></span> Plan pour <span th:text="${subscription.getAmount().getValue()}"></span> € par an
                 <br>
                 Il est valable jusqu'au : <span th:text="${#dates.format(nextPaymentDate, 'dd/MM/yyyy')}"></span>
             </p>
-            <p>Nouvel abonnement choisi : <span th:text="${subscription.getNewPlan().name()}"></span> Plan pour <span th:text="${subscription.getNewPlan().getValeur()}"></span> € par an
+            <p th:if="${subscription.getNewPlan() != null}">Nouvel abonnement choisi : <span th:text="${subscription.getNewPlan().name()}"></span> Plan pour <span th:text="${subscription.getNewPlan().getValeur()}"></span> € par an
             </p>
             <input type="hidden" th:field="*{id}" th:value="${subscription.getId()}" readonly>
             <input type="hidden" th:field="*{mandateId}" th:value="${subscription.getMandateId()}" readonly>

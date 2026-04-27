@@ -43,7 +43,7 @@
                     <form th:if="${bug.getEtatBug().name() != 'IGNORED' && bug.getEtatBug().name() != 'SOLVED'}" th:action="@{/app/private/confirmBug/{id}(id=${bug.getId()})}" method="post">
                         <button type="submit" class="solved" th:text="${bug.getEtatBug().name == 'PENDING' ? 'Résoudre' : 'Confirmer'}">Confirmer</button>
                     </form>
-                    <form th:if="${bug.getEtatBug().name == 'SOLVED' || bug.getEtatBug().name() == 'IGNORED'}" th:action="@{/app/private/confirmBug/{id}(id=${bug.getId()})}" method="post">
+                    <form th:if="${bug.getEtatBug().name() == 'SOLVED' || bug.getEtatBug().name() == 'IGNORED'}" th:action="@{/app/private/confirmBug/{id}(id=${bug.getId()})}" method="post">
                         <button type="submit" class="new">Réouvrir</button>
                     </form>
                     <form th:if="${bug.getEtatBug().name() != 'IGNORED' && bug.getEtatBug().name() != 'SOLVED'}" th:action="@{/app/private/ignoredBug/{id}(id=${bug.getId()})}" method="post">

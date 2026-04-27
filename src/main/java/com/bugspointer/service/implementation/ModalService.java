@@ -52,7 +52,7 @@ public class ModalService implements IModal {
         long timeSeconde = 60;
         boolean wantNewBugNotif = false;
 
-        if (dto.getBot().isEmpty())
+        if (dto.getBot() == null || dto.getBot().isEmpty())
         {
             bot = true;
         } else {

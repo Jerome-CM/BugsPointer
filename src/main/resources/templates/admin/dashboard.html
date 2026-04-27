@@ -16,6 +16,9 @@
             <hr>
             <div class="first-report" th:each="first : ${firstReports}">
                 <form action="#" th:action="@{/api/saveFirstReport}" method="post" th:object="${firstReportDTO}" class="form-first-report">
+                    <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                        <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                    </div>
                     <a target="_blank" th:href="@{${first.domaine}}" th:text="${first.companyName}"></a>
                     First : <input type="checkbox" th:field="*{sendIsChecked}">
                     <input type="text" th:field="*{description}" placeholder="Description du bug signalé">
@@ -30,6 +33,9 @@
             <hr>
             <div class="first-report" th:each="second : ${secondReports}">
                 <form action="#" th:action="@{/api/saveFirstReport}" method="post" th:object="${firstReportDTO}" class="form-first-report">
+                    <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                        <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                    </div>
                     <a target="_blank" th:href="@{${second.domaine}}" th:text="${second.companyName}"></a>
                     Second : <input type="checkbox" th:field="*{sendIsChecked}">
                     <input type="text" th:field="*{description}" placeholder="Description du bug signalé">
