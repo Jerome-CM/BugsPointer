@@ -35,6 +35,15 @@ public class MailService {
     @Value("${mail.password}")
     private String password;
 
+    @Value("${mail.from.noreply:noreply@bugspointer.com}")
+    private String noReplyAddress;
+
+    @Value("${mail.from.contact:contact@bugspointer.com}")
+    private String contactAddress;
+
+    @Value("${mail.from.name:BugsPointer}")
+    private String fromName;
+
     private static final String ADRESSE = "https://bugspointer.com/";
 
     private final BugService bugService;
@@ -44,6 +53,43 @@ public class MailService {
     public MailService(BugService bugService, CustomerService customerService) {
         this.bugService = bugService;
         this.customerService = customerService;
+    }
+
+    private Response sendNoReplyMail(String to, String subject, String htmlContent, String successMessage, String logContext) {
+        try {
+            sendHtmlMail(noReplyAddress, to, subject, htmlContent);
+            log.info("{} sent at : {}", logContext, to);
+            return new Response(EnumStatus.OK, null, successMessage);
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            log.error("Error from mail sender for {} to {} : {}", logContext, to, e.getMessage(), e);
+            return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
+        }
+    }
+
+    private void sendHtmlMail(String from, String to, String subject, String htmlContent) throws MessagingException, UnsupportedEncodingException {
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.starttls.required", "true");
+        properties.put("mail.smtp.ssl.trust", host);
+
+        Authenticator auth = new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, password);
+            }
+        };
+
+        Session session = Session.getInstance(properties, auth);
+        MimeMessage message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(from, fromName));
+        message.setReplyTo(new Address[]{new InternetAddress(contactAddress, fromName)});
+        message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
+        message.setSubject(subject, "UTF-8");
+        message.setContent(htmlContent, "text/html; charset=UTF-8");
+
+        Transport.send(message);
     }
 
     /**
@@ -99,44 +145,13 @@ public class MailService {
                 "   </body>" +
                 "</html>";
 
-
-        // Configuration des propriétés
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.port", port);
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-
-        // Création de l'authentificateur
-        Authenticator auth = new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, password);
-            }
-        };
-
-        // Création de la session
-        Session session = Session.getInstance(properties, auth);
-
-        try {
-            // Création du message
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user, "BugsPointer"));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject, "UTF-8");
-            message.setContent(htmlContent, "text/html; charset=UTF-8");
-
-            // Envoi du message
-            Transport.send(message);
-
-            log.info("Email register sent at : {}", to);
-            return new Response(EnumStatus.OK, null, "Nous vous avons envoyé un e-mail de confirmation à l'adresse : " + to);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            log.error("Error from mail sender : " + e.getMessage());
-            return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        return sendNoReplyMail(
+                to,
+                subject,
+                htmlContent,
+                "Nous vous avons envoyé un e-mail de confirmation à l'adresse : " + to,
+                "Email register"
+        );
     }
 
     /**
@@ -169,44 +184,7 @@ public class MailService {
                         "   </body>" +
                         "</html>";
 
-
-        // Configuration des propriétés
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.port", port);
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-
-        // Création de l'authentificateur
-        Authenticator auth = new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, password);
-            }
-        };
-
-        // Création de la session
-        Session session = Session.getInstance(properties, auth);
-
-        try {
-            // Création du message
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user, "BugsPointer"));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject, "UTF-8");
-            message.setContent(htmlContent, "text/html; charset=UTF-8");
-
-            // Envoi du message
-            Transport.send(message);
-
-
-            log.info("email new bug sent at : {}", to);
-            return new Response(EnumStatus.OK, null, "Mail gratuit avec détails envoyé");
-
-        } catch (MessagingException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-            log.info("error from mail sender : " + e.getMessage());
-            return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
-        }
+        return sendNoReplyMail(to, subject, htmlContent, "Mail gratuit avec détails envoyé", "Email new bug detail");
     }
 
     /**
@@ -238,45 +216,7 @@ public class MailService {
                         "   </body>" +
                         "</html>";
 
-
-        // Configuration des propriétés
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.port", port);
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-
-        // Création de l'authentificateur
-        Authenticator auth = new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, password);
-            }
-        };
-
-        // Création de la session
-        Session session = Session.getInstance(properties, auth);
-
-        try {
-            // Création du message
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user, "BugsPointer"));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject, "UTF-8");
-            message.setContent(htmlContent, "text/html; charset=UTF-8");
-
-            // Envoi du message
-            Transport.send(message);
-
-            log.info("email new bug sent at : {}", to);
-            return new Response(EnumStatus.OK, null, "Mail gratuit sans détails envoyé");
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            log.info("error from mail sender : " + e.getMessage());
-            return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        return sendNoReplyMail(to, subject, htmlContent, "Mail gratuit sans détails envoyé", "Email new bug no detail");
     }
 
     public Response sendMailLostPassword(String to, String publicKey, String token) {
@@ -306,44 +246,13 @@ public class MailService {
                         "   </body>" +
                         "</html>";
 
-
-        // Configuration des propriétés
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.port", port);
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-
-        // Création de l'authentificateur
-        Authenticator auth = new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, password);
-            }
-        };
-
-        // Création de la session
-        Session session = Session.getInstance(properties, auth);
-
-        try {
-            // Création du message
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user, "BugsPointer"));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject, "UTF-8");
-            message.setContent(htmlContent, "text/html; charset=UTF-8");
-
-            // Envoi du message
-            Transport.send(message);
-
-            log.info("email reset password sent at : {}", to);
-            return new Response(EnumStatus.OK, null, "Un mail valable 15 minutes pour réinitialiser votre mot de passe vient de vous êtes envoyé");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            log.info("error from mail sender : " + e.getMessage());
-            return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        return sendNoReplyMail(
+                to,
+                subject,
+                htmlContent,
+                "Un mail valable 15 minutes pour réinitialiser votre mot de passe vient de vous êtes envoyé",
+                "Email reset password"
+        );
     }
 
     public Response sendMailTest(String to, Bug bugTest) {
@@ -456,46 +365,7 @@ public class MailService {
                         "  </body>" +
                         "</html>";
 
-
-        // Configuration des propriétés
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.port", port);
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-
-        // Création de l'authentificateur
-        Authenticator auth = new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, password);
-            }
-        };
-
-        // Création de la session
-        Session session = Session.getInstance(properties, auth);
-
-        try {
-            // Création du message
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user, "BugsPointer"));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject, "UTF-8");
-            message.setContent(htmlContent, "text/html; charset=UTF-8");
-
-            // Envoi du message
-            Transport.send(message);
-
-
-            log.info("email new bug sent at : {}", to);
-            return new Response(EnumStatus.OK, null, "Mail avec le bug sur page de test envoyé");
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            log.info("error from mail sender : " + e.getMessage());
-            return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        return sendNoReplyMail(to, subject, htmlContent, "Mail avec le bug sur page de test envoyé", "Email test report");
     }
 
     public Response sendMailNewMandate(CustomerDTO customer) throws MollieException {
@@ -546,44 +416,13 @@ public class MailService {
                             "   </body>" +
                             "</html>";
 
-
-            // Configuration des propriétés
-            Properties properties = new Properties();
-            properties.put("mail.smtp.host", host);
-            properties.put("mail.smtp.port", port);
-            properties.put("mail.smtp.auth", "true");
-            properties.put("mail.smtp.starttls.enable", "true");
-
-            // Création de l'authentificateur
-            Authenticator auth = new Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(user, password);
-                }
-            };
-
-            // Création de la session
-            Session session = Session.getInstance(properties, auth);
-
-            try {
-                // Création du message
-                MimeMessage message = new MimeMessage(session);
-                message.setFrom(new InternetAddress(user, "BugsPointer"));
-                message.setRecipient(Message.RecipientType.TO, new InternetAddress(customer.getMail()));
-                message.setSubject(subject, "UTF-8");
-                message.setContent(htmlContent, "text/html; charset=UTF-8");
-
-                // Envoi du message
-                Transport.send(message);
-
-                log.info("email details mandate sent at : {}", customer.getMail());
-                return new Response(EnumStatus.OK, null, "Détail du mandat envoyer à " + customer.getMail());
-            } catch (MessagingException e) {
-                e.printStackTrace();
-                log.error("error from mail sender mandate details to : " + e.getMessage());
-                return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
+            return sendNoReplyMail(
+                    customer.getMail(),
+                    subject,
+                    htmlContent,
+                    "Détail du mandat envoyer à " + customer.getMail(),
+                    "Email details mandate"
+            );
         }
         log.error("error from mail sender mandate details to {}", customer.getCompanyName());
         return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
@@ -608,44 +447,7 @@ public class MailService {
                         "   </body>" +
                         "</html>";
 
-
-        // Configuration des propriétés
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.port", port);
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-
-        // Création de l'authentificateur
-        Authenticator auth = new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, password);
-            }
-        };
-
-        // Création de la session
-        Session session = Session.getInstance(properties, auth);
-
-        try {
-            // Création du message
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user, "BugsPointer"));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(mail));
-            message.setSubject(subject, "UTF-8");
-            message.setContent(htmlContent, "text/html; charset=UTF-8");
-
-            // Envoi du message
-            Transport.send(message);
-
-            log.info("email new subscribe sent at : {}", mail);
-            return new Response(EnumStatus.OK, null, "Votre souscription a bien été prise en compte, merci");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            log.info("error from mail sender : " + e.getMessage());
-            return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        return sendNoReplyMail(mail, subject, htmlContent, "Votre souscription a bien été prise en compte, merci", "Email new subscribe");
     }
 
 
@@ -686,45 +488,7 @@ public class MailService {
                         "    </body>" +
                         "</html>";
 
-
-        // Configuration des propriétés
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.port", port);
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-
-        // Création de l'authentificateur
-        Authenticator auth = new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, password);
-            }
-        };
-
-        // Création de la session
-        Session session = Session.getInstance(properties, auth);
-
-        try {
-            // Création du message
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user, "BugsPointer"));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(mail));
-            message.setSubject(subject, "UTF-8");
-            message.setContent(htmlContent, "text/html; charset=UTF-8");
-
-            // Envoi du message
-            Transport.send(message);
-
-            log.info("email new bug report sent at : {}", mail);
-            return new Response(EnumStatus.OK, null, "");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            log.info("error from mail sender : " + e.getMessage());
-            return new Response(EnumStatus.ERROR, null, "Oups, il y a eu une erreur !");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        return sendNoReplyMail(mail, subject, htmlContent, "", "Email new bug report");
     }
 
 }
-

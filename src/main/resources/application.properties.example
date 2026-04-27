@@ -24,6 +24,9 @@ mail.smtp=${MAIL_SMTP}
 mail.port=${MAIL_PORT:587}
 mail.user=${MAIL_USER}
 mail.password=${MAIL_PASSWORD}
+mail.from.noreply=${MAIL_FROM_NOREPLY:noreply@bugspointer.com}
+mail.from.contact=${MAIL_FROM_CONTACT:contact@bugspointer.com}
+mail.from.name=${MAIL_FROM_NAME:BugsPointer}
 
 ################### SSL Configuration ##########################
 server.ssl.enabled=${SERVER_SSL_ENABLED:false}
