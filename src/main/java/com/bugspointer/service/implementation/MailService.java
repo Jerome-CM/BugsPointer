@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Properties;
@@ -55,6 +57,133 @@ public class MailService {
         this.customerService = customerService;
     }
 
+    private String buildEmail(String preheader, String eyebrow, String title, String bodyContent, String buttonLabel, String buttonUrl, String footerNote) {
+        String safePreheader = escapeHtml(preheader);
+        String safeEyebrow = escapeHtml(eyebrow);
+        String safeTitle = escapeHtml(title);
+        String button = "";
+        String linkFallback = "";
+        String note = "";
+
+        if (buttonLabel != null && buttonUrl != null) {
+            String safeButtonLabel = escapeHtml(buttonLabel);
+            String safeButtonUrl = escapeHtml(buttonUrl);
+            button =
+                    "<tr><td align='left' style='padding:10px 0 8px 0;'>" +
+                    "<table role='presentation' border='0' cellpadding='0' cellspacing='0'><tr>" +
+                    "<td bgcolor='#00E676' style='border-radius:8px;'>" +
+                    "<a href='" + safeButtonUrl + "' target='_blank' style='display:inline-block;padding:14px 20px;border-radius:8px;background-color:#00E676;color:#08110D;font-family:Arial,sans-serif;font-size:15px;font-weight:bold;line-height:20px;text-decoration:none;'>" + safeButtonLabel + "</a>" +
+                    "</td>" +
+                    "</tr></table>" +
+                    "</td></tr>";
+            linkFallback =
+                    "<tr><td style='padding:16px 0 0 0;color:#6B7280;font-family:Arial,sans-serif;font-size:12px;line-height:18px;'>" +
+                    "Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br>" +
+                    "<a href='" + safeButtonUrl + "' target='_blank' style='color:#0F8F54;text-decoration:underline;word-break:break-all;'>" + safeButtonUrl + "</a>" +
+                    "</td></tr>";
+        }
+
+        if (footerNote != null && !footerNote.trim().isEmpty()) {
+            note =
+                    "<tr><td style='padding:18px 0 0 0;color:#6B7280;font-family:Arial,sans-serif;font-size:12px;line-height:18px;'>" +
+                    escapeHtml(footerNote) +
+                    "</td></tr>";
+        }
+
+        return "<!doctype html>" +
+                "<html><head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>" +
+                "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
+                "<meta name='x-apple-disable-message-reformatting'>" +
+                "<title>" + safeTitle + "</title></head>" +
+                "<body style='margin:0;padding:0;background-color:#F3F7F4;'>" +
+                "<div style='display:none;max-height:0;overflow:hidden;color:#F3F7F4;opacity:0;'>" + safePreheader + "</div>" +
+                "<table role='presentation' width='100%' border='0' cellpadding='0' cellspacing='0' style='background-color:#F3F7F4;'>" +
+                "<tr><td align='center' style='padding:28px 12px;'>" +
+                "<table role='presentation' width='100%' border='0' cellpadding='0' cellspacing='0' style='width:100%;max-width:640px;background-color:#FFFFFF;border:1px solid #DDE7E0;border-radius:12px;'>" +
+                "<tr><td style='padding:28px 28px 8px 28px;'>" +
+                "<table role='presentation' width='100%' border='0' cellpadding='0' cellspacing='0'>" +
+                "<tr><td style='color:#08110D;font-family:Arial,sans-serif;font-size:20px;font-weight:bold;line-height:24px;'>BugsPointer</td>" +
+                "<td align='right' style='color:#0F8F54;font-family:Arial,sans-serif;font-size:12px;font-weight:bold;line-height:18px;text-transform:uppercase;'>" + safeEyebrow + "</td></tr>" +
+                "</table>" +
+                "</td></tr>" +
+                "<tr><td style='padding:18px 28px 0 28px;'>" +
+                "<h1 style='margin:0;color:#08110D;font-family:Arial,sans-serif;font-size:26px;font-weight:bold;line-height:32px;'>" + safeTitle + "</h1>" +
+                "</td></tr>" +
+                "<tr><td style='padding:18px 28px 28px 28px;color:#26352E;font-family:Arial,sans-serif;font-size:15px;line-height:24px;'>" +
+                bodyContent +
+                "<table role='presentation' width='100%' border='0' cellpadding='0' cellspacing='0'>" +
+                button +
+                linkFallback +
+                note +
+                "</table>" +
+                "</td></tr>" +
+                "</table>" +
+                "<table role='presentation' width='100%' border='0' cellpadding='0' cellspacing='0' style='width:100%;max-width:640px;'>" +
+                "<tr><td align='center' style='padding:16px 8px 0 8px;color:#6B7280;font-family:Arial,sans-serif;font-size:12px;line-height:18px;'>" +
+                "Email transactionnel envoyé par BugsPointer. Contact : " + escapeHtml(contactAddress) +
+                "</td></tr></table>" +
+                "</td></tr></table>" +
+                "</body></html>";
+    }
+
+    private String paragraph(String content) {
+        return "<p style='margin:0 0 14px 0;'>" + escapeHtml(content) + "</p>";
+    }
+
+    private String rawParagraph(String content) {
+        return "<p style='margin:0 0 14px 0;'>" + content + "</p>";
+    }
+
+    private String detailsTable(String[][] rows) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<table role='presentation' width='100%' border='0' cellpadding='0' cellspacing='0' style='margin:10px 0 18px 0;border:1px solid #DDE7E0;border-radius:8px;'>");
+        for (String[] row : rows) {
+            builder.append("<tr>");
+            builder.append("<td style='padding:10px 12px;border-bottom:1px solid #EEF3EF;color:#536158;font-family:Arial,sans-serif;font-size:13px;line-height:20px;width:38%;'>").append(escapeHtml(row[0])).append("</td>");
+            builder.append("<td style='padding:10px 12px;border-bottom:1px solid #EEF3EF;color:#08110D;font-family:Arial,sans-serif;font-size:13px;line-height:20px;word-break:break-word;'>").append(escapeHtml(row[1])).append("</td>");
+            builder.append("</tr>");
+        }
+        builder.append("</table>");
+        return builder.toString();
+    }
+
+    private String codeBlock(String content) {
+        return "<pre style='margin:0 0 16px 0;padding:12px;white-space:pre-wrap;word-break:break-word;background-color:#F6F8F7;border:1px solid #DDE7E0;border-radius:8px;color:#26352E;font-family:Consolas,Monaco,monospace;font-size:12px;line-height:18px;'>" + escapeHtml(content) + "</pre>";
+    }
+
+    private String emailUrl(String path) {
+        return ADRESSE + path;
+    }
+
+    private String escapeHtml(String value) {
+        if (value == null) {
+            return "";
+        }
+        return value
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
+    }
+
+    private String htmlToText(String htmlContent) {
+        return htmlContent
+                .replaceAll("(?i)<br\\s*/?>", "\n")
+                .replaceAll("(?i)</p>", "\n")
+                .replaceAll("(?i)</h1>", "\n")
+                .replaceAll("<[^>]+>", " ")
+                .replace("&nbsp;", " ")
+                .replace("&amp;", "&")
+                .replace("&lt;", "<")
+                .replace("&gt;", ">")
+                .replace("&quot;", "\"")
+                .replace("&#39;", "'")
+                .replaceAll("[ \\t\\x0B\\f\\r]+", " ")
+                .replaceAll("\\n\\s+", "\n")
+                .trim();
+    }
+
     private Response sendNoReplyMail(String to, String subject, String htmlContent, String successMessage, String logContext) {
         try {
             sendHtmlMail(noReplyAddress, to, subject, htmlContent);
@@ -87,7 +216,15 @@ public class MailService {
         message.setReplyTo(new Address[]{new InternetAddress(contactAddress, fromName)});
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
         message.setSubject(subject, "UTF-8");
-        message.setContent(htmlContent, "text/html; charset=UTF-8");
+
+        MimeMultipart multipart = new MimeMultipart("alternative");
+        MimeBodyPart textPart = new MimeBodyPart();
+        textPart.setText(htmlToText(htmlContent), "UTF-8");
+        MimeBodyPart htmlPart = new MimeBodyPart();
+        htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
+        multipart.addBodyPart(textPart);
+        multipart.addBodyPart(htmlPart);
+        message.setContent(multipart);
 
         Transport.send(message);
     }
@@ -103,47 +240,18 @@ public class MailService {
         // Paramètres du destinataire
         String subject = "BugsPointer - Confirmer votre inscription";
 
-        // Contenu HTML de l'email
-        String htmlContent =
-                "<html>" +
-                "   <body>" +
-                "       " +
-                "       " +
-                "       <table width='100%' align='center' border='0' cellpadding='0' cellspacing='0'>" +
-                "           <tr>" +
-                "               <td align='center' style='padding: 10px;'>" +
-                "                   <h2>Confirmation</h2>" +
-                "               </td>" +
-                "           </tr>" +
-                "           <tr style='line-height:20px;'><td></td></tr>" +
-                "           <tr>" +
-                "               <td align='center' style='padding: 10px;'>" +
-                "                   <p>Votre tableau de bord tout neuf est entrain d'être finalisé, mais nous avons besoin de votre aide</p>" +
-                "               </td>" +
-                "           </tr>" +
-                "           <tr style='line-height:20px;'><td></td></tr>" +
-                "           <tr>" +
-                "               <td align='center' style='padding: 10px;'>" +
-                "                  <p>Afin de confirmer votre inscription, merci de cliquer sur le bouton ci-dessous:</p>" +
-                "               </td>" +
-                "           </tr>" +
-                "           <tr style='line-height:30px;'><td></td></tr>" +
-                "           <tr>" +
-                "               <td align='center' style='padding: 10px;'>" +
-                "                   <a href='"+ ADRESSE +"confirmRegister/"+ publicKey + "' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Confirmer</a>" +
-                "               </td>" +
-                "           </tr>" +
-                "        <tr style='line-height:30px;'><td></td></tr>" +
-                "        <tr><td align='center'>ou sur ce lien</td></tr>" +
-                "        <tr style='line-height:20px;'><td></td></tr>" +
-                "           <tr>" +
-                "               <td align='center' style='padding: 10px;'>" +
-                "                   <p><a href='"+ ADRESSE +"confirmRegister/"+ publicKey + "'>" + ADRESSE + "confirmRegister/" + publicKey + "</a></p>" +
-                "               </td>" +
-                "           </tr>" +
-                "       </table>" +
-                "   </body>" +
-                "</html>";
+        String confirmationUrl = emailUrl("confirmRegister/" + publicKey);
+        String htmlContent = buildEmail(
+                "Confirmez votre adresse e-mail pour activer votre espace BugsPointer.",
+                "Activation",
+                "Confirmez votre inscription",
+                paragraph("Bonjour,") +
+                        paragraph("Votre compte BugsPointer est presque prêt. Pour l'activer, confirmez simplement votre adresse e-mail.") +
+                        paragraph("Ce contrôle protège votre espace et garantit que les prochains rapports de bugs arriveront bien au bon endroit."),
+                "Confirmer mon inscription",
+                confirmationUrl,
+                "Si vous n'êtes pas à l'origine de cette inscription, vous pouvez ignorer ce message."
+        );
 
         return sendNoReplyMail(
                 to,
@@ -163,26 +271,22 @@ public class MailService {
     public Response sendMailNewBugDetail(String to, Bug newBug) {
 
         // Paramètres du destinataire
-        String subject = "Bugspointer - Nouveau Bug";
+        String subject = "BugsPointer - Nouveau bug";
 
-        // Contenu HTML de l'email
-        String htmlContent =
-                "<html>" +
-                        "   <body>" +
-                        "       <h1>Nouveau Bug</h1><br>" +
-                        "       <p>Un utilisateur vient de déclarer un nouveau bug sur votre site :" +
-                        "       <p>URL concernée : "+ newBug.getUrl() +"</p><br>" +
-                        "       <p>Description du bug : <br>" + newBug.getDescription() +"</p><br>" +
-                        "       <p>Afin d'avoir plus de détails sur ce bug, vous pouvez changer votre abonnement en cliquant sur le bouton ci-dessous :" +
-                        "       <table border='0' cellpadding='0' cellspacing='0' >" +
-                        "           <tr>" +
-                        "               <td align='center' style='padding: 10px;'>" +
-                        "                   <a href='" + ADRESSE + "features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
-                        "               </td>" +
-                        "           </tr>" +
-                        "       </table>" +
-                        "   </body>" +
-                        "</html>";
+        String htmlContent = buildEmail(
+                "Un nouveau bug vient d'être signalé sur votre site.",
+                "Nouveau rapport",
+                "Nouveau bug signalé",
+                paragraph("Un utilisateur vient de déclarer un nouveau bug sur votre site.") +
+                        detailsTable(new String[][]{
+                                {"URL concernée", newBug.getUrl()},
+                                {"Description", newBug.getDescription()}
+                        }) +
+                        paragraph("Pour accéder aux détails complets et centraliser vos rapports dans le dashboard, vous pouvez découvrir le plan Target."),
+                "Voir les fonctionnalités",
+                emailUrl("features/"),
+                null
+        );
 
         return sendNoReplyMail(to, subject, htmlContent, "Mail gratuit avec détails envoyé", "Email new bug detail");
     }
@@ -196,25 +300,18 @@ public class MailService {
 
 
         // Paramètres du destinataire
-        String subject = "Bugspointer - Nouveau Bug";
+        String subject = "BugsPointer - Nouveau bug";
 
-        // Contenu HTML de l'email
-        String htmlContent =
-                "<html>" +
-                        "   <body>" +
-                        "       <h1>Nouveau Bug</h1><br>" +
-                        "       <p>Un utilisateur vient de déclarer un nouveau bug sur votre site " +
-                        "       <p>Malheureusement, vous avez atteint la limite gratuite d'un rapport de bug tout les 30 jours</p><br>" +
-                        "       <p>Changer d'offre afin de voir toutes les informations sur ce bug :" +
-                        "       <table border='0' cellpadding='0' cellspacing='0' >" +
-                        "           <tr>" +
-                        "               <td align='center' style='padding: 10px;'>" +
-                        "                   <a href='"+ ADRESSE +"features/' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Voir en détail</a>" +
-                        "               </td>" +
-                        "           </tr>" +
-                        "       </table>" +
-                        "   </body>" +
-                        "</html>";
+        String htmlContent = buildEmail(
+                "Un nouveau bug a été signalé, mais votre limite gratuite est atteinte.",
+                "Nouveau rapport",
+                "Nouveau bug signalé",
+                paragraph("Un utilisateur vient de déclarer un nouveau bug sur votre site.") +
+                        paragraph("Votre plan gratuit inclut un rapport détaillé tous les 30 jours. Pour voir toutes les informations de ce nouveau signalement, passez au plan Target."),
+                "Voir les détails du plan",
+                emailUrl("features/"),
+                null
+        );
 
         return sendNoReplyMail(to, subject, htmlContent, "Mail gratuit sans détails envoyé", "Email new bug no detail");
     }
@@ -222,29 +319,20 @@ public class MailService {
     public Response sendMailLostPassword(String to, String publicKey, String token) {
 
         // Paramètres du destinataire
-        String subject = "Bugspointer - Réinitisation mot de passe";
+        String subject = "BugsPointer - Réinitialisation du mot de passe";
 
-        // Contenu HTML de l'email
-        String htmlContent =
-                "<html>" +
-                        "   <body>" +
-                        "       <h1>Réinitialiser le mot de passe</h1><br>" +
-                        "       <p>Bonjour,<br> " +
-                        "       <p>Vous avez demandé à réinitialiser votre mot de passe.</p><br>" +
-                        "       <p>Choisissez en un autre en cliquant sur le bouton, ci-dessous:" +
-                        "       <table border='0' cellpadding='0' cellspacing='0' >" +
-                        "           <tr>" +
-                        "               <td align='center' style='padding: 10px;'>" +
-                        "                   <a href='"+ ADRESSE +"resetPassword/"+ publicKey + "?token=" + token + "' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Réinitialiser mon mot de passe</a>" +
-                        "               </td>" +
-                        "           </tr>" +
-                        "       </table>" +
-                        "       <p>Ou cliquer sur ce lien : </p>" +
-                        "       <a target='_blank' href='"+ ADRESSE +"resetPassword/"+ publicKey + "?token=" + token + "'>"+ ADRESSE +"resetPassword/"+ publicKey +"</a>" +
-                        "       <br>" +
-                        "       <p>Si vous n'avez pas demandé un nouveau mot de passe, veuillez ignorer ce message" +
-                        "   </body>" +
-                        "</html>";
+        String resetUrl = emailUrl("resetPassword/" + publicKey + "/" + token);
+        String htmlContent = buildEmail(
+                "Votre lien de réinitialisation BugsPointer est valable 15 minutes.",
+                "Sécurité",
+                "Réinitialisez votre mot de passe",
+                paragraph("Bonjour,") +
+                        paragraph("Vous avez demandé à réinitialiser le mot de passe de votre compte BugsPointer. Ce lien est valable 15 minutes.") +
+                        paragraph("Choisissez un nouveau mot de passe en utilisant le bouton ci-dessous."),
+                "Réinitialiser mon mot de passe",
+                resetUrl,
+                "Si vous n'avez pas demandé cette réinitialisation, vous pouvez ignorer ce message."
+        );
 
         return sendNoReplyMail(
                 to,
@@ -259,111 +347,30 @@ public class MailService {
 
 
         // Paramètres du destinataire
-        String subject = "Bugspointer - Votre rapport de la page de test";
+        String subject = "BugsPointer - Votre rapport de la page de test";
 
-        // Contenu HTML de l'email
-        String htmlContent =
-                "<html style='font-size:16px'>" +
-                        "  <body>" +
-                        "    <h1> Améliorez votre site web avec Bugspointer - Obtenez des détails approfondis sur vos rapports de bugs ! </h1>" +
-                        "    <p>Cher utilisateur de Bugspointer, <br>" +
-                        "    Nous avons bien reçu votre rapport de bug depuis la page de test de notre site bugspointer.com, et nous tenons à vous remercier pour votre intérêt</p><br><br>" +
-                        "      <table width='100%' align='center'>" +
-                        /*"        <thead>" +
-                        "        <tr>" +
-                        "          <th>Voici un aperçu de ce que vous obtiendrez pour une utilisation gratuite :</th>" +
-                        "          </tr>" +
-                        "        </thead>" +*/
-                        "        <tbody>" +
-                        "        <tr>" +
-                        "          <td>" +
-                        "            <h1>Version gratuite : Nouveau bug</h1><br>" +
-                        "            <p>Un utilisateur vient de déclarer un nouveau bug sur votre site " +
-                        "            <p>URL concernée : "+ bugTest.getUrl() +"</p><br>" +
-                        "            <p>Description du bug : <br>" + bugTest.getDescription() +"</p><br>" +
-                        "            <p>Afin d'avoir plus d'informations sur ce bug, vous pouvez changer votre abonnement en cliquant sur le bouton ci-dessous:" +
-                        "            <table border='0' cellpadding='0' cellspacing='0' align='center'>" +
-                        "              <tr>" +
-                        "                <td align='center' style='padding: 10px;'>" +
-                        "                  <a href='"+ ADRESSE +"features' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Je veux en voir plus</a>" +
-                        "                </td>" +
-                        "              </tr>" +
-                        "            </table>" +
-                        "          </td>" +
-                        "        </tr>" +
-                        "        <tr>" +
-                        "            <tr>" +
-                        "               <td>" +
-                        "                   <h1>Version payante : Nouveau bug</h1>" +
-                        "                   <table>" +
-                        "                       <tr>" +
-                                "                <th width='170px' text-align='right'>URL concernée : </th>" +
-                                "                <td>"+ bugTest.getUrl() +"</td>" +
-                                "              </tr>" +
-                                "              <tr>" +
-                                "                <th width='170px' text-align='right'>Date du rapport : </th>" +
-                                "                <td>"+ Utility.dateFormator(bugTest.getDateCreation(), "dd/MM/yyyy HH:mm:ss") +"</td>" +
-                                "              </tr>" +
-                                "              <tr>" +
-                                "                <th width='170px' text-align='right'>Description du bug : </th>" +
-                                "                <td>" + bugTest.getDescription() +"</td>" +
-                                "              </tr>" +
-                                "              <tr>" +
-                                "                <th width='170px' text-align='right'>OS utilisateur : </th>" +
-                                "                <td>"  + bugTest.getOs() +"</td>" +
-                                "              </tr>" +
-                                "              <tr>" +
-                                "                <th width='170px' text-align='right'>Navigateur : </th>" +
-                                "                <td>"  + bugTest.getBrowser() +"</td>" +
-                                "              </tr>" +
-                                "              <tr>" +
-                                "                <th width='170px' text-align='right'>Taille de l'écran : </th>" +
-                                "                <td>"  + bugTest.getScreenSize() +"</td>" +
-                                "              </tr>" +
-                                "              <tr>" +
-                                "               <th colspan=2>La balise pointé par vos soins est maintenant identifiable par la classe : bugspointer-pointed-balise</th>" +
-                                "              </tr>" +
-                                "              <tr>" +
-                                "                <th width='170px' text-align='right'>Code HTML sélectionné : </th>" +
-                                "                <td><pre><code>"  + bugService.codeBlockFormatter(bugTest.getCodeLocation()) +"</code></pre></td>" +
-                                "              </tr>" +
-                                "            </table>" +
-                                "            <p>Imaginez la valeur que vous pourriez obtenir en ayant accès à ces détails précis pour tous vos rapports de bugs. Notre offre payante vous permettra de prendre des décisions éclairées, d'améliorer rapidement votre site et de fournir une expérience utilisateur exceptionnelle. <br><br>" +
-                                "            Vous pouvez également consulter votre Dashboard personnalisé pour avoir une vue d'ensemble complète de tous vos rapports de bugs et de leurs détails. C'est un outil puissant qui vous aidera à suivre les progrès de résolution des problèmes." +
-                                "            <table align='center' border='0' cellpadding='0' cellspacing='0' >" +
-                                "              <tr>" +
-                                "                <td align='center' style='padding: 10px;'>" +
-                                "                  <a href='"+ ADRESSE +"authentication' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: orange;'>Voir mon Dashboard</a>" +
-                                "                </td>" +
-                                "              </tr><br><br>" +
-                                "              <tr>" +
-                                "               <th>Merci d'avoir testé notre application, aidez-nous à nous améliorer encore plus en évaluant nos services grâce au bouton ci-dessous : </th>" +
-                                "              </tr>" +
-                                "            </table>" +
-                                "          </td>" +
-                        "               </tr>" +
-
-                        "                  <tr>" +
-                        "                   <td>" +
-                        /*"                       <table border='0' cellpadding='0' cellspacing='0' >" +*/
-                        "                       <tr>" +
-                        "                       <td align='center' style='padding: 10px'>" +
-                        "                           <a href='"+ ADRESSE +"pollUser' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 18px; color: white; text-decoration: none; background-color: #00E676;' box-shadow='0 0 5px lightgrey'>Donner mon avis</a>" +
-                        "                       </td>" +
-                        "                   </tr>" +
-/*                        "            </table>" +*/
-                        "        <tr>" +
-                        "         <td> " +
-                    "               <p>Si vous avez des questions ou avez besoin d'une assistance supplémentaire, n'hésitez pas à nous contacter. Notre équipe est là pour vous aider.\n" +
-                    "               <br><br>" +
-                    "               Cordialement,<br>" +
-                    "               L'équipe Bugspointer</p>" +
-                        "         </td>" +
-                        "        </tr>" +
-                        "       </tbody>" +
-                        "      </table>" +
-                        "  </body>" +
-                        "</html>";
+        String htmlContent = buildEmail(
+                "Votre rapport de test BugsPointer a bien été reçu.",
+                "Page de test",
+                "Votre rapport de test est prêt",
+                paragraph("Bonjour,") +
+                        paragraph("Nous avons bien reçu le rapport envoyé depuis la page de test. Voici un aperçu du niveau de détail disponible dans BugsPointer.") +
+                        detailsTable(new String[][]{
+                                {"URL concernée", bugTest.getUrl()},
+                                {"Date du rapport", Utility.dateFormator(bugTest.getDateCreation(), "dd/MM/yyyy HH:mm:ss")},
+                                {"Description", bugTest.getDescription()},
+                                {"OS utilisateur", bugTest.getOs()},
+                                {"Navigateur", bugTest.getBrowser()},
+                                {"Taille de l'écran", bugTest.getScreenSize()}
+                        }) +
+                        paragraph("La balise pointée est identifiable avec la classe bugspointer-pointed-balise.") +
+                        rawParagraph("<strong style='color:#08110D;'>Code HTML sélectionné</strong>") +
+                        codeBlock(bugService.codeBlockFormatter(bugTest.getCodeLocation())) +
+                        paragraph("Le dashboard vous permet de retrouver ces informations pour chaque signalement et de suivre leur résolution au fil du temps."),
+                "Voir mon dashboard",
+                emailUrl("authentication"),
+                "Merci d'avoir testé BugsPointer. Vous pouvez aussi nous envoyer votre avis depuis " + emailUrl("pollUser") + "."
+        );
 
         return sendNoReplyMail(to, subject, htmlContent, "Mail avec le bug sur page de test envoyé", "Email test report");
     }
@@ -376,45 +383,27 @@ public class MailService {
         if(contentData.get("status").equals("OK")) {
 
             // Paramètres du destinataire
-            String subject = "Bugspointer - Mandat de prélèvement SEPA";
+            String subject = "BugsPointer - Mandat de prélèvement SEPA";
 
-            // Contenu HTML de l'email
-            String htmlContent =
-                    "<html>" +
-                            "   <body>" +
-                            "       <h1>Confirmation mandat SEPA</h1><br>" +
-                            "       <p>Bonjour,<br> " +
-                            "       <p>Nous vous confirmons le mandat de prélèvement que vous venez de signer sur Bugspointer</p><br>" +
-                            "       <p>Voici le détail :" +
-                            "       <table border='0' cellpadding='0' cellspacing='0' >" +
-                            "           <tr>" +
-                            "               <td style='padding: 10px;'>Référence</td>" +
-                            "               <td style='padding: 10px;'>" + contentData.get("reference") + "</td>" +
-                            "           </tr>" +
-                            "           <tr>" +
-                            "               <td style='padding: 10px;'>IBAN</td>" +
-                            "               <td style='padding: 10px;'>" + contentData.get("iban") + "</td>" +
-                            "           </tr>" +
-                            "           <tr>" +
-                            "               <td style='padding: 10px;'>BIC</td>" +
-                            "               <td style='padding: 10px;'>" + contentData.get("bic") + "</td>" +
-                            "           </tr>" +
-                            "           <tr>" +
-                            "               <td style='padding: 10px;'>Date de signature</td>" +
-                            "               <td style='padding: 10px;'>" + contentData.get("dateSignature") + "</td>" +
-                            "           </tr>" +
-                            "           <tr>" +
-                            "               <td style='padding: 10px;'>Date du prochain paiement</td>" +
-                            "               <td style='padding: 10px;'>" + contentData.get("dateNextPayment") + "</td>" +
-                            "           </tr>" +
-                            "           <tr>" +
-                            "               <td style='padding: 10px;'>Mandat valide jusqu'au</td>" +
-                            "               <td style='padding: 10px;'>" + contentData.get("dateExpiration") + "</td>" +
-                            "           </tr>" +
-                            "       </table>" +
-                            "       <p>Vous pouvez révoquer ce mandat à tous moment dans la partie Account de votre Dashboard</p>" +
-                            "   </body>" +
-                            "</html>";
+            String htmlContent = buildEmail(
+                    "Confirmation de votre mandat de prélèvement SEPA BugsPointer.",
+                    "Paiement",
+                    "Mandat SEPA confirmé",
+                    paragraph("Bonjour,") +
+                            paragraph("Nous vous confirmons le mandat de prélèvement que vous venez de signer sur BugsPointer.") +
+                            detailsTable(new String[][]{
+                                    {"Référence", contentData.get("reference")},
+                                    {"IBAN", contentData.get("iban")},
+                                    {"BIC", contentData.get("bic")},
+                                    {"Date de signature", contentData.get("dateSignature")},
+                                    {"Date du prochain paiement", contentData.get("dateNextPayment")},
+                                    {"Mandat valide jusqu'au", contentData.get("dateExpiration")}
+                            }) +
+                            paragraph("Vous pouvez révoquer ce mandat à tout moment depuis la partie Account de votre dashboard."),
+                    "Ouvrir mon compte",
+                    emailUrl("authentication"),
+                    null
+            );
 
             return sendNoReplyMail(
                     customer.getMail(),
@@ -432,20 +421,19 @@ public class MailService {
     public Response sendMailChangePlan(EnumPlan plan, String mail) {
 
         // Paramètres du destinataire
-        String subject = "Bugspointer - Confirmation de l'abonnement";
+        String subject = "BugsPointer - Confirmation de l'abonnement";
 
-        // Contenu HTML de l'email
-        String htmlContent =
-                "<html>" +
-                        "   <body>" +
-                        "       <table border='0' cellpadding='0' cellspacing='0' >" +
-                        "           <tr><td align='center'><img src='https://bugspointer.com/css/img/icones/merci.gif' alt='Logo merci' ></td></tr> " +
-                        "           <tr><td align='center' style='padding: 10px;'><h1>Merci</h1></td></tr> " +
-                        "           <tr><td align='center' style='padding: 10px;'><p>Mille mercis pour votre abonnement "+ plan +"</p></td></tr> " +
-                        "           <tr><td align='center'></td></tr> " +
-                        "       </table>" +
-                        "   </body>" +
-                        "</html>";
+        String htmlContent = buildEmail(
+                "Votre abonnement BugsPointer a bien été pris en compte.",
+                "Abonnement",
+                "Votre plan est activé",
+                paragraph("Bonjour,") +
+                        paragraph("Votre souscription au plan " + plan + " a bien été prise en compte.") +
+                        paragraph("Vous pouvez maintenant retrouver votre espace et continuer à suivre vos signalements depuis le dashboard."),
+                "Ouvrir le dashboard",
+                emailUrl("authentication"),
+                null
+        );
 
         return sendNoReplyMail(mail, subject, htmlContent, "Votre souscription a bien été prise en compte, merci", "Email new subscribe");
     }
@@ -454,39 +442,18 @@ public class MailService {
     public Response sendMailNewBugForNotification(String mail) {
 
         // Paramètres du destinataire
-        String subject = "Bugspointer - Nouveau bug signalé";
+        String subject = "BugsPointer - Nouveau bug signalé";
 
-        // Contenu HTML de l'email
-        String htmlContent =
-                "<html>" +
-                        "    <body>" +
-                        "        <div style='width:100%; background-color:#000000;padding: 20px 0;'>" +
-                        "            <table align='center' cellpadding='0' cellspacing='0' style='border:4px solid #00E676; color:#000000; border-radius:25px; width: 50%; max-width: 90%; box-sizing: border-box; margin: 0 auto; background-color:#FFFFFF;padding: 0 10px 20px 10px;'>" +
-                        "                <tr>" +
-                        "                    <td align='center'><h1 style='font-size:35px;'>Vous avez un nouveau bug </h1></td>" +
-                        "                </tr>" +
-                        "                <tr>" +
-                        "                    <td style='padding: 20px 0;'></td>" +
-                        "                </tr>" +
-                        "                <tr>" +
-                        "                    <td align='center'><p style='font-size:18px;'>Un utilisateur vient de signaler un bug sur votre site</p></td>" +
-                        "                </tr>" +
-                        "                <tr>" +
-                        "                    <td style='padding: 20px 0;'></td>" +
-                        "                </tr>" +
-                        "                <tr>" +
-                        "                    <td  align='center'><a href='"+ ADRESSE +"authentication' style='display: inline-block; padding: 10px 20px; border-radius: 5px; font-size: 20px; color: white; text-decoration: none; background-color: #00E676; box-shadow: 0 0 5px lightgrey;'>Voir le bug</a></td>" +
-                        "                </tr>" +
-                        "                <tr>" +
-                        "                    <td style='padding: 20px 0;'></td>" +
-                        "                </tr>" +
-                        "                <tr>" +
-                        "                    <td style='font-size:14px;font-style:italic;text-align:center;'>Si vous ne souhaitez plus recevoir de mail pour les nouveaux bugs, vous pouvez désactiver les notifications dans votre Dashboard > Notifications</td>" +
-                        "                </tr>" +
-                        "            </table>" +
-                        "        </div>" +
-                        "    </body>" +
-                        "</html>";
+        String htmlContent = buildEmail(
+                "Un utilisateur vient de signaler un bug sur votre site.",
+                "Notification",
+                "Vous avez un nouveau bug",
+                paragraph("Un utilisateur vient de signaler un bug sur votre site.") +
+                        paragraph("Connectez-vous à votre dashboard pour consulter le rapport et organiser son suivi."),
+                "Voir le bug",
+                emailUrl("authentication"),
+                "Vous pouvez désactiver ces notifications depuis Dashboard > Notifications."
+        );
 
         return sendNoReplyMail(mail, subject, htmlContent, "", "Email new bug report");
     }

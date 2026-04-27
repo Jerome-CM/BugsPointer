@@ -55,9 +55,39 @@
                 </div>
 
                 <section th:if="${page == 'register'}" class="w-full rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:w-7/12 lg:p-7">
-                    <img class="mx-auto mb-6 w-full max-w-md rounded-lg border border-white/10 bg-white/90 p-4" th:src="@{/css/img/motion/welcome_motion.gif}" alt="Bienvenue">
+                    <div class="mb-6 rounded-lg border border-white/10 bg-[#08110D] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:p-6">
+                        <div class="mb-5 flex items-center justify-between gap-4 border-b border-white/10 pb-4">
+                            <div>
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Compte créé</p>
+                                <h2 class="mt-2 font-display text-2xl leading-none text-white sm:text-3xl">Activez votre espace</h2>
+                            </div>
+                            <span class="inline-flex h-12 w-12 flex-none items-center justify-center rounded-lg border border-pointer-green/30 bg-pointer-green/10 text-xl font-black text-pointer-lime">BP</span>
+                        </div>
+                        <div class="grid gap-3 sm:grid-cols-3">
+                            <div class="rounded-lg border border-white/10 bg-white/[0.055] p-4">
+                                <span class="mb-3 block h-2 w-10 rounded-full bg-pointer-green"></span>
+                                <p class="text-sm font-bold text-white">1. Confirmer</p>
+                                <p class="mt-2 text-sm leading-6 text-white/60">Cliquez sur le lien reçu par e-mail.</p>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-white/[0.055] p-4">
+                                <span class="mb-3 block h-2 w-10 rounded-full bg-pointer-lime"></span>
+                                <p class="text-sm font-bold text-white">2. Installer</p>
+                                <p class="mt-2 text-sm leading-6 text-white/60">Ajoutez le bouton sur votre site.</p>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-white/[0.055] p-4">
+                                <span class="mb-3 block h-2 w-10 rounded-full bg-white/55"></span>
+                                <p class="text-sm font-bold text-white">3. Suivre</p>
+                                <p class="mt-2 text-sm leading-6 text-white/60">Recevez vos premiers rapports.</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="flex flex-col gap-4 rounded-lg border border-white/10 bg-black/15 p-5 sm:flex-row sm:items-center">
-                        <img class="h-20 w-20 flex-none rounded-lg bg-white/90 p-3" alt="enveloppe mail" th:src="@{/css/img/icones/e-mail.gif}"/>
+                        <div class="flex h-14 w-14 flex-none items-center justify-center rounded-lg border border-pointer-green/25 bg-pointer-green/10">
+                            <span class="relative h-5 w-7 rounded-sm border-2 border-pointer-lime">
+                                <span class="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-45 border-b-2 border-r-2 border-pointer-lime"></span>
+                            </span>
+                        </div>
                         <div>
                             <p th:if="${status=='OK'}" class="text-lg font-bold leading-7 text-white">
                                 Un e-mail d’activation vient d’être envoyé.
