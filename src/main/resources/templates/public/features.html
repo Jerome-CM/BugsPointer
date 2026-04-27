@@ -1,137 +1,237 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Découvrez toutes les fonctionnalités de BugsPointer</title>
-    <meta name="description" content="Facile à mettre en place, profitez des nombreuses aides que peut vous apportez BugsPointer. ">
-    <meta name="keywords" content="fonctionnalités, rapport de bug, tableau de bord, target plan">
+    <title>Fonctionnalités BugsPointer - signalement de bug et dashboard</title>
+    <meta name="description" content="Découvrez les fonctionnalités BugsPointer: bouton de signalement, rapport de bug par mail, dashboard Target, contexte utilisateur et rapports illimités.">
+    <meta name="keywords" content="fonctionnalités BugsPointer, signalement de bug, rapport de bug, dashboard bug, retour utilisateur, bug site web">
     <meta name="robots" content="all">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}</style>
 </head>
-<body class="index">
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
     <div th:replace="~{include/nav.html}"></div>
 
-    <h1>Pensé pour votre entreprise, pensé pour vos utilisateurs</h1>
+    <main>
+        <section class="relative px-5 pb-16 pt-12 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-10 lg:flex-row lg:items-center">
+                <div class="w-full lg:w-6/12">
+                    <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                        Fonctionnalités BugsPointer
+                    </p>
+                    <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
+                        Un outil complet pour collecter, comprendre et corriger les bugs de votre site.
+                    </h1>
+                    <p class="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg">
+                        BugsPointer transforme les retours utilisateurs en rapports exploitables. Du premier signalement reçu par mail au dashboard de suivi, chaque fonctionnalité aide votre équipe à protéger l’expérience utilisateur.
+                    </p>
+                    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                        <a th:href="@{/authentication}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.24)] transition hover:-translate-y-0.5">
+                            Essayer gratuitement
+                        </a>
+                        <a th:href="@{/features#targetplan}" class="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5">
+                            Voir Target
+                        </a>
+                    </div>
+                </div>
 
-    <div class="container">
-        <h2 class="space green-pill">Profiter des avantages d'un site web, sans bug</h2>
-
-        <div th:replace="~{include/pricingSection.html}"></div>
-    </div>
-
-    <div class="headband" id="free">
-        <h2>Free</h2>
-        <a th:href="@{/authentication}" class="btn-action" style="margin-top: 10px!important;">S'inscrire</a>
-    </div>
-
-    <div class="container">
-
-
-
-        <div class="container container-row space-feature feature-transition">
-            <div class="left feature_name">Contenu du rapport</div>
-            <div class="right feature_description">
-                <p>Votre rapport contient : <br><br> L'URL complète de la page contenant le bug
-                <br><br> Une brève description laisser par l'utilisateur</p>
+                <div class="flex w-full flex-col gap-4 lg:w-6/12">
+                    <div class="flex flex-col gap-4 sm:flex-row">
+                        <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur sm:w-6/12">
+                            <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Collecte</span>
+                            <h2 class="mt-4 text-2xl font-black text-white">Un bouton de signalement simple</h2>
+                            <p class="mt-3 leading-7 text-white/65">Vos visiteurs pointent ce qui ne fonctionne pas sans quitter la page afin de ne pas perdre vos acquisitions.</p>
+                        </article>
+                        <article class="w-full rounded-lg border border-pointer-green/30 bg-white/[0.085] p-5 shadow-[0_24px_70px_rgba(0,230,118,0.12)] backdrop-blur sm:w-6/12">
+                            <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Contexte</span>
+                            <h2 class="mt-4 text-2xl font-black text-white">Des informations utiles au diagnostic</h2>
+                            <p class="mt-3 leading-7 text-white/65">URL, description et environnement utilisateur rendent le bug plus facile à reproduire pour le corriger.</p>
+                        </article>
+                    </div>
+                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Suivi</span>
+                        <h2 class="mt-4 text-2xl font-black text-white">Un dashboard pour prioriser les corrections</h2>
+                        <p class="mt-3 leading-7 text-white/65">Avec le plan Target, tous les rapports arrivent dans une interface claire pour suivre les problèmes qui dégradent réellement l’expérience de vos clients.</p>
+                    </article>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <div class="grey-form1"></div>
-
-        <div class="container container-row space-feature feature-transition">
-            <div class="left feature_description text-after-title">
-                <p>Vous pouvez modifier les couleurs et certain texte pour intégrer notre outil à 100% avec votre charte graphique</p>
+        <section class="px-5 py-14 sm:px-8 lg:px-12">
+            <div class="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:items-center">
+                <div class="w-full lg:w-4/12">
+                    <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Parcours utilisateur</p>
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Le signalement reste simple côté visiteur.</h2>
+                    <p class="mt-5 text-base leading-7 text-white/70 sm:text-lg">
+                        L’utilisateur voit un bug, clique sur le bouton BugsPointer, décrit le problème et envoie son rapport. Vous récupérez une remontée structurée, sans échange interminable.
+                    </p>
+                </div>
+                <div class="flex w-full flex-col gap-4 lg:w-8/12">
+                    <div class="flex flex-col gap-4 md:flex-row">
+                        <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 md:w-4/12">
+                            <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">1</span>
+                            <h3 class="mt-4 text-xl font-black text-white">Il repère un bug</h3>
+                            <p class="mt-3 leading-7 text-white/65">Faute, lien cassé, bouton invisible, erreur serveur ou problème de design.</p>
+                        </article>
+                        <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 md:w-4/12">
+                            <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">2</span>
+                            <h3 class="mt-4 text-xl font-black text-white">Il pointe la zone</h3>
+                            <p class="mt-3 leading-7 text-white/65">Le contexte visuel aide votre équipe à comprendre précisément le retour.</p>
+                        </article>
+                        <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 md:w-4/12">
+                            <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">3</span>
+                            <h3 class="mt-4 text-xl font-black text-white">Vous recevez le rapport</h3>
+                            <p class="mt-3 leading-7 text-white/65">Soit par mail, soit dans le dashboard avec le plan Target.</p>
+                        </article>
+                    </div>
+                </div>
             </div>
-            <div class="right feature_name ">Customisation</div>
-        </div>
+        </section>
 
-        <!--<div class="container container-row space-feature feature-transition">
-            <div class="right feature_name">CrawlScan</div>
-            <div class="left feature_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br> Consectetur delectus ea labore. Cum esse explicabo nam porro quas, sed? Consequuntur expedita ipsam
-                <br> magni possimus quae quos reprehenderit soluta voluptatem voluptatum.</div>
-        </div>
-
-        <div class="container container-row space-feature feature-transition">
-            <div class="right feature_description">Avec la version gratuite, vous ne pouvez pas recevoir plus d'un rapport de bug en 30 jours.
-                <br><br> Passer à la version TARGET pour voir un nombre illimité de rapports</div>
-            <div class="left feature_name">Nombre de rapport limité</div>
-        </div>-->
-
-        <div class="green-form green-form-right"></div>
-
-        <div class="container container-row space-feature feature-transition">
-            <div class="left feature_name">Nombre de rapport limité</div>
-            <div class="right feature_description">
-                <p>Avec la version gratuite, vous ne pouvez pas recevoir plus d'un rapport de bug en 30 jours.
-                <br><br> Passer à la version TARGET pour voir un nombre illimité de rapports</p>
+        <section id="pricing" class="px-5 py-14 sm:px-8 lg:px-12">
+            <div class="mx-auto max-w-7xl">
+                <div class="mx-auto mb-9 max-w-5xl text-center">
+                    <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Plans</p>
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Choisissez le niveau de suivi adapté à votre volume de rapports.</h2>
+                    <p class="mx-auto mt-5 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">Commencez par recevoir un rapport par mail, puis passez au dashboard quand les retours deviennent un vrai levier produit.</p>
+                </div>
+                <div class="home-pricing">
+                    <div th:replace="~{include/pricingSection.html}"></div>
+                </div>
             </div>
-        </div>
+        </section>
 
-    </div>
+        <section id="free" class="px-5 py-14 sm:px-8 lg:px-12">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-8 flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end md:justify-between">
+                    <div class="w-full md:w-8/12">
+                        <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Plan Free</p>
+                        <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Testez BugsPointer avec un premier rapport de bug par mail.</h2>
+                    </div>
+                    <a th:href="@{/authentication}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)]">
+                        S’inscrire
+                    </a>
+                </div>
 
-
-    <div class="headband" id="targetplan">
-        <h2>Target</h2>
-        <a href="app/private/recapPayment?product=TARGET" class="btn-action" style="margin-top: 10px!important;">15€ / an</a>
-    </div>
-
-    <div class="container">
-
-        <div class="container container-row space-feature feature-transition">
-            <div class="left feature_name">Dashboard</div>
-            <div class="right feature_description"><p>Administrer tous vos rapports sur un tableau de bord clair et intuitif</p>
-                <img class="img-description-feature" th:src="@{/css/img/sliderPlan/dashboard.png}" alt="Preview of dashboard">
+                <div class="flex flex-col gap-5 md:flex-row">
+                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-4/12">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Rapport essentiel</span>
+                        <h3 class="mt-4 text-2xl font-black text-white">URL et description</h3>
+                        <p class="mt-3 leading-7 text-white/65">Recevez l’adresse de la page concernée et une description simple laissée par l’utilisateur.</p>
+                    </article>
+                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-4/12">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Intégration</span>
+                        <h3 class="mt-4 text-2xl font-black text-white">Un bouton adapté à votre site</h3>
+                        <p class="mt-3 leading-7 text-white/65">Personnalisez les couleurs et certains textes pour rester cohérent avec votre identité visuelle.</p>
+                    </article>
+                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-4/12">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Démarrage</span>
+                        <h3 class="mt-4 text-2xl font-black text-white">Un rapport par mois</h3>
+                        <p class="mt-3 leading-7 text-white/65">Validez la valeur du signalement avant de passer à un suivi illimité avec le plan Target.</p>
+                    </article>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <div class="grey-form2"></div>
+        <section id="targetplan" class="px-5 py-14 sm:px-8 lg:px-12">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-8 flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end md:justify-between">
+                    <div class="w-full md:w-8/12">
+                        <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Plan Target</p>
+                        <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Centralisez les rapports et priorisez les corrections dans un dashboard.</h2>
+                    </div>
+                    <a href="app/private/recapPayment?product=TARGET" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)]">
+                        15€ / an
+                    </a>
+                </div>
 
-        <div class="container container-row space-feature feature-transition">
-           <div class="container-row left text-after-title">
-               <div class="feature_description">
-                   <p>Obtenez des données de l'appareil de l'utilisateur comme la taille d'écran ou son navigateur pour comprendre dans quelle circonstance le bug est apparu chez lui</p>
-                   <img class="img-description-feature" th:src="@{/css/img/sliderPlan/userEnv.png}" alt="Preview of user environment">
-               </div>
-           </div>
-            <div class="right feature_name">Environnement de l'utilisateur</div>
-        </div>
+                <div class="flex flex-col gap-6 lg:flex-row">
+                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur lg:w-6/12">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Dashboard</span>
+                        <h3 class="mt-4 text-2xl font-black text-white">Tous vos signalements au même endroit</h3>
+                        <p class="mt-3 leading-7 text-white/65">Scannez, priorisez et traitez les bugs signalés par vos utilisateurs dans une interface claire.</p>
+                        <img class="mt-5 w-full rounded-lg border border-white/10 bg-white/90" th:src="@{/css/img/sliderPlan/dashboard.png}" alt="Aperçu du dashboard BugsPointer">
+                    </article>
 
-        <div class="green-form green-form-left"></div>
+                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur lg:w-6/12">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Environnement utilisateur</span>
+                        <h3 class="mt-4 text-2xl font-black text-white">Reproduisez les bugs plus vite</h3>
+                        <p class="mt-3 leading-7 text-white/65">Navigateur, taille d’écran et contexte technique vous donnent de meilleurs indices pour comprendre le problème.</p>
+                        <img class="mt-5 w-full rounded-lg border border-white/10 bg-white/90" th:src="@{/css/img/sliderPlan/userEnv.png}" alt="Aperçu des données d'environnement utilisateur">
+                    </article>
+                </div>
 
-        <div class="container container-row space-feature feature-transition">
-            <div class="left feature_description text-after-title"><p>Vous n'avez plus de limite de rapport, recevez instantanément tous les rapports que vos utilisateurs envois dans votre dashboard</p></div>
-            <div class="right feature_name">Rapports illimités</div>
-        </div>
-    </div>
+                <article class="mt-6 flex flex-col gap-5 rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,230,118,0.10)] backdrop-blur md:flex-row md:items-center">
+                    <div class="w-full md:w-5/12">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Rapports illimités</span>
+                        <h3 class="mt-4 text-2xl font-black text-white">Ne laissez aucun bug utilisateur hors radar</h3>
+                    </div>
+                    <p class="w-full leading-7 text-white/65 md:w-7/12">Target supprime la limite de volume: chaque rapport envoyé par vos visiteurs arrive dans votre dashboard, prêt à être consulté, trié et corrigé.</p>
+                </article>
 
+                <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                    <article class="rounded-lg border border-white/10 bg-white/[0.065] p-5">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Qualification</span>
+                        <h3 class="mt-4 text-xl font-black text-white">Classement par statut</h3>
+                        <p class="mt-3 text-sm leading-6 text-white/62">Suivez chaque retour dans les états nouveau, en cours, résolu ou ignoré pour garder une vision claire du traitement.</p>
+                    </article>
+                    <article class="rounded-lg border border-white/10 bg-white/[0.065] p-5">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Priorisation</span>
+                        <h3 class="mt-4 text-xl font-black text-white">Historique centralisé</h3>
+                        <p class="mt-3 text-sm leading-6 text-white/62">Conservez les bugs reçus, consultez les détails et retrouvez les anciens signalements sans fouiller dans vos e-mails.</p>
+                    </article>
+                    <article class="rounded-lg border border-white/10 bg-white/[0.065] p-5">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Alertes</span>
+                        <h3 class="mt-4 text-xl font-black text-white">Notifications de réception</h3>
+                        <p class="mt-3 text-sm leading-6 text-white/62">Activez les alertes pour être prévenu quand un utilisateur signale un nouveau problème sur votre site.</p>
+                    </article>
+                    <article class="rounded-lg border border-white/10 bg-white/[0.065] p-5">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Pilotage</span>
+                        <h3 class="mt-4 text-xl font-black text-white">Vue orientée correction</h3>
+                        <p class="mt-3 text-sm leading-6 text-white/62">Repérez rapidement les pages touchées, le contexte utilisateur et les bugs qui méritent une action immédiate.</p>
+                    </article>
+                </div>
 
-    <!--<div class="headband">
-        <h2>Ultimate</h2>
-        <a href="app/private/recapPayment?product=ULTIMATE" class="btn-action" style="margin-top: 10px!important;">50€ / an</a>
-    </div>-->
+                <article class="mt-6 rounded-lg border border-white/10 bg-white/[0.065] p-5">
+                    <div class="grid gap-5 lg:grid-cols-[0.36fr_0.64fr] lg:items-start">
+                        <div>
+                            <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Ce que Target ajoute</span>
+                            <h3 class="mt-4 text-2xl font-black text-white">Un vrai espace de suivi, pas seulement une boîte de réception.</h3>
+                        </div>
+                        <ul class="grid gap-3 text-sm font-bold leading-6 text-white/68 sm:grid-cols-2">
+                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Rapports de bugs illimités</li>
+                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Dashboard de consultation</li>
+                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Statuts de traitement</li>
+                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Données d'environnement utilisateur</li>
+                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Historique des signalements</li>
+                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Notifications configurables</li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
 
-
-<div th:replace="~{include/footer.html}"></div>
-    <script>
-
-        const heightScreen = window.innerHeight - 100;
-        // Sélectionnez les éléments en dehors de la fonction handleScroll
-        const featureElements = document.querySelectorAll('.feature-transition');
-
-        // Fonction pour activer la transition lorsque l'élément est à 1000px du haut de la fenêtre
-        function handleScroll() {
-            featureElements.forEach(function(element) {
-                const elementTopPosition = element.getBoundingClientRect().top;
-
-                if (elementTopPosition <= heightScreen) {
-                    element.style.opacity="1";
-                }
-            });
-        }
-
-        // Écouteur d'événement pour le défilement de la fenêtre
-        setInterval(function() {
-            handleScroll()
-        },100);
-
-    </script>
+    <div th:replace="~{include/footer.html}"></div>
 </body>
 </html>

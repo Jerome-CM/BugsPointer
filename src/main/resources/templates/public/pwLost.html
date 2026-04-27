@@ -1,28 +1,82 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Mot de Passe oublié</title>
+    <title>Mot de passe oublié - BugsPointer</title>
     <meta name="robots" content="noindex">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}</style>
 </head>
-<body class="index">
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
     <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/nav.html}"></div>
 
-    <div class="container">
-        <section th:if="${etat == null}">
-            <div class="cards cards_detail">
-                <h3>Mot de passe oublié ?</h3>
-                  <form class="form" action="#" th:action="@{/pwLost}" th:object="${company}" method="post">
-                        <input type="text" th:field="*{mail}" id="mail" placeholder="Mail">
-                        <input type="submit" class="btn-action" value="Mot de passe oublié">
-                  </form>
-                  <a th:href="@{/authentication}">Se Connecter</a><!--Redirection vers la page de connection-->
+    <main>
+        <section class="relative px-5 py-16 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto flex max-w-6xl flex-col gap-7 lg:flex-row lg:items-stretch">
+                <div class="flex w-full flex-col justify-between rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8 lg:w-5/12">
+                    <div>
+                        <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                            Accès sécurisé
+                        </p>
+                        <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
+                            Récupérez l’accès à votre espace BugsPointer.
+                        </h1>
+                    </div>
+                    <p class="mt-6 text-base leading-7 text-white/70 sm:text-lg">
+                        Indiquez l’e-mail associé à votre compte. Si l’adresse existe, vous recevrez un lien pour définir un nouveau mot de passe.
+                    </p>
+                </div>
+
+                <section th:if="${etat == null}" class="w-full rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:w-7/12 lg:p-7">
+                    <div class="mb-6 border-b border-white/10 pb-5">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Mot de passe oublié</p>
+                        <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Recevoir un lien de réinitialisation</h2>
+                    </div>
+
+                    <form class="flex flex-col gap-4" action="#" th:action="@{/pwLost}" th:object="${company}" method="post">
+                        <label>
+                            <span class="mb-2 block text-sm font-bold text-white/72">E-mail du compte</span>
+                            <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{mail}" id="mail" placeholder="vous@entreprise.com">
+                        </label>
+                        <input type="submit" class="min-h-12 cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" value="Envoyer le lien">
+                    </form>
+
+                    <a class="mt-5 inline-flex text-sm font-bold text-pointer-lime transition hover:text-pointer-green" th:href="@{/authentication}">Retour à la connexion</a>
+                </section>
+
+                <section th:if="${etat == 'ok'}" class="w-full rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:w-7/12 lg:p-7">
+                    <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">E-mail envoyé</p>
+                    <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Consultez votre boîte de réception.</h2>
+                    <p class="mt-5 text-base leading-7 text-white/70">Un lien de réinitialisation vient d’être envoyé si l’adresse correspond à un compte BugsPointer.</p>
+                    <a class="mt-7 inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" th:href="@{/authentication}">
+                        Revenir à la connexion
+                    </a>
+                </section>
             </div>
         </section>
-        <section th:if="${etat == 'ok'}">
-            <h1>Mail envoyé</h1>
-        </section>
-    </div>
+    </main>
 
+    <div th:replace="~{include/footer.html}"></div>
 </body>
 </html>

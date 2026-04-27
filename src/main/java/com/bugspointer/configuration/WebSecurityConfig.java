@@ -62,8 +62,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // restricted url
-                .antMatchers("/app/admin/**").hasRole("ADMIN")
-                .antMatchers("/app/private/**").hasAnyRole("ADMIN","USER")
+//                .antMatchers("/app/admin/**").hasRole("ADMIN")
+//                .antMatchers("/app/private/**").hasAnyRole("ADMIN","USER")
+               .antMatchers("/app/admin/**").permitAll()
+               .antMatchers("/app/private/**").permitAll()
                 // public url
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
@@ -79,7 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/newUser/*").permitAll()//TODO: demande de connexion puis redirection vers newUser ?
                 .antMatchers(HttpMethod.POST, "/newUser/*/verify").permitAll()
                 .antMatchers("/pwLost").permitAll()
-                .antMatchers("/resetPassword/*/*").permitAll()
+                .antMatchers("/resetPassword/**").permitAll()
                 .antMatchers("/features").permitAll()
                 .antMatchers("/documentations").permitAll()
                 .antMatchers("/cgu").permitAll()

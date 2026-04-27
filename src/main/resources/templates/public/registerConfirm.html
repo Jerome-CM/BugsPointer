@@ -1,32 +1,92 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Register Confirm</title>
+    <title>Confirmation de compte BugsPointer</title>
     <meta name="robots" content="noindex">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}</style>
 </head>
-<body class="index">
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
     <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/nav.html}"></div>
 
-    <div class="container">
-        <div th:if="${page=='delete'}" class="btn-download welcome">
-            <img th:class="${page=='delete'} ? 'auRevoir' : ''" alt="welcome" id="gifElement" th:src="@{/css/img/icones/au-revoir.gif}"/>
-        </div>
+    <main>
+        <section class="relative px-5 py-16 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto flex max-w-6xl flex-col gap-7 lg:flex-row lg:items-stretch">
+                <div class="flex w-full flex-col justify-between rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8 lg:w-5/12">
+                    <div>
+                        <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                            Confirmation BugsPointer
+                        </p>
+                        <h1 th:if="${page == 'register'}" class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
+                            Merci de nous avoir rejoints.
+                        </h1>
+                        <h1 th:if="${page == 'delete'}" class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
+                            Votre demande a bien été prise en compte.
+                        </h1>
+                    </div>
+                    <p th:if="${page == 'register'}" class="mt-6 text-base leading-7 text-white/70 sm:text-lg">
+                        Dernière étape : confirmez votre adresse e-mail pour activer votre compte et commencer l’installation.
+                    </p>
+                    <p th:if="${page == 'delete'}" class="mt-6 text-base leading-7 text-white/70 sm:text-lg">
+                        Votre espace est mis à jour. Merci d’avoir utilisé BugsPointer.
+                    </p>
+                </div>
 
-        <img style="width:60%; margin:0 auto;" th:if="${page=='register'}" th:src="@{/css/img/motion/welcome_motion.gif}" alt="Bienvenue">
+                <section th:if="${page == 'register'}" class="w-full rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:w-7/12 lg:p-7">
+                    <img class="mx-auto mb-6 w-full max-w-md rounded-lg border border-white/10 bg-white/90 p-4" th:src="@{/css/img/motion/welcome_motion.gif}" alt="Bienvenue">
+                    <div class="flex flex-col gap-4 rounded-lg border border-white/10 bg-black/15 p-5 sm:flex-row sm:items-center">
+                        <img class="h-20 w-20 flex-none rounded-lg bg-white/90 p-3" alt="enveloppe mail" th:src="@{/css/img/icones/e-mail.gif}"/>
+                        <div>
+                            <p th:if="${status=='OK'}" class="text-lg font-bold leading-7 text-white">
+                                Un e-mail d’activation vient d’être envoyé.
+                            </p>
+                            <p th:if="${status=='OK'}" class="mt-2 text-sm leading-6 text-white/68">
+                                Pensez à vérifier vos spams ou courriers indésirables si vous ne le voyez pas dans quelques minutes.
+                            </p>
+                            <p th:if="${status=='ERROR'}" class="text-lg font-bold leading-7 text-white">
+                                Une erreur s’est produite lors de l’envoi du mail.
+                            </p>
+                            <p th:if="${status=='ERROR'}" class="mt-2 text-sm leading-6 text-white/68">
+                                Réessayez plus tard. Si l’erreur persiste, contactez contact@bugspointer.com.
+                            </p>
+                        </div>
+                    </div>
+                    <a class="mt-6 inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" th:href="@{/authentication}">
+                        Aller à la connexion
+                    </a>
+                </section>
 
-        <h1 class="space" th:if="${page == 'register'}">Merci de nous avoir rejoints !</h1>
-
-        <div th:if="${page == 'register'}" class="btn-download">
-            <img alt="envoloppe mail" th:src="@{/css/img/icones/e-mail.gif}"/>
-            <span th:if="${status=='OK'}" class="center fs20">Un mail vient d'être envoyé. Il contient un lien d'activation
-            <br>Pensez aux spams/courriers indésirables</span>
-            <span th:if="${status=='ERROR'}" class="center">Une erreur s'est produite lors de l'envoi du mail.
-                <br>Cliquez <a>ici</a> pour effectuer un nouvel envoi.
-            <br>Si l'erreur persiste contacter : contact@bugspointer.com</span>
-        </div>
-
-    </div>
+                <section th:if="${page == 'delete'}" class="w-full rounded-lg border border-white/10 bg-white/[0.055] p-5 text-center shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:w-7/12 lg:p-7">
+                    <img class="mx-auto w-full max-w-sm rounded-lg border border-white/10 bg-white/90 p-4" th:classappend="${page=='delete'} ? ' auRevoir' : ''" alt="au revoir" id="gifElement" th:src="@{/css/img/icones/au-revoir.gif}"/>
+                    <a class="mt-6 inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5 hover:border-pointer-green/40 hover:text-pointer-lime" th:href="@{/}">
+                        Retour à l’accueil
+                    </a>
+                </section>
+            </div>
+        </section>
+    </main>
 
     <div th:replace="~{include/footer.html}"></div>
 </body>

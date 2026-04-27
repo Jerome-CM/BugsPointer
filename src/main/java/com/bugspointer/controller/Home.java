@@ -49,8 +49,8 @@ public class Home {
     String getHome(Model model){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("nbrBugReported", 277 ); // bugService.getNbrBugReportedForIndex());
-        model.addAttribute("averageBugByCompany", 4 ); //bugService.getAverageNbrBugByCompanyForIndex());
-        model.addAttribute("averageSatisfyingUser", pollService.getAverageSatisfyingUserForIndex());
+        model.addAttribute("companyCount", 32 );
+        model.addAttribute("averageSatisfyingUser", "9,4");
         viewCounterService.addVisit(EnumViewCounterPage.INDEX);
         return "index";
     }
