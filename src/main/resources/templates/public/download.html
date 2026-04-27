@@ -1,35 +1,103 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Télécharger les fichiers pour obtenir BugsPointer</title>
-    <meta name="description" content="Connectez-vous pour télécharger les fichiers nécessaire à l'installation de BugsPointer sur votre site.">
-    <meta name="keywords" content="télécharger BugsPointer, comment avoir BugsPointer, download, téléchargement, fichiers, dossier, outils">
+    <title>Télécharger BugsPointer - fichiers d’installation</title>
+    <meta name="description" content="Téléchargez les fichiers nécessaires pour installer BugsPointer sur votre site et accéder à la documentation d’intégration.">
+    <meta name="keywords" content="télécharger BugsPointer, installation BugsPointer, fichiers BugsPointer, bug reporting, documentation BugsPointer">
     <meta name="robots" content="all">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}</style>
 </head>
-<body class="index">
-
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
     <div th:replace="~{include/nav.html}"></div>
 
-    <div class="container">
-        <h1 class="h-in-black">Téléchargement</h1>
+    <main>
+        <section class="relative px-5 pb-16 pt-12 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-7">
+                <div class="flex w-full flex-col gap-8 rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8 lg:flex-row lg:items-end lg:justify-between">
+                    <div class="w-full lg:w-7/12">
+                        <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                            Installation BugsPointer
+                        </p>
+                        <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
+                            Téléchargez les fichiers et connectez votre site.
+                        </h1>
+                        <p class="mt-6 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
+                            Ajoutez le bouton ou le lien de signalement BugsPointer à votre interface, puis commencez à recevoir des rapports exploitables depuis vos pages.
+                        </p>
+                    </div>
+                    <div class="flex w-full flex-col gap-3 lg:w-5/12">
+                        <div class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4">
+                            <span class="h-3 w-3 flex-none rounded-full bg-pointer-green shadow-[0_0_20px_rgba(0,230,118,0.55)]"></span>
+                            <p class="text-sm leading-6 text-white/68"><strong class="text-white">Fichier prêt à intégrer.</strong> Le zip contient les éléments nécessaires à l’installation.</p>
+                        </div>
+                        <div class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4">
+                            <span class="h-3 w-3 flex-none rounded-full bg-pointer-lime shadow-[0_0_20px_rgba(183,255,74,0.45)]"></span>
+                            <p class="text-sm leading-6 text-white/68"><strong class="text-white">Documentation disponible.</strong> Suivez les étapes pour adapter BugsPointer à votre site.</p>
+                        </div>
+                    </div>
+                </div>
 
-        <p class="space">Obtener les fichiers permettant de mettre sur votre site le logo et le formulaire de Bugspointer</p>
+                <div class="flex w-full flex-col gap-5 lg:flex-row lg:items-stretch">
+                    <section class="w-full rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:w-6/12 lg:p-7">
+                        <div class="mb-6 border-b border-white/10 pb-5">
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 1</p>
+                            <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Récupérer le kit</h2>
+                        </div>
+                        <p class="mb-6 text-base leading-7 text-white/68">
+                            Téléchargez le pack BugsPointer, ajoutez les fichiers dans votre projet, puis branchez le formulaire de signalement sur les pages à surveiller.
+                        </p>
+                        <a class="inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime sm:w-auto" th:href="@{/downloadableZip/Bugspointer_V1.0.0.zip}" download="Bugspointer_V1.0.0.zip" th:data-companyId="${companyId}" onclick="downloadFile(this)">
+                            <img class="h-8 w-8 rounded-md bg-white/80 p-1" alt="" th:src="@{/css/img/telecharger.gif}"/>
+                            Télécharger les fichiers
+                        </a>
+                    </section>
 
-        <div th:replace="~{include/btnDownload.html}"></div>
+                    <section class="w-full rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:w-6/12 lg:p-7">
+                        <div class="mb-6 border-b border-white/10 pb-5">
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 2</p>
+                            <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Finaliser l’intégration</h2>
+                        </div>
+                        <p class="mb-6 text-base leading-7 text-white/68">
+                            La documentation détaille l’installation, la personnalisation du bouton et les bonnes pratiques pour tester votre premier signalement.
+                        </p>
+                        <a th:href="@{/documentations}" class="inline-flex min-h-14 w-full items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5 hover:border-pointer-green/40 hover:text-pointer-lime sm:w-auto">
+                            Voir la documentation
+                        </a>
+                    </section>
+                </div>
+            </div>
+        </section>
+    </main>
 
-        <p class="space">Pour que l'intégration de l'outil à votre site se face plus facilement, consulter la documentation en ligne</p>
-
-        <a th:href="@{/documentations}" class="btn-action">Voir la documentation</a>
-    </div>
     <div th:replace="~{include/footer.html}"></div>
     <script th:inline="javascript">
         function downloadFile(link) {
-            // Récupérer l'ID de l'entreprise à partir de l'attribut th:data
             var companyId = link.getAttribute('data-companyId');
             var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
             var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-            // Effectuer l'appel API à votre endpoint en utilisant l'ID de l'entreprise
             fetch('api/user/addDateDownload/' + companyId, {
                 method: 'POST',
                 headers: {

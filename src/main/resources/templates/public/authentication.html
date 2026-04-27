@@ -1,47 +1,149 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>S'inscrire ou se connecter - BugsPointer</title>
-    <meta name="description" content="Créer un compte et connectez-vous pour utiliser BugsPponter">
-    <meta name="keywords" content="Se créer un compte, connection, utiliser BugsPointer, comment avoir BugsPointer">
+    <title>Connexion et inscription BugsPointer - créer un compte bug reporting</title>
+    <meta name="description" content="Créez votre compte BugsPointer ou connectez-vous pour recevoir, centraliser et traiter les bugs signalés par vos utilisateurs.">
+    <meta name="keywords" content="connexion BugsPointer, inscription BugsPointer, créer compte bug reporting, outil signalement bug">
     <meta name="robots" content="all">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}</style>
 </head>
-<body class="index">
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
     <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/nav.html}"></div>
 
-    <div class="container container-row">
-        <section>
-            <div class="cards cards_detail w90 w95">
-                <h3>S'inscrire</h3>
-                <form action="#" th:action="@{/register}" th:object="${companyRegister}" method="post">
-                    <input type="text" th:field="*{companyName}" id="companyName" placeholder="Nom de votre entreprise" required>
-                    <input type="text" th:field="*{mail}" id="registerMail" placeholder="E-mail" required>
-                    <input type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmation de l'e-mail" required>
-                    <input type="password" th:field="*{password}" id="registerPassword" placeholder="Mot de passe" required>
-                    <input type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmation du mot de passe" required>
-                    <input class="btn-action" type="submit" value="Debug maintenant !">
-                </form>
-            </div>
-        </section>
-        <br>
-        <section>
-            <div class="cards cards_detail w40 w95">
-                <h3>Se connecter</h3>
-                <form class="form" action="#" th:action="@{/login}" th:object="${companyLogin}" method="post">
-                    <input type="text" th:field="*{mail}" id="mail" placeholder="E-mail" required>
-                    <input type="password" th:field="*{password}" id="password" placeholder="Mot de passe" required>
-                    <p style="height: fit-content; margin-right:5px;"><input type="checkbox" name="rememberMe" id="rememberMe"> Se souvenir de moi</p>
-                    <input class="btn-action cancel-margin-top" type="submit" value="Connexion">
-                </form>
-                <a style="color: black;" th:href="@{/pwLost}">Mot de passe oublié ?</a>
-            </div>
-        </section>
-    </div>
+    <main>
+        <section class="relative px-5 pb-16 pt-12 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-7">
+                <div class="flex w-full flex-col gap-8 rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8 lg:flex-row lg:items-end lg:justify-between">
+                    <div class="w-full lg:w-7/12">
+                        <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                            Accès BugsPointer
+                        </p>
+                        <h1 class="font-display text-2xl leading-[0.98] text-white sm:text-3xl lg:text-4xl">
+                            Lancez votre espace de suivi des bugs en quelques secondes.
+                        </h1>
+                        <p class="mt-6 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
+                            Créez un compte pour recevoir vos premiers signalements, connecter votre site et transformer les retours utilisateurs en corrections actionnables.
+                        </p>
+                    </div>
 
-    <p th:if="${notification != null && notification.contains('contact@bugspointer.com')}" class="center">Votre compte est désactivé ? Vous souhaitez le réactiver ? Veuillez envoyer votre demande à contact@bugspointer.com</p>
+                    <div class="flex w-full flex-col gap-3 lg:w-5/12">
+                        <div class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4">
+                            <span class="h-3 w-3 flex-none rounded-full bg-pointer-green shadow-[0_0_20px_rgba(0,230,118,0.55)]"></span>
+                            <p class="text-sm leading-6 text-white/68"><strong class="text-white">Plan Free disponible.</strong> Testez vos premiers rapports par mail avant de passer au plan Target.</p>
+                        </div>
+                        <div class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4">
+                            <span class="h-3 w-3 flex-none rounded-full bg-pointer-lime shadow-[0_0_20px_rgba(183,255,74,0.45)]"></span>
+                            <p class="text-sm leading-6 text-white/68"><strong class="text-white">Installation rapide.</strong> Votre bouton ou lien de signalement s'adapte au design de votre site.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex w-full flex-col gap-5 xl:flex-row xl:items-start">
+                    <section class="w-full rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:p-7 xl:w-7/12">
+                        <div class="mb-6 flex flex-col gap-2 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
+                            <div>
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Nouveau compte</p>
+                                <h2 class="mt-2 font-display text-xl leading-none text-white sm:text-2xl lg:text-3xl">S'inscrire</h2>
+                            </div>
+                            <p class="max-w-md text-sm leading-6 text-white/62">Activez BugsPointer pour votre entreprise et commencez à collecter des retours vraiment exploitables.</p>
+                        </div>
+
+                        <form class="flex flex-col gap-4" action="#" th:action="@{/register}" th:object="${companyRegister}" method="post">
+                            <div class="flex flex-col gap-4 md:flex-row">
+                                <label class="w-full md:w-6/12">
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Entreprise</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{companyName}" id="companyName" placeholder="Ex: BugsPointer" required>
+                                </label>
+                                <label class="w-full md:w-6/12">
+                                    <span class="mb-2 block text-sm font-bold text-white/72">E-mail professionnel</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{mail}" id="registerMail" placeholder="vous@entreprise.com" required>
+                                </label>
+                            </div>
+
+                            <label>
+                                <span class="mb-2 block text-sm font-bold text-white/72">Confirmation de l'e-mail</span>
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmez votre e-mail" required>
+                            </label>
+
+                            <div class="flex flex-col gap-4 md:flex-row">
+                                <label class="w-full md:w-6/12">
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Mot de passe</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" id="registerPassword" placeholder="Mot de passe" required>
+                                </label>
+                                <label class="w-full md:w-6/12">
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Confirmation</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmez le mot de passe" required>
+                                </label>
+                            </div>
+
+                            <input class="mt-2 min-h-12 cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" type="submit" value="Créer mon compte gratuit">
+                        </form>
+                    </section>
+
+                    <section class="w-full rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7 xl:w-5/12">
+                        <div class="mb-6 flex flex-col gap-2 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
+                            <div>
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Espace client</p>
+                                <h2 class="mt-2 font-display text-xl leading-none text-white sm:text-2xl lg:text-3xl">Se connecter</h2>
+                            </div>
+                            <a class="text-sm font-bold text-pointer-lime transition hover:text-pointer-green" th:href="@{/pwLost}">Mot de passe oublié ?</a>
+                        </div>
+
+                        <form class="flex flex-col gap-4" action="#" th:action="@{/login}" th:object="${companyLogin}" method="post">
+                            <div class="flex flex-col gap-4">
+                                <label class="w-full">
+                                    <span class="mb-2 block text-sm font-bold text-white/72">E-mail</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{mail}" id="mail" placeholder="vous@entreprise.com" required>
+                                </label>
+                                <label class="w-full">
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Mot de passe</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" id="password" placeholder="Mot de passe" required>
+                                </label>
+                                <div class="flex w-full items-end">
+                                    <input class="min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-4 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" type="submit" value="Connexion">
+                                </div>
+                            </div>
+
+                            <label class="inline-flex w-fit cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-4 py-3 text-sm font-bold text-white/68">
+                                <input class="h-4 w-4 accent-[#00E676]" type="checkbox" name="rememberMe" id="rememberMe">
+                                Se souvenir de moi
+                            </label>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+        <section th:if="${notification != null && notification.contains('contact@bugspointer.com')}" class="px-5 pb-14 sm:px-8 lg:px-12">
+            <p class="mx-auto max-w-4xl rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 text-center leading-7 text-white/72">
+                Votre compte est désactivé ? Pour le réactiver, envoyez votre demande à contact@bugspointer.com.
+            </p>
+        </section>
+    </main>
 
     <div th:replace="~{include/footer.html}"></div>
-
 </body>
 </html>

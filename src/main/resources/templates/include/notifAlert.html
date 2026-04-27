@@ -1,2 +1,75 @@
+<style>
+    .bp-notice {
+        position: fixed;
+        top: 92px;
+        right: clamp(16px, 4vw, 40px);
+        z-index: 2000;
+        display: flex;
+        max-width: min(420px, calc(100vw - 32px));
+        gap: 14px;
+        padding: 16px 18px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.78);
+        background: rgba(6, 16, 12, 0.92);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(18px);
+        font-family: "Inter", "DM-Sans", system-ui, sans-serif;
+    }
 
-  <div th:if="${status != null}" th:class="${status=='ERROR'} ? 'alert notifAlert' : 'notification notifAlert'" th:text="${notification}"></div>
+    .bp-notice::before {
+        content: "";
+        flex: 0 0 auto;
+        width: 12px;
+        height: 12px;
+        margin-top: 5px;
+        border-radius: 999px;
+        background: #00E676;
+        box-shadow: 0 0 24px rgba(0, 230, 118, 0.55);
+    }
+
+    .bp-notice-error {
+        border-color: rgba(248, 113, 113, 0.34);
+        background: linear-gradient(135deg, rgba(38, 10, 12, 0.96), rgba(6, 16, 12, 0.92));
+    }
+
+    .bp-notice-error::before {
+        background: #ff5f5f;
+        box-shadow: 0 0 24px rgba(255, 95, 95, 0.45);
+    }
+
+    .bp-notice-success {
+        border-color: rgba(0, 230, 118, 0.28);
+    }
+
+    .bp-notice-title {
+        margin: 0 0 4px 0;
+        color: #fff;
+        font-size: 0.9rem;
+        font-weight: 900;
+        line-height: 1.2;
+    }
+
+    .bp-notice-message {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+    @media (max-width: 640px) {
+        .bp-notice {
+            top: 84px;
+            right: 16px;
+            left: 16px;
+            max-width: none;
+        }
+    }
+</style>
+
+<div th:if="${status != null}" th:class="${status=='ERROR'} ? 'bp-notice bp-notice-error' : 'bp-notice bp-notice-success'" role="status" aria-live="polite">
+    <div>
+        <p class="bp-notice-title" th:text="${status=='ERROR'} ? 'Action requise' : 'Confirmation'">Confirmation</p>
+        <p class="bp-notice-message" th:text="${notification}">Notification</p>
+    </div>
+</div>
