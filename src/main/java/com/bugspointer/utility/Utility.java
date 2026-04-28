@@ -48,7 +48,7 @@ public class Utility {
 
     public static class domaineValidate{
 
-        private static final String DOMAINE_PATTERN="^[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*[.][a-zA-Z]{2,6}$";
+        private static final String DOMAINE_PATTERN="^[a-zA-Z0-9-]+([.][a-zA-Z0-9-]+)*[.][a-zA-Z]{2,}$";
                                                 //accepte monsite.extension ou ssdomaine.monsite.extension
         private static final Pattern pattern = Pattern.compile(DOMAINE_PATTERN);
 

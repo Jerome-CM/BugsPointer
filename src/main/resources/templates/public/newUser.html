@@ -79,14 +79,14 @@
                                 <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{domaine}" id="domaine" placeholder="monsite.fr" th:value="${company.getDomaine()}">
                             </label>
                             <div class="flex w-full items-end md:w-4/12">
-                                <input th:if="${company.getDomaine() == null}" class="min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" type="button" id="btn-envoi" value="Valider le domaine">
+                                <input th:if="${!company.isDomainVerified()}" class="min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" type="button" id="btn-envoi" th:value="${company.getDomaine() == null} ? 'Valider le domaine' : 'Modifier le domaine'">
                             </div>
                         </form>
                         <div class="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4 lg:w-3/12">
                             <span th:if="${company.getDomaine() != null && company.isDomainVerified()}" class="h-3 w-3 flex-none rounded-full bg-pointer-green shadow-[0_0_20px_rgba(0,230,118,0.55)]"></span>
                             <span th:if="${company.getDomaine() == null || !company.isDomainVerified()}" class="h-3 w-3 flex-none rounded-full bg-white/40"></span>
                             <span th:if="${company.getDomaine() != null && company.isDomainVerified()}" class="text-sm font-bold leading-6 text-white/78">Domaine vérifié</span>
-                            <span th:if="${company.getDomaine() == null || !company.isDomainVerified()}" class="text-sm font-bold leading-6 text-white/62">En attente de vérification</span>
+                            <span th:if="${company.getDomaine() == null || !company.isDomainVerified()}" class="text-sm font-bold leading-6 text-white/62">Domaine non vérifié</span>
                         </div>
                     </div>
                 </section>
@@ -183,7 +183,7 @@
         </section>
     </main>
 
-    <div class="popup fixed inset-0 z-[2000] hidden items-center justify-center overflow-y-auto bg-black/70 px-5 py-8 backdrop-blur" id="popup" th:if="${company.getDomaine() == null}">
+    <div class="popup fixed inset-0 z-[2000] hidden items-center justify-center overflow-y-auto bg-black/70 px-5 py-8 backdrop-blur" id="popup" th:if="${!company.isDomainVerified()}">
         <form class="flex w-full max-w-4xl flex-col gap-5 rounded-lg border border-pointer-green/25 bg-[#08110D] p-6 shadow-[0_30px_100px_rgba(0,230,118,0.18)]" action="#" id="form-confirmation" th:action="@{/newUser/{publicKey}(publicKey=${publicKey})}" th:object="${company}" method="post">
             <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
                 <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>

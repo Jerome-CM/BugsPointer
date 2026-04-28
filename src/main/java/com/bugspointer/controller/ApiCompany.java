@@ -55,8 +55,12 @@ public class ApiCompany {
             // Create table for bugspointer send 2 reports on client website
             Response rep = firstReportService.initFirstReport(publicKey);
             if (rep.getStatus().equals(EnumStatus.OK)) {
-                return "redirect:/newUser/{publicKey}";
+                redirectAttributes.addFlashAttribute("notification", "Compte validé. Connectez-vous pour finaliser l'installation de votre site.");
+                redirectAttributes.addFlashAttribute("status", String.valueOf(EnumStatus.OK));
+                return "redirect:/authentication";
             }
+            redirectAttributes.addFlashAttribute("notification", rep.getMessage());
+            redirectAttributes.addFlashAttribute("status", String.valueOf(rep.getStatus()));
         }
         return "redirect:/authentication";
     }

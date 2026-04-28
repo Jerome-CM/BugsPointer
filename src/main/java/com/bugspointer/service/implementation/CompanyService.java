@@ -380,6 +380,10 @@ public class CompanyService implements ICompany {
     }
 
     public Response validateRegister(String publicKey){
+        if (publicKey == null || publicKey.trim().isEmpty()) {
+            return new Response(EnumStatus.ERROR, null, "Lien d'activation incomplet. Ouvrez le dernier e-mail reçu ou demandez un nouveau lien.");
+        }
+
         Company company = getCompanyByPublicKey(publicKey);
 
         if (company != null) {
@@ -393,7 +397,7 @@ public class CompanyService implements ICompany {
             return new Response(EnumStatus.ERROR, null, "Ce compte a déjà été validé, veuillez vous connecter");
         }
 
-        return new Response(EnumStatus.ERROR, null, "Echec de la validation");
+        return new Response(EnumStatus.ERROR, null, "Lien d'activation invalide ou expiré. Vérifiez que vous avez ouvert le dernier e-mail de confirmation.");
     }
 
     public Response registerDomaine(AccountDTO dto){

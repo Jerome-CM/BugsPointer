@@ -128,6 +128,10 @@ public class Authentication {
                 model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());
                 model.addAttribute("etat", "error");
+                Company company = companyService.getCompanyByPublicKey(publicKey);
+                if (company != null) {
+                    model.addAttribute("company", companyService.getAccountDto(company));
+                }
             }
         } else {
             Company company = companyService.getCompanyByPublicKey(publicKey);

@@ -209,8 +209,14 @@ public class Private {
     }
 
     @GetMapping("dashboard")
-    String getDashboard(Model model, HttpServletRequest request){
-        model.addAttribute("company", companyService.getDashboardDto(companyService.getCompanyWithToken(request)));
+    String getDashboard(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes){
+        Company company = companyService.getCompanyWithToken(request);
+        if (company != null && (company.getDomaine() == null || !company.isDomainVerified())) {
+            redirectAttributes.addFlashAttribute("status", "ERROR");
+            redirectAttributes.addFlashAttribute("notification", "Finalisez la vérification de votre site avant d'accéder au dashboard.");
+            return "redirect:/newUser/" + company.getPublicKey();
+        }
+        model.addAttribute("company", companyService.getDashboardDto(company));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/dashboard";
     }
