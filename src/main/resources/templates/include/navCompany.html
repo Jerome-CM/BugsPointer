@@ -10,7 +10,7 @@
             <li th:if="${isLoggedIn == true}"><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/private/dashboard}">Dashboard</a></li>
             <li th:if="${isLoggedIn == true}"><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/download}">Download</a></li>
             <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/documentations}">Documentations</a></li>
-            <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/features}">Offres</a></li>
+            <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/features}">Fonctionnalités</a></li>
             <li th:if="${isLoggedIn == false}"><a class="inline-flex min-h-10 items-center justify-center rounded-lg bg-pointer-green px-4 py-2 text-sm font-extrabold text-pointer-ink transition hover:bg-pointer-lime" th:href="@{/authentication}">Connexion</a></li>
             <li th:if="${isLoggedIn == true}">
                 <form th:action="@{/logout}" method="post">
