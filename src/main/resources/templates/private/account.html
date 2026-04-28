@@ -1,7 +1,7 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Account - BugsPointer</title>
+    <title>Mon compte - BugsPointer</title>
     <meta name="robots" content="noindex">
     <script th:src="@{/js/tailwindcss-cdn.js}"></script>
     <script>
@@ -34,25 +34,25 @@
         <section class="relative px-5 pb-16 pt-12 sm:px-8 lg:px-12">
             <div class="home-noise"></div>
             <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-7">
-                <div class="rounded-lg border border-white/10 bg-white/[0.065] p-6 text-center shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
+                <div class="rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
                     <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
-                        Account
+                        Mon compte
                     </p>
                     <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
-                        Gérez votre compte et votre installation.
+                        Gérez votre compte et votre installation
                     </h1>
                 </div>
 
-                <div class="grid gap-5 lg:grid-cols-[240px_1fr] lg:items-start">
-                    <aside class="sticky top-24 hidden rounded-lg border border-white/10 bg-white/[0.055] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur lg:block">
+                <div class="grid gap-5 lg:grid-cols-[320px_1fr] lg:items-start">
+                    <aside class="sticky top-24 hidden min-h-[30rem] rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur lg:block">
                         <p class="px-3 pb-3 text-xs font-black uppercase tracking-wider text-pointer-lime">Sections</p>
                         <nav class="flex flex-col gap-1">
-                            <a class="rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#identity">Identité</a>
-                            <a class="rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#security">Sécurité</a>
-                            <a class="rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#domain">Domaine</a>
-                            <a class="rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#plan">Plan</a>
-                            <a class="rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#mandates">Mandats</a>
-                            <a class="rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#public-key">Public Key</a>
+                            <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#identity">Identité</a>
+                            <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#security">Sécurité</a>
+                            <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#domain">Domaine</a>
+                            <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#plan">Plan</a>
+                            <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#mandates">Mandats</a>
+                            <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#public-key">Public Key</a>
                         </nav>
                     </aside>
 
@@ -66,7 +66,7 @@
                                 <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Identité</p>
                                 <h2 class="mt-2 font-display text-3xl leading-none text-white">E-mail</h2>
                             </div>
-                            <div class="flex flex-col gap-4">
+                            <div class="grid max-w-4xl gap-4 md:grid-cols-2">
                                 <label>
                                     <span class="mb-2 block text-sm font-bold text-white/72">Nouvel e-mail</span>
                                     <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{mail}" id="mail" name="mail" th:value="${company.getMail()}" placeholder="vous@entreprise.com">
@@ -78,8 +78,8 @@
                             </div>
                             <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
                             <div class="mt-5 flex flex-col gap-3 sm:flex-row">
-                                <button type="submit" class="min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" name="action" value="updateMail">Mettre à jour</button>
-                                <a class="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime" th:href="@{/app/private/notifications}">Notifications</a>
+                                <button type="submit" class="min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime sm:w-auto" name="action" value="updateMail">Mettre à jour</button>
+                                <a class="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime sm:w-auto" th:href="@{/app/private/notifications}">Notifications</a>
                             </div>
                         </form>
                     </section>
@@ -91,15 +91,15 @@
                             </div>
                             <div class="mb-5 border-b border-white/10 pb-5">
                                 <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Sécurité</p>
-                                <h2 class="mt-2 font-display text-3xl leading-none text-white">Password</h2>
+                                <h2 class="mt-2 font-display text-3xl leading-none text-white">Mot de passe</h2>
                             </div>
-                            <div class="flex flex-col gap-4">
+                            <div class="grid max-w-4xl gap-4 md:grid-cols-2">
                                 <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" id="actualPassword" placeholder="Mot de passe actuel">
                                 <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{newPassword}" id="newPassword" placeholder="Nouveau mot de passe">
-                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmer le nouveau mot de passe">
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] md:col-span-2" type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmer le nouveau mot de passe">
                             </div>
                             <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}" readonly>
-                            <button type="submit" class="mt-5 min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" name="action" value="updatePw">Mettre à jour</button>
+                            <button type="submit" class="mt-5 min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime sm:w-auto" name="action" value="updatePw">Mettre à jour</button>
                         </form>
                     </section>
 
@@ -112,12 +112,12 @@
                                 <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Installation</p>
                                 <h2 class="mt-2 font-display text-3xl leading-none text-white">Domaine</h2>
                             </div>
-                            <div class="flex flex-col gap-4">
+                            <div class="grid max-w-4xl gap-4 md:grid-cols-2">
                                 <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{domaine}" id="domaine" th:value="${company.getDomaine()}" placeholder="https://www.exemple.fr">
                                 <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" placeholder="Mot de passe">
                             </div>
                             <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}" readonly>
-                            <button type="submit" class="mt-5 min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" name="action" value="updateDomaine">Mettre à jour</button>
+                            <button type="submit" class="mt-5 min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime sm:w-auto" name="action" value="updateDomaine">Mettre à jour</button>
                         </form>
                     </section>
 
@@ -175,7 +175,7 @@
                     <form id="public-key" class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" th:object="${company}" method="get">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Clé publique</p>
                         <h2 class="mt-2 font-display text-3xl leading-none text-white">Public Key</h2>
-                        <input class="mt-5 min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none" type="text" th:field="*{publicKey}" id="publicKey" th:value="${company.getPublicKey()}" readonly>
+                        <input class="mt-5 min-h-12 w-full max-w-3xl rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none" type="text" th:field="*{publicKey}" id="publicKey" th:value="${company.getPublicKey()}" readonly>
                     </form>
                     <form id="key" class="rounded-lg border border-red-300/25 bg-red-500/10 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/account/delete}" th:object="${company}" method="post">
                         <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>

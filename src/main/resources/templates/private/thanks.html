@@ -1,29 +1,33 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Merci pour votre abonnement</title>
+    <title>Merci - BugsPointer</title>
     <meta name="robots" content="noindex">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { pointer: { green: '#00E676', lime: '#B7FF4A', ink: '#08110D' } }, fontFamily: { sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'], display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif'] } } } };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}</style>
 </head>
-<body class="index">
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
     <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/nav.html}"></div>
 
-    <div class="container">
-        <img style="width:60%; margin:0 auto;" th:src="@{/css/img/motion/merci_motion.gif}" alt="thanks"/>
-
-        <h1 th:text="${title}" class="space"></h1>
-
-        <div th:if="${plan != null && plan == 'TARGET'}" class="btn-download container-row">
-            <p class="center">Venez profiter dès à présent de votre tout nouveau Dashboard, fraichement construit pour votre arrivée</p>
-            <a th:href="@{/app/private/dashboard}" class="btn-action">Mon Dashboard</a>
-        </div>
-
-       <!-- <div th:if="${plan == 'ULTIMATE'}" class="btn-download container-row">
-            <p class="center">Rendez-vous dans votre Dashboard, dans une nouvelle catégorie fraichement construite, afin de mettre en place simplement le lien entre Bugspointer et votre plateforme de développement</p>
-            <a th:href="@{/app/private/dashboard}" class="btn-action">Mon Dashboard</a>
-        </div>-->
-
-    </div>
+    <main>
+        <section class="relative px-5 py-16 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto max-w-3xl rounded-lg border border-pointer-green/25 bg-white/[0.075] p-6 text-center shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-8">
+                <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime">Merci</p>
+                <h1 class="font-display text-4xl leading-none text-white sm:text-5xl" th:text="${title}">Merci pour votre retour</h1>
+                <p class="mx-auto mt-5 max-w-xl text-base leading-7 text-white/70">Votre réponse nous aide à améliorer BugsPointer et le signalement de bug sur site web.</p>
+                <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+                    <a th:href="@{/}" class="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime">Accueil</a>
+                    <a th:if="${plan != null && plan == 'TARGET'}" th:href="@{/app/private/dashboard}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)]">Mon dashboard</a>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <div th:replace="~{include/footer.html}"></div>
 </body>

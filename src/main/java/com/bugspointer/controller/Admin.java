@@ -49,6 +49,11 @@ public class Admin {
         model.addAttribute("estimatedRevenue", adminService.getEstimatedAnnualRevenue());
         model.addAttribute("estimatedProfit", adminService.getEstimatedProfit());
         model.addAttribute("paidCompanyCount", adminService.getPaidCompanyCount());
+        model.addAttribute("totalCompanyCount", adminService.getTotalCompanyCount());
+        model.addAttribute("freeCompanyCount", adminService.getFreeCompanyCount());
+        model.addAttribute("verifiedDomainCount", adminService.getVerifiedDomainCount());
+        model.addAttribute("missingDomainCount", adminService.getMissingDomainCount());
+        model.addAttribute("totalBugCount", adminService.getTotalBugCount());
         return "admin/dashboard";
     }
 

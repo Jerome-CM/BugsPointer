@@ -83,6 +83,32 @@ public class AdminService {
                 .count();
     }
 
+    public long getTotalCompanyCount() {
+        return StreamSupport.stream(companyRepository.findAll().spliterator(), false).count();
+    }
+
+    public long getFreeCompanyCount() {
+        return StreamSupport.stream(companyRepository.findAll().spliterator(), false)
+                .filter(company -> company.getPlan() == null || company.getPlan() == EnumPlan.FREE)
+                .count();
+    }
+
+    public long getVerifiedDomainCount() {
+        return StreamSupport.stream(companyRepository.findAll().spliterator(), false)
+                .filter(Company::isDomainVerified)
+                .count();
+    }
+
+    public long getMissingDomainCount() {
+        return StreamSupport.stream(companyRepository.findAll().spliterator(), false)
+                .filter(company -> company.getDomaine() == null || company.getDomaine().trim().isEmpty())
+                .count();
+    }
+
+    public Long getTotalBugCount() {
+        return bugRepository.allBugCounted();
+    }
+
     public BigDecimal getEstimatedAnnualRevenue() {
         return BigDecimal.valueOf(getPaidCompanyCount()).multiply(BigDecimal.valueOf(15));
     }
