@@ -1,52 +1,85 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
     <title>Dashboard Administrator</title>
     <meta name="robots" content="noindex">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { pointer: { green: '#00E676', lime: '#B7FF4A', ink: '#08110D' } }, fontFamily: { sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'], display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif'] } } } };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}</style>
 </head>
-<body>
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
+    <div th:replace="~{include/notifAlert.html}"></div>
+    <div th:replace="~{include/navAdmin.html}"></div>
 
-<div th:replace="~{include/notifAlert.html}"></div>
-<div th:replace="~{include/navAdmin.html}"></div>
-    <h1>My Dashboard</h1>
+    <main>
+        <section class="relative px-5 pb-16 pt-12 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-7">
+                <div class="rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
+                    <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime">Admin</p>
+                    <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">Pilotage BugsPointer.</h1>
+                    <p class="mt-6 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">Suivez les premiers rapports clients, les dépenses et la rentabilité estimée.</p>
+                </div>
 
-    <div class="container">
-        <section th:if="${firstReports.size() > 0}">
-            <h3>First report</h3>
-            <hr>
-            <div class="first-report" th:each="first : ${firstReports}">
-                <form action="#" th:action="@{/api/saveFirstReport}" method="post" th:object="${firstReportDTO}" class="form-first-report">
-                    <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
-                        <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                <section class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+                    <div class="rounded-lg border border-white/10 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Clients payants</p>
+                        <p class="mt-4 font-display text-5xl leading-none text-white" th:text="${paidCompanyCount}">0</p>
                     </div>
-                    <a target="_blank" th:href="@{${first.domaine}}" th:text="${first.companyName}"></a>
-                    First : <input type="checkbox" th:field="*{sendIsChecked}">
-                    <input type="text" th:field="*{description}" placeholder="Description du bug signalé">
-                    <input type="hidden" name="id" th:value="${first.getId()}">
-                    <input type="submit" value="➔">
-                </form>
+                    <div class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_24px_80px_rgba(0,230,118,0.10)] backdrop-blur">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Revenu annuel estimé</p>
+                        <p class="mt-4 font-display text-5xl leading-none text-white"><span th:text="${estimatedRevenue}">0</span>€</p>
+                    </div>
+                    <div class="rounded-lg border border-white/10 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
+                        <p class="text-sm font-black uppercase tracking-wider text-white/55">Dépenses</p>
+                        <p class="mt-4 font-display text-5xl leading-none text-white"><span th:text="${billingTotal}">0</span>€</p>
+                    </div>
+                    <div class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_24px_80px_rgba(0,230,118,0.10)] backdrop-blur">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Rentabilité</p>
+                        <p class="mt-4 font-display text-5xl leading-none text-white"><span th:text="${estimatedProfit}">0</span>€</p>
+                    </div>
+                </section>
+
+                <div class="grid gap-5 lg:grid-cols-2">
+                    <section class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                        <div class="mb-5 border-b border-white/10 pb-5">
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">First report</p>
+                            <h2 class="mt-2 font-display text-3xl leading-none text-white">À envoyer</h2>
+                        </div>
+                        <div class="flex flex-col gap-3" th:if="${firstReports.size() > 0}">
+                            <form action="#" th:action="@{/api/saveFirstReport}" method="post" th:object="${firstReportDTO}" class="grid gap-3 rounded-lg border border-white/10 bg-black/15 p-4" th:each="first : ${firstReports}">
+                                <a class="font-bold text-pointer-lime" target="_blank" th:href="@{${first.domaine}}" th:text="${first.companyName}"></a>
+                                <label class="inline-flex items-center gap-2 text-sm text-white/68">First <input class="h-4 w-4 accent-[#00E676]" type="checkbox" th:field="*{sendIsChecked}"></label>
+                                <input class="min-h-11 rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none" type="text" th:field="*{description}" placeholder="Description du bug signalé">
+                                <input type="hidden" name="id" th:value="${first.getId()}">
+                                <input class="min-h-11 cursor-pointer rounded-lg bg-pointer-green px-4 py-2 font-extrabold text-pointer-ink" type="submit" value="Valider">
+                            </form>
+                        </div>
+                        <p class="text-sm leading-6 text-white/62" th:if="${firstReports.size() == 0}">Aucun premier rapport en attente.</p>
+                    </section>
+
+                    <section class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                        <div class="mb-5 border-b border-white/10 pb-5">
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Second report</p>
+                            <h2 class="mt-2 font-display text-3xl leading-none text-white">À envoyer</h2>
+                        </div>
+                        <div class="flex flex-col gap-3" th:if="${secondReports.size() > 0}">
+                            <form action="#" th:action="@{/api/saveFirstReport}" method="post" th:object="${firstReportDTO}" class="grid gap-3 rounded-lg border border-white/10 bg-black/15 p-4" th:each="second : ${secondReports}">
+                                <a class="font-bold text-pointer-lime" target="_blank" th:href="@{${second.domaine}}" th:text="${second.companyName}"></a>
+                                <label class="inline-flex items-center gap-2 text-sm text-white/68">Second <input class="h-4 w-4 accent-[#00E676]" type="checkbox" th:field="*{sendIsChecked}"></label>
+                                <input class="min-h-11 rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none" type="text" th:field="*{description}" placeholder="Description du bug signalé">
+                                <input type="hidden" name="id" th:value="${second.getId()}">
+                                <input class="min-h-11 cursor-pointer rounded-lg bg-pointer-green px-4 py-2 font-extrabold text-pointer-ink" type="submit" value="Valider">
+                            </form>
+                        </div>
+                        <p class="text-sm leading-6 text-white/62" th:if="${secondReports.size() == 0}">Aucun second rapport en attente.</p>
+                    </section>
+                </div>
             </div>
         </section>
-        <br>
-        <section th:if="${secondReports.size() > 0}">
-            <h3>Second report</h3>
-            <hr>
-            <div class="first-report" th:each="second : ${secondReports}">
-                <form action="#" th:action="@{/api/saveFirstReport}" method="post" th:object="${firstReportDTO}" class="form-first-report">
-                    <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
-                        <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
-                    </div>
-                    <a target="_blank" th:href="@{${second.domaine}}" th:text="${second.companyName}"></a>
-                    Second : <input type="checkbox" th:field="*{sendIsChecked}">
-                    <input type="text" th:field="*{description}" placeholder="Description du bug signalé">
-                    <input type="hidden" name="id" th:value="${second.getId()}">
-                    <input type="submit" value="➔">
-                </form>
-            </div>
-        </section>
-
-
-    </div>
-
+    </main>
 </body>
 </html>

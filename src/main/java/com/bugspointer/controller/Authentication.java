@@ -111,19 +111,16 @@ public class Authentication {
     String registerSite(@PathVariable("publicKey") String publicKey,
                         @Validated(AccountDTO.Domain.class) @ModelAttribute("company") AccountDTO dto,
                         BindingResult result,
-                        Model model){
+                        Model model,
+                        RedirectAttributes redirectAttributes){
         if (!result.hasErrors()) {
             String companyMail = dto.getMail();
             dto.setPublicKey(publicKey);
             Response response = companyService.registerDomaine(dto);
             if (response.getStatus().equals(EnumStatus.OK)) {
-                model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyByPublicKey(publicKey)));
-                model.addAttribute("status", String.valueOf(response.getStatus()));
-                model.addAttribute("notification", response.getMessage());
-                model.addAttribute("etat", "ok");
-                model.addAttribute("mail", companyMail);
-                model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-                return "public/newUser";
+                redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+                redirectAttributes.addFlashAttribute("notification", "Domaine enregistré. Téléchargez maintenant le kit BugsPointer pour finaliser l'installation.");
+                return "redirect:/download";
             } else {
                 model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());

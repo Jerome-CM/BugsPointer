@@ -1,49 +1,60 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
     <title>Companies List</title>
     <meta name="robots" content="noindex">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { pointer: { green: '#00E676', lime: '#B7FF4A', ink: '#08110D' } }, fontFamily: { sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'], display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif'] } } } };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}</style>
 </head>
-<body>
-
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
     <div th:replace="~{include/notifAlert.html}"></div>
-        <div th:replace="~{include/navAdmin.html}"></div>
+    <div th:replace="~{include/navAdmin.html}"></div>
 
-    <h1>Companies List</h1>
+    <main>
+        <section class="relative px-5 pb-16 pt-12 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-7">
+                <div class="rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
+                    <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime">Admin</p>
+                    <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">Companies.</h1>
+                </div>
 
-    <div class="container">
-
-        <table class="companiesList">
-            <thead>
-                <tr>
-                    <th>Company name</th>
-                    <th>Creation</th>
-                    <th>Valide</th>
-                    <th>Download</th>
-                    <th>Received</th>
-                    <th>Solved</th>
-                    <th>Plan</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="company : ${companies}">
-                    <td th:text="${company.getCompanyName()}"></td>
-                    <td th:text="${company.getCreationDate}"></td>
-                    <td>
-                        <span class="enclosure solved" th:if="${company.motifEnable.equals('Validate')}" th:text="${company.motifEnable}"></span>
-                        <span class="enclosure ignored" th:if="${company.motifEnable.equals('Confirmation')}" th:text="${company.motifEnable}"></span>
-                        <span class="enclosure pending" th:if="${company.motifEnable.equals('Suppression')}" th:text="${company.motifEnable}"></span>
-                        <span class="enclosure new" th:if="${company.motifEnable.equals('Admin')}" th:text="${company.motifEnable}"></span>
-                    </td>
-                    <td><span th:class="${company.getDateDownload() != '--'} ? enclosure : ''" th:classappend="${company.getDateDownload() != '--'} ? solved : ''" th:text="${company.getDateDownload()}"></span></td>
-                    <td th:text="${company.getNbrTotalBug()}"></td>
-                    <td th:text="${company.getNbrSolved()}"></td>
-                    <td><span th:classappend="${(!company.getPlan().equals('Free') ? 'gold ' : '') + (!company.getPlan().equals('Free') ? 'enclosure' : '')}" th:text="${company.getPlan()}"></span></td>
-                    <td><a target="_blank" th:href="@{/app/admin/companyDetails/{id}(id=${company.getCompanyId()})}">Details</a></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                <section class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                    <div class="overflow-x-auto">
+                        <table class="w-full min-w-[980px] border-separate border-spacing-0 overflow-hidden rounded-lg border border-white/10 text-left">
+                            <thead>
+                                <tr class="bg-black/25 text-sm uppercase tracking-wider text-white/58">
+                                    <th class="px-4 py-3">Company</th>
+                                    <th class="px-4 py-3">Creation</th>
+                                    <th class="px-4 py-3">Status</th>
+                                    <th class="px-4 py-3">Download</th>
+                                    <th class="px-4 py-3">Received</th>
+                                    <th class="px-4 py-3">Solved</th>
+                                    <th class="px-4 py-3">Plan</th>
+                                    <th class="px-4 py-3 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-sm text-white/72" th:each="company : ${companies}">
+                                    <td class="border-t border-white/10 px-4 py-3 font-bold text-white" th:text="${company.getCompanyName()}"></td>
+                                    <td class="border-t border-white/10 px-4 py-3" th:text="${company.getCreationDate}"></td>
+                                    <td class="border-t border-white/10 px-4 py-3"><span class="rounded-full border border-white/10 bg-white/8 px-3 py-1 text-xs font-black uppercase tracking-wider" th:text="${company.motifEnable}"></span></td>
+                                    <td class="border-t border-white/10 px-4 py-3" th:text="${company.getDateDownload()}"></td>
+                                    <td class="border-t border-white/10 px-4 py-3" th:text="${company.getNbrTotalBug()}"></td>
+                                    <td class="border-t border-white/10 px-4 py-3" th:text="${company.getNbrSolved()}"></td>
+                                    <td class="border-t border-white/10 px-4 py-3"><span class="rounded-full border border-pointer-green/25 bg-pointer-green/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-pointer-lime" th:text="${company.getPlan()}"></span></td>
+                                    <td class="border-t border-white/10 px-4 py-3 text-right"><a class="font-bold text-pointer-lime transition hover:text-pointer-green" target="_blank" th:href="@{/app/admin/companyDetails/{id}(id=${company.getCompanyId()})}">Details</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
