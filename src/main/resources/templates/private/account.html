@@ -1,153 +1,194 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Account</title>
+    <title>Account - BugsPointer</title>
     <meta name="robots" content="noindex">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}</style>
 </head>
-<body>
-
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
     <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/navCompany.html}"></div>
 
-    <h1>Account</h1>
+    <main>
+        <section class="relative px-5 pb-16 pt-12 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-7">
+                <div class="rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
+                    <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                        Account
+                    </p>
+                    <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
+                        Gérez votre compte et votre installation.
+                    </h1>
+                    <p class="mt-6 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
+                        Mettez à jour vos accès, votre domaine, votre plan et les informations de paiement liées à BugsPointer.
+                    </p>
+                </div>
 
-    <div class="container">
-        <section>
-            <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
-                <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
-                    <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
-                </div>
-                <h3>E-mail</h3>
-                <input type="text" th:field="*{mail}" id="mail" name="mail" th:value="${company.getMail()}" placeholder="E-mail">
-                <input type="password" th:field="*{password}" id="password" name="password" placeholder="Password">
-                <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
-                <div class="row">
-                    <button type="submit" class="submit" name="action" value="updateMail">Update</button> <span>&nbsp; | &nbsp;</span>
-                    <a class="submit align_in_container_row" th:href="@{/app/private/notifications}"><img th:src="@{/css/img/notification.png}" alt="Notification"></a>
-                </div>
-            </form>
-        </section>
+                <div class="grid gap-5 lg:grid-cols-2">
+                    <section>
+                        <form class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
+                            <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                                <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                            </div>
+                            <div class="mb-5 border-b border-white/10 pb-5">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Identité</p>
+                                <h2 class="mt-2 font-display text-3xl leading-none text-white">E-mail</h2>
+                            </div>
+                            <div class="flex flex-col gap-4">
+                                <label>
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Nouvel e-mail</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{mail}" id="mail" name="mail" th:value="${company.getMail()}" placeholder="vous@entreprise.com">
+                                </label>
+                                <label>
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Mot de passe actuel</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" id="password" name="password" placeholder="Mot de passe">
+                                </label>
+                            </div>
+                            <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
+                            <div class="mt-5 flex flex-col gap-3 sm:flex-row">
+                                <button type="submit" class="min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" name="action" value="updateMail">Mettre à jour</button>
+                                <a class="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime" th:href="@{/app/private/notifications}">Notifications</a>
+                            </div>
+                        </form>
+                    </section>
 
-        <section>
-            <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
-                <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
-                    <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
-                </div>
-                <h3>Password</h3>
-                <input type="password" th:field="*{password}" id="actualPassword" placeholder="Actual password">
-                <input type="password" th:field="*{newPassword}" id="newPassword" placeholder="New password">
-                <input type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirme new password">
-                <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}" readonly>
-                <button type="submit" class="submit" name="action" value="updatePw">Update</button>
-            </form>
-        </section>
+                    <section>
+                        <form class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
+                            <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                                <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                            </div>
+                            <div class="mb-5 border-b border-white/10 pb-5">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Sécurité</p>
+                                <h2 class="mt-2 font-display text-3xl leading-none text-white">Password</h2>
+                            </div>
+                            <div class="flex flex-col gap-4">
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" id="actualPassword" placeholder="Mot de passe actuel">
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{newPassword}" id="newPassword" placeholder="Nouveau mot de passe">
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmer le nouveau mot de passe">
+                            </div>
+                            <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}" readonly>
+                            <button type="submit" class="mt-5 min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" name="action" value="updatePw">Mettre à jour</button>
+                        </form>
+                    </section>
 
-        <!--<section>
-            <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
-                <h3>SMS</h3>
-                <div class="container-phone">
-                    <select th:field="*{indicatif}" id="indicatif">
-                        <option th:each="indicatif : ${T(com.bugspointer.entity.EnumIndicatif).values()}"
-                                th:value="${indicatif}"
-                                th:text="${indicatif.getValeur()}"
-                                th:selected="${indicatif == company.getIndicatif()}"></option>
-                    </select>
-                    <input type="tel" th:field="*{phoneNumber}" id="phoneNumber" th:value="${company.getPhoneNumber()}" placeholder="Format : 06xxxxxxxx" pattern="[0-9]{10}">
-                </div>
-                <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
-                <div class="container-row">
-                    <button type="submit" class="submit" name="action" value="updateSms">Update</button><span>&nbsp; | &nbsp;</span>
-                    <a class="submit align_in_container_row" th:href="@{/app/private/notifications}"><img th:src="@{/css/img/notification.png}" alt="Notification"></a>
-                </div>
-            </form>
-        </section>-->
+                    <section id="domain">
+                        <form class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
+                            <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                                <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                            </div>
+                            <div class="mb-5 border-b border-white/10 pb-5">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Installation</p>
+                                <h2 class="mt-2 font-display text-3xl leading-none text-white">Domaine</h2>
+                            </div>
+                            <div class="flex flex-col gap-4">
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{domaine}" id="domaine" th:value="${company.getDomaine()}" placeholder="https://www.exemple.fr">
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" placeholder="Mot de passe">
+                            </div>
+                            <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}" readonly>
+                            <button type="submit" class="mt-5 min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" name="action" value="updateDomaine">Mettre à jour</button>
+                        </form>
+                    </section>
 
-        <section id="domain">
-            <form class="cards account" action="#" th:action="@{/app/private/account}" th:object="${company}" method="post">
-                <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
-                    <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                    <section>
+                        <div class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6">
+                            <div class="mb-5 border-b border-white/10 pb-5">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Abonnement</p>
+                                <h2 class="mt-2 font-display text-3xl leading-none text-white">Plan</h2>
+                            </div>
+                            <p class="font-display text-5xl leading-none text-white" th:text="${company.getPlan()}">FREE</p>
+                            <div class="mt-5 flex flex-col gap-3 sm:flex-row">
+                                <a class="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" th:href="@{/features}">Changer de plan</a>
+                                <form class="w-full" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}" th:action="@{/api/user/{idCompany}/{idCustomer}/stopSubscribe(idCompany=${company.getId()}, idCustomer=${company.getCustomerId()})}" method="post" id="confirmationFormClosePlan">
+                                    <button type="submit" class="min-h-12 w-full cursor-pointer rounded-lg border border-red-300/30 bg-red-500/12 px-5 py-3 font-extrabold text-red-100 transition hover:border-red-200/60">Stopper l’abonnement</button>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-                <h3>Domaine</h3>
-                <input type="text" th:field="*{domaine}" id="domaine" th:value="${company.getDomaine()}" placeholder="Indiquez le domaine du site contenant la modal de rapport de bug">
-                <input type="password" th:field="*{password}" placeholder="Password">
-                <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}" readonly>
-                <button type="submit" class="submit" name="action" value="updateDomaine">Update</button>
-            </form>
-        </section>
 
-        <section>
-            <div class="cards account">
-                <h3>Type of plan</h3>
-                <span style="margin-top:22px;" th:text="${company.getPlan()}"></span>
-                <div class="container-row">
-                    <a class="submit solved" th:href="@{/features}">Change plan</a>
-                    <form th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}" th:action="@{/api/user/{idCompany}/{idCustomer}/stopSubscribe(idCompany=${company.getId()}, idCustomer=${company.getCustomerId()})}" method="post" id="confirmationFormClosePlan">
-                        <button type="submit" class="submit new" style="margin:15px 0 0 15px;">Stop my subscribe</button>
+                <section class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7">
+                    <div class="mb-5 flex flex-col gap-3 border-b border-white/10 pb-5 md:flex-row md:items-end md:justify-between">
+                        <div>
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Paiement</p>
+                            <h2 class="mt-2 font-display text-3xl leading-none text-white">Mandats</h2>
+                        </div>
+                        <p class="text-sm leading-6 text-white/62" th:if="${mandates.size() == 0}">Vous n'avez pas encore de mandat de prélèvement.</p>
+                    </div>
+                    <div class="overflow-x-auto" th:if="${mandates.size() > 0}">
+                        <table class="w-full min-w-[720px] border-separate border-spacing-0 overflow-hidden rounded-lg border border-white/10 text-left">
+                            <thead>
+                                <tr class="bg-black/25 text-sm uppercase tracking-wider text-white/58">
+                                    <th class="px-4 py-3">Iban</th>
+                                    <th class="px-4 py-3">Bic</th>
+                                    <th class="px-4 py-3">Validité</th>
+                                    <th class="px-4 py-3 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-t border-white/10 text-sm text-white/72" th:each="mandate :${mandates}">
+                                    <td class="border-t border-white/10 px-4 py-3" th:text="${mandate.getIban()}"></td>
+                                    <td class="border-t border-white/10 px-4 py-3" th:text="${mandate.getBic()}"></td>
+                                    <td class="border-t border-white/10 px-4 py-3" th:text="${mandate.getValidDate()}"></td>
+                                    <td class="border-t border-white/10 px-4 py-3 text-right">
+                                        <form th:action="@{/api/user/{idCompany}/{idCustomer}/deleteMandate/{idMandate}(idCompany=${company.getId()} ,idCustomer=${mandate.getCustomerId()}, idMandate=${mandate.getMandateId()})}" method="post">
+                                            <button type="submit" class="min-h-10 rounded-lg border border-red-300/30 bg-red-500/12 px-4 font-extrabold text-red-100 transition hover:border-red-200/60">Supprimer</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-start">
+                    <form class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" th:object="${company}" method="get">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Clé publique</p>
+                        <h2 class="mt-2 font-display text-3xl leading-none text-white">Public Key</h2>
+                        <input class="mt-5 min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none" type="text" th:field="*{publicKey}" id="publicKey" th:value="${company.getPublicKey()}" readonly>
                     </form>
-                </div>
+                    <form id="key" class="rounded-lg border border-red-300/25 bg-red-500/10 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/account/delete}" th:object="${company}" method="post">
+                        <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
+                        <p class="text-sm font-black uppercase tracking-wider text-red-100">Zone sensible</p>
+                        <button class="mt-4 min-h-12 w-full cursor-pointer rounded-lg border border-red-300/30 bg-red-500/15 px-5 py-3 font-extrabold text-red-100 transition hover:border-red-200/60" type="submit">Clôturer mon compte</button>
+                    </form>
+                </section>
             </div>
         </section>
-
-        <section>
-            <div class="cards account">
-                <h3>Mandats</h3>
-                <p th:if="${mandates.size() == 0}">Vous n'avez pas encore de mandat de prélèvement</p>
-                <div class="cards-mandate" th:if="${mandates.size() > 0}">
-                    <table class="content-info-mandat">
-                        <tbody>
-                            <tr class="th">
-                                <th>Iban</th>
-                                <th>Bic</th>
-                                <th>Validité</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr class="tr" th:each="mandate :${mandates}">
-                                <td class="iban" th:text="${mandate.getIban()}"></td>
-                                <td class="bic" th:text="${mandate.getBic()}"></td>
-                                <td class="validity" th:text="${mandate.getValidDate()}"></td>
-                                <td class="action center">
-                                    <form th:action="@{/api/user/{idCompany}/{idCustomer}/deleteMandate/{idMandate}(idCompany=${company.getId()} ,idCustomer=${mandate.getCustomerId()}, idMandate=${mandate.getMandateId()})}" method="post">
-                                        <button type="submit" class="submit align_in_container_row new">x</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <form class="cards account" th:object="${company}" method="get">
-                <h3>Public Key</h3>
-                <input type="text" th:field="*{publicKey}" id="publicKey" th:value="${company.getPublicKey()}" readonly>
-            </form>
-        </section>
-        <br>
-        <form id="key" class="account" action="#" th:action="@{/app/private/account/delete}" th:object="${company}" method="post">
-            <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
-            <button class="delete" type="submit">Clôturer mon compte</button>
-        </form>
-    </div>
+    </main>
 
     <div th:replace="~{include/footer.html}"></div>
     <script th:inline="javascript">
-
         const formStop = document.getElementById('confirmationFormClosePlan');
-        /* Account close plan confirme */
         if (formStop) {
             formStop.onsubmit = function(event) {
-            // Demander la confirmation de l'utilisateur
-            const confirmation = window.confirm("Êtes-vous sûr de vouloir stopper votre abonnement ?");
-
-            // Vérifier la réponse de l'utilisateur
-            if (!confirmation) {
-                event.preventDefault();
-            }
+                const confirmation = window.confirm("Êtes-vous sûr de vouloir stopper votre abonnement ?");
+                if (!confirmation) {
+                    event.preventDefault();
+                }
             }
         }
     </script>
-
 </body>
 </html>
-};

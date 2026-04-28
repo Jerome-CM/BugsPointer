@@ -45,7 +45,7 @@ public class AccountDTO {
     private EnumPlan plan;
 
     @NotBlank(message = "Le domaine est obligatoire", groups = Domain.class)
-    @Pattern(regexp = "^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Le domaine doit ressembler à exemple.fr", groups = Domain.class)
+    @Pattern(regexp = "^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/?$", message = "Le domaine doit ressembler à exemple.fr ou https://www.exemple.fr", groups = Domain.class)
     private String domaine;
 
     private boolean domainVerified;
