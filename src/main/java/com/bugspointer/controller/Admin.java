@@ -5,6 +5,7 @@ import com.bugspointer.dto.AdminBillingDTO;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.FirstReportDTO;
 import com.bugspointer.dto.Response;
+import com.bugspointer.entity.EnumEtatBug;
 import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.service.implementation.AdminService;
 import com.bugspointer.service.implementation.ChartService;
@@ -50,10 +51,15 @@ public class Admin {
         model.addAttribute("estimatedProfit", adminService.getEstimatedProfit());
         model.addAttribute("paidCompanyCount", adminService.getPaidCompanyCount());
         model.addAttribute("totalCompanyCount", adminService.getTotalCompanyCount());
+        model.addAttribute("confirmedCompanyCount", adminService.getConfirmedCompanyCount());
         model.addAttribute("freeCompanyCount", adminService.getFreeCompanyCount());
+        model.addAttribute("targetCompanyCount", adminService.getTargetCompanyCount());
+        model.addAttribute("ultimateCompanyCount", adminService.getUltimateCompanyCount());
         model.addAttribute("verifiedDomainCount", adminService.getVerifiedDomainCount());
         model.addAttribute("missingDomainCount", adminService.getMissingDomainCount());
         model.addAttribute("totalBugCount", adminService.getTotalBugCount());
+        model.addAttribute("pendingBugCount", adminService.getBugCount(EnumEtatBug.PENDING));
+        model.addAttribute("solvedBugCount", adminService.getBugCount(EnumEtatBug.SOLVED));
         return "admin/dashboard";
     }
 

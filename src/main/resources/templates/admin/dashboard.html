@@ -18,43 +18,42 @@
         <section class="relative px-5 pb-16 pt-12 sm:px-8 lg:px-12">
             <div class="home-noise"></div>
             <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-7">
-                <section class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-                    <div class="rounded-lg border border-white/10 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
-                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Inscrits</p>
-                        <p class="mt-4 font-display text-5xl leading-none text-white" th:text="${totalCompanyCount}">0</p>
-                    </div>
-                    <div class="rounded-lg border border-white/10 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
-                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Plan Free</p>
-                        <p class="mt-4 font-display text-5xl leading-none text-white" th:text="${freeCompanyCount}">0</p>
-                    </div>
-                    <div class="rounded-lg border border-white/10 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
-                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Clients payants</p>
-                        <p class="mt-4 font-display text-5xl leading-none text-white" th:text="${paidCompanyCount}">0</p>
-                    </div>
-                    <div class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_24px_80px_rgba(0,230,118,0.10)] backdrop-blur">
-                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Domaines validés</p>
-                        <p class="mt-4 font-display text-5xl leading-none text-white" th:text="${verifiedDomainCount}">0</p>
-                    </div>
-                    <div class="rounded-lg border border-yellow-300/25 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
-                        <p class="text-sm font-black uppercase tracking-wider text-yellow-100">Domaines manquants</p>
-                        <p class="mt-4 font-display text-5xl leading-none text-white" th:text="${missingDomainCount}">0</p>
-                    </div>
-                    <div class="rounded-lg border border-white/10 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
-                        <p class="text-sm font-black uppercase tracking-wider text-white/55">Rapports reçus</p>
-                        <p class="mt-4 font-display text-5xl leading-none text-white" th:text="${totalBugCount}">0</p>
-                    </div>
-                    <div class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_24px_80px_rgba(0,230,118,0.10)] backdrop-blur">
-                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Revenu annuel estimé</p>
-                        <p class="mt-4 font-display text-5xl leading-none text-white"><span th:text="${estimatedRevenue}">0</span>€</p>
-                    </div>
-                    <div class="rounded-lg border border-white/10 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
-                        <p class="text-sm font-black uppercase tracking-wider text-white/55">Dépenses</p>
-                        <p class="mt-4 font-display text-5xl leading-none text-white"><span th:text="${billingTotal}">0</span>€</p>
-                    </div>
-                    <div class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_24px_80px_rgba(0,230,118,0.10)] backdrop-blur">
+                <section class="grid gap-5 xl:grid-cols-4">
+                    <article class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Users</p>
+                        <div class="mt-5 grid gap-3">
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4"><span class="text-xs font-bold uppercase tracking-wider text-white/55">Inscrits</span><p class="mt-2 font-display text-4xl leading-none text-white" th:text="${totalCompanyCount}">0</p></div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4"><span class="text-xs font-bold uppercase tracking-wider text-white/55">User confirmé</span><p class="mt-2 font-display text-4xl leading-none text-white" th:text="${confirmedCompanyCount}">0</p></div>
+                            <div class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-4"><span class="text-xs font-bold uppercase tracking-wider text-pointer-lime">Domaines validés</span><p class="mt-2 font-display text-4xl leading-none text-white" th:text="${verifiedDomainCount}">0</p></div>
+                        </div>
+                    </article>
+
+                    <article class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Report</p>
+                        <div class="mt-5 grid gap-3">
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4"><span class="text-xs font-bold uppercase tracking-wider text-white/55">Rapports reçus</span><p class="mt-2 font-display text-4xl leading-none text-white" th:text="${totalBugCount}">0</p></div>
+                            <div class="rounded-lg border border-yellow-300/25 bg-yellow-300/10 p-4"><span class="text-xs font-bold uppercase tracking-wider text-yellow-100">Rapports pending</span><p class="mt-2 font-display text-4xl leading-none text-white" th:text="${pendingBugCount}">0</p></div>
+                            <div class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-4"><span class="text-xs font-bold uppercase tracking-wider text-pointer-lime">Rapports solved</span><p class="mt-2 font-display text-4xl leading-none text-white" th:text="${solvedBugCount}">0</p></div>
+                        </div>
+                    </article>
+
+                    <article class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Subscription</p>
+                        <div class="mt-5 grid gap-3">
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4"><span class="text-xs font-bold uppercase tracking-wider text-white/55">Plan Free</span><p class="mt-2 font-display text-4xl leading-none text-white" th:text="${freeCompanyCount}">0</p></div>
+                            <div class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-4"><span class="text-xs font-bold uppercase tracking-wider text-pointer-lime">Plan Target</span><p class="mt-2 font-display text-4xl leading-none text-white" th:text="${targetCompanyCount}">0</p></div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4"><span class="text-xs font-bold uppercase tracking-wider text-white/55">Plan Ultimate</span><p class="mt-2 font-display text-4xl leading-none text-white" th:text="${ultimateCompanyCount}">0</p></div>
+                        </div>
+                    </article>
+
+                    <article class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_24px_80px_rgba(0,230,118,0.10)] backdrop-blur">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Rentabilité</p>
-                        <p class="mt-4 font-display text-5xl leading-none text-white"><span th:text="${estimatedProfit}">0</span>€</p>
-                    </div>
+                        <div class="mt-5 grid gap-3">
+                            <div class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-4"><span class="text-xs font-bold uppercase tracking-wider text-pointer-lime">Revenu annuel estimé</span><p class="mt-2 font-display text-4xl leading-none text-white"><span th:text="${estimatedRevenue}">0</span>€</p></div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4"><span class="text-xs font-bold uppercase tracking-wider text-white/55">Dépenses</span><p class="mt-2 font-display text-4xl leading-none text-white"><span th:text="${billingTotal}">0</span>€</p></div>
+                            <div class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-4"><span class="text-xs font-bold uppercase tracking-wider text-pointer-lime">Rentabilité</span><p class="mt-2 font-display text-4xl leading-none text-white"><span th:text="${estimatedProfit}">0</span>€</p></div>
+                        </div>
+                    </article>
                 </section>
 
                 <div class="grid gap-5 lg:grid-cols-2">

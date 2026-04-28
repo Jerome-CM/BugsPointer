@@ -87,9 +87,27 @@ public class AdminService {
         return StreamSupport.stream(companyRepository.findAll().spliterator(), false).count();
     }
 
-    public long getFreeCompanyCount() {
+    public long getConfirmedCompanyCount() {
         return StreamSupport.stream(companyRepository.findAll().spliterator(), false)
-                .filter(company -> company.getPlan() == null || company.getPlan() == EnumPlan.FREE)
+                .filter(company -> company.getMotifEnable() == EnumMotif.VALIDATE)
+                .count();
+    }
+
+    public long getFreeCompanyCount() {
+        return getPlanCount("FREE");
+    }
+
+    public long getTargetCompanyCount() {
+        return getPlanCount("TARGET");
+    }
+
+    public long getUltimateCompanyCount() {
+        return getPlanCount("ULTIMATE");
+    }
+
+    private long getPlanCount(String planName) {
+        return StreamSupport.stream(companyRepository.findAll().spliterator(), false)
+                .filter(company -> company.getPlan() != null && company.getPlan().name().equals(planName))
                 .count();
     }
 
@@ -107,6 +125,12 @@ public class AdminService {
 
     public Long getTotalBugCount() {
         return bugRepository.allBugCounted();
+    }
+
+    public long getBugCount(EnumEtatBug status) {
+        return StreamSupport.stream(bugRepository.findAll().spliterator(), false)
+                .filter(bug -> bug.getEtatBug() == status)
+                .count();
     }
 
     public BigDecimal getEstimatedAnnualRevenue() {
