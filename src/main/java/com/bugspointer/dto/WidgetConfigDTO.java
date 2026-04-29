@@ -11,6 +11,10 @@ public class WidgetConfigDTO {
 
     private String modalBackgroundColor = "#FFFFFF";
 
+    private String modalTextColor = "#24233D";
+
+    private String linkTextColor = "#27215F";
+
     private String buttonText = "Signaler un bug";
 
     private String buttonStyle = "button";

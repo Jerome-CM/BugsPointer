@@ -27,6 +27,10 @@ public class CompanyPreferenceDTO {
 
     private String widgetModalBackgroundColor;
 
+    private String widgetModalTextColor;
+
+    private String widgetLinkTextColor;
+
     private String widgetButtonText;
 
     private String widgetButtonStyle;

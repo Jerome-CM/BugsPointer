@@ -32,6 +32,10 @@ public class CompanyPreferences {
 
     private String widgetModalBackgroundColor = "#FFFFFF";
 
+    private String widgetModalTextColor = "#24233D";
+
+    private String widgetLinkTextColor = "#27215F";
+
     private String widgetButtonText = "Signaler un bug";
 
     private String widgetButtonStyle = "button";

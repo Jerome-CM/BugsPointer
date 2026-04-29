@@ -13,6 +13,8 @@
     const defaults = {
         primaryColor: "#27215F",
         modalBackgroundColor: "#FFFFFF",
+        modalTextColor: "#24233D",
+        linkTextColor: "#27215F",
         buttonText: "Signaler un bug",
         buttonStyle: "button",
         title: "Signaler un nouveau bug",
@@ -63,6 +65,8 @@
         const config = {};
         if (script.dataset.color) config.primaryColor = script.dataset.color;
         if (script.dataset.modalBackgroundColor) config.modalBackgroundColor = script.dataset.modalBackgroundColor;
+        if (script.dataset.modalTextColor) config.modalTextColor = script.dataset.modalTextColor;
+        if (script.dataset.linkTextColor) config.linkTextColor = script.dataset.linkTextColor;
         if (script.dataset.buttonText) config.buttonText = script.dataset.buttonText;
         if (script.dataset.buttonStyle) config.buttonStyle = script.dataset.buttonStyle;
         if (script.dataset.title) config.title = script.dataset.title;
@@ -77,6 +81,8 @@
         return {
             primaryColor: safeColor(config.primaryColor),
             modalBackgroundColor: safeColor(config.modalBackgroundColor, defaults.modalBackgroundColor),
+            modalTextColor: safeColor(config.modalTextColor, defaults.modalTextColor),
+            linkTextColor: safeColor(config.linkTextColor, defaults.linkTextColor),
             buttonText: config.buttonText || defaults.buttonText,
             buttonStyle: config.buttonStyle === "link" ? "link" : "button",
             title: config.title || defaults.title,
@@ -94,9 +100,11 @@
                 :host {
                     --bp-primary: ${cfg.primaryColor};
                     --bp-modal-bg: ${cfg.modalBackgroundColor};
+                    --bp-modal-text: ${cfg.modalTextColor};
+                    --bp-link-text: ${cfg.linkTextColor};
                     --bp-margin-x: ${cfg.marginX}px;
                     --bp-margin-y: ${cfg.marginY}px;
-                    --bp-text: #24233d;
+                    --bp-text: var(--bp-modal-text);
                     --bp-muted: #7b8290;
                     --bp-border: #dfe4ec;
                     --bp-soft: #f5f7fb;
@@ -107,14 +115,16 @@
                     position: fixed;
                     z-index: 2147483000;
                     border: 0;
-                    border-radius: 10px;
+                    border-radius: 999px;
                     color: var(--bp-primary);
                     font: 800 15px/1 Inter, ui-sans-serif, system-ui, sans-serif;
                     cursor: pointer;
                 }
                 .bp-launcher.is-button {
                     min-height: 48px;
-                    padding: 0 18px;
+                    width: 56px;
+                    height: 56px;
+                    padding: 0;
                     background: var(--bp-primary);
                     color: #fff;
                     box-shadow: 0 18px 42px rgba(24, 22, 58, 0.24);
@@ -123,7 +133,7 @@
                     min-height: auto;
                     padding: 0;
                     background: transparent;
-                    color: var(--bp-primary);
+                    color: var(--bp-link-text);
                     box-shadow: none;
                     text-decoration: underline;
                     text-underline-offset: 3px;
@@ -196,9 +206,10 @@
                 .bp-label {
                     display: block;
                     margin-bottom: 8px;
-                    color: #4d5663;
+                    color: var(--bp-text);
                     font-size: 14px;
                     font-weight: 800;
+                    opacity: 0.76;
                 }
                 .bp-input,
                 .bp-textarea {
@@ -267,7 +278,7 @@
                     .bp-title { font-size: 22px; }
                 }
             </style>
-            <button class="bp-launcher ${escapeHtml(safePosition(cfg.position))} is-${escapeHtml(cfg.buttonStyle)}" type="button" data-bp-open>${escapeHtml(cfg.buttonText)}</button>
+            <button class="bp-launcher ${escapeHtml(safePosition(cfg.position))} is-${escapeHtml(cfg.buttonStyle)}" type="button" title="${escapeHtml(cfg.buttonText)}" aria-label="${escapeHtml(cfg.buttonText)}" data-bp-open>${cfg.buttonStyle === "link" ? escapeHtml(cfg.buttonText) : "!"}</button>
             <div class="bp-overlay" data-bp-overlay>
                 <form class="bp-modal" method="post" action="${baseUrl}/api/user/modalControl" data-bp-form>
                     <div class="bp-header">

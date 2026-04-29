@@ -41,6 +41,8 @@ public class CompanyPreferencesService implements ICompanyPreferences {
         dto.setCompanyPhoneNumber(company.getPhoneNumber());
         dto.setWidgetPrimaryColor(safeColor(preferences.getWidgetPrimaryColor()));
         dto.setWidgetModalBackgroundColor(safeColor(preferences.getWidgetModalBackgroundColor(), "#FFFFFF"));
+        dto.setWidgetModalTextColor(safeColor(preferences.getWidgetModalTextColor(), "#24233D"));
+        dto.setWidgetLinkTextColor(safeColor(preferences.getWidgetLinkTextColor()));
         dto.setWidgetButtonText(safeText(preferences.getWidgetButtonText(), "Signaler un bug", 60));
         dto.setWidgetButtonStyle(safeButtonStyle(preferences.getWidgetButtonStyle()));
         dto.setWidgetTitle(safeText(preferences.getWidgetTitle(), "Signaler un nouveau bug", 80));
@@ -75,6 +77,8 @@ public class CompanyPreferencesService implements ICompanyPreferences {
             } else if (action.equals("updateWidget")) {
                 preferences.setWidgetPrimaryColor(safeColor(dto.getWidgetPrimaryColor()));
                 preferences.setWidgetModalBackgroundColor(safeColor(dto.getWidgetModalBackgroundColor(), "#FFFFFF"));
+                preferences.setWidgetModalTextColor(safeColor(dto.getWidgetModalTextColor(), "#24233D"));
+                preferences.setWidgetLinkTextColor(safeColor(dto.getWidgetLinkTextColor()));
                 preferences.setWidgetButtonText(safeText(dto.getWidgetButtonText(), "Signaler un bug", 60));
                 preferences.setWidgetButtonStyle(safeButtonStyle(dto.getWidgetButtonStyle()));
                 preferences.setWidgetTitle(safeText(dto.getWidgetTitle(), "Signaler un nouveau bug", 80));
@@ -112,6 +116,8 @@ public class CompanyPreferencesService implements ICompanyPreferences {
         CompanyPreferences preferences = getOrCreatePreferences(company);
         dto.setPrimaryColor(safeColor(preferences.getWidgetPrimaryColor()));
         dto.setModalBackgroundColor(safeColor(preferences.getWidgetModalBackgroundColor(), "#FFFFFF"));
+        dto.setModalTextColor(safeColor(preferences.getWidgetModalTextColor(), "#24233D"));
+        dto.setLinkTextColor(safeColor(preferences.getWidgetLinkTextColor()));
         dto.setButtonText(safeText(preferences.getWidgetButtonText(), "Signaler un bug", 60));
         dto.setButtonStyle(safeButtonStyle(preferences.getWidgetButtonStyle()));
         dto.setTitle(safeText(preferences.getWidgetTitle(), "Signaler un nouveau bug", 80));

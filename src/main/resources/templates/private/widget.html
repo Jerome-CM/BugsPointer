@@ -73,6 +73,16 @@
                                 <span class="mb-2 block text-sm font-bold text-white/72">Fond de la modal</span>
                                 <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="color" th:field="*{widgetModalBackgroundColor}" id="widgetModalBackgroundColor">
                             </label>
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <label>
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Texte de la modal</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="color" th:field="*{widgetModalTextColor}" id="widgetModalTextColor">
+                                </label>
+                                <label>
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Texte du lien</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="color" th:field="*{widgetLinkTextColor}" id="widgetLinkTextColor">
+                                </label>
+                            </div>
                             <label>
                                 <span class="mb-2 block text-sm font-bold text-white/72">Style du déclencheur</span>
                                 <select class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" th:field="*{widgetButtonStyle}" id="widgetButtonStyle">
@@ -128,19 +138,19 @@
 
                         <div class="relative min-h-[560px] overflow-hidden rounded-lg bg-[#eef0f7] p-8 text-[#25243f]">
                             <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(39,33,95,.08)_1px,transparent_1px),linear-gradient(rgba(39,33,95,.08)_1px,transparent_1px)] bg-[size:44px_44px]"></div>
-                            <button id="widgetPreviewButton" type="button" class="absolute z-30 rounded-lg px-5 py-3 text-sm font-black text-white shadow-lg" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}" th:text="${widget.getWidgetButtonText()}">Signaler un bug</button>
+                            <button id="widgetPreviewButton" type="button" class="absolute z-30 flex h-14 w-14 items-center justify-center rounded-full text-lg font-black text-white shadow-lg" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}" th:title="${widget.getWidgetButtonText()}">!</button>
                             <div class="absolute inset-0 z-20 flex items-center justify-center bg-[rgba(39,33,95,0.50)] p-12">
-                                <div id="widgetPreviewModal" class="w-full max-w-2xl rounded-[18px] bg-white p-8 shadow-[0_26px_80px_rgba(37,36,63,0.28)]" th:style="'background-color:' + ${widget.getWidgetModalBackgroundColor()}">
+                                <div id="widgetPreviewModal" class="w-full max-w-2xl rounded-[18px] bg-white p-8 shadow-[0_26px_80px_rgba(37,36,63,0.28)]" th:style="'background-color:' + ${widget.getWidgetModalBackgroundColor()} + '; color:' + ${widget.getWidgetModalTextColor()}">
                                     <div class="mb-5 flex items-start justify-between gap-4">
                                         <h3 id="widgetPreviewTitle" class="text-3xl font-black leading-tight" th:text="${widget.getWidgetTitle()}">Signaler un nouveau bug</h3>
                                         <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-3xl leading-none text-slate-400">&times;</span>
                                     </div>
                                     <label class="mb-4 block">
-                                        <span class="mb-2 block text-sm font-bold text-slate-600">URL concernée</span>
+                                        <span class="mb-2 block text-sm font-bold opacity-75">URL concernée</span>
                                         <input class="min-h-12 w-full rounded-lg border border-slate-200 px-4 text-slate-500" value="https://site-client.fr/page-exemple" readonly>
                                     </label>
                                     <button id="widgetPreviewPointer" class="mb-4 min-h-12 w-full rounded-lg px-4 font-black text-white" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}">Pointer le bug</button>
-                                    <label id="widgetPreviewLabel" class="mb-2 block text-sm font-bold text-slate-600" th:text="${widget.getWidgetDescriptionLabel()}">Description du bug</label>
+                                    <label id="widgetPreviewLabel" class="mb-2 block text-sm font-bold opacity-75" th:text="${widget.getWidgetDescriptionLabel()}">Description du bug</label>
                                     <textarea class="min-h-[130px] w-full rounded-lg border border-slate-200 px-4 py-3" placeholder="Expliquez le problème rencontré"></textarea>
                                     <div class="mt-4 flex justify-end">
                                         <button id="widgetPreviewSubmit" class="min-h-11 rounded-lg px-5 font-black text-white" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}">Envoyer le rapport</button>
@@ -159,6 +169,8 @@
         const widgetInputs = {
             color: document.getElementById('widgetPrimaryColor'),
             modalBackgroundColor: document.getElementById('widgetModalBackgroundColor'),
+            modalTextColor: document.getElementById('widgetModalTextColor'),
+            linkTextColor: document.getElementById('widgetLinkTextColor'),
             buttonStyle: document.getElementById('widgetButtonStyle'),
             position: document.getElementById('widgetPosition'),
             marginX: document.getElementById('widgetMarginX'),
@@ -187,15 +199,24 @@
             widgetPreview.button.style.backgroundColor = widgetInputs.color.value;
             widgetPreview.button.style.color = '#ffffff';
             widgetPreview.button.style.boxShadow = '0 18px 45px rgba(37,36,63,0.22)';
-            widgetPreview.button.style.padding = '12px 20px';
+            widgetPreview.button.style.width = '56px';
+            widgetPreview.button.style.height = '56px';
+            widgetPreview.button.style.padding = '0';
+            widgetPreview.button.style.borderRadius = '999px';
             widgetPreview.button.style.textDecoration = 'none';
+            widgetPreview.button.textContent = '!';
+            widgetPreview.button.title = widgetInputs.buttonText.value || 'Signaler un bug';
             if (isLink) {
                 widgetPreview.button.style.backgroundColor = 'transparent';
-                widgetPreview.button.style.color = widgetInputs.color.value;
+                widgetPreview.button.style.color = widgetInputs.linkTextColor.value;
                 widgetPreview.button.style.boxShadow = 'none';
+                widgetPreview.button.style.width = 'auto';
+                widgetPreview.button.style.height = 'auto';
                 widgetPreview.button.style.padding = '0';
+                widgetPreview.button.style.borderRadius = '0';
                 widgetPreview.button.style.textDecoration = 'underline';
                 widgetPreview.button.style.textUnderlineOffset = '3px';
+                widgetPreview.button.textContent = widgetInputs.buttonText.value || 'Signaler un bug';
             }
             widgetPreview.button.style.top = 'auto';
             widgetPreview.button.style.right = 'auto';
@@ -215,7 +236,7 @@
             widgetPreview.pointer.style.backgroundColor = widgetInputs.color.value;
             widgetPreview.submit.style.backgroundColor = widgetInputs.color.value;
             widgetPreview.modal.style.backgroundColor = widgetInputs.modalBackgroundColor.value;
-            widgetPreview.button.textContent = widgetInputs.buttonText.value || 'Signaler un bug';
+            widgetPreview.modal.style.color = widgetInputs.modalTextColor.value;
             widgetPreview.title.textContent = widgetInputs.title.value || 'Signaler un nouveau bug';
             widgetPreview.label.textContent = widgetInputs.descriptionLabel.value || 'Description du bug';
         }
