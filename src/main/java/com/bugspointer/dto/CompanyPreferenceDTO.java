@@ -25,11 +25,19 @@ public class CompanyPreferenceDTO {
 
     private String widgetPrimaryColor;
 
+    private String widgetModalBackgroundColor;
+
     private String widgetButtonText;
+
+    private String widgetButtonStyle;
 
     private String widgetTitle;
 
     private String widgetDescriptionLabel;
 
     private String widgetPosition;
+
+    private Integer widgetMarginX;
+
+    private Integer widgetMarginY;
 }

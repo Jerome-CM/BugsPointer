@@ -40,10 +40,14 @@ public class CompanyPreferencesService implements ICompanyPreferences {
         dto.setCompanyPublicKey(company.getPublicKey());
         dto.setCompanyPhoneNumber(company.getPhoneNumber());
         dto.setWidgetPrimaryColor(safeColor(preferences.getWidgetPrimaryColor()));
+        dto.setWidgetModalBackgroundColor(safeColor(preferences.getWidgetModalBackgroundColor(), "#FFFFFF"));
         dto.setWidgetButtonText(safeText(preferences.getWidgetButtonText(), "Signaler un bug", 60));
+        dto.setWidgetButtonStyle(safeButtonStyle(preferences.getWidgetButtonStyle()));
         dto.setWidgetTitle(safeText(preferences.getWidgetTitle(), "Signaler un nouveau bug", 80));
         dto.setWidgetDescriptionLabel(safeText(preferences.getWidgetDescriptionLabel(), "Description du bug", 80));
         dto.setWidgetPosition(safePosition(preferences.getWidgetPosition()));
+        dto.setWidgetMarginX(safeMargin(preferences.getWidgetMarginX()));
+        dto.setWidgetMarginY(safeMargin(preferences.getWidgetMarginY()));
         return dto;
     }
 
@@ -70,10 +74,14 @@ public class CompanyPreferencesService implements ICompanyPreferences {
                 }
             } else if (action.equals("updateWidget")) {
                 preferences.setWidgetPrimaryColor(safeColor(dto.getWidgetPrimaryColor()));
+                preferences.setWidgetModalBackgroundColor(safeColor(dto.getWidgetModalBackgroundColor(), "#FFFFFF"));
                 preferences.setWidgetButtonText(safeText(dto.getWidgetButtonText(), "Signaler un bug", 60));
+                preferences.setWidgetButtonStyle(safeButtonStyle(dto.getWidgetButtonStyle()));
                 preferences.setWidgetTitle(safeText(dto.getWidgetTitle(), "Signaler un nouveau bug", 80));
                 preferences.setWidgetDescriptionLabel(safeText(dto.getWidgetDescriptionLabel(), "Description du bug", 80));
                 preferences.setWidgetPosition(safePosition(dto.getWidgetPosition()));
+                preferences.setWidgetMarginX(safeMargin(dto.getWidgetMarginX()));
+                preferences.setWidgetMarginY(safeMargin(dto.getWidgetMarginY()));
             } else {
                 return new Response(EnumStatus.ERROR, null, "Une erreur s'est produite");
             }
@@ -103,10 +111,14 @@ public class CompanyPreferencesService implements ICompanyPreferences {
 
         CompanyPreferences preferences = getOrCreatePreferences(company);
         dto.setPrimaryColor(safeColor(preferences.getWidgetPrimaryColor()));
+        dto.setModalBackgroundColor(safeColor(preferences.getWidgetModalBackgroundColor(), "#FFFFFF"));
         dto.setButtonText(safeText(preferences.getWidgetButtonText(), "Signaler un bug", 60));
+        dto.setButtonStyle(safeButtonStyle(preferences.getWidgetButtonStyle()));
         dto.setTitle(safeText(preferences.getWidgetTitle(), "Signaler un nouveau bug", 80));
         dto.setDescriptionLabel(safeText(preferences.getWidgetDescriptionLabel(), "Description du bug", 80));
         dto.setPosition(safePosition(preferences.getWidgetPosition()));
+        dto.setMarginX(safeMargin(preferences.getWidgetMarginX()));
+        dto.setMarginY(safeMargin(preferences.getWidgetMarginY()));
         return dto;
     }
 
@@ -124,10 +136,14 @@ public class CompanyPreferencesService implements ICompanyPreferences {
     }
 
     private String safeColor(String color) {
+        return safeColor(color, "#27215F");
+    }
+
+    private String safeColor(String color, String fallback) {
         if (color != null && color.matches("^#[0-9a-fA-F]{6}$")) {
             return color;
         }
-        return "#27215F";
+        return fallback;
     }
 
     private String safeText(String value, String fallback, int maxLength) {
@@ -143,6 +159,23 @@ public class CompanyPreferencesService implements ICompanyPreferences {
             return position;
         }
         return "bottom-right";
+    }
+
+    private String safeButtonStyle(String style) {
+        if ("link".equals(style)) {
+            return "link";
+        }
+        return "button";
+    }
+
+    private Integer safeMargin(Integer margin) {
+        if (margin == null) {
+            return 15;
+        }
+        if (margin < 0) {
+            return 0;
+        }
+        return Math.min(margin, 120);
     }
 
 }

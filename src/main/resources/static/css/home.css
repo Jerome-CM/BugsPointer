@@ -340,7 +340,6 @@ html:has(.home-modern) {
 
 .home-pricing .btn-action {
     width: 100%;
-    margin-top: auto;
     padding: 12px 18px;
     border-radius: 8px;
     color: #06100c;
@@ -351,9 +350,9 @@ html:has(.home-modern) {
 }
 
 .home-pricing .price-in-card {
-    width: min(100%, 260px);
+    width: auto;
     padding: 12px 18px;
-    margin: 0 auto 20px auto;
+    margin: 0;
     border: 1px solid rgba(183, 255, 74, 0.32);
     border-radius: 8px;
     color: #B7FF4A;
@@ -362,6 +361,20 @@ html:has(.home-modern) {
     font-weight: 900;
     text-align: center;
     background: rgba(0, 0, 0, 0.18);
+}
+
+.home-pricing .pricing-card-action {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: auto;
+    align-items: stretch;
+}
+
+@media (max-width: 640px) {
+    .home-pricing .pricing-card-action {
+        grid-template-columns: 1fr;
+    }
 }
 
 .home-pricing .halo-green {

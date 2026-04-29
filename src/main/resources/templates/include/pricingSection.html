@@ -20,8 +20,10 @@
         <ul>
             <th:block th:replace="~{include/targetPlanContent.html}"></th:block>
         </ul>
-        <span class="price-in-card">15€ / an</span>
-        <a th:href="@{/features#targetplan}" class="btn-action">Voir le détail</a>
+        <div class="pricing-card-action">
+            <span class="price-in-card">15€ / an</span>
+            <a th:href="@{/features#targetplan}" class="btn-action">Voir le détail</a>
+        </div>
     </div>
     <!--<div class="cards cards_detail">
         <img class="img-in-price-card" th:src="@{/css/img/icones/base-de-donnees.gif}" alt="">

@@ -12,10 +12,14 @@
 
     const defaults = {
         primaryColor: "#27215F",
+        modalBackgroundColor: "#FFFFFF",
         buttonText: "Signaler un bug",
+        buttonStyle: "button",
         title: "Signaler un nouveau bug",
         descriptionLabel: "Description du bug",
-        position: "bottom-right"
+        position: "bottom-right",
+        marginX: 15,
+        marginY: 15
     };
 
     const state = {
@@ -58,20 +62,28 @@
     function readDatasetConfig() {
         const config = {};
         if (script.dataset.color) config.primaryColor = script.dataset.color;
+        if (script.dataset.modalBackgroundColor) config.modalBackgroundColor = script.dataset.modalBackgroundColor;
         if (script.dataset.buttonText) config.buttonText = script.dataset.buttonText;
+        if (script.dataset.buttonStyle) config.buttonStyle = script.dataset.buttonStyle;
         if (script.dataset.title) config.title = script.dataset.title;
         if (script.dataset.descriptionLabel) config.descriptionLabel = script.dataset.descriptionLabel;
         if (script.dataset.position) config.position = script.dataset.position;
+        if (script.dataset.marginX) config.marginX = script.dataset.marginX;
+        if (script.dataset.marginY) config.marginY = script.dataset.marginY;
         return config;
     }
 
     function normalizeConfig(config) {
         return {
             primaryColor: safeColor(config.primaryColor),
+            modalBackgroundColor: safeColor(config.modalBackgroundColor, defaults.modalBackgroundColor),
             buttonText: config.buttonText || defaults.buttonText,
+            buttonStyle: config.buttonStyle === "link" ? "link" : "button",
             title: config.title || defaults.title,
             descriptionLabel: config.descriptionLabel || defaults.descriptionLabel,
-            position: safePosition(config.position)
+            position: safePosition(config.position),
+            marginX: safeMargin(config.marginX),
+            marginY: safeMargin(config.marginY)
         };
     }
 
@@ -81,6 +93,9 @@
             <style>
                 :host {
                     --bp-primary: ${cfg.primaryColor};
+                    --bp-modal-bg: ${cfg.modalBackgroundColor};
+                    --bp-margin-x: ${cfg.marginX}px;
+                    --bp-margin-y: ${cfg.marginY}px;
                     --bp-text: #24233d;
                     --bp-muted: #7b8290;
                     --bp-border: #dfe4ec;
@@ -91,20 +106,32 @@
                 .bp-launcher {
                     position: fixed;
                     z-index: 2147483000;
-                    min-height: 48px;
                     border: 0;
                     border-radius: 10px;
+                    color: var(--bp-primary);
+                    font: 800 15px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+                    cursor: pointer;
+                }
+                .bp-launcher.is-button {
+                    min-height: 48px;
                     padding: 0 18px;
                     background: var(--bp-primary);
                     color: #fff;
-                    font: 800 15px/1 Inter, ui-sans-serif, system-ui, sans-serif;
                     box-shadow: 0 18px 42px rgba(24, 22, 58, 0.24);
-                    cursor: pointer;
                 }
-                .bp-launcher.bottom-right { right: 20px; bottom: 20px; }
-                .bp-launcher.bottom-left { left: 20px; bottom: 20px; }
-                .bp-launcher.top-right { right: 20px; top: 20px; }
-                .bp-launcher.top-left { left: 20px; top: 20px; }
+                .bp-launcher.is-link {
+                    min-height: auto;
+                    padding: 0;
+                    background: transparent;
+                    color: var(--bp-primary);
+                    box-shadow: none;
+                    text-decoration: underline;
+                    text-underline-offset: 3px;
+                }
+                .bp-launcher.bottom-right { right: var(--bp-margin-x); bottom: var(--bp-margin-y); }
+                .bp-launcher.bottom-left { left: var(--bp-margin-x); bottom: var(--bp-margin-y); }
+                .bp-launcher.top-right { right: var(--bp-margin-x); top: var(--bp-margin-y); }
+                .bp-launcher.top-left { left: var(--bp-margin-x); top: var(--bp-margin-y); }
                 .bp-overlay {
                     position: fixed;
                     inset: 0;
@@ -120,7 +147,7 @@
                 .bp-modal {
                     width: min(760px, 100%);
                     border-radius: 18px;
-                    background: #fff;
+                    background: var(--bp-modal-bg);
                     color: var(--bp-text);
                     box-shadow: 0 28px 90px rgba(16, 18, 32, 0.32);
                     padding: 28px;
@@ -230,12 +257,6 @@
                 .bp-honeypot,
                 .bp-hidden { display: none; }
                 @media (max-width: 640px) {
-                    .bp-launcher {
-                        right: 14px;
-                        bottom: 14px;
-                        left: auto;
-                        top: auto;
-                    }
                     .bp-overlay { padding: 12px; }
                     .bp-modal {
                         max-height: calc(100vh - 24px);
@@ -246,7 +267,7 @@
                     .bp-title { font-size: 22px; }
                 }
             </style>
-            <button class="bp-launcher ${escapeHtml(safePosition(cfg.position))}" type="button" data-bp-open>${escapeHtml(cfg.buttonText)}</button>
+            <button class="bp-launcher ${escapeHtml(safePosition(cfg.position))} is-${escapeHtml(cfg.buttonStyle)}" type="button" data-bp-open>${escapeHtml(cfg.buttonText)}</button>
             <div class="bp-overlay" data-bp-overlay>
                 <form class="bp-modal" method="post" action="${baseUrl}/api/user/modalControl" data-bp-form>
                     <div class="bp-header">
@@ -450,8 +471,16 @@
         return ["bottom-right", "bottom-left", "top-right", "top-left"].includes(position) ? position : "bottom-right";
     }
 
-    function safeColor(color) {
-        return /^#[0-9a-fA-F]{6}$/.test(color || "") ? color : defaults.primaryColor;
+    function safeColor(color, fallback = defaults.primaryColor) {
+        return /^#[0-9a-fA-F]{6}$/.test(color || "") ? color : fallback;
+    }
+
+    function safeMargin(margin) {
+        const parsed = Number.parseInt(margin, 10);
+        if (Number.isNaN(parsed)) {
+            return 15;
+        }
+        return Math.min(Math.max(parsed, 0), 120);
     }
 
     function escapeHtml(value) {
