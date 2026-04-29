@@ -45,7 +45,7 @@ public class ModalService implements IModal {
         boolean description;
         boolean key;
         boolean envoi = false;
-        Company company;
+        Company company = null;
         Date dateJour = new Date();
         Date dateDernierEnvoi = null;
         Date dateIpEnvoi;
@@ -73,10 +73,15 @@ public class ModalService implements IModal {
 
         if (dto.getKey().equals("LaClefDeTest")) {
             test = true;
+            if (dto.getMail() == null || dto.getMail().trim().isEmpty()) {
+                return new Response(EnumStatus.ERROR, null, "Merci d'indiquer votre e-mail pour recevoir le rapport de test");
+            }
         }
 
-        Optional<Company> companyOptional = companyRepository.findByPublicKey(dto.getKey());
-        if (companyOptional.isPresent()){
+        Optional<Company> companyOptional = test ? Optional.empty() : companyRepository.findByPublicKey(dto.getKey());
+        if (test) {
+            key = true;
+        } else if (companyOptional.isPresent()){
 
             company = companyOptional.get();
             if (company.isEnable()){

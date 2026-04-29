@@ -112,7 +112,7 @@
     </footer>
 
     <div class="bugspointer-popup" id="bugspointer_popup">
-        <form class="bugspointer-popup-container" method="post" action="/api/user/modalControl">
+        <form class="bugspointer-popup-container" method="post" th:action="@{/api/user/modalControl}">
             <div class="bugspointer-popup-header">
                 <span class="bugspointer-popup-titre">Signaler un nouveau bug</span>
                 <span class="bugspointer-close-popup" id="bugspointer_close_popup">&times;</span>
@@ -140,7 +140,7 @@
                 <input type="hidden" name="key" id="key" readonly>
 
                 <label for="bugspointer-mail-test">Afin de découvrir le rapport que vous recevrez, veuillez indiquer votre mail ci-dessous</label>
-                <input type="text" name="mail" class="bugspointer-popup-content-texturl" id="bugspointer-mail-test" placeholder="Mail">
+                <input type="email" name="mail" class="bugspointer-popup-content-texturl" id="bugspointer-mail-test" placeholder="vous@exemple.fr" required>
 
                 <p class="small-text">Ce mail ne sera pas conservé ni utilisé à des fins commerciales</p>
 
