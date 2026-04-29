@@ -3,6 +3,7 @@ package com.bugspointer.controller;
 import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
+import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.entity.Poll;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
@@ -59,8 +60,10 @@ public class Home {
     String getDownloadPage(Model model, HttpServletRequest request){
 
         if(userAuthenticationUtil.isUserLoggedIn()){
+            Company company = companyService.getCompanyWithToken(request);
             model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-            model.addAttribute("companyId", companyService.getCompanyWithToken(request).getCompanyId());
+            model.addAttribute("companyId", company.getCompanyId());
+            model.addAttribute("publicKey", company.getPublicKey());
             viewCounterService.addVisit(EnumViewCounterPage.DOWNLOAD);
             return "public/download";
         } else {
@@ -76,8 +79,11 @@ public class Home {
     }
 
     @GetMapping("documentations")
-    String getDocumentations(Model model){
+    String getDocumentations(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        if(userAuthenticationUtil.isUserLoggedIn()){
+            model.addAttribute("publicKey", companyService.getCompanyWithToken(request).getPublicKey());
+        }
         return "public/documentations";
     }
 

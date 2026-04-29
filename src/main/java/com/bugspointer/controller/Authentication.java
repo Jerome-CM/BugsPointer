@@ -119,7 +119,7 @@ public class Authentication {
             Response response = companyService.registerDomaine(dto);
             if (response.getStatus().equals(EnumStatus.OK)) {
                 redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
-                redirectAttributes.addFlashAttribute("notification", "Domaine enregistré. Téléchargez maintenant le kit BugsPointer pour finaliser l'installation.");
+                redirectAttributes.addFlashAttribute("notification", "Domaine enregistré. Installez maintenant le script BugsPointer pour finaliser l'installation.");
                 return "redirect:/download";
             } else {
                 model.addAttribute("status", String.valueOf(response.getStatus()));

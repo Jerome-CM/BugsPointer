@@ -28,4 +28,14 @@ public class CompanyPreferences {
 
     private boolean smsNewFeature;
 
+    private String widgetPrimaryColor = "#27215F";
+
+    private String widgetButtonText = "Signaler un bug";
+
+    private String widgetTitle = "Signaler un nouveau bug";
+
+    private String widgetDescriptionLabel = "Description du bug";
+
+    private String widgetPosition = "bottom-right";
+
 }

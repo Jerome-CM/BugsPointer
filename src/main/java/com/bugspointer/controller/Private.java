@@ -137,9 +137,41 @@ public class Private {
     @GetMapping("account")
     String getAccount(Model model, HttpServletRequest request) throws MollieException {
         HttpSession session = request.getSession();
-        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
-        model.addAttribute("mandates", customerService.getMandateList(companyService.getCompanyWithToken(request)));
+        Company company = companyService.getCompanyWithToken(request);
+        model.addAttribute("company", companyService.getAccountDto(company));
+        model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(company));
+        model.addAttribute("mandates", customerService.getMandateList(company));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "private/account";
+    }
+
+    @PostMapping("account/widget")
+    String updateWidget(@Valid @ModelAttribute("widget") CompanyPreferenceDTO dto,
+                        BindingResult result,
+                        Model model,
+                        RedirectAttributes redirectAttributes,
+                        HttpServletRequest request) throws MollieException {
+        Company currentCompany = companyService.getCompanyWithToken(request);
+        dto.setCompanyPublicKey(currentCompany.getPublicKey());
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+
+        if (!result.hasErrors()) {
+            Response response = preferencesService.updatePreference(dto, "updateWidget");
+            if (response.getStatus().equals(EnumStatus.OK)) {
+                redirectAttributes.addFlashAttribute("notification", response.getMessage());
+                redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+                return "redirect:/app/private/account#widget-installation";
+            }
+            model.addAttribute("status", String.valueOf(response.getStatus()));
+            model.addAttribute("notification", response.getMessage());
+        } else {
+            model.addAttribute("status", "ERROR");
+            model.addAttribute("notification", "Merci de corriger les champs indiqués.");
+        }
+
+        model.addAttribute("company", companyService.getAccountDto(currentCompany));
+        model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(currentCompany));
+        model.addAttribute("mandates", customerService.getMandateList(currentCompany));
         return "private/account";
     }
 
@@ -163,7 +195,7 @@ public class Private {
                   BindingResult result,
                   Model model,
                   RedirectAttributes redirectAttributes,
-                  HttpServletRequest request){
+                  HttpServletRequest request) throws MollieException {
         String action = request.getParameter("action");
         log.info("buttonName : {}", action);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
@@ -205,6 +237,8 @@ public class Private {
         }
 
         model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
+        model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(companyService.getCompanyWithToken(request)));
+        model.addAttribute("mandates", customerService.getMandateList(companyService.getCompanyWithToken(request)));
         return "private/account";
     }
 

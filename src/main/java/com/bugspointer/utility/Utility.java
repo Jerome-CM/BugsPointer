@@ -43,7 +43,7 @@ public class Utility {
             publicKey.append(chars[index]);
         }
 
-        return publicKey.toString();
+        return "pk_" + publicKey;
     }
 
     public static class domaineValidate{

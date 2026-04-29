@@ -7,4 +7,5 @@ public interface ICompanyPreferences {
 
     CompanyPreferenceDTO getCompanyPreferenceDTO(Company company);
     Response updatePreference(CompanyPreferenceDTO dto, String action);
+    WidgetConfigDTO getWidgetConfigDTO(String publicKey);
 }

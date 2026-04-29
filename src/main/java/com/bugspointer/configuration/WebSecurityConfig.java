@@ -62,11 +62,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // public url
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
+                .antMatchers("/widget/**").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/authentication").permitAll()
                 .antMatchers("/testPage").permitAll()
                 .antMatchers("/pollUser").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user/modalControl").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/widget/config").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
                 .antMatchers("/registerConfirm").permitAll()
