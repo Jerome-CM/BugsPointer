@@ -139,28 +139,44 @@ public class Private {
         HttpSession session = request.getSession();
         Company company = companyService.getCompanyWithToken(request);
         model.addAttribute("company", companyService.getAccountDto(company));
-        model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(company));
         model.addAttribute("mandates", customerService.getMandateList(company));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/account";
     }
 
-    @PostMapping("account/widget")
+    @GetMapping("widget")
+    String getWidget(Model model, HttpServletRequest request) {
+        Company company = companyService.getCompanyWithToken(request);
+        model.addAttribute("company", companyService.getDashboardDto(company));
+        model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(company));
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "private/widget";
+    }
+
+    @PostMapping("widget")
     String updateWidget(@Valid @ModelAttribute("widget") CompanyPreferenceDTO dto,
                         BindingResult result,
                         Model model,
                         RedirectAttributes redirectAttributes,
-                        HttpServletRequest request) throws MollieException {
+                        HttpServletRequest request) {
         Company currentCompany = companyService.getCompanyWithToken(request);
         dto.setCompanyPublicKey(currentCompany.getPublicKey());
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        model.addAttribute("company", companyService.getDashboardDto(currentCompany));
+
+        if (currentCompany.getPlan().equals(EnumPlan.FREE)) {
+            model.addAttribute("status", String.valueOf(EnumStatus.ERROR));
+            model.addAttribute("notification", "La personnalisation du widget est disponible avec le plan Target.");
+            model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(currentCompany));
+            return "private/widget";
+        }
 
         if (!result.hasErrors()) {
             Response response = preferencesService.updatePreference(dto, "updateWidget");
             if (response.getStatus().equals(EnumStatus.OK)) {
                 redirectAttributes.addFlashAttribute("notification", response.getMessage());
                 redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
-                return "redirect:/app/private/account#widget-installation";
+                return "redirect:/app/private/widget";
             }
             model.addAttribute("status", String.valueOf(response.getStatus()));
             model.addAttribute("notification", response.getMessage());
@@ -169,10 +185,8 @@ public class Private {
             model.addAttribute("notification", "Merci de corriger les champs indiqués.");
         }
 
-        model.addAttribute("company", companyService.getAccountDto(currentCompany));
         model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(currentCompany));
-        model.addAttribute("mandates", customerService.getMandateList(currentCompany));
-        return "private/account";
+        return "private/widget";
     }
 
     @PostMapping("account/delete")
@@ -237,7 +251,6 @@ public class Private {
         }
 
         model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
-        model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(companyService.getCompanyWithToken(request)));
         model.addAttribute("mandates", customerService.getMandateList(companyService.getCompanyWithToken(request)));
         return "private/account";
     }

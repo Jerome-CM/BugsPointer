@@ -72,7 +72,7 @@
 
                         <label class="block">
                             <span class="mb-2 block text-sm font-bold text-white/72">Code d’installation</span>
-                            <textarea class="install-code min-h-[142px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly th:text="'&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; defer&gt;&lt;/script&gt;'"></textarea>
+                            <textarea class="install-code min-h-[76px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly th:text="'&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; defer&gt;&lt;/script&gt;'"></textarea>
                         </label>
 
                         <div class="mt-5 grid gap-3 md:grid-cols-3">
@@ -95,10 +95,10 @@
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 2</p>
                         <h2 class="mt-2 font-display text-3xl leading-none text-white">Configurer le widget</h2>
                         <p class="mt-5 text-base leading-7 text-white/68">
-                            Depuis votre compte, vous pouvez modifier la couleur principale, le texte du bouton, le titre de la modal, le libellé du champ description et la position du bouton.
+                            Depuis la page Widget, vous pouvez modifier la couleur principale, le texte du bouton, le titre de la modal, le libellé du champ description et la position du bouton.
                         </p>
                         <div class="mt-5 flex flex-col gap-3">
-                            <a th:href="@{/app/private/account#widget-installation}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime">
+                            <a th:href="@{/app/private/widget}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime">
                                 Personnaliser le widget
                             </a>
                             <a th:href="@{/documentations#integration}" class="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5 hover:border-pointer-green/40 hover:text-pointer-lime">

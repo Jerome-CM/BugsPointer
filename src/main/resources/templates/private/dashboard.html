@@ -35,7 +35,7 @@
     <div th:replace="~{include/navCompany.html}"></div>
 
     <main>
-        <section class="relative px-5 pb-16 pt-6 sm:px-8 sm:pt-8 lg:px-12">
+        <section class="relative px-5 pb-16 pt-1 sm:px-8 sm:pt-2 lg:px-12">
             <div class="home-noise"></div>
             <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-7">
                 <div class="rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
@@ -52,16 +52,23 @@
                     </div>
                 </div>
 
-                <section th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}" class="flex flex-col gap-5 lg:flex-row lg:items-stretch">
-                    <div class="flex min-h-64 w-full flex-col justify-between rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur lg:w-4/12">
+                <section th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}" class="grid gap-5 lg:grid-cols-[minmax(280px,420px)_1fr] lg:items-start">
+                    <div class="flex flex-col gap-4">
+                        <div class="w-full rounded-lg border border-white/10 bg-white/[0.055] p-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur">
                             <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Plan Free</p>
-                            <div>
-                                <h2 class="mt-2 text-2xl font-black leading-tight text-white">Vous êtes sur le plan Free</h2>
-                                <p class="mt-3 text-sm leading-6 text-white/65">Recevez vos premiers rapports par e-mail. Passez à Target pour suivre tous les bugs dans le dashboard.</p>
-                            </div>
-                            <a th:href="@{/features#targetplan}" class="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-pointer-green px-4 py-2.5 text-sm font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.14)] transition hover:-translate-y-0.5 hover:bg-pointer-lime sm:w-auto">Voir le plan Target</a>
+                            <h2 class="mt-2 text-xl font-black leading-tight text-white">Vous êtes sur le plan Free</h2>
+                            <p class="mt-2 text-sm leading-6 text-white/65">Recevez vos premiers rapports par e-mail.</p>
+                            <a th:href="@{/features#targetplan}" class="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-lg bg-pointer-green px-4 py-2 text-sm font-extrabold text-pointer-ink shadow-[0_14px_35px_rgba(0,230,118,0.12)] transition hover:-translate-y-0.5 hover:bg-pointer-lime sm:w-auto">Voir Target</a>
+                        </div>
+
+                        <div class="w-full rounded-lg border border-pointer-green/20 bg-white/[0.055] p-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur">
+                            <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Widget</p>
+                            <h2 class="mt-2 text-xl font-black leading-tight text-white">Personnalisation verrouillée</h2>
+                            <p class="mt-2 text-sm leading-6 text-white/65">Passez au plan Target pour modifier la couleur, les textes et la position du widget.</p>
+                            <a th:href="@{/features#targetplan}" class="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime sm:w-auto">Débloquer avec Target</a>
+                        </div>
                     </div>
-                    <div class="home-pricing w-full lg:w-4/12">
+                    <div class="home-pricing w-full max-w-xl">
                         <article class="cards cards_detail halo-green target-card dashboard-target-card w-full">
                             <span class="pricing-badge">Recommandé</span>
                             <h3 class="h-in-price-card margin-bottom">Target</h3>
@@ -122,6 +129,10 @@
                         <a th:href="@{/app/private/account}" class="rounded-lg border border-white/10 bg-black/15 p-5 transition hover:-translate-y-0.5 hover:border-pointer-green/35">
                             <p class="text-xl font-black text-white">Compte</p>
                             <p class="mt-2 text-sm leading-6 text-white/62">Gérez vos accès, votre domaine, votre plan et vos mandats.</p>
+                        </a>
+                        <a th:href="@{/app/private/widget}" class="rounded-lg border border-white/10 bg-black/15 p-5 transition hover:-translate-y-0.5 hover:border-pointer-green/35">
+                            <p class="text-xl font-black text-white">Widget</p>
+                            <p class="mt-2 text-sm leading-6 text-white/62">Personnalisez la modal de signalement visible sur votre site.</p>
                         </a>
                     </div>
                 </section>
