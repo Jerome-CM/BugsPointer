@@ -40,6 +40,8 @@ public class CompanyPreferences {
 
     private String widgetButtonStyle = "button";
 
+    private Integer widgetButtonSize = 56;
+
     private String widgetTitle = "Signaler un nouveau bug";
 
     private String widgetDescriptionLabel = "Description du bug";

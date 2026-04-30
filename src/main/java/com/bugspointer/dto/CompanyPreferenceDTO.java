@@ -35,6 +35,8 @@ public class CompanyPreferenceDTO {
 
     private String widgetButtonStyle;
 
+    private Integer widgetButtonSize;
+
     private String widgetTitle;
 
     private String widgetDescriptionLabel;

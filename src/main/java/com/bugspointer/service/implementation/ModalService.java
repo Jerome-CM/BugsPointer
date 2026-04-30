@@ -60,7 +60,7 @@ public class ModalService implements IModal {
             return new Response(EnumStatus.ERROR, null, "");
         }
 
-        if (dto.getDescription().length()>10){
+        if (dto.getDescription().length() >= 5){
             if(dto.getDescription().contains("<script>")){
                 description = false;
                 return new Response(EnumStatus.ERROR, null, "Merci de ne pas signaler de balise <script> dans la description");

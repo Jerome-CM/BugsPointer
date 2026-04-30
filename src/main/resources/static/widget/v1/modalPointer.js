@@ -17,6 +17,7 @@
         linkTextColor: "#27215F",
         buttonText: "Signaler un bug",
         buttonStyle: "button",
+        buttonSize: 56,
         title: "Signaler un nouveau bug",
         descriptionLabel: "Description du bug",
         position: "bottom-right",
@@ -69,6 +70,7 @@
         if (script.dataset.linkTextColor) config.linkTextColor = script.dataset.linkTextColor;
         if (script.dataset.buttonText) config.buttonText = script.dataset.buttonText;
         if (script.dataset.buttonStyle) config.buttonStyle = script.dataset.buttonStyle;
+        if (script.dataset.buttonSize) config.buttonSize = script.dataset.buttonSize;
         if (script.dataset.title) config.title = script.dataset.title;
         if (script.dataset.descriptionLabel) config.descriptionLabel = script.dataset.descriptionLabel;
         if (script.dataset.position) config.position = script.dataset.position;
@@ -85,6 +87,7 @@
             linkTextColor: safeColor(config.linkTextColor, defaults.linkTextColor),
             buttonText: config.buttonText || defaults.buttonText,
             buttonStyle: config.buttonStyle === "link" ? "link" : "button",
+            buttonSize: safeButtonSize(config.buttonSize),
             title: config.title || defaults.title,
             descriptionLabel: config.descriptionLabel || defaults.descriptionLabel,
             position: safePosition(config.position),
@@ -102,6 +105,7 @@
                     --bp-modal-bg: ${cfg.modalBackgroundColor};
                     --bp-modal-text: ${cfg.modalTextColor};
                     --bp-link-text: ${cfg.linkTextColor};
+                    --bp-button-size: ${cfg.buttonSize}px;
                     --bp-margin-x: ${cfg.marginX}px;
                     --bp-margin-y: ${cfg.marginY}px;
                     --bp-text: var(--bp-modal-text);
@@ -122,8 +126,8 @@
                 }
                 .bp-launcher.is-button {
                     min-height: 48px;
-                    width: 56px;
-                    height: 56px;
+                    width: var(--bp-button-size);
+                    height: var(--bp-button-size);
                     padding: 0;
                     background: var(--bp-primary);
                     color: #fff;
@@ -301,7 +305,7 @@
                         <textarea class="bp-hidden" name="codeLocation" data-bp-code readonly></textarea>
                         <label>
                             <span class="bp-label">${escapeHtml(cfg.descriptionLabel)}</span>
-                            <textarea class="bp-textarea" name="description" minlength="10" required placeholder="Expliquez le probleme rencontre"></textarea>
+                            <textarea class="bp-textarea" name="description" minlength="5" required placeholder="Expliquez le probleme rencontre" data-bp-description></textarea>
                         </label>
                         <input class="bp-honeypot" type="text" name="bot" tabindex="-1" autocomplete="off">
                         <input type="hidden" name="os" data-bp-os>
@@ -325,10 +329,12 @@
         const pointer = shadow.querySelector("[data-bp-pointer]");
         const form = shadow.querySelector("[data-bp-form]");
         const submit = shadow.querySelector("[data-bp-submit]");
+        const description = shadow.querySelector("[data-bp-description]");
 
         launcher.addEventListener("click", open);
         close.addEventListener("click", closeModal);
         pointer.addEventListener("click", startPointer);
+        description.addEventListener("input", validateSubmit);
         form.addEventListener("submit", submitReport);
         overlay.addEventListener("click", (event) => {
             if (event.target === overlay) closeModal();
@@ -349,7 +355,7 @@
 
         function submitReport(event) {
             event.preventDefault();
-            if (!state.pointed) {
+            if (!validateSubmit()) {
                 return;
             }
             submit.disabled = true;
@@ -408,13 +414,24 @@
             const element = event.target;
             const parent = findReadableParent(element);
             shadow.querySelector("[data-bp-code]").value = markSelectedElement(parent.outerHTML, element.outerHTML);
-            shadow.querySelector("[data-bp-help]").textContent = "Bug pointe correctement.";
-            pointer.textContent = "Bug pointe correctement";
+            shadow.querySelector("[data-bp-help]").textContent = "Bug pointé correctement.";
+            pointer.textContent = "Bug pointé correctement";
+            pointer.style.background = "#00E676";
+            pointer.style.color = "#06100c";
             state.pointed = true;
-            submit.disabled = false;
-            submit.textContent = "Envoyer le rapport";
+            validateSubmit();
             stopPointer();
             open();
+        }
+
+        function validateSubmit() {
+            const isValid = state.pointed && description.value.trim().length >= 5;
+            submit.disabled = !isValid;
+            submit.textContent = state.pointed ? "Envoyer le rapport" : "Sélectionnez le bug";
+            if (state.pointed && !isValid) {
+                submit.textContent = "Décrivez le bug";
+            }
+            return isValid;
         }
     }
 
@@ -492,6 +509,14 @@
             return 15;
         }
         return Math.min(Math.max(parsed, 0), 120);
+    }
+
+    function safeButtonSize(size) {
+        const parsed = Number.parseInt(size, 10);
+        if (Number.isNaN(parsed)) {
+            return defaults.buttonSize;
+        }
+        return Math.min(Math.max(parsed, 44), 96);
     }
 
     function escapeHtml(value) {

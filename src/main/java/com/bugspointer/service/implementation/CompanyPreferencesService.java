@@ -45,6 +45,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
         dto.setWidgetLinkTextColor(safeColor(preferences.getWidgetLinkTextColor()));
         dto.setWidgetButtonText(safeText(preferences.getWidgetButtonText(), "Signaler un bug", 60));
         dto.setWidgetButtonStyle(safeButtonStyle(preferences.getWidgetButtonStyle()));
+        dto.setWidgetButtonSize(safeButtonSize(preferences.getWidgetButtonSize()));
         dto.setWidgetTitle(safeText(preferences.getWidgetTitle(), "Signaler un nouveau bug", 80));
         dto.setWidgetDescriptionLabel(safeText(preferences.getWidgetDescriptionLabel(), "Description du bug", 80));
         dto.setWidgetPosition(safePosition(preferences.getWidgetPosition()));
@@ -81,6 +82,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
                 preferences.setWidgetLinkTextColor(safeColor(dto.getWidgetLinkTextColor()));
                 preferences.setWidgetButtonText(safeText(dto.getWidgetButtonText(), "Signaler un bug", 60));
                 preferences.setWidgetButtonStyle(safeButtonStyle(dto.getWidgetButtonStyle()));
+                preferences.setWidgetButtonSize(safeButtonSize(dto.getWidgetButtonSize()));
                 preferences.setWidgetTitle(safeText(dto.getWidgetTitle(), "Signaler un nouveau bug", 80));
                 preferences.setWidgetDescriptionLabel(safeText(dto.getWidgetDescriptionLabel(), "Description du bug", 80));
                 preferences.setWidgetPosition(safePosition(dto.getWidgetPosition()));
@@ -120,6 +122,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
         dto.setLinkTextColor(safeColor(preferences.getWidgetLinkTextColor()));
         dto.setButtonText(safeText(preferences.getWidgetButtonText(), "Signaler un bug", 60));
         dto.setButtonStyle(safeButtonStyle(preferences.getWidgetButtonStyle()));
+        dto.setButtonSize(safeButtonSize(preferences.getWidgetButtonSize()));
         dto.setTitle(safeText(preferences.getWidgetTitle(), "Signaler un nouveau bug", 80));
         dto.setDescriptionLabel(safeText(preferences.getWidgetDescriptionLabel(), "Description du bug", 80));
         dto.setPosition(safePosition(preferences.getWidgetPosition()));
@@ -182,6 +185,16 @@ public class CompanyPreferencesService implements ICompanyPreferences {
             return 0;
         }
         return Math.min(margin, 120);
+    }
+
+    private Integer safeButtonSize(Integer size) {
+        if (size == null) {
+            return 56;
+        }
+        if (size < 44) {
+            return 44;
+        }
+        return Math.min(size, 96);
     }
 
 }

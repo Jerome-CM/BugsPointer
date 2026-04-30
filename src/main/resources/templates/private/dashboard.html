@@ -30,7 +30,7 @@
         .dashboard-target-card{min-height:100%;}
         .dashboard-target-card .pricing-card-action{align-items:center;}
         .dashboard-target-card .price-in-card,
-        .dashboard-target-card .btn-action{align-items:center;display:flex;justify-content:center;min-height:52px;padding:10px 14px;}
+        .dashboard-target-card .btn-action{align-items:center;display:flex;font-size:1rem;justify-content:center;min-height:42px;padding:8px 12px;}
     </style>
 </head>
 <body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
@@ -75,35 +75,35 @@
                     </div>
                 </section>
 
-                <section th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}" class="grid gap-5 lg:grid-cols-[repeat(3,minmax(0,1fr))_minmax(360px,1.25fr)] lg:items-stretch">
-                    <div class="flex w-full flex-col items-center justify-center rounded-lg border border-white/10 bg-white/[0.055] p-4 text-center shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur">
-                        <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Plan Free</p>
-                        <h2 class="mt-2 text-xl font-black leading-tight text-white">Vous êtes sur le plan Free</h2>
-                        <p class="mt-2 text-sm leading-6 text-white/65">Recevez vos premiers rapports par e-mail.</p>
-                    </div>
+                <section th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}" class="flex flex-col gap-5 lg:flex-row lg:items-stretch">
+                    <div class="grid w-full gap-4 md:grid-cols-2 lg:w-7/12">
+                        <div class="flex min-h-44 w-full flex-col justify-center rounded-lg border border-white/10 bg-white/[0.055] p-4 text-center shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur">
+                            <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Plan Free</p>
+                            <h2 class="mt-2 text-xl font-black leading-tight text-white">Vous êtes sur le plan Free</h2>
+                            <p class="mt-2 text-sm leading-6 text-white/65">Recevez vos premiers rapports par e-mail.</p>
+                        </div>
 
-                    <div class="flex w-full flex-col items-center justify-center rounded-lg border border-white/10 bg-white/[0.055] p-4 text-center shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur">
-                        <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Rapports</p>
-                        <div class="mt-3 grid w-full grid-cols-2 gap-3">
-                            <div class="rounded-lg border border-white/10 bg-black/15 p-3">
-                                <span class="block font-display text-4xl leading-none text-white" th:text="${company.getNbNewBug() + company.getNbPendingBug() + company.getNbSolvedBug() + company.getNbIgnoredBug()}">0</span>
-                                <span class="mt-1 block text-xs font-bold text-white/58">reçus</span>
-                            </div>
-                            <div class="rounded-lg border border-red-300/25 bg-red-500/10 p-3">
-                                <span class="block font-display text-4xl leading-none text-white" th:text="${(company.getNbNewBug() + company.getNbPendingBug() + company.getNbSolvedBug() + company.getNbIgnoredBug()) > 1 ? (company.getNbNewBug() + company.getNbPendingBug() + company.getNbSolvedBug() + company.getNbIgnoredBug()) - 1 : 0}">0</span>
-                                <span class="mt-1 block text-xs font-bold text-red-100/70">perdus</span>
-                            </div>
+                        <div class="flex min-h-44 w-full flex-col justify-center rounded-lg border border-pointer-green/20 bg-white/[0.055] p-4 text-center shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur">
+                            <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Widget</p>
+                            <h2 class="mt-2 text-xl font-black leading-tight text-white">Personnalisation verrouillée</h2>
+                            <p class="mt-2 text-sm leading-6 text-white/65">Passez au plan Target pour modifier la couleur, les textes et la position du widget.</p>
+                            <a th:href="@{/features#targetplan}" class="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime sm:w-auto">Débloquer avec Target</a>
+                        </div>
+
+                        <div class="flex min-h-44 w-full flex-col items-center justify-center rounded-lg border border-white/10 bg-white/[0.055] p-4 text-center shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur">
+                            <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Rapports reçus</p>
+                            <span class="mt-3 block font-display text-5xl leading-none text-white" th:text="${company.getNbNewBug() + company.getNbPendingBug() + company.getNbSolvedBug() + company.getNbIgnoredBug()}">0</span>
+                            <p class="mt-2 text-sm leading-6 text-white/65">Rapports transmis à votre compte.</p>
+                        </div>
+
+                        <div class="flex min-h-44 w-full flex-col items-center justify-center rounded-lg border border-red-300/25 bg-red-500/10 p-4 text-center shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur">
+                            <p class="text-xs font-black uppercase tracking-wider text-red-100">Rapports perdus</p>
+                            <span class="mt-3 block font-display text-5xl leading-none text-white" th:text="${(company.getNbNewBug() + company.getNbPendingBug() + company.getNbSolvedBug() + company.getNbIgnoredBug()) > 1 ? (company.getNbNewBug() + company.getNbPendingBug() + company.getNbSolvedBug() + company.getNbIgnoredBug()) - 1 : 0}">0</span>
+                            <p class="mt-2 text-sm leading-6 text-red-100/70">Rapports non vus par e-mail à cause de la limite d'un par mois.</p>
                         </div>
                     </div>
 
-                    <div class="flex w-full flex-col items-center justify-center rounded-lg border border-pointer-green/20 bg-white/[0.055] p-4 text-center shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur">
-                        <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Widget</p>
-                        <h2 class="mt-2 text-xl font-black leading-tight text-white">Personnalisation verrouillée</h2>
-                        <p class="mt-2 text-sm leading-6 text-white/65">Passez au plan Target pour modifier la couleur, les textes et la position du widget.</p>
-                        <a th:href="@{/features#targetplan}" class="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime sm:w-auto">Débloquer avec Target</a>
-                    </div>
-
-                    <div class="home-pricing w-full">
+                    <div class="home-pricing w-full lg:w-4/12">
                         <article class="cards cards_detail halo-green target-card dashboard-target-card w-full">
                             <span class="pricing-badge">Recommandé</span>
                             <h3 class="h-in-price-card margin-bottom">Target</h3>

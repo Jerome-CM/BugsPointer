@@ -12,7 +12,7 @@ public class ModalDTO {
     private String url;
 
     @NotBlank(message = "La description est obligatoire")
-    @Size(min = 10, message = "La description doit contenir au moins 10 caractères")
+    @Size(min = 5, message = "La description doit contenir au moins 5 caractères")
     private String description;
 
     private String codeLocation;

@@ -91,6 +91,10 @@
                                 </select>
                             </label>
                             <label>
+                                <span class="mb-2 block text-sm font-bold text-white/72">Taille du bouton</span>
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="number" min="44" max="96" step="1" th:field="*{widgetButtonSize}" id="widgetButtonSize">
+                            </label>
+                            <label>
                                 <span class="mb-2 block text-sm font-bold text-white/72">Position</span>
                                 <select class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" th:field="*{widgetPosition}" id="widgetPosition">
                                     <option value="bottom-right">Bas droite</option>
@@ -172,6 +176,7 @@
             modalTextColor: document.getElementById('widgetModalTextColor'),
             linkTextColor: document.getElementById('widgetLinkTextColor'),
             buttonStyle: document.getElementById('widgetButtonStyle'),
+            buttonSize: document.getElementById('widgetButtonSize'),
             position: document.getElementById('widgetPosition'),
             marginX: document.getElementById('widgetMarginX'),
             marginY: document.getElementById('widgetMarginY'),
@@ -195,12 +200,13 @@
             const marginY = Math.max(0, Math.min(parseInt(widgetInputs.marginY.value || '15', 10), 120));
             const position = widgetInputs.position.value || 'bottom-right';
             const isLink = widgetInputs.buttonStyle.value === 'link';
+            const buttonSize = Math.max(44, Math.min(parseInt(widgetInputs.buttonSize.value || '56', 10), 96));
 
             widgetPreview.button.style.backgroundColor = widgetInputs.color.value;
             widgetPreview.button.style.color = '#ffffff';
             widgetPreview.button.style.boxShadow = '0 18px 45px rgba(37,36,63,0.22)';
-            widgetPreview.button.style.width = '56px';
-            widgetPreview.button.style.height = '56px';
+            widgetPreview.button.style.width = buttonSize + 'px';
+            widgetPreview.button.style.height = buttonSize + 'px';
             widgetPreview.button.style.padding = '0';
             widgetPreview.button.style.borderRadius = '999px';
             widgetPreview.button.style.textDecoration = 'none';
