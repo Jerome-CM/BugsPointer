@@ -55,10 +55,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // restricted url
-//                .antMatchers("/app/admin/**").hasRole("ADMIN")
-//                .antMatchers("/app/private/**").hasAnyRole("ADMIN","USER")
-               .antMatchers("/app/admin/**").permitAll()
-               .antMatchers("/app/private/**").permitAll()
+                .antMatchers("/app/private/thanks").permitAll()
+                .antMatchers("/app/admin/**").hasRole("ADMIN")
+                .antMatchers("/app/private/**").hasAnyRole("ADMIN","USER")
                 // public url
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
@@ -83,7 +82,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/cgv").permitAll()
                 .antMatchers("/mentions").permitAll()
                 .antMatchers("/download").permitAll()
-                .antMatchers("/app/private/thanks").permitAll()
                 .antMatchers(HttpMethod.GET,"/modal").permitAll()
                 .anyRequest().authenticated()
                 .and()

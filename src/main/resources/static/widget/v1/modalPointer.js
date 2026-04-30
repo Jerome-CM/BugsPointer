@@ -20,6 +20,7 @@
         buttonSize: 56,
         title: "Signaler un nouveau bug",
         descriptionLabel: "Description du bug",
+        collectEmail: false,
         position: "bottom-right",
         marginX: 15,
         marginY: 15
@@ -73,6 +74,7 @@
         if (script.dataset.buttonSize) config.buttonSize = script.dataset.buttonSize;
         if (script.dataset.title) config.title = script.dataset.title;
         if (script.dataset.descriptionLabel) config.descriptionLabel = script.dataset.descriptionLabel;
+        if (script.dataset.collectEmail) config.collectEmail = script.dataset.collectEmail;
         if (script.dataset.position) config.position = script.dataset.position;
         if (script.dataset.marginX) config.marginX = script.dataset.marginX;
         if (script.dataset.marginY) config.marginY = script.dataset.marginY;
@@ -90,6 +92,7 @@
             buttonSize: safeButtonSize(config.buttonSize),
             title: config.title || defaults.title,
             descriptionLabel: config.descriptionLabel || defaults.descriptionLabel,
+            collectEmail: config.collectEmail === true || config.collectEmail === "true",
             position: safePosition(config.position),
             marginX: safeMargin(config.marginX),
             marginY: safeMargin(config.marginY)
@@ -346,6 +349,13 @@
                             <span class="bp-label">${escapeHtml(cfg.descriptionLabel)}</span>
                             <textarea class="bp-textarea" name="description" minlength="5" required placeholder="Expliquez le probleme rencontre" data-bp-description></textarea>
                         </label>
+                        ${cfg.collectEmail ? `
+                        <label>
+                            <span class="bp-label">Votre e-mail</span>
+                            <input class="bp-input" type="email" name="mail" required placeholder="vous@exemple.fr">
+                            <span class="bp-help">Recevez le rapport de test sans créer de compte.</span>
+                        </label>
+                        ` : ""}
                         <input class="bp-honeypot" type="text" name="bot" tabindex="-1" autocomplete="off">
                         <input type="hidden" name="os" data-bp-os>
                         <input type="hidden" name="browser" data-bp-browser>

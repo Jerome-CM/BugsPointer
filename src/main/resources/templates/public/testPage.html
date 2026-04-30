@@ -26,9 +26,6 @@
             }
         };
     </script>
-    <link th:href="@{/css/modalStyleTestPage.css}" rel="stylesheet" />
-    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
-    <script type="text/javascript" th:src="@{/js/modalControlTestPage.js}"></script>
     <title>Tester la puissance de BugsPointer</title>
     <meta name="description" content="Notre page de test vous permet d'utiliser les fonctionnalités de BugsPointer. Déclarez un bug sur cette page et recevez un rapport de bug par mail">
     <meta name="keywords" content="test, rapport de bug, signalement de problème, outil de rapport, expérience utilisateur, site web sans erreur">
@@ -55,11 +52,11 @@
             <div class="w-full md:w-5/12">
                 <h2 class="text-left text-2xl font-black text-white">Mode d'emploi</h2>
                 <p class="mt-3 text-left leading-7 text-white/65">
-                    Utilisez le bouton BugsPointer flottant ou le lien en bas de page, pointez une zone, puis envoyez-vous le rapport de test.
+                    Utilisez le bouton BugsPointer flottant, pointez une zone, puis recevez le rapport de test par e-mail.
                 </p>
             </div>
             <ul class="flex w-full flex-col gap-3 text-left text-white/75 md:w-7/12">
-                <li class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Cliquez sur le logo ou sur le lien "Signaler un bug".</li>
+                <li class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Cliquez sur le bouton BugsPointer.</li>
                 <li class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Suivez les indications du formulaire de signalement.</li>
                 <li class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Recevez les données de ce test par mail.</li>
             </ul>
@@ -100,53 +97,16 @@
         </section>
     </main>
 
-    <button class="bugspointer-logo" id="bugspointer_logo">
-        <div class="bugspointer-objet-logo">
-            <div class="bugspointer-objet-ellispe"></div>
-            <span class="bugspointer-objet-report span-desktop">Signaler un bug</span>
-            <span class="bugspointer-objet-report span-mobile">Bug</span>
-        </div>
-    </button>
     <footer class="bg-[#101814] px-5 py-6 text-center text-white/60">
-        <a class="bugspointer-open-popup font-black text-pointer-green" id="bugspointer_open_popup">Signaler un bug</a> - 2026 - Ceci est une page de test
+        <span class="font-black text-pointer-green">BugsPointer</span> - 2026 - Ceci est une page de test
     </footer>
 
-    <div class="bugspointer-popup" id="bugspointer_popup">
-        <form class="bugspointer-popup-container" method="post" th:action="@{/api/user/modalControl}">
-            <div class="bugspointer-popup-header">
-                <span class="bugspointer-popup-titre">Signaler un nouveau bug</span>
-                <span class="bugspointer-close-popup" id="bugspointer_close_popup">&times;</span>
-            </div>
-            <div id="bugspointer-message-success">
-                <p>Merci infiniment pour votre envoi <br><br><br>Donnez votre avis et façonnez l'avenir de notre produit</p>
-                <a class="bugspointer-btn-action" target="_blank" id="bugspointer-lien-success">Evaluer en 3 questions</a>
-            </div>
-            <div class="bugspointer-popup-content" id="bugspointer-affichage">
-                <label for="bugspointer-urlPointed">Url avec ce bug</label>
-                <input type="text" name="url" class="bugspointer-popup-content-texturl" id="bugspointer-urlPointed" value="" readonly>
-
-                <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-pointer" title="Cliquez-ici avant d'envoyer le formulaire">Pointer le bug</button>
-                <p class="bugspointer-popup-pointer-bug-text" id="bugspointer-popup-pointer-bug-text">Merci de sélectionner l'endroit contenant le bug en cliquant sur le bouton ci dessus</p>
-
-                <textarea name="codeLocation" id="bugspointer-popup-pointer-bug" readonly hidden></textarea>
-
-                <label>Description du bug</label>
-                <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="10" required></textarea>
-                <input type="text" name="bot" class="bugspointer-popup-content-inputbot">
-
-                <input type="hidden" name="os" id="bugspointer-popup-os" readonly>
-                <input type="hidden" name="browser" id="bugspointer-popup-browser" readonly>
-                <input type="hidden" name="screenSize" id="bugspointer-popup-screen" readonly>
-                <input type="hidden" name="key" id="key" readonly>
-
-                <label for="bugspointer-mail-test">Afin de découvrir le rapport que vous recevrez, veuillez indiquer votre mail ci-dessous</label>
-                <input type="email" name="mail" class="bugspointer-popup-content-texturl" id="bugspointer-mail-test" placeholder="vous@exemple.fr" required>
-
-                <p class="small-text">Ce mail ne sera pas conservé ni utilisé à des fins commerciales</p>
-
-                <button class="bugspointer-popup-btn-submit" type="submit" id="bugspointer-popup-btn-submit" disabled title="Veuillez cliquer sur le bouton 'Pointer le bug' avant d'envoyer le formulaire">Envoyer mon rapport</button>
-            </div>
-        </form>
-    </div>
+    <script th:src="@{/widget/v1/modalPointer.js}"
+            data-public-key="LaClefDeTest"
+            data-collect-email="true"
+            data-button-text="Signaler un bug de test"
+            data-title="Tester BugsPointer"
+            data-description-label="Décrivez le bug à recevoir par e-mail"
+            defer></script>
 </body>
 </html>
