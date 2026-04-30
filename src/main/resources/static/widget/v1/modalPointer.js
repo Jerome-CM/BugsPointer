@@ -193,14 +193,48 @@
                 }
                 .bp-success {
                     display: none;
-                    padding: 28px 8px 10px;
-                    text-align: center;
+                    padding: 22px 8px 10px;
+                    text-align: left;
                 }
-                .bp-success.is-visible { display: block; }
+                .bp-success.is-visible {
+                    display: grid;
+                    gap: 14px;
+                }
                 .bp-success strong {
                     display: block;
-                    margin-bottom: 10px;
                     font-size: 22px;
+                }
+                .bp-success-url {
+                    display: grid;
+                    gap: 6px;
+                    border-radius: 12px;
+                    border: 1px solid rgba(255,255,255,.12);
+                    background: rgba(255,255,255,.08);
+                    padding: 12px;
+                    overflow-wrap: anywhere;
+                }
+                .bp-success-url span {
+                    color: var(--bp-muted);
+                    font-size: 12px;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                }
+                .bp-success-url a {
+                    color: var(--bp-link-text);
+                    font-weight: 900;
+                    text-decoration: none;
+                }
+                .bp-success-cta {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-height: 42px;
+                    border-radius: 10px;
+                    background: var(--bp-primary);
+                    color: #fff;
+                    font-weight: 900;
+                    text-decoration: none;
+                    padding: 10px 14px;
                 }
                 .bp-fields {
                     display: grid;
@@ -291,7 +325,12 @@
                     </div>
                     <div class="bp-success" data-bp-success>
                         <strong>Merci pour votre retour.</strong>
-                        <span>Votre rapport a bien ete transmis.</span>
+                        <span>Votre rapport a bien été transmis.</span>
+                        <div class="bp-success-url">
+                            <span>Lien signalé</span>
+                            <a href="#" target="_blank" rel="noopener" data-bp-success-url></a>
+                        </div>
+                        <a class="bp-success-cta" href="${baseUrl}/pollUser" target="_blank" rel="noopener">Nous noter en 3 questions</a>
                     </div>
                     <div class="bp-fields" data-bp-fields>
                         <label>
@@ -367,6 +406,10 @@
                 mode: "no-cors",
                 credentials: "omit"
             }).finally(() => {
+                const currentUrl = shadow.querySelector("[data-bp-url]").value || window.location.href;
+                const successUrl = shadow.querySelector("[data-bp-success-url]");
+                successUrl.href = currentUrl;
+                successUrl.textContent = currentUrl;
                 shadow.querySelector("[data-bp-fields]").classList.add("is-hidden");
                 shadow.querySelector("[data-bp-success]").classList.add("is-visible");
             });

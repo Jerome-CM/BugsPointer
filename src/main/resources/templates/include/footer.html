@@ -42,8 +42,10 @@
             <span class="bugspointer-close-popup" id="bugspointer_close_popup">&times;</span>
         </div>
         <div id="bugspointer-message-success">
-            <p>Merci infiniment pour votre envoi <br><br><br>Donnez votre avis et façonnez l'avenir de notre produit</p>
-            <a class="bugspointer-btn-action" target="_blank" id="bugspointer-lien-success">Evaluer en 3 questions</a>
+            <p>Merci pour votre signalement.</p>
+            <p>Lien signalé : <a target="_blank" id="bugspointer-lien-signale-success"></a></p>
+            <p>Donnez votre avis sur BugsPointer en 3 questions.</p>
+            <a class="bugspointer-btn-action" target="_blank" id="bugspointer-lien-success">Évaluer en 3 questions</a>
         </div>
         <div class="bugspointer-popup-content" id="bugspointer-affichage">
             <label for="bugspointer-urlPointed">Url avec ce bug</label>
@@ -55,7 +57,7 @@
             <textarea name="codeLocation" id="bugspointer-popup-pointer-bug" class="bugspointer-codeLocation" readonly hidden></textarea>
 
             <label>Description du bug</label>
-            <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="10" required></textarea>
+            <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="5" required></textarea>
             <input type="text" name="bot" class="bugspointer-popup-content-inputbot">
 
             <input type="hidden" name="os" id="bugspointer-popup-os" readonly>

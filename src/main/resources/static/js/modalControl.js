@@ -9,6 +9,7 @@ window.addEventListener("DOMContentLoaded", function(){
     let form = document.querySelector('.bugspointer-popup-container');
     let messageElement = document.getElementById("bugspointer-message-success");
     let lienElement = document.getElementById("bugspointer-lien-success");
+    let lienSignaleElement = document.getElementById("bugspointer-lien-signale-success");
     let section = document.getElementById("bugspointer-affichage");
     let url = document.getElementById("bugspointer-urlPointed");
     let urlPointed = window.location.href;
@@ -64,6 +65,10 @@ window.addEventListener("DOMContentLoaded", function(){
         * et masque le formulaire, il ne reste que le bouton 'close' */
         messageElement.style.display = "block";
         lienElement.href = "https://bugspointer.com/pollUser";
+        if (lienSignaleElement) {
+            lienSignaleElement.textContent = urlPointed;
+            lienSignaleElement.href = urlPointed;
+        }
         section.style.display = "none";
     }
 
