@@ -256,10 +256,16 @@ public class Private {
     }
 
     @GetMapping("dashboard")
-    String getDashboard(Model model, HttpServletRequest request){
+    String getDashboard(Model model, HttpServletRequest request,
+                        @RequestParam(value = "status", required = false) String status,
+                        @RequestParam(value = "message", required = false) String message){
         Company company = companyService.getCompanyWithToken(request);
         model.addAttribute("company", companyService.getDashboardDto(company));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        if (status != null && message != null) {
+            model.addAttribute("status", status);
+            model.addAttribute("notification", message);
+        }
         return "private/dashboard";
     }
 

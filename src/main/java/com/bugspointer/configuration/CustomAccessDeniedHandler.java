@@ -29,6 +29,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                     + request.getRequestURI());
         }
 
-        response.sendRedirect("/authentication");
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+            response.sendRedirect("/app/private/dashboard?status=ERROR&message=Vous%20n%27avez%20pas%20les%20droits%20n%C3%A9cessaires");
+            return;
+        }
+
+        response.sendRedirect("/authentication?status=ERROR&message=Vous%20devez%20vous%20connecter");
     }
 }

@@ -94,22 +94,23 @@ public class MailService {
                 "<html><head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>" +
                 "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
                 "<meta name='x-apple-disable-message-reformatting'>" +
+                "<style>@media only screen and (max-width:600px){.bp-shell{width:100%!important;border-radius:0!important}.bp-pad{padding-left:18px!important;padding-right:18px!important}.bp-title{font-size:22px!important;line-height:28px!important}.bp-code{font-size:11px!important;line-height:16px!important}}</style>" +
                 "<title>" + safeTitle + "</title></head>" +
                 "<body style='margin:0;padding:0;background-color:#F3F7F4;'>" +
                 "<div style='display:none;max-height:0;overflow:hidden;color:#F3F7F4;opacity:0;'>" + safePreheader + "</div>" +
                 "<table role='presentation' width='100%' border='0' cellpadding='0' cellspacing='0' style='background-color:#F3F7F4;'>" +
                 "<tr><td align='center' style='padding:28px 12px;'>" +
-                "<table role='presentation' width='100%' border='0' cellpadding='0' cellspacing='0' style='width:100%;max-width:640px;background-color:#FFFFFF;border:1px solid #DDE7E0;border-radius:12px;'>" +
-                "<tr><td style='padding:28px 28px 8px 28px;'>" +
+                "<table class='bp-shell' role='presentation' width='100%' border='0' cellpadding='0' cellspacing='0' style='width:100%;max-width:640px;background-color:#FFFFFF;border:1px solid #DDE7E0;border-radius:12px;'>" +
+                "<tr><td class='bp-pad' style='padding:28px 28px 8px 28px;'>" +
                 "<table role='presentation' width='100%' border='0' cellpadding='0' cellspacing='0'>" +
                 "<tr><td style='color:#08110D;font-family:Arial,sans-serif;font-size:20px;font-weight:bold;line-height:24px;'>BugsPointer</td>" +
                 "<td align='right' style='color:#0F8F54;font-family:Arial,sans-serif;font-size:12px;font-weight:bold;line-height:18px;text-transform:uppercase;'>" + safeEyebrow + "</td></tr>" +
                 "</table>" +
                 "</td></tr>" +
-                "<tr><td style='padding:18px 28px 0 28px;'>" +
-                "<h1 style='margin:0;color:#08110D;font-family:Arial,sans-serif;font-size:26px;font-weight:bold;line-height:32px;'>" + safeTitle + "</h1>" +
+                "<tr><td class='bp-pad' style='padding:18px 28px 0 28px;'>" +
+                "<h1 class='bp-title' style='margin:0;color:#08110D;font-family:Arial,sans-serif;font-size:26px;font-weight:bold;line-height:32px;'>" + safeTitle + "</h1>" +
                 "</td></tr>" +
-                "<tr><td style='padding:18px 28px 28px 28px;color:#26352E;font-family:Arial,sans-serif;font-size:15px;line-height:24px;'>" +
+                "<tr><td class='bp-pad' style='padding:18px 28px 28px 28px;color:#26352E;font-family:Arial,sans-serif;font-size:15px;line-height:24px;'>" +
                 bodyContent +
                 "<table role='presentation' width='100%' border='0' cellpadding='0' cellspacing='0'>" +
                 button +
@@ -148,7 +149,7 @@ public class MailService {
     }
 
     private String codeBlock(String content) {
-        return "<pre style='margin:0 0 16px 0;padding:12px;white-space:pre-wrap;word-break:break-word;background-color:#F6F8F7;border:1px solid #DDE7E0;border-radius:8px;color:#26352E;font-family:Consolas,Monaco,monospace;font-size:12px;line-height:18px;'>" + escapeHtml(content) + "</pre>";
+        return "<pre class='bp-code' style='margin:0 0 16px 0;padding:14px;white-space:pre-wrap;word-break:break-word;tab-size:2;background-color:#F6F8F7;border:1px solid #DDE7E0;border-radius:8px;color:#26352E;font-family:Consolas,Monaco,monospace;font-size:12px;line-height:19px;'>" + escapeHtml(content) + "</pre>";
     }
 
     private String shortCodeBlock(String content) {
@@ -160,6 +161,18 @@ public class MailService {
             return content;
         }
         return content.substring(0, maxLength) + "\n...";
+    }
+
+    private String reportSection(String eyebrow, String title, String bodyContent) {
+        return "<table role='presentation' width='100%' border='0' cellpadding='0' cellspacing='0' style='margin:0 0 18px 0;border:1px solid #DDE7E0;border-radius:10px;'>" +
+                "<tr><td style='padding:16px 16px 6px 16px;'>" +
+                "<p style='margin:0 0 6px 0;color:#0F8F54;font-family:Arial,sans-serif;font-size:11px;font-weight:bold;line-height:16px;text-transform:uppercase;'>" + escapeHtml(eyebrow) + "</p>" +
+                "<h2 style='margin:0;color:#08110D;font-family:Arial,sans-serif;font-size:18px;font-weight:bold;line-height:24px;'>" + escapeHtml(title) + "</h2>" +
+                "</td></tr>" +
+                "<tr><td style='padding:10px 16px 16px 16px;color:#26352E;font-family:Arial,sans-serif;font-size:14px;line-height:22px;'>" +
+                bodyContent +
+                "</td></tr>" +
+                "</table>";
     }
 
     private String emailUrl(String path) {
@@ -365,18 +378,32 @@ public class MailService {
                 "Page de test",
                 "Rapport de test reçu",
                 paragraph("Bonjour,") +
-                        paragraph("Voici le rapport envoyé depuis la page de test BugsPointer.") +
-                        detailsTable(new String[][]{
-                                {"URL concernée", bugTest.getUrl()},
-                                {"Date du rapport", Utility.dateFormator(bugTest.getDateCreation(), "dd/MM/yyyy HH:mm:ss")},
-                                {"Description", bugTest.getDescription()},
-                                {"OS utilisateur", bugTest.getOs()},
-                                {"Navigateur", bugTest.getBrowser()},
-                                {"Taille de l'écran", bugTest.getScreenSize()}
-                        }) +
-                        paragraph("La balise pointée est identifiable avec la classe bugspointer-pointed-balise.") +
-                        rawParagraph("<strong style='color:#08110D;'>Code HTML sélectionné</strong>") +
-                        codeBlock(shortCodeBlock(bugService.codeBlockFormatter(bugTest.getCodeLocation()))),
+                        paragraph("Voici un exemple de rapport envoyé depuis la page de test BugsPointer.") +
+                        reportSection(
+                                "Offre Free",
+                                "Rapport reçu par e-mail",
+                                paragraph("Le plan Free envoie un résumé simple du signalement pour vérifier que BugsPointer fonctionne sur votre site.") +
+                                        detailsTable(new String[][]{
+                                                {"URL concernée", bugTest.getUrl()},
+                                                {"Description", bugTest.getDescription()}
+                                        })
+                        ) +
+                        reportSection(
+                                "Offre Target",
+                                "Rapport complet pour analyser le bug",
+                                paragraph("Le plan Target ajoute le contexte technique et le bloc HTML utile pour retrouver rapidement l'élément concerné.") +
+                                        detailsTable(new String[][]{
+                                                {"URL concernée", bugTest.getUrl()},
+                                                {"Date du rapport", Utility.dateFormator(bugTest.getDateCreation(), "dd/MM/yyyy HH:mm:ss")},
+                                                {"Description", bugTest.getDescription()},
+                                                {"OS utilisateur", bugTest.getOs()},
+                                                {"Navigateur", bugTest.getBrowser()},
+                                                {"Taille de l'écran", bugTest.getScreenSize()}
+                                        }) +
+                                        paragraph("Dans le code ci-dessous, l'élément sélectionné contient la classe bugspointer-pointed-balise pour être retrouvé facilement.") +
+                                        rawParagraph("<strong style='color:#08110D;'>Code HTML sélectionné</strong>") +
+                                        codeBlock(shortCodeBlock(bugService.codeBlockFormatter(bugTest.getCodeLocation())))
+                        ),
                 null,
                 null,
                 "Vous recevez cet e-mail parce que cette adresse a été saisie sur la page de test BugsPointer."
