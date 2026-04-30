@@ -195,10 +195,6 @@ public class ModalService implements IModal {
                     }
 
                 } else {
-                    String codeLoc = dto.getCodeLocation();
-                    codeLoc = codeLoc.replace("<", "&lt;");
-                    codeLoc = codeLoc.replace(">", "&gt;");
-                    bug.setCodeLocation(codeLoc);
                     Response response = mailService.sendMailTest(dto.getMail(), bug);
                     if (response.getStatus().equals(EnumStatus.OK)) {
                         log.info("TestPage report send");

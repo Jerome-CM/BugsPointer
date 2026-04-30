@@ -497,13 +497,20 @@
     }
 
     function findReadableParent(element) {
+        const readableContainers = ["ARTICLE", "ASIDE", "SECTION", "HEADER", "FOOTER", "NAV", "LI", "TR", "FORM"];
         let readable = element;
-        for (let index = 0; index < 2; index += 1) {
-            if (!readable.parentElement || readable.parentElement === document.body) {
+
+        while (readable.parentElement && readable.parentElement !== document.body) {
+            const parent = readable.parentElement;
+            if (readableContainers.includes(parent.tagName)) {
+                return parent;
+            }
+            if (parent.tagName === "MAIN") {
                 break;
             }
-            readable = readable.parentElement;
+            readable = parent;
         }
+
         return readable;
     }
 

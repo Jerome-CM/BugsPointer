@@ -151,6 +151,17 @@ public class MailService {
         return "<pre style='margin:0 0 16px 0;padding:12px;white-space:pre-wrap;word-break:break-word;background-color:#F6F8F7;border:1px solid #DDE7E0;border-radius:8px;color:#26352E;font-family:Consolas,Monaco,monospace;font-size:12px;line-height:18px;'>" + escapeHtml(content) + "</pre>";
     }
 
+    private String shortCodeBlock(String content) {
+        if (content == null) {
+            return "";
+        }
+        int maxLength = 2500;
+        if (content.length() <= maxLength) {
+            return content;
+        }
+        return content.substring(0, maxLength) + "\n...";
+    }
+
     private String emailUrl(String path) {
         return ADRESSE + path;
     }
@@ -347,14 +358,14 @@ public class MailService {
 
 
         // Paramètres du destinataire
-        String subject = "BugsPointer - Votre rapport de la page de test";
+        String subject = "Votre rapport BugsPointer";
 
         String htmlContent = buildEmail(
-                "Votre rapport de test BugsPointer a bien été reçu.",
+                "Voici le rapport demandé depuis la page de test BugsPointer.",
                 "Page de test",
-                "Votre rapport de test est prêt",
+                "Rapport de test reçu",
                 paragraph("Bonjour,") +
-                        paragraph("Nous avons bien reçu le rapport envoyé depuis la page de test. Voici un aperçu du niveau de détail disponible dans BugsPointer.") +
+                        paragraph("Voici le rapport envoyé depuis la page de test BugsPointer.") +
                         detailsTable(new String[][]{
                                 {"URL concernée", bugTest.getUrl()},
                                 {"Date du rapport", Utility.dateFormator(bugTest.getDateCreation(), "dd/MM/yyyy HH:mm:ss")},
@@ -365,11 +376,10 @@ public class MailService {
                         }) +
                         paragraph("La balise pointée est identifiable avec la classe bugspointer-pointed-balise.") +
                         rawParagraph("<strong style='color:#08110D;'>Code HTML sélectionné</strong>") +
-                        codeBlock(bugService.codeBlockFormatter(bugTest.getCodeLocation())) +
-                        paragraph("Le dashboard vous permet de retrouver ces informations pour chaque signalement et de suivre leur résolution au fil du temps."),
-                "Voir mon dashboard",
-                emailUrl("authentication"),
-                "Merci d'avoir testé BugsPointer. Vous pouvez aussi nous envoyer votre avis depuis " + emailUrl("pollUser") + "."
+                        codeBlock(shortCodeBlock(bugService.codeBlockFormatter(bugTest.getCodeLocation()))),
+                null,
+                null,
+                "Vous recevez cet e-mail parce que cette adresse a été saisie sur la page de test BugsPointer."
         );
 
         return sendNoReplyMail(to, subject, htmlContent, "Mail avec le bug sur page de test envoyé", "Email test report");
