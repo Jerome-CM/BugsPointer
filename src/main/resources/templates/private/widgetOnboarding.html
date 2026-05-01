@@ -65,16 +65,19 @@
                         <p class="mt-2 text-sm leading-6 text-white/62" th:text="${company.getDomaine() != null ? company.getDomaine() : 'À renseigner'}">À renseigner</p>
                     </div>
                     <div class="rounded-lg border bg-white/[0.055] p-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)]"
-                         th:classappend="${company.isDomainVerified() ? ' border-pointer-green/35' : (company.getDomaine() != null ? ' border-pointer-lime/35' : ' border-white/10')}">
+                         th:classappend="${company.getDomaine() != null ? ' border-pointer-lime/35' : ' border-white/10'}">
                         <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Étape 2</p>
-                        <h2 class="mt-2 text-xl font-black text-white">Vérification</h2>
-                        <p class="mt-2 text-sm leading-6 text-white/62" th:text="${company.isDomainVerified() ? 'Domaine certifié' : 'Script à détecter'}">Script à détecter</p>
+                        <h2 class="mt-2 text-xl font-black text-white">Widget Installation</h2>
+                        <p class="mt-2 text-sm leading-6 text-white/62">Copier le script</p>
                     </div>
                     <div class="rounded-lg border bg-white/[0.055] p-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)]"
-                         th:classappend="${company.isDomainVerified() ? ' border-pointer-lime/35' : ' border-white/10'}">
+                         th:classappend="${company.isDomainVerified() ? ' border-pointer-green/35' : (company.getDomaine() != null ? ' border-red-300/35' : ' border-white/10')}">
                         <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Étape 3</p>
-                        <h2 class="mt-2 text-xl font-black text-white">Widget</h2>
-                        <p class="mt-2 text-sm leading-6 text-white/62">Installation et personnalisation</p>
+                        <div class="mt-2 flex items-center gap-2">
+                            <span class="h-3 w-3 rounded-full" th:classappend="${company.isDomainVerified() ? ' bg-pointer-green shadow-[0_0_20px_rgba(0,230,118,0.55)]' : ' bg-red-400 shadow-[0_0_20px_rgba(248,113,113,0.45)]'}"></span>
+                            <h2 class="text-xl font-black text-white">Vérification</h2>
+                        </div>
+                        <p class="mt-2 text-sm leading-6 text-white/62" th:text="${company.isDomainVerified() ? 'Domaine certifié' : 'À valider'}">À valider</p>
                     </div>
                 </section>
 
@@ -101,16 +104,39 @@
 
                         <article class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:p-7">
                             <div class="mb-5 border-b border-white/10 pb-5">
-                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Installation</p>
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 2</p>
                                 <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl">Copier le script</h2>
                                 <p class="mt-4 max-w-2xl text-sm leading-6 text-white/65">
-                                    Collez cette balise avant la fermeture <code class="rounded bg-black/35 px-1.5 py-0.5 text-pointer-lime">&lt;/body&gt;</code>, puis lancez la vérification.
+                                    Collez cette balise avant la fermeture <code class="rounded bg-black/35 px-1.5 py-0.5 text-pointer-lime">&lt;/body&gt;</code> sur la page d'accueil du domaine renseigné.
                                 </p>
                             </div>
                             <textarea class="install-code min-h-[94px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly th:text="'&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; defer&gt;&lt;/script&gt;'"></textarea>
+                        </article>
+
+                        <article class="rounded-lg border bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7"
+                                 th:classappend="${company.isDomainVerified() ? ' border-pointer-green/25' : ' border-red-300/25'}">
+                            <div class="mb-5 border-b border-white/10 pb-5">
+                                <div class="flex flex-wrap items-center gap-3">
+                                    <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 3</p>
+                                    <span class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-black uppercase tracking-wider"
+                                          th:classappend="${company.isDomainVerified() ? ' border-pointer-green/30 bg-pointer-green/10 text-pointer-lime' : ' border-red-300/30 bg-red-500/10 text-red-100'}">
+                                        <span class="h-2.5 w-2.5 rounded-full" th:classappend="${company.isDomainVerified() ? ' bg-pointer-green shadow-[0_0_16px_rgba(0,230,118,0.55)]' : ' bg-red-400 shadow-[0_0_16px_rgba(248,113,113,0.45)]'}"></span>
+                                        <span th:text="${company.isDomainVerified() ? 'Validé' : 'Non validé'}">Non validé</span>
+                                    </span>
+                                    <span class="group relative inline-flex h-7 w-7 cursor-help items-center justify-center rounded-full border border-white/15 bg-white/8 text-sm font-black text-white/80">?
+                                        <span class="pointer-events-none absolute bottom-9 left-1/2 z-20 hidden w-72 -translate-x-1/2 rounded-lg border border-white/10 bg-[#08110D] p-3 text-left text-xs font-medium leading-5 text-white/72 shadow-[0_18px_45px_rgba(0,0,0,0.35)] group-hover:block">
+                                            Pour valider le domaine une première fois, le script doit être installé sur l'URL exacte de la page d'accueil vérifiée par BugsPointer.
+                                        </span>
+                                    </span>
+                                </div>
+                                <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl">Vérifier le domaine</h2>
+                                <p class="mt-4 max-w-2xl text-sm leading-6 text-white/65">
+                                    BugsPointer ouvre votre page d'accueil en HTTPS et cherche la balise script avec votre clé publique.
+                                </p>
+                            </div>
                             <form class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end" th:action="@{/app/private/onboarding/widget/verify}" method="post">
                                 <p class="text-sm leading-6 text-white/62 sm:mr-auto" th:if="${company.isDomainVerified()}">Le domaine est certifié. Vous pouvez continuer.</p>
-                                <p class="text-sm leading-6 text-white/62 sm:mr-auto" th:if="${!company.isDomainVerified()}">Le script doit être présent sur la page d'accueil de votre domaine.</p>
+                                <p class="text-sm leading-6 text-white/62 sm:mr-auto" th:if="${!company.isDomainVerified()}">Le script doit être détecté sur la page d'accueil du domaine enregistré.</p>
                                 <button class="min-h-11 rounded-lg border border-white/20 bg-white/5 px-5 py-2.5 font-extrabold text-white transition hover:-translate-y-0.5 hover:border-pointer-green/40 hover:text-pointer-lime" type="submit" th:disabled="${company.getDomaine() == null}">
                                     Vérifier l'installation
                                 </button>
