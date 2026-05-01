@@ -449,6 +449,7 @@ public class CompanyService implements ICompany {
                     .execute();
 
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                markDomainAsNotVerified(company, normalizedDomain);
                 return new Response(EnumStatus.ERROR, null, "Le site ne répond pas correctement en HTTPS");
             }
 
@@ -460,10 +461,21 @@ public class CompanyService implements ICompany {
                 return companyTryRegistration(company, "Installation Bugspointer vérifiée");
             }
 
-            return new Response(EnumStatus.ERROR, null, "Le script Bugspointer avec votre clé publique n'a pas été détecté sur la page d'accueil");
+            markDomainAsNotVerified(company, normalizedDomain);
+            return new Response(EnumStatus.ERROR, null, "Le script Bugspointer avec votre clé publique n'a pas été détecté sur l'URL de vérification");
         } catch (Exception e) {
             log.warn("Domain verification failed for {}: {}", normalizedDomain, e.getMessage());
+            markDomainAsNotVerified(company, normalizedDomain);
             return new Response(EnumStatus.ERROR, null, "Impossible de vérifier le domaine pour le moment");
+        }
+    }
+
+    private void markDomainAsNotVerified(Company company, String normalizedDomain) {
+        if (company != null) {
+            company.setDomaine(normalizedDomain);
+            company.setDomainVerified(false);
+            company.setDomainVerifiedAt(null);
+            companyTryRegistration(company, "Installation Bugspointer non vérifiée");
         }
     }
 

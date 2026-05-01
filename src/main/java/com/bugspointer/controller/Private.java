@@ -156,6 +156,15 @@ public class Private {
     @GetMapping("onboarding/widget")
     String getWidgetOnboarding(Model model, HttpServletRequest request) {
         Company company = companyService.getCompanyWithToken(request);
+        boolean wasVerified = company.isDomainVerified();
+        if (company.getDomaine() != null && !company.getDomaine().trim().isEmpty()) {
+            Response verification = companyService.verifyDomainInstallation(company);
+            if (wasVerified && verification.getStatus().equals(EnumStatus.ERROR)) {
+                model.addAttribute("status", String.valueOf(verification.getStatus()));
+                model.addAttribute("notification", verification.getMessage());
+            }
+            company = companyService.getCompanyWithToken(request);
+        }
         model.addAttribute("company", companyService.getAccountDto(company));
         model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(company));
         model.addAttribute("publicKey", company.getPublicKey());
