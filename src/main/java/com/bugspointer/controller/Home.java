@@ -60,13 +60,9 @@ public class Home {
     String getDownloadPage(Model model, HttpServletRequest request){
 
         if(userAuthenticationUtil.isUserLoggedIn()){
-            Company company = companyService.getCompanyWithToken(request);
-            model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-            model.addAttribute("companyId", company.getCompanyId());
-            model.addAttribute("publicKey", company.getPublicKey());
-            viewCounterService.addVisit(EnumViewCounterPage.DOWNLOAD);
-            return "public/download";
+            return "redirect:/app/private/onboarding/widget";
         } else {
+            request.getSession().setAttribute("redirectAfterLogin", "/app/private/onboarding/widget");
             return "redirect:authentication?status=ERROR&message=Merci de vous connecter";
         }
 

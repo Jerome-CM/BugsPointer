@@ -74,8 +74,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         if(company.getRole().equals("ROLE_ADMIN")){
             response.sendRedirect("app/admin/dashboard");
-        } else if (company.getDomaine() == null || company.getDomaine().trim().isEmpty()) {
-            response.sendRedirect("/newUser/" + company.getPublicKey());
+        } else if (session.getAttribute("redirectAfterLogin") != null && String.valueOf(session.getAttribute("redirectAfterLogin")).startsWith("/")) {
+            String redirectAfterLogin = String.valueOf(session.getAttribute("redirectAfterLogin"));
+            session.removeAttribute("redirectAfterLogin");
+            response.sendRedirect(redirectAfterLogin);
+        } else if (company.getDomaine() == null || company.getDomaine().trim().isEmpty() || !company.isDomainVerified()) {
+            response.sendRedirect("/app/private/onboarding/widget");
         }else{
             response.sendRedirect("app/private/dashboard");
         }

@@ -39,8 +39,8 @@ public class DomainRequiredInterceptor implements HandlerInterceptor {
         }
 
         Company company = companyOptional.get();
-        if (!"ROLE_ADMIN".equals(company.getRole()) && (company.getDomaine() == null || company.getDomaine().trim().isEmpty())) {
-            response.sendRedirect("/newUser/" + company.getPublicKey());
+        if (!"ROLE_ADMIN".equals(company.getRole()) && (company.getDomaine() == null || company.getDomaine().trim().isEmpty() || !company.isDomainVerified())) {
+            response.sendRedirect("/app/private/onboarding/widget");
             return false;
         }
 

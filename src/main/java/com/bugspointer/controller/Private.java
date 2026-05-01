@@ -153,6 +153,50 @@ public class Private {
         return "private/widget";
     }
 
+    @GetMapping("onboarding/widget")
+    String getWidgetOnboarding(Model model, HttpServletRequest request) {
+        Company company = companyService.getCompanyWithToken(request);
+        model.addAttribute("company", companyService.getAccountDto(company));
+        model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(company));
+        model.addAttribute("publicKey", company.getPublicKey());
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "private/widgetOnboarding";
+    }
+
+    @PostMapping("onboarding/widget/domain")
+    String updateOnboardingDomain(@Validated(AccountDTO.Domain.class) @ModelAttribute("company") AccountDTO dto,
+                                  BindingResult result,
+                                  Model model,
+                                  RedirectAttributes redirectAttributes,
+                                  HttpServletRequest request) {
+        Company company = companyService.getCompanyWithToken(request);
+        dto.setPublicKey(company.getPublicKey());
+
+        if (!result.hasErrors()) {
+            Response response = companyService.registerDomaine(company, dto);
+            redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+            redirectAttributes.addFlashAttribute("notification", response.getMessage());
+            return "redirect:/app/private/onboarding/widget";
+        }
+
+        model.addAttribute("status", "ERROR");
+        model.addAttribute("notification", "Merci de saisir un domaine valide.");
+        model.addAttribute("company", companyService.getAccountDto(company));
+        model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(company));
+        model.addAttribute("publicKey", company.getPublicKey());
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "private/widgetOnboarding";
+    }
+
+    @PostMapping("onboarding/widget/verify")
+    String verifyOnboardingDomain(RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        Company company = companyService.getCompanyWithToken(request);
+        Response response = companyService.verifyDomainInstallation(company);
+        redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+        redirectAttributes.addFlashAttribute("notification", response.getMessage());
+        return "redirect:/app/private/onboarding/widget";
+    }
+
     @PostMapping("widget")
     String updateWidget(@Valid @ModelAttribute("widget") CompanyPreferenceDTO dto,
                         BindingResult result,

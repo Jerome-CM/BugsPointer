@@ -17,6 +17,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(domainRequiredInterceptor)
                 .addPathPatterns("/app/private/**")
-                .excludePathPatterns("/app/private/thanks");
+                .excludePathPatterns("/app/private/thanks", "/app/private/onboarding/**");
     }
 }

@@ -1,0 +1,150 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
+<div th:replace="~{include/head.html}"></div>
+    <title>Installer le widget - BugsPointer</title>
+    <meta name="robots" content="noindex">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>
+        .bugspointer-logo{display:none;}
+        .install-code{white-space:pre-wrap;word-break:break-word;}
+    </style>
+</head>
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
+    <div th:replace="~{include/notifAlert.html}"></div>
+    <div th:replace="~{include/navCompany.html}"></div>
+
+    <main>
+        <section class="relative px-5 pb-16 pt-6 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-6">
+                <header class="rounded-lg border border-white/10 bg-white/[0.065] p-5 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur sm:p-6 lg:p-8">
+                    <p class="mb-4 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                        Installation guidée
+                    </p>
+                    <div class="grid gap-5 lg:grid-cols-[1fr_360px] lg:items-end">
+                        <div>
+                            <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl xl:text-6xl">
+                                Installez BugsPointer sur votre site
+                            </h1>
+                            <p class="mt-5 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
+                                Vérifiez votre domaine, copiez le script, puis ajustez le widget depuis un seul parcours.
+                            </p>
+                        </div>
+                        <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                            <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Clé publique</p>
+                            <p class="mt-2 break-all font-mono text-sm font-bold text-white" th:text="${publicKey}">pk_xxxxx</p>
+                        </div>
+                    </div>
+                </header>
+
+                <section class="grid gap-3 md:grid-cols-3">
+                    <div class="rounded-lg border bg-white/[0.055] p-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)]"
+                         th:classappend="${company.getDomaine() != null ? ' border-pointer-green/35' : ' border-pointer-lime/35'}">
+                        <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Étape 1</p>
+                        <h2 class="mt-2 text-xl font-black text-white">Domaine</h2>
+                        <p class="mt-2 text-sm leading-6 text-white/62" th:text="${company.getDomaine() != null ? company.getDomaine() : 'À renseigner'}">À renseigner</p>
+                    </div>
+                    <div class="rounded-lg border bg-white/[0.055] p-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)]"
+                         th:classappend="${company.isDomainVerified() ? ' border-pointer-green/35' : (company.getDomaine() != null ? ' border-pointer-lime/35' : ' border-white/10')}">
+                        <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Étape 2</p>
+                        <h2 class="mt-2 text-xl font-black text-white">Vérification</h2>
+                        <p class="mt-2 text-sm leading-6 text-white/62" th:text="${company.isDomainVerified() ? 'Domaine certifié' : 'Script à détecter'}">Script à détecter</p>
+                    </div>
+                    <div class="rounded-lg border bg-white/[0.055] p-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)]"
+                         th:classappend="${company.isDomainVerified() ? ' border-pointer-lime/35' : ' border-white/10'}">
+                        <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Étape 3</p>
+                        <h2 class="mt-2 text-xl font-black text-white">Widget</h2>
+                        <p class="mt-2 text-sm leading-6 text-white/62">Installation et personnalisation</p>
+                    </div>
+                </section>
+
+                <section class="grid gap-5 lg:grid-cols-[1fr_380px] lg:items-start">
+                    <div class="flex flex-col gap-5">
+                        <article class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7">
+                            <div class="mb-5 border-b border-white/10 pb-5">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Domaine</p>
+                                <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl">Associer le site</h2>
+                                <p class="mt-4 max-w-2xl text-sm leading-6 text-white/65">
+                                    Entrez le domaine public qui accueillera le widget. Les chemins comme /blog sont ignorés.
+                                </p>
+                            </div>
+                            <form class="grid gap-4 md:grid-cols-[1fr_210px] md:items-end" th:action="@{/app/private/onboarding/widget/domain}" th:object="${company}" method="post">
+                                <label>
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Domaine</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{domaine}" placeholder="https://www.exemple.fr">
+                                </label>
+                                <button class="min-h-12 w-full rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" type="submit">
+                                    Enregistrer
+                                </button>
+                            </form>
+                        </article>
+
+                        <article class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:p-7">
+                            <div class="mb-5 border-b border-white/10 pb-5">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Installation</p>
+                                <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl">Copier le script</h2>
+                                <p class="mt-4 max-w-2xl text-sm leading-6 text-white/65">
+                                    Collez cette balise avant la fermeture <code class="rounded bg-black/35 px-1.5 py-0.5 text-pointer-lime">&lt;/body&gt;</code>, puis lancez la vérification.
+                                </p>
+                            </div>
+                            <textarea class="install-code min-h-[94px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly th:text="'&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; defer&gt;&lt;/script&gt;'"></textarea>
+                            <form class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end" th:action="@{/app/private/onboarding/widget/verify}" method="post">
+                                <p class="text-sm leading-6 text-white/62 sm:mr-auto" th:if="${company.isDomainVerified()}">Le domaine est certifié. Vous pouvez continuer.</p>
+                                <p class="text-sm leading-6 text-white/62 sm:mr-auto" th:if="${!company.isDomainVerified()}">Le script doit être présent sur la page d'accueil de votre domaine.</p>
+                                <button class="min-h-11 rounded-lg border border-white/20 bg-white/5 px-5 py-2.5 font-extrabold text-white transition hover:-translate-y-0.5 hover:border-pointer-green/40 hover:text-pointer-lime" type="submit" th:disabled="${company.getDomaine() == null}">
+                                    Vérifier l'installation
+                                </button>
+                            </form>
+                        </article>
+                    </div>
+
+                    <aside class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Dernière étape</p>
+                        <h2 class="mt-2 font-display text-3xl leading-none text-white">Personnaliser</h2>
+                        <p class="mt-5 text-sm leading-6 text-white/68" th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                            Le plan Free permet d'installer le widget et de recevoir vos premiers rapports. La personnalisation complète est disponible avec Target.
+                        </p>
+                        <p class="mt-5 text-sm leading-6 text-white/68" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}">
+                            Votre plan permet de modifier les couleurs, textes, position et taille du bouton.
+                        </p>
+                        <div class="mt-5 grid gap-3">
+                            <a th:href="@{/app/private/widget}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime"
+                               th:classappend="${!company.isDomainVerified() ? ' pointer-events-none opacity-45' : ''}">
+                                Ouvrir la personnalisation
+                            </a>
+                            <a th:href="@{/testPage}" class="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5 hover:border-pointer-green/40 hover:text-pointer-lime">
+                                Tester BugsPointer
+                            </a>
+                            <a th:href="@{/documentations#integration}" class="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/10 px-5 py-3 font-extrabold text-white/74 transition hover:text-white">
+                                Lire la documentation
+                            </a>
+                        </div>
+                    </aside>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <div th:replace="~{include/footer.html}"></div>
+</body>
+</html>
