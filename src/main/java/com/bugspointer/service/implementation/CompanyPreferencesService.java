@@ -171,6 +171,9 @@ public class CompanyPreferencesService implements ICompanyPreferences {
     }
 
     private String safeButtonStyle(String style) {
+        if ("custom".equals(style)) {
+            return "custom";
+        }
         if ("link".equals(style)) {
             return "link";
         }

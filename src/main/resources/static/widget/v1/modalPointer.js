@@ -88,7 +88,7 @@
             modalTextColor: safeColor(config.modalTextColor, defaults.modalTextColor),
             linkTextColor: safeColor(config.linkTextColor, defaults.linkTextColor),
             buttonText: config.buttonText || defaults.buttonText,
-            buttonStyle: config.buttonStyle === "link" ? "link" : "button",
+            buttonStyle: safeButtonStyle(config.buttonStyle),
             buttonSize: safeButtonSize(config.buttonSize),
             title: config.title || defaults.title,
             descriptionLabel: config.descriptionLabel || defaults.descriptionLabel,
@@ -319,7 +319,7 @@
                     .bp-title { font-size: 22px; }
                 }
             </style>
-            <button class="bp-launcher ${escapeHtml(safePosition(cfg.position))} is-${escapeHtml(cfg.buttonStyle)}" type="button" title="${escapeHtml(cfg.buttonText)}" aria-label="${escapeHtml(cfg.buttonText)}" data-bp-open>${cfg.buttonStyle === "link" ? escapeHtml(cfg.buttonText) : "!"}</button>
+            ${cfg.buttonStyle === "custom" ? "" : `<button class="bp-launcher ${escapeHtml(safePosition(cfg.position))} is-${escapeHtml(cfg.buttonStyle)}" type="button" title="${escapeHtml(cfg.buttonText)}" aria-label="${escapeHtml(cfg.buttonText)}" data-bp-open>${cfg.buttonStyle === "link" ? escapeHtml(cfg.buttonText) : "!"}</button>`}
             <div class="bp-overlay" data-bp-overlay>
                 <form class="bp-modal" method="post" action="${baseUrl}/api/user/modalControl" data-bp-form>
                     <div class="bp-header">
@@ -380,7 +380,10 @@
         const submit = shadow.querySelector("[data-bp-submit]");
         const description = shadow.querySelector("[data-bp-description]");
 
-        launcher.addEventListener("click", open);
+        if (launcher) {
+            launcher.addEventListener("click", open);
+        }
+        bindCustomTriggers(open);
         close.addEventListener("click", closeModal);
         pointer.addEventListener("click", startPointer);
         description.addEventListener("input", validateSubmit);
@@ -488,6 +491,30 @@
         }
     }
 
+    function bindCustomTriggers(open) {
+        const triggers = document.querySelectorAll("[data-bugspointer-open]");
+        triggers.forEach((trigger) => {
+            if (trigger.dataset.bugspointerBound === "true") {
+                return;
+            }
+            trigger.dataset.bugspointerBound = "true";
+            if (!trigger.textContent.trim()) {
+                trigger.textContent = state.config.buttonText;
+            }
+            if (trigger.dataset.bugspointerUnstyled !== "true") {
+                trigger.style.color = state.config.linkTextColor;
+                trigger.style.cursor = "pointer";
+                trigger.style.fontWeight = "800";
+                trigger.style.textDecoration = "underline";
+                trigger.style.textUnderlineOffset = "3px";
+            }
+            trigger.addEventListener("click", (event) => {
+                event.preventDefault();
+                open();
+            });
+        });
+    }
+
     function restoreSelectedBorder() {
         if (state.selectedElement) {
             state.selectedElement.style.border = state.selectedBorder;
@@ -557,6 +584,10 @@
 
     function safePosition(position) {
         return ["bottom-right", "bottom-left", "top-right", "top-left"].includes(position) ? position : "bottom-right";
+    }
+
+    function safeButtonStyle(style) {
+        return ["button", "link", "custom"].includes(style) ? style : "button";
     }
 
     function safeColor(color, fallback = defaults.primaryColor) {
