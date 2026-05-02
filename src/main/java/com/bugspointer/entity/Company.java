@@ -32,6 +32,8 @@ public class Company {
 
     private Date domainVerifiedAt;
 
+    private String domainVerificationUrl;
+
     private EnumPlan plan = EnumPlan.FREE;
 
     @JsonFormat(pattern = "yyyy-MM-dd")

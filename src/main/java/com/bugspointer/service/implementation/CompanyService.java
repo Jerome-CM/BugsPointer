@@ -418,6 +418,7 @@ public class CompanyService implements ICompany {
             company.setDomaine(normalizedDomain);
             company.setDomainVerified(false);
             company.setDomainVerifiedAt(null);
+            company.setDomainVerificationUrl(null);
             return companyTryRegistration(company, "Nom de domaine enregistré");
         }
 
@@ -430,6 +431,10 @@ public class CompanyService implements ICompany {
     }
 
     public Response verifyDomainInstallation(Company company) {
+        return verifyDomainInstallation(company, company != null ? company.getDomainVerificationUrl() : null);
+    }
+
+    public Response verifyDomainInstallation(Company company, String verificationUrl) {
         if (company == null || company.getDomaine() == null || company.getDomaine().trim().isEmpty()) {
             return new Response(EnumStatus.ERROR, null, "Aucun domaine n'est enregistré pour ce compte");
         }
@@ -439,7 +444,11 @@ public class CompanyService implements ICompany {
             return new Response(EnumStatus.ERROR, null, "Le domaine enregistré n'est pas valide");
         }
 
-        String url = "https://" + normalizedDomain;
+        String url = normalizeVerificationUrl(verificationUrl, normalizedDomain);
+        if (url == null) {
+            return new Response(EnumStatus.ERROR, null, "L'URL de vérification doit appartenir au domaine enregistré");
+        }
+
         try {
             Connection.Response response = Jsoup.connect(url)
                     .timeout(5000)
@@ -449,7 +458,7 @@ public class CompanyService implements ICompany {
                     .execute();
 
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
-                markDomainAsNotVerified(company, normalizedDomain);
+                markDomainAsNotVerified(company, normalizedDomain, url);
                 return new Response(EnumStatus.ERROR, null, "Le site ne répond pas correctement en HTTPS");
             }
 
@@ -458,24 +467,61 @@ public class CompanyService implements ICompany {
                 company.setDomaine(normalizedDomain);
                 company.setDomainVerified(true);
                 company.setDomainVerifiedAt(new Date());
+                company.setDomainVerificationUrl(url);
                 return companyTryRegistration(company, "Installation Bugspointer vérifiée");
             }
 
-            markDomainAsNotVerified(company, normalizedDomain);
+            markDomainAsNotVerified(company, normalizedDomain, url);
             return new Response(EnumStatus.ERROR, null, "Le script Bugspointer avec votre clé publique n'a pas été détecté sur l'URL de vérification");
         } catch (Exception e) {
-            log.warn("Domain verification failed for {}: {}", normalizedDomain, e.getMessage());
-            markDomainAsNotVerified(company, normalizedDomain);
+            log.warn("Domain verification failed for {} on {}: {}", normalizedDomain, url, e.getMessage());
+            markDomainAsNotVerified(company, normalizedDomain, url);
             return new Response(EnumStatus.ERROR, null, "Impossible de vérifier le domaine pour le moment");
         }
     }
 
-    private void markDomainAsNotVerified(Company company, String normalizedDomain) {
+    private void markDomainAsNotVerified(Company company, String normalizedDomain, String verificationUrl) {
         if (company != null) {
             company.setDomaine(normalizedDomain);
             company.setDomainVerified(false);
             company.setDomainVerifiedAt(null);
+            company.setDomainVerificationUrl(verificationUrl);
             companyTryRegistration(company, "Installation Bugspointer non vérifiée");
+        }
+    }
+
+    private String normalizeVerificationUrl(String rawUrl, String normalizedDomain) {
+        String value = rawUrl;
+        if (value == null || value.trim().isEmpty()) {
+            value = "https://" + normalizedDomain;
+        }
+
+        value = value.trim();
+        if (!value.startsWith("http://") && !value.startsWith("https://")) {
+            value = "https://" + value;
+        }
+
+        try {
+            URI uri = URI.create(value);
+            String host = uri.getHost();
+            if (host == null || host.trim().isEmpty()) {
+                return null;
+            }
+
+            String asciiHost = IDN.toASCII(host.toLowerCase(Locale.ROOT));
+            String comparableHost = asciiHost.startsWith("www.") ? asciiHost.substring(4) : asciiHost;
+            if (!comparableHost.equals(normalizedDomain)) {
+                return null;
+            }
+
+            String path = uri.getRawPath();
+            if (path == null || path.trim().isEmpty()) {
+                path = "/";
+            }
+            String query = uri.getRawQuery() != null ? "?" + uri.getRawQuery() : "";
+            return "https://" + asciiHost + path + query;
+        } catch (IllegalArgumentException e) {
+            return null;
         }
     }
 

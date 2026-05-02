@@ -157,7 +157,7 @@ public class Private {
     String getWidgetOnboarding(Model model, HttpServletRequest request) {
         Company company = companyService.getCompanyWithToken(request);
         boolean wasVerified = company.isDomainVerified();
-        if (company.getDomaine() != null && !company.getDomaine().trim().isEmpty()) {
+        if (company.getDomainVerificationUrl() != null && !company.getDomainVerificationUrl().trim().isEmpty()) {
             Response verification = companyService.verifyDomainInstallation(company);
             if (wasVerified && verification.getStatus().equals(EnumStatus.ERROR)) {
                 model.addAttribute("status", String.valueOf(verification.getStatus()));
@@ -198,11 +198,16 @@ public class Private {
     }
 
     @PostMapping("onboarding/widget/verify")
-    String verifyOnboardingDomain(RedirectAttributes redirectAttributes, HttpServletRequest request) {
+    String verifyOnboardingDomain(@RequestParam("verificationUrl") String verificationUrl,
+                                  RedirectAttributes redirectAttributes,
+                                  HttpServletRequest request) {
         Company company = companyService.getCompanyWithToken(request);
-        Response response = companyService.verifyDomainInstallation(company);
+        Response response = companyService.verifyDomainInstallation(company, verificationUrl);
         redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
         redirectAttributes.addFlashAttribute("notification", response.getMessage());
+        if (response.getStatus().equals(EnumStatus.OK)) {
+            return "redirect:/app/private/dashboard";
+        }
         return "redirect:/app/private/onboarding/widget";
     }
 

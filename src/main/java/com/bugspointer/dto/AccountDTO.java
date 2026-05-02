@@ -49,4 +49,6 @@ public class AccountDTO {
     private String domaine;
 
     private boolean domainVerified;
+
+    private String domainVerificationUrl;
 }
