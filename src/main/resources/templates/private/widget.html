@@ -140,39 +140,49 @@
                         </span>
                     </form>
 
-                    <aside class="widget-preview-shell rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
-                        <div class="mb-5 flex flex-col gap-2 border-b border-white/10 pb-5 md:flex-row md:items-end md:justify-between">
-                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Aperçu</p>
-                            <span class="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm font-bold text-white/62">Site client</span>
-                        </div>
+                    <aside class="flex flex-col gap-5">
+                        <section class="widget-preview-shell rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                            <div class="mb-5 flex flex-col gap-2 border-b border-white/10 pb-5 md:flex-row md:items-end md:justify-between">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Aperçu de la modal</p>
+                                <span class="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm font-bold text-white/62">Site client</span>
+                            </div>
 
-                        <div class="relative min-h-[560px] overflow-hidden rounded-lg bg-[#eef0f7] p-8 text-[#25243f]">
-                            <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(39,33,95,.08)_1px,transparent_1px),linear-gradient(rgba(39,33,95,.08)_1px,transparent_1px)] bg-[size:44px_44px]"></div>
-                            <button id="widgetPreviewButton" type="button" class="absolute z-30 flex h-14 w-14 items-center justify-center rounded-full text-lg font-black text-white shadow-lg" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}" th:title="${widget.getWidgetButtonText()}">!</button>
-                            <footer class="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-center gap-2 bg-white/75 px-4 py-4 text-sm font-bold text-[#25243f]">
-                                <span>&copy; Site client</span>
-                                <span>-</span>
-                                <a id="widgetPreviewCustomLink" href="#" class="hidden underline underline-offset-4" th:style="'color:' + ${widget.getWidgetLinkTextColor()}" th:text="${widget.getWidgetButtonText()}">Signaler un bug</a>
-                            </footer>
-                            <div class="absolute inset-0 z-20 flex items-center justify-center bg-[rgba(39,33,95,0.50)] p-12">
-                                <div id="widgetPreviewModal" class="w-full max-w-2xl rounded-[18px] bg-white p-8 shadow-[0_26px_80px_rgba(37,36,63,0.28)]" th:style="'background-color:' + ${widget.getWidgetModalBackgroundColor()} + '; color:' + ${widget.getWidgetModalTextColor()}">
-                                    <div class="mb-5 flex items-start justify-between gap-4">
-                                        <h3 id="widgetPreviewTitle" class="text-3xl font-black leading-tight" th:text="${widget.getWidgetTitle()}">Signaler un nouveau bug</h3>
-                                        <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-3xl leading-none text-slate-400">&times;</span>
-                                    </div>
-                                    <label class="mb-4 block">
-                                        <span class="mb-2 block text-sm font-bold opacity-75">URL concernée</span>
-                                        <input class="min-h-12 w-full rounded-lg border border-slate-200 px-4 text-slate-500" value="https://site-client.fr/page-exemple" readonly>
-                                    </label>
-                                    <button id="widgetPreviewPointer" class="mb-4 min-h-12 w-full rounded-lg px-4 font-black text-white" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}">Pointer le bug</button>
-                                    <label id="widgetPreviewLabel" class="mb-2 block text-sm font-bold opacity-75" th:text="${widget.getWidgetDescriptionLabel()}">Description du bug</label>
-                                    <textarea class="min-h-[130px] w-full rounded-lg border border-slate-200 px-4 py-3" placeholder="Expliquez le problème rencontré"></textarea>
-                                    <div class="mt-4 flex justify-end">
-                                        <button id="widgetPreviewSubmit" class="min-h-11 rounded-lg px-5 font-black text-white" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}">Envoyer le rapport</button>
+                            <div class="relative min-h-[560px] overflow-hidden rounded-lg bg-[#eef0f7] p-8 text-[#25243f]">
+                                <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(39,33,95,.08)_1px,transparent_1px),linear-gradient(rgba(39,33,95,.08)_1px,transparent_1px)] bg-[size:44px_44px]"></div>
+                                <button id="widgetPreviewButton" type="button" class="absolute z-30 flex h-14 w-14 items-center justify-center rounded-full text-lg font-black text-white shadow-lg" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}" th:title="${widget.getWidgetButtonText()}">!</button>
+                                <div class="absolute inset-0 z-20 flex items-center justify-center bg-[rgba(39,33,95,0.50)] p-12">
+                                    <div id="widgetPreviewModal" class="w-full max-w-2xl rounded-[18px] bg-white p-8 shadow-[0_26px_80px_rgba(37,36,63,0.28)]" th:style="'background-color:' + ${widget.getWidgetModalBackgroundColor()} + '; color:' + ${widget.getWidgetModalTextColor()}">
+                                        <div class="mb-5 flex items-start justify-between gap-4">
+                                            <h3 id="widgetPreviewTitle" class="text-3xl font-black leading-tight" th:text="${widget.getWidgetTitle()}">Signaler un nouveau bug</h3>
+                                            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-3xl leading-none text-slate-400">&times;</span>
+                                        </div>
+                                        <label class="mb-4 block">
+                                            <span class="mb-2 block text-sm font-bold opacity-75">URL concernée</span>
+                                            <input class="min-h-12 w-full rounded-lg border border-slate-200 px-4 text-slate-500" value="https://site-client.fr/page-exemple" readonly>
+                                        </label>
+                                        <button id="widgetPreviewPointer" class="mb-4 min-h-12 w-full rounded-lg px-4 font-black text-white" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}">Pointer le bug</button>
+                                        <label id="widgetPreviewLabel" class="mb-2 block text-sm font-bold opacity-75" th:text="${widget.getWidgetDescriptionLabel()}">Description du bug</label>
+                                        <textarea class="min-h-[130px] w-full rounded-lg border border-slate-200 px-4 py-3" placeholder="Expliquez le problème rencontré"></textarea>
+                                        <div class="mt-4 flex justify-end">
+                                            <button id="widgetPreviewSubmit" class="min-h-11 rounded-lg px-5 font-black text-white" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}">Envoyer le rapport</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </section>
+
+                        <section class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                            <div class="mb-5 border-b border-white/10 pb-5">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Aperçu d'un lien</p>
+                                <h2 class="mt-2 text-2xl font-black text-white">Footer client</h2>
+                            </div>
+                            <div id="widgetPreviewCustomShell" class="rounded-lg border border-white/10 bg-[#eef0f7] px-5 py-6 text-center text-sm font-bold text-[#25243f]">
+                                <span>&copy; Site client</span>
+                                <span class="mx-2">-</span>
+                                <a id="widgetPreviewCustomLink" href="#" class="underline underline-offset-4" th:style="'color:' + ${widget.getWidgetLinkTextColor()}" th:text="${widget.getWidgetButtonText()}">Signaler un bug</a>
+                            </div>
+                            <p class="mt-3 text-sm leading-6 text-white/62">Ce lien correspond au déclencheur à placer dans un footer, une navigation ou un bloc personnalisé.</p>
+                        </section>
                     </aside>
                 </section>
             </div>
@@ -214,6 +224,7 @@
             const isCustom = widgetInputs.buttonStyle.value === 'custom';
             const buttonSize = Math.max(44, Math.min(parseInt(widgetInputs.buttonSize.value || '56', 10), 96));
             const customLink = document.getElementById('widgetPreviewCustomLink');
+            const customShell = document.getElementById('widgetPreviewCustomShell');
 
             widgetPreview.button.style.display = 'flex';
             widgetPreview.button.style.backgroundColor = widgetInputs.color.value;
@@ -242,9 +253,12 @@
                 widgetPreview.button.style.display = 'none';
             }
             if (customLink) {
-                customLink.style.display = isCustom ? 'inline' : 'none';
+                customLink.style.display = 'inline';
                 customLink.style.color = widgetInputs.linkTextColor.value;
                 customLink.textContent = widgetInputs.buttonText.value || 'Signaler un bug';
+            }
+            if (customShell) {
+                customShell.style.opacity = isCustom ? '1' : '0.72';
             }
             widgetPreview.button.style.top = 'auto';
             widgetPreview.button.style.right = 'auto';

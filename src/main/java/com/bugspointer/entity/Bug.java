@@ -21,6 +21,7 @@ public class Bug {
     private Company company;
 
     @NotNull
+    @Column(columnDefinition = "TEXT")
     private String url;
 
     @NotNull

@@ -155,14 +155,9 @@ public class ModalService implements IModal {
             }
             try {
                 if (!test) {
-                    Bug savedBug = new Bug();
-                    try{
-                        savedBug = bugRepository.save(bug);
-                        Utility.saveLog(bug.getCompany().getCompanyId(), Action.SAVE, What.BUG, "#"+ savedBug.getId(), null, null);
-                        log.info("Company #{} save a new bug #{}",savedBug.getCompany().getCompanyId(), savedBug.getId());
-                    } catch (Exception e){
-                        log.error("Impossible to save a bug for company#{} : {}", bug.getCompany().getCompanyId(), e.getMessage());
-                    }
+                    Bug savedBug = bugRepository.save(bug);
+                    Utility.saveLog(bug.getCompany().getCompanyId(), Action.SAVE, What.BUG, "#"+ savedBug.getId(), null, null);
+                    log.info("Company #{} save a new bug #{}",savedBug.getCompany().getCompanyId(), savedBug.getId());
 
                     // Notification new mail si notification activée
                     Optional<CompanyPreferences> notifOpt = companyPreferencesRepository.findByCompany(company);
@@ -203,7 +198,7 @@ public class ModalService implements IModal {
                 return new Response(EnumStatus.OK, null, "Envoie avec succès");
             }
             catch (Exception e){
-                log.error("Error : {}", e.getMessage());
+                log.error("Impossible to save or notify bug report for key {}: {}", dto.getKey(), e.getMessage(), e);
                 return new Response(EnumStatus.ERROR, null, "Une erreur est survenue, merci de recommencer");
             }
         }
