@@ -15,6 +15,8 @@ public class WidgetConfigDTO {
 
     private String linkTextColor = "#27215F";
 
+    private boolean linkUnderline = true;
+
     private String buttonText = "Signaler un bug";
 
     private String buttonStyle = "button";

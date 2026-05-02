@@ -31,6 +31,8 @@ public class CompanyPreferenceDTO {
 
     private String widgetLinkTextColor;
 
+    private boolean widgetLinkUnderline;
+
     private String widgetButtonText;
 
     private String widgetButtonStyle;

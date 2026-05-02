@@ -43,6 +43,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
         dto.setWidgetModalBackgroundColor(safeColor(preferences.getWidgetModalBackgroundColor(), "#FFFFFF"));
         dto.setWidgetModalTextColor(safeColor(preferences.getWidgetModalTextColor(), "#24233D"));
         dto.setWidgetLinkTextColor(safeColor(preferences.getWidgetLinkTextColor()));
+        dto.setWidgetLinkUnderline(preferences.isWidgetLinkUnderline());
         dto.setWidgetButtonText(safeText(preferences.getWidgetButtonText(), "Signaler un bug", 60));
         dto.setWidgetButtonStyle(safeButtonStyle(preferences.getWidgetButtonStyle()));
         dto.setWidgetButtonSize(safeButtonSize(preferences.getWidgetButtonSize()));
@@ -80,6 +81,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
                 preferences.setWidgetModalBackgroundColor(safeColor(dto.getWidgetModalBackgroundColor(), "#FFFFFF"));
                 preferences.setWidgetModalTextColor(safeColor(dto.getWidgetModalTextColor(), "#24233D"));
                 preferences.setWidgetLinkTextColor(safeColor(dto.getWidgetLinkTextColor()));
+                preferences.setWidgetLinkUnderline(dto.isWidgetLinkUnderline());
                 preferences.setWidgetButtonText(safeText(dto.getWidgetButtonText(), "Signaler un bug", 60));
                 preferences.setWidgetButtonStyle(safeButtonStyle(dto.getWidgetButtonStyle()));
                 preferences.setWidgetButtonSize(safeButtonSize(dto.getWidgetButtonSize()));
@@ -120,6 +122,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
         dto.setModalBackgroundColor(safeColor(preferences.getWidgetModalBackgroundColor(), "#FFFFFF"));
         dto.setModalTextColor(safeColor(preferences.getWidgetModalTextColor(), "#24233D"));
         dto.setLinkTextColor(safeColor(preferences.getWidgetLinkTextColor()));
+        dto.setLinkUnderline(preferences.isWidgetLinkUnderline());
         dto.setButtonText(safeText(preferences.getWidgetButtonText(), "Signaler un bug", 60));
         dto.setButtonStyle(safeButtonStyle(preferences.getWidgetButtonStyle()));
         dto.setButtonSize(safeButtonSize(preferences.getWidgetButtonSize()));
@@ -173,9 +176,6 @@ public class CompanyPreferencesService implements ICompanyPreferences {
     private String safeButtonStyle(String style) {
         if ("custom".equals(style)) {
             return "custom";
-        }
-        if ("link".equals(style)) {
-            return "link";
         }
         return "button";
     }

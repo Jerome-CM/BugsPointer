@@ -15,6 +15,7 @@
         modalBackgroundColor: "#FFFFFF",
         modalTextColor: "#24233D",
         linkTextColor: "#27215F",
+        linkUnderline: true,
         buttonText: "Signaler un bug",
         buttonStyle: "button",
         buttonSize: 56,
@@ -69,6 +70,7 @@
         if (script.dataset.modalBackgroundColor) config.modalBackgroundColor = script.dataset.modalBackgroundColor;
         if (script.dataset.modalTextColor) config.modalTextColor = script.dataset.modalTextColor;
         if (script.dataset.linkTextColor) config.linkTextColor = script.dataset.linkTextColor;
+        if (script.dataset.linkUnderline) config.linkUnderline = script.dataset.linkUnderline;
         if (script.dataset.buttonText) config.buttonText = script.dataset.buttonText;
         if (script.dataset.buttonStyle) config.buttonStyle = script.dataset.buttonStyle;
         if (script.dataset.buttonSize) config.buttonSize = script.dataset.buttonSize;
@@ -87,6 +89,7 @@
             modalBackgroundColor: safeColor(config.modalBackgroundColor, defaults.modalBackgroundColor),
             modalTextColor: safeColor(config.modalTextColor, defaults.modalTextColor),
             linkTextColor: safeColor(config.linkTextColor, defaults.linkTextColor),
+            linkUnderline: config.linkUnderline === true || config.linkUnderline === "true",
             buttonText: config.buttonText || defaults.buttonText,
             buttonStyle: safeButtonStyle(config.buttonStyle),
             buttonSize: safeButtonSize(config.buttonSize),
@@ -142,7 +145,7 @@
                     background: transparent;
                     color: var(--bp-link-text);
                     box-shadow: none;
-                    text-decoration: underline;
+                    text-decoration: ${cfg.linkUnderline ? "underline" : "none"};
                     text-underline-offset: 3px;
                 }
                 .bp-launcher.bottom-right { right: var(--bp-margin-x); bottom: var(--bp-margin-y); }
@@ -505,7 +508,7 @@
                 trigger.style.color = state.config.linkTextColor;
                 trigger.style.cursor = "pointer";
                 trigger.style.fontWeight = "800";
-                trigger.style.textDecoration = "underline";
+                trigger.style.textDecoration = state.config.linkUnderline ? "underline" : "none";
                 trigger.style.textUnderlineOffset = "3px";
             }
             trigger.addEventListener("click", (event) => {
@@ -587,7 +590,7 @@
     }
 
     function safeButtonStyle(style) {
-        return ["button", "link", "custom"].includes(style) ? style : "button";
+        return ["button", "custom"].includes(style) ? style : "button";
     }
 
     function safeColor(color, fallback = defaults.primaryColor) {

@@ -36,6 +36,8 @@ public class CompanyPreferences {
 
     private String widgetLinkTextColor = "#27215F";
 
+    private boolean widgetLinkUnderline = true;
+
     private String widgetButtonText = "Signaler un bug";
 
     private String widgetButtonStyle = "button";

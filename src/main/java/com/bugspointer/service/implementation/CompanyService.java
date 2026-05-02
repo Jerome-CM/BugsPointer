@@ -472,7 +472,7 @@ public class CompanyService implements ICompany {
             }
 
             markDomainAsNotVerified(company, normalizedDomain, url);
-            return new Response(EnumStatus.ERROR, null, "Le script Bugspointer avec votre clé publique n'a pas été détecté sur l'URL de vérification");
+            return new Response(EnumStatus.ERROR, null, "Le code Bugspointer avec votre clé publique n'a pas été détecté sur l'URL de vérification");
         } catch (Exception e) {
             log.warn("Domain verification failed for {} on {}: {}", normalizedDomain, url, e.getMessage());
             markDomainAsNotVerified(company, normalizedDomain, url);
