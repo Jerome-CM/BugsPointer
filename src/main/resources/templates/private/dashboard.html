@@ -40,7 +40,7 @@
     <main>
         <section class="relative px-5 pb-16 pt-1 sm:px-8 sm:pt-2 lg:px-12">
             <div class="home-noise"></div>
-            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-7">
+            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-1">
                 <div class="rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
                     <div class="w-full">
                         <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
@@ -49,8 +49,8 @@
                         <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl xl:text-6xl">
                             Suivez les bugs signalés sur votre site
                         </h1>
-                        <p class="mt-6 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
-                            Centralisez vos rapports de bug, gardez une vue claire des statuts et améliorez l'expérience utilisateur.
+                        <p class="mt-6 text-center text-base leading-7 text-white/70 sm:text-lg">
+                            Centralisez vos rapports de bug, gardez une vue claire des statuts et améliorez l'expérience utilisateur
                         </p>
                     </div>
                 </div>
@@ -73,6 +73,29 @@
                             <p class="mt-2 text-sm leading-6 text-white/62">Gérez vos accès, votre domaine, votre plan et vos mandats.</p>
                         </a>
                     </div>
+                </section>
+
+                <section th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}" class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+                    <a th:href="@{/app/private/bugList(state='new', publicKey=${company.getPublicKey()})}" class="rounded-lg border border-red-400/25 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur transition hover:-translate-y-0.5 hover:border-red-300/40">
+                        <p class="text-sm font-black uppercase tracking-wider text-red-200">New bug</p>
+                        <span class="mt-5 block font-display text-6xl leading-none text-white" th:text="${company.getNbNewBug()}">0</span>
+                        <p class="mt-4 text-sm leading-6 text-white/62">Nouveaux signalements à traiter.</p>
+                    </a>
+                    <a th:href="@{/app/private/bugList(state='pending', publicKey=${company.getPublicKey()})}" class="rounded-lg border border-yellow-300/25 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur transition hover:-translate-y-0.5 hover:border-yellow-200/40">
+                        <p class="text-sm font-black uppercase tracking-wider text-yellow-100">Pending bug</p>
+                        <span class="mt-5 block font-display text-6xl leading-none text-white" th:text="${company.getNbPendingBug()}">0</span>
+                        <p class="mt-4 text-sm leading-6 text-white/62">Rapports en cours d’analyse.</p>
+                    </a>
+                    <a th:href="@{/app/private/bugList(state='solved', publicKey=${company.getPublicKey()})}" class="rounded-lg border border-pointer-green/25 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur transition hover:-translate-y-0.5 hover:border-pointer-green/45">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Solved bug</p>
+                        <span class="mt-5 block font-display text-6xl leading-none text-white" th:text="${company.getNbSolvedBug()}">0</span>
+                        <p class="mt-4 text-sm leading-6 text-white/62">Corrections terminées.</p>
+                    </a>
+                    <a th:href="@{/app/private/bugList(state='ignored', publicKey=${company.getPublicKey()})}" class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur transition hover:-translate-y-0.5 hover:border-white/25">
+                        <p class="text-sm font-black uppercase tracking-wider text-white/55">Ignored bug</p>
+                        <span class="mt-5 block font-display text-6xl leading-none text-white" th:text="${company.getNbIgnoredBug()}">0</span>
+                        <p class="mt-4 text-sm leading-6 text-white/62">Signalements écartés.</p>
+                    </a>
                 </section>
 
                 <section th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}" class="flex flex-col gap-5 lg:flex-row lg:items-stretch">
@@ -126,30 +149,6 @@
                         <p class="mt-3 text-sm leading-6 text-white/62">Les rapports détaillés sont actifs sur votre espace.</p>
                     </div>
                 </section>
-
-                <section th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}" class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-                    <a th:href="@{/app/private/bugList(state='new', publicKey=${company.getPublicKey()})}" class="rounded-lg border border-red-400/25 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur transition hover:-translate-y-0.5 hover:border-red-300/40">
-                        <p class="text-sm font-black uppercase tracking-wider text-red-200">New bug</p>
-                        <span class="mt-5 block font-display text-6xl leading-none text-white" th:text="${company.getNbNewBug()}">0</span>
-                        <p class="mt-4 text-sm leading-6 text-white/62">Nouveaux signalements à traiter.</p>
-                    </a>
-                    <a th:href="@{/app/private/bugList(state='pending', publicKey=${company.getPublicKey()})}" class="rounded-lg border border-yellow-300/25 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur transition hover:-translate-y-0.5 hover:border-yellow-200/40">
-                        <p class="text-sm font-black uppercase tracking-wider text-yellow-100">Pending bug</p>
-                        <span class="mt-5 block font-display text-6xl leading-none text-white" th:text="${company.getNbPendingBug()}">0</span>
-                        <p class="mt-4 text-sm leading-6 text-white/62">Rapports en cours d’analyse.</p>
-                    </a>
-                    <a th:href="@{/app/private/bugList(state='solved', publicKey=${company.getPublicKey()})}" class="rounded-lg border border-pointer-green/25 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur transition hover:-translate-y-0.5 hover:border-pointer-green/45">
-                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Solved bug</p>
-                        <span class="mt-5 block font-display text-6xl leading-none text-white" th:text="${company.getNbSolvedBug()}">0</span>
-                        <p class="mt-4 text-sm leading-6 text-white/62">Corrections terminées.</p>
-                    </a>
-                    <a th:href="@{/app/private/bugList(state='ignored', publicKey=${company.getPublicKey()})}" class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur transition hover:-translate-y-0.5 hover:border-white/25">
-                        <p class="text-sm font-black uppercase tracking-wider text-white/55">Ignored bug</p>
-                        <span class="mt-5 block font-display text-6xl leading-none text-white" th:text="${company.getNbIgnoredBug()}">0</span>
-                        <p class="mt-4 text-sm leading-6 text-white/62">Signalements écartés.</p>
-                    </a>
-                </section>
-
             </div>
         </section>
     </main>

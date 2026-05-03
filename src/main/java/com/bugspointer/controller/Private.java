@@ -375,34 +375,6 @@ public class Private {
         return "redirect:/app/private/bugReport/{id}";
     }
 
-    @GetMapping("bugList")
-    String getbugList(Model map,@RequestParam("publicKey") String publicKey, @RequestParam("state") String state, HttpServletRequest request){
-        Company currentCompany = companyService.getCompanyWithToken(request);
-        map.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        map.addAttribute("dataBug", companyService.getDashboardDto(currentCompany));
-        Response responseBugList = bugService.getBugDTOByCompanyAndState(currentCompany.getPublicKey(), state);
-        List<BugDTO> bugDTOList = (List<BugDTO>) responseBugList.getContent();
-
-        if(responseBugList.getContent() == null){
-            return "redirect:dashboard";
-        }
-        BugDTO bugDTO = bugDTOList.get(0);
-        if(bugDTOList.size() == 1){
-            map.addAttribute("title", bugService.getTitle(state, false));
-            map.addAttribute("state", bugDTO.getEtatBug());
-            map.addAttribute("publicKey", currentCompany.getPublicKey());
-            return "redirect:bugReport/"+bugDTO.getId();
-        } else {
-            map.addAttribute("title", bugService.getTitle(state, true));
-            map.addAttribute("bugList", bugDTOList);
-            map.addAttribute("state", bugDTO.getEtatBug());
-            map.addAttribute("publicKey", currentCompany.getPublicKey());
-
-            return "private/bugList";
-        }
-
-    }
-
     @GetMapping(value="thanks")
     String thanks(Model model, HttpServletRequest request){
 

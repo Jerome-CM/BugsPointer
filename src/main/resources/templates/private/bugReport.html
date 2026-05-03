@@ -150,11 +150,15 @@
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Données utilisateur</p>
                         <dl class="mt-5 grid gap-3 text-sm md:grid-cols-2 xl:grid-cols-5">
                             <div class="rounded-lg border border-white/10 bg-black/15 p-4">
-                                <dt class="font-black text-white">OS approximatif</dt>
+                                <dt class="font-black text-white">Appareil</dt>
+                                <dd class="mt-1 break-words text-white/64" th:text="${bug.getDeviceType() != null ? bug.getDeviceType() : '- -'}"></dd>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <dt class="font-black text-white">OS</dt>
                                 <dd class="mt-1 break-words text-white/64" th:text="${bug.getOs() != null ? bug.getOs() : '- -'}"></dd>
                             </div>
                             <div class="rounded-lg border border-white/10 bg-black/15 p-4">
-                                <dt class="font-black text-white">Navigateur approximatif</dt>
+                                <dt class="font-black text-white">Navigateur</dt>
                                 <dd class="mt-1 break-words text-white/64" th:text="${bug.getBrowser() != null ? bug.getBrowser() : '- -'}"></dd>
                             </div>
                             <div class="rounded-lg border border-white/10 bg-black/15 p-4">
@@ -162,11 +166,7 @@
                                 <dd class="mt-1 break-words text-white/64" th:text="${bug.getBrowserLanguage() != null ? bug.getBrowserLanguage() : '- -'}"></dd>
                             </div>
                             <div class="rounded-lg border border-white/10 bg-black/15 p-4">
-                                <dt class="font-black text-white">Appareil</dt>
-                                <dd class="mt-1 break-words text-white/64" th:text="${bug.getDeviceType() != null ? bug.getDeviceType() : '- -'}"></dd>
-                            </div>
-                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
-                                <dt class="font-black text-white">Taille viewport</dt>
+                                <dt class="font-black text-white">Taille d'écran</dt>
                                 <dd class="mt-1 break-words text-white/64" th:text="${bug.getScreenSize() != null ? bug.getScreenSize() : '- -'}"></dd>
                             </div>
                         </dl>
