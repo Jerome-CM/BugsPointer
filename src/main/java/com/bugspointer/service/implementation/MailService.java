@@ -398,6 +398,8 @@ public class MailService {
                                                 {"Description", bugTest.getDescription()},
                                                 {"OS utilisateur", bugTest.getOs()},
                                                 {"Navigateur", bugTest.getBrowser()},
+                                                {"Langue navigateur", bugTest.getBrowserLanguage()},
+                                                {"Type d'appareil", bugTest.getDeviceType()},
                                                 {"Taille de l'écran", bugTest.getScreenSize()}
                                         }) +
                                         paragraph("Dans le code ci-dessous, l'élément sélectionné contient la classe bugspointer-pointed-balise pour être retrouvé facilement.") +

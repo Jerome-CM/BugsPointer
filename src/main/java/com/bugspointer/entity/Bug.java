@@ -37,6 +37,10 @@ public class Bug {
     @NotNull
     private String browser;
 
+    private String browserLanguage;
+
+    private String deviceType;
+
     @NotNull
     private String adresseIp;
 

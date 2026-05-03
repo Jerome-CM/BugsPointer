@@ -65,18 +65,37 @@ public class BugService {
             return "";
         }
 
-        String trimmed = code.trim();
+        String trimmed = decodeCapturedMarkup(code.trim());
         if (!looksLikeMarkup(trimmed)) {
             return normalizeIndentation(trimmed);
         }
 
-        Document document = Jsoup.parseBodyFragment(code);
-        document.outputSettings().indentAmount(2).prettyPrint(true);
-        return document.body().html().trim();
+        Document document = Jsoup.parseBodyFragment(trimmed);
+        document.outputSettings()
+                .indentAmount(2)
+                .prettyPrint(true)
+                .outline(false)
+                .syntax(Document.OutputSettings.Syntax.html);
+        return collapseExtraBlankLines(document.body().html());
     }
 
     private boolean looksLikeMarkup(String code) {
         return code.matches("(?s).*<\\s*/?\\s*[a-zA-Z][^>]*>.*");
+    }
+
+    private String decodeCapturedMarkup(String code) {
+        if (code.contains("&lt;") || code.contains("&gt;")) {
+            return Jsoup.parse(code).text();
+        }
+        return code;
+    }
+
+    private String collapseExtraBlankLines(String code) {
+        return code.replace("\r\n", "\n")
+                .replace('\r', '\n')
+                .replaceAll("(?m)^[ \\t]+$", "")
+                .replaceAll("\\n{3,}", "\n\n")
+                .trim();
     }
 
     private String normalizeIndentation(String code) {

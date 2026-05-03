@@ -367,6 +367,8 @@
                         <input class="bp-honeypot" type="text" name="bot" tabindex="-1" autocomplete="off">
                         <input type="hidden" name="os" data-bp-os>
                         <input type="hidden" name="browser" data-bp-browser>
+                        <input type="hidden" name="browserLanguage" data-bp-language>
+                        <input type="hidden" name="deviceType" data-bp-device>
                         <input type="hidden" name="screenSize" data-bp-screen>
                         <input type="hidden" name="key" value="${escapeHtml(publicKey)}">
                         <div class="bp-actions">
@@ -404,6 +406,8 @@
             shadow.querySelector("[data-bp-url]").value = window.location.href;
             shadow.querySelector("[data-bp-os]").value = getPlatform();
             shadow.querySelector("[data-bp-browser]").value = getBrowser();
+            shadow.querySelector("[data-bp-language]").value = getBrowserLanguage();
+            shadow.querySelector("[data-bp-device]").value = getDeviceType();
             shadow.querySelector("[data-bp-screen]").value = `${window.innerWidth} x ${window.innerHeight}`;
             overlay.classList.add("is-open");
         }
@@ -561,33 +565,95 @@
     }
 
     function getPlatform() {
-        if (navigator.userAgentData && navigator.userAgentData.platform) {
-            return navigator.userAgentData.platform;
+        const userAgent = navigator.userAgent || "";
+        const lowerAgent = userAgent.toLowerCase();
+        const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+
+        const windowsVersion = /windows nt ([\d.]+)/i.exec(userAgent);
+        if (windowsVersion) {
+            const names = {
+                "10.0": "Windows 10/11",
+                "6.3": "Windows 8.1",
+                "6.2": "Windows 8",
+                "6.1": "Windows 7"
+            };
+            return names[windowsVersion[1]] || `Windows NT ${shortVersion(windowsVersion[1])}`;
         }
-        return navigator.platform || "unknown";
+
+        const macVersion = /mac os x ([\d_]+)/i.exec(userAgent);
+        if (macVersion) {
+            return `macOS ${shortVersion(macVersion[1].replace(/_/g, "."))}`;
+        }
+
+        const iosVersion = /(?:iphone|ipad|ipod).*os ([\d_]+)/i.exec(userAgent);
+        if (iosVersion) {
+            return `iOS ${shortVersion(iosVersion[1].replace(/_/g, "."))}`;
+        }
+
+        const androidVersion = /android ([\d.]+)/i.exec(userAgent);
+        if (androidVersion) {
+            return `Android ${shortVersion(androidVersion[1])}`;
+        }
+
+        if (lowerAgent.includes("linux")) {
+            return "Linux";
+        }
+
+        return platform || "Inconnu";
     }
 
     function getBrowser() {
-        if (navigator.userAgentData && navigator.userAgentData.brands && navigator.userAgentData.brands.length > 0) {
-            const brand = navigator.userAgentData.brands[0];
-            return `${brand.brand} v${brand.version}`;
-        }
+        const userAgent = navigator.userAgent || "";
+        const checks = [
+            ["Microsoft Edge", /edg\/([\d.]+)/i],
+            ["Opera", /opr\/([\d.]+)/i],
+            ["Firefox", /firefox\/([\d.]+)/i],
+            ["Chrome", /chrome\/([\d.]+)/i],
+            ["Safari", /version\/([\d.]+).*safari/i]
+        ];
 
-        const userAgent = navigator.userAgent.toLowerCase();
-        const browsers = {
-            edge: /edge\/([\d.]+)/.exec(userAgent),
-            chrome: /chrome\/([\d.]+)/.exec(userAgent),
-            safari: /version\/([\d.]+).*safari/.exec(userAgent),
-            firefox: /firefox\/([\d.]+)/.exec(userAgent),
-            ie: /msie ([\d.]+)/.exec(userAgent) || /trident\/.*rv:([\d.]+)/.exec(userAgent)
-        };
-
-        for (const browser in browsers) {
-            if (browsers[browser]) {
-                return `${browser.charAt(0).toUpperCase()}${browser.slice(1)} v${browsers[browser][1]}`;
+        for (const [name, pattern] of checks) {
+            const match = pattern.exec(userAgent);
+            if (match) {
+                return `${name} ${shortVersion(match[1])}`;
             }
         }
-        return "unknown";
+
+        if (navigator.userAgentData && navigator.userAgentData.brands) {
+            const brand = navigator.userAgentData.brands.find((item) => !/not.?a.?brand/i.test(item.brand));
+            if (brand) {
+                return `${brand.brand} ${shortVersion(brand.version)}`;
+            }
+        }
+
+        return "Inconnu";
+    }
+
+    function getBrowserLanguage() {
+        return navigator.language || navigator.userLanguage || "Inconnue";
+    }
+
+    function getDeviceType() {
+        const userAgent = navigator.userAgent || "";
+        const lowerAgent = userAgent.toLowerCase();
+        const isTouchMac = navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+
+        if (/ipad|tablet|playbook|silk/i.test(userAgent) || isTouchMac) {
+            return "Tablette";
+        }
+
+        if (/mobi|iphone|ipod|android.*mobile|windows phone/i.test(lowerAgent) || window.innerWidth < 768) {
+            return "Mobile";
+        }
+
+        return "Ordinateur";
+    }
+
+    function shortVersion(version) {
+        if (!version) {
+            return "";
+        }
+        return version.split(".").slice(0, 2).join(".");
     }
 
     function safePosition(position) {

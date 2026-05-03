@@ -21,6 +21,10 @@ public class ModalDTO {
 
     private String browser;
 
+    private String browserLanguage;
+
+    private String deviceType;
+
     private String adresseIp;
 
     private String screenSize;

@@ -137,6 +137,8 @@ public class ModalService implements IModal {
             bug.setCodeLocation(dto.getCodeLocation());
             bug.setOs(dto.getOs());
             bug.setBrowser(dto.getBrowser());
+            bug.setBrowserLanguage(dto.getBrowserLanguage());
+            bug.setDeviceType(dto.getDeviceType());
             bug.setScreenSize(dto.getScreenSize());
             bug.setDateCreation(dateJour);
             bug.setEtatBug(EnumEtatBug.NEW);

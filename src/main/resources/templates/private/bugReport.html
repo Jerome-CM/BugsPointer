@@ -121,35 +121,49 @@
             <section class="bug-report-main flex min-w-0 flex-col gap-6">
                     <article class="bug-report-card rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Chronologie</p>
-                        <div class="mt-5 grid gap-6 text-sm md:grid-cols-3">
-                            <div class="timeline-step relative pl-10 md:pl-0 md:pt-10">
-                                <span class="absolute left-0 top-1 flex h-7 w-7 items-center justify-center rounded-full bg-pointer-green shadow-[0_0_22px_rgba(0,230,118,0.32)]"></span>
-                                <p class="font-black text-white">Signalé</p>
-                                <p class="mt-1 text-white/64" th:text="${bug.getDateCreation() != null ? #dates.format(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></p>
+                        <div class="mt-5 grid gap-3 text-sm md:grid-cols-3">
+                            <div class="rounded-lg border border-pointer-green/20 bg-pointer-green/10 p-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="flex h-3 w-3 rounded-full bg-pointer-green shadow-[0_0_18px_rgba(0,230,118,0.55)]"></span>
+                                    <p class="font-black text-white">Signalé</p>
+                                </div>
+                                <p class="mt-3 text-white/64" th:text="${bug.getDateCreation() != null ? #dates.format(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></p>
                             </div>
-                            <div class="timeline-step relative pl-10 md:pl-0 md:pt-10">
-                                <span class="absolute left-0 top-1 flex h-7 w-7 items-center justify-center rounded-full" th:classappend="${bug.getDateView() != null ? ' bg-amber-300 shadow-[0_0_22px_rgba(252,211,77,0.28)]' : ' bg-white/15'}"></span>
-                                <p class="font-black text-white">Vu</p>
-                                <p class="mt-1 text-white/64" th:text="${bug.getDateView() != null ? #dates.format(bug.getDateView(), 'dd/MM/yyyy - HH:mm:ss') : 'En attente'}"></p>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="flex h-3 w-3 rounded-full" th:classappend="${bug.getDateView() != null ? ' bg-amber-300 shadow-[0_0_18px_rgba(252,211,77,0.48)]' : ' bg-white/20'}"></span>
+                                    <p class="font-black text-white">Vu</p>
+                                </div>
+                                <p class="mt-3 text-white/64" th:text="${bug.getDateView() != null ? #dates.format(bug.getDateView(), 'dd/MM/yyyy - HH:mm:ss') : 'En attente'}"></p>
                             </div>
-                            <div class="timeline-step relative pl-10 md:pl-0 md:pt-10">
-                                <span class="absolute left-0 top-1 flex h-7 w-7 items-center justify-center rounded-full" th:classappend="${bug.getDateSolved() != null ? ' bg-sky-300 shadow-[0_0_22px_rgba(125,211,252,0.28)]' : ' bg-white/15'}"></span>
-                                <p class="font-black text-white">Résolu / Ignoré</p>
-                                <p class="mt-1 text-white/64" th:text="${bug.getDateSolved() != null ? #dates.format(bug.getDateSolved(), 'dd/MM/yyyy - HH:mm:ss') : 'En attente'}"></p>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="flex h-3 w-3 rounded-full" th:classappend="${bug.getDateSolved() != null ? ' bg-sky-300 shadow-[0_0_18px_rgba(125,211,252,0.45)]' : ' bg-white/20'}"></span>
+                                    <p class="font-black text-white">Résolu / Ignoré</p>
+                                </div>
+                                <p class="mt-3 text-white/64" th:text="${bug.getDateSolved() != null ? #dates.format(bug.getDateSolved(), 'dd/MM/yyyy - HH:mm:ss') : 'En attente'}"></p>
                             </div>
                         </div>
                     </article>
 
                     <article class="bug-report-card rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Données utilisateur</p>
-                        <dl class="mt-5 grid gap-3 text-sm md:grid-cols-3">
+                        <dl class="mt-5 grid gap-3 text-sm md:grid-cols-2 xl:grid-cols-5">
                             <div class="rounded-lg border border-white/10 bg-black/15 p-4">
-                                <dt class="font-black text-white">OS</dt>
+                                <dt class="font-black text-white">OS approximatif</dt>
                                 <dd class="mt-1 break-words text-white/64" th:text="${bug.getOs() != null ? bug.getOs() : '- -'}"></dd>
                             </div>
                             <div class="rounded-lg border border-white/10 bg-black/15 p-4">
-                                <dt class="font-black text-white">Navigateur</dt>
+                                <dt class="font-black text-white">Navigateur approximatif</dt>
                                 <dd class="mt-1 break-words text-white/64" th:text="${bug.getBrowser() != null ? bug.getBrowser() : '- -'}"></dd>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <dt class="font-black text-white">Langue navigateur</dt>
+                                <dd class="mt-1 break-words text-white/64" th:text="${bug.getBrowserLanguage() != null ? bug.getBrowserLanguage() : '- -'}"></dd>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <dt class="font-black text-white">Appareil déduit</dt>
+                                <dd class="mt-1 break-words text-white/64" th:text="${bug.getDeviceType() != null ? bug.getDeviceType() : '- -'}"></dd>
                             </div>
                             <div class="rounded-lg border border-white/10 bg-black/15 p-4">
                                 <dt class="font-black text-white">Écran</dt>
@@ -158,7 +172,7 @@
                         </dl>
                     </article>
 
-                    <article class="bug-report-card min-h-[190px] rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                    <article class="bug-report-card rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Description</p>
                         <p class="mt-4 leading-7 text-white/72" th:text="${bug.getDescription() != null ? bug.getDescription() : ''}"></p>
                     </article>
@@ -166,7 +180,11 @@
                     <article class="bug-report-card min-w-0 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
                         <div class="mb-5 border-b border-white/10 pb-5">
                             <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Code sélectionné</p>
-                            <p class="mt-2 text-sm leading-6 text-white/62">Cherchez <strong class="text-white">bugspointer-pointed-balise</strong> pour retrouver précisément l'élément pointé.</p>
+                            <p class="mt-2 text-sm leading-6 text-white/62">
+                                Utilisez
+                                <strong class="text-white" th:text="${bug.getOs() != null && bug.getOs().toLowerCase().contains('mac') ? 'Cmd + F' : 'Ctrl + F'}">Ctrl + F</strong>
+                                puis cherchez <strong class="text-white">bugspointer-pointed-balise</strong> pour retrouver l'élément pointé.
+                            </p>
                         </div>
                         <pre class="bug-code rounded-lg border border-white/10 bg-black/45 p-4 text-sm leading-6 text-white"><code class="language-markup" th:text="${code}"></code></pre>
                     </article>
