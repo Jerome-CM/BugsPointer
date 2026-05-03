@@ -42,6 +42,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
         dto.setWidgetPrimaryColor(safeColor(preferences.getWidgetPrimaryColor()));
         dto.setWidgetModalBackgroundColor(safeColor(preferences.getWidgetModalBackgroundColor(), "#FFFFFF"));
         dto.setWidgetModalTextColor(safeColor(preferences.getWidgetModalTextColor(), "#24233D"));
+        dto.setWidgetTitleColor(safeColor(preferences.getWidgetTitleColor(), "#24233D"));
         dto.setWidgetLinkTextColor(safeColor(preferences.getWidgetLinkTextColor()));
         dto.setWidgetLinkUnderline(preferences.isWidgetLinkUnderline());
         dto.setWidgetButtonText(safeText(preferences.getWidgetButtonText(), "Signaler un bug", 60));
@@ -80,6 +81,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
                 preferences.setWidgetPrimaryColor(safeColor(dto.getWidgetPrimaryColor()));
                 preferences.setWidgetModalBackgroundColor(safeColor(dto.getWidgetModalBackgroundColor(), "#FFFFFF"));
                 preferences.setWidgetModalTextColor(safeColor(dto.getWidgetModalTextColor(), "#24233D"));
+                preferences.setWidgetTitleColor(safeColor(dto.getWidgetTitleColor(), "#24233D"));
                 preferences.setWidgetLinkTextColor(safeColor(dto.getWidgetLinkTextColor()));
                 preferences.setWidgetLinkUnderline(dto.isWidgetLinkUnderline());
                 preferences.setWidgetButtonText(safeText(dto.getWidgetButtonText(), "Signaler un bug", 60));
@@ -121,6 +123,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
         dto.setPrimaryColor(safeColor(preferences.getWidgetPrimaryColor()));
         dto.setModalBackgroundColor(safeColor(preferences.getWidgetModalBackgroundColor(), "#FFFFFF"));
         dto.setModalTextColor(safeColor(preferences.getWidgetModalTextColor(), "#24233D"));
+        dto.setTitleColor(safeColor(preferences.getWidgetTitleColor(), "#24233D"));
         dto.setLinkTextColor(safeColor(preferences.getWidgetLinkTextColor()));
         dto.setLinkUnderline(preferences.isWidgetLinkUnderline());
         dto.setButtonText(safeText(preferences.getWidgetButtonText(), "Signaler un bug", 60));

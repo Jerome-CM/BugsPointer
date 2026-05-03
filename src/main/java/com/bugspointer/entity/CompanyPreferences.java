@@ -34,6 +34,8 @@ public class CompanyPreferences {
 
     private String widgetModalTextColor = "#24233D";
 
+    private String widgetTitleColor = "#24233D";
+
     private String widgetLinkTextColor = "#27215F";
 
     private boolean widgetLinkUnderline = true;

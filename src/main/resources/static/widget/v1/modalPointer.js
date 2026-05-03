@@ -14,6 +14,7 @@
         primaryColor: "#27215F",
         modalBackgroundColor: "#FFFFFF",
         modalTextColor: "#24233D",
+        titleColor: "#24233D",
         linkTextColor: "#27215F",
         linkUnderline: true,
         buttonText: "Signaler un bug",
@@ -69,6 +70,7 @@
         if (script.dataset.color) config.primaryColor = script.dataset.color;
         if (script.dataset.modalBackgroundColor) config.modalBackgroundColor = script.dataset.modalBackgroundColor;
         if (script.dataset.modalTextColor) config.modalTextColor = script.dataset.modalTextColor;
+        if (script.dataset.titleColor) config.titleColor = script.dataset.titleColor;
         if (script.dataset.linkTextColor) config.linkTextColor = script.dataset.linkTextColor;
         if (script.dataset.linkUnderline) config.linkUnderline = script.dataset.linkUnderline;
         if (script.dataset.buttonText) config.buttonText = script.dataset.buttonText;
@@ -88,6 +90,7 @@
             primaryColor: safeColor(config.primaryColor),
             modalBackgroundColor: safeColor(config.modalBackgroundColor, defaults.modalBackgroundColor),
             modalTextColor: safeColor(config.modalTextColor, defaults.modalTextColor),
+            titleColor: safeColor(config.titleColor, defaults.titleColor),
             linkTextColor: safeColor(config.linkTextColor, defaults.linkTextColor),
             linkUnderline: config.linkUnderline === true || config.linkUnderline === "true",
             buttonText: config.buttonText || defaults.buttonText,
@@ -110,6 +113,7 @@
                     --bp-primary: ${cfg.primaryColor};
                     --bp-modal-bg: ${cfg.modalBackgroundColor};
                     --bp-modal-text: ${cfg.modalTextColor};
+                    --bp-title-text: ${cfg.titleColor};
                     --bp-link-text: ${cfg.linkTextColor};
                     --bp-button-size: ${cfg.buttonSize}px;
                     --bp-margin-x: ${cfg.marginX}px;
@@ -181,6 +185,7 @@
                 }
                 .bp-title {
                     margin: 0;
+                    color: var(--bp-title-text);
                     font-size: 26px;
                     line-height: 1.15;
                     font-weight: 900;
@@ -365,7 +370,7 @@
                         <input type="hidden" name="screenSize" data-bp-screen>
                         <input type="hidden" name="key" value="${escapeHtml(publicKey)}">
                         <div class="bp-actions">
-                            <p class="bp-help">Le rapport inclut le navigateur et la taille d'ecran.</p>
+                            <p class="bp-help">bugspointer.com</p>
                             <button class="bp-button" type="submit" data-bp-submit disabled>Selectionnez le bug</button>
                         </div>
                     </div>

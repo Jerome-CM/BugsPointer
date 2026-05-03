@@ -13,6 +13,8 @@ public class WidgetConfigDTO {
 
     private String modalTextColor = "#24233D";
 
+    private String titleColor = "#24233D";
+
     private String linkTextColor = "#27215F";
 
     private boolean linkUnderline = true;

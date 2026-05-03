@@ -29,6 +29,8 @@ public class CompanyPreferenceDTO {
 
     private String widgetModalTextColor;
 
+    private String widgetTitleColor;
+
     private String widgetLinkTextColor;
 
     private boolean widgetLinkUnderline;
