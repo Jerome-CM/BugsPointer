@@ -1,10 +1,17 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Documentation BugsPointer - installation par script</title>
-    <meta name="description" content="Installez BugsPointer avec une balise script, configurez votre clé publique et personnalisez la modal depuis votre dashboard.">
-    <meta name="keywords" content="BugsPointer documentation, modalPointer, data-public-key, widget bug report, installation script">
-    <meta name="robots" content="all">
+    <title>Documentation BugsPointer - bouton, lien et personnalisation du widget</title>
+    <meta name="description" content="Installez BugsPointer avec un bouton flottant ou un lien placé dans votre site. Configurez la clé publique, vérifiez le domaine et personnalisez le widget.">
+    <meta name="keywords" content="documentation BugsPointer, modalPointer, data-public-key, widget bug report, bouton signalement bug, lien signalement bug">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bugspointer.com/documentations">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Documentation BugsPointer - bouton, lien et personnalisation du widget">
+    <meta property="og:description" content="Guide d’installation du widget BugsPointer avec bouton flottant ou lien intégré au site.">
+    <meta property="og:url" content="https://bugspointer.com/documentations">
+    <meta property="og:site_name" content="BugsPointer">
+    <meta name="twitter:card" content="summary">
     <script th:src="@{/js/tailwindcss-cdn.js}"></script>
     <script>
         tailwind.config = {
@@ -53,10 +60,10 @@
                         Documentation BugsPointer
                     </p>
                     <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
-                        Installer et configurer le widget BugsPointer.
+                        Installer et personnaliser le widget BugsPointer.
                     </h1>
                     <p class="mx-auto mt-6 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
-                        Une balise script, une clé publique, puis la personnalisation depuis votre dashboard. Le site client ne maintient aucun fichier BugsPointer.
+                        Une clé publique, deux modes d’affichage et une personnalisation centralisée depuis votre dashboard. Le site client ne maintient aucun fichier BugsPointer.
                     </p>
                 </div>
             </div>
@@ -75,7 +82,8 @@
                             <div>
                                 <a href="#integration" class="block rounded-lg px-3 py-2 font-black text-white transition hover:bg-white/10">Installation</a>
                                 <div class="mt-1 flex flex-col border-l border-white/10 pl-3">
-                                    <a href="#script" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Script unique</a>
+                                    <a href="#button-script" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Bouton flottant</a>
+                                    <a href="#link-script" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Lien placé</a>
                                     <a href="#public-key" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Clé publique</a>
                                     <a href="#placement" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Où le placer</a>
                                 </div>
@@ -92,7 +100,7 @@
                             <div>
                                 <a href="#customisation" class="block rounded-lg px-3 py-2 font-black text-white transition hover:bg-white/10">Personnalisation</a>
                                 <div class="mt-1 flex flex-col border-l border-white/10 pl-3">
-                                    <a href="#dashboard-config" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Dashboard</a>
+                                    <a href="#dashboard-config" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Design du widget</a>
                                     <a href="#override" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Attributs optionnels</a>
                                 </div>
                             </div>
@@ -122,8 +130,8 @@
                         <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
                             <div>
                                 <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Principe</p>
-                                <h2 class="mt-3 text-2xl font-black text-white">Le site client colle uniquement une balise script</h2>
-                                <p class="mt-3 max-w-2xl leading-7 text-white/65">BugsPointer charge le widget, récupère la configuration du projet et envoie les rapports vers votre dashboard.</p>
+                                <h2 class="mt-3 text-2xl font-black text-white">Le site client ajoute le script, puis choisit son déclencheur</h2>
+                                <p class="mt-3 max-w-2xl leading-7 text-white/65">BugsPointer charge la modal, récupère la configuration du projet et envoie les rapports vers votre dashboard. Le déclencheur peut être un bouton flottant ou un lien placé dans votre site.</p>
                             </div>
                             <a th:href="@{/download}" class="inline-flex min-h-12 shrink-0 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5">
                                 Voir mon script
@@ -136,10 +144,19 @@
                         <h2 class="font-display text-3xl leading-none text-white sm:text-4xl">Installation</h2>
 
                         <article class="mt-8">
-                            <h3 id="script" class="text-2xl font-black text-white">Script unique</h3>
+                            <h3 id="button-script" class="text-2xl font-black text-white">Option 1 : bouton flottant</h3>
                             <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
-                                <p>Copiez la balise depuis votre page d’installation. Elle contient votre clé publique et charge le widget depuis BugsPointer.</p>
+                                <p>Copiez cette balise pour afficher automatiquement le bouton BugsPointer sur votre site. Elle contient votre clé publique et charge le widget depuis BugsPointer.</p>
                                 <textarea class="code-block mt-4 min-h-[128px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly th:text="${publicKey != null} ? '&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; defer&gt;&lt;/script&gt;' : '&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;pk_xxxxx&quot; defer&gt;&lt;/script&gt;'"></textarea>
+                            </div>
+                        </article>
+
+                        <article class="mt-8">
+                            <h3 id="link-script" class="text-2xl font-black text-white">Option 2 : lien placé dans le site</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>Utilisez cette option si vous voulez ouvrir la modal depuis un lien dans le footer, le menu, une page d’aide ou un bloc personnalisé. Le script charge la modal, mais n’affiche pas de bouton flottant.</p>
+                                <textarea class="code-block mt-4 min-h-[172px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly th:text="${publicKey != null} ? '&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; data-button-style=&quot;custom&quot; defer&gt;&lt;/script&gt;&#10;&#10;&lt;a href=&quot;#&quot; data-bugspointer-open data-bugspointer-key=&quot;' + ${publicKey} + '&quot;&gt;&lt;/a&gt;' : '&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;pk_xxxxx&quot; data-button-style=&quot;custom&quot; defer&gt;&lt;/script&gt;&#10;&#10;&lt;a href=&quot;#&quot; data-bugspointer-open data-bugspointer-key=&quot;pk_xxxxx&quot;&gt;&lt;/a&gt;'"></textarea>
+                                <p class="mt-3">Laissez le lien vide si vous souhaitez utiliser le texte enregistré dans la personnalisation du widget. Vous pouvez aussi écrire votre propre texte entre les balises <code>&lt;a&gt;</code>.</p>
                             </div>
                         </article>
 
@@ -155,8 +172,9 @@
                         <article class="mt-8">
                             <h3 id="placement" class="text-2xl font-black text-white">Où placer le script</h3>
                             <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
-                                <p>Placez le script globalement sur les pages où les utilisateurs peuvent signaler un bug. Le plus simple est de le coller avant la fermeture du <code>&lt;/body&gt;</code>.</p>
+                                <p>Placez le script sur les pages où les utilisateurs peuvent signaler un bug. Le plus simple est de le coller avant la fermeture du <code>&lt;/body&gt;</code>.</p>
                                 <p class="mt-3">L’attribut <code>defer</code> laisse la page se charger correctement avant l’exécution du widget.</p>
+                                <p class="mt-3">Si vous utilisez un lien personnalisé, placez aussi la balise <code>&lt;a data-bugspointer-open&gt;</code> à l’endroit exact où le lien doit apparaître.</p>
                             </div>
                         </article>
                     </section>
@@ -191,13 +209,16 @@
                             <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
                                 <p>Depuis <a th:href="@{/app/private/widget}" class="font-bold text-pointer-lime underline decoration-pointer-lime/40 underline-offset-4 transition hover:text-pointer-green">la page Widget</a>, vous pouvez modifier :</p>
                                 <ul class="mt-3 list-disc space-y-2 pl-5">
-                                    <li>la couleur principale</li>
-                                    <li>le texte du bouton</li>
+                                    <li>la couleur principale du bouton et des actions</li>
+                                    <li>la couleur de fond, du texte et du titre de la modal</li>
+                                    <li>la couleur du lien placé dans le site</li>
+                                    <li>le soulignement du lien</li>
+                                    <li>le texte du lien</li>
                                     <li>le titre de la modal</li>
                                     <li>le libellé du champ description</li>
-                                    <li>la position du bouton</li>
+                                    <li>la taille, la position et les marges du bouton flottant</li>
                                 </ul>
-                                <p class="mt-4">Les données sont enregistrées côté BugsPointer et appliquées automatiquement au script déjà installé sur le site client.</p>
+                                <p class="mt-4">Le choix “bouton” ou “lien” dans la page Widget sert à prévisualiser les bons réglages. Il ne bloque pas l’autre déclencheur : si le code du bouton et le code du lien sont installés sur le site, les deux peuvent fonctionner.</p>
                             </div>
                         </article>
 
@@ -212,6 +233,7 @@
   data-button-text=&quot;Signaler un bug&quot;
   data-position=&quot;bottom-right&quot;
   defer&gt;&lt;/script&gt;</textarea>
+                                <p class="mt-3">Pour masquer le bouton flottant et utiliser uniquement un lien, ajoutez <code>data-button-style="custom"</code>.</p>
                             </div>
                         </article>
                     </section>
@@ -254,8 +276,8 @@ connect-src https://bugspointer.com;</textarea>
                         <article class="mt-8">
                             <h3 id="report" class="text-2xl font-black text-white">Signaler un bug</h3>
                             <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
-                                <p>L’utilisateur clique sur le bouton BugsPointer, pointe l’élément concerné sur la page, décrit le problème puis envoie le rapport.</p>
-                                <p class="mt-3">Le rapport inclut l’URL, l’élément pointé, la description, le navigateur, l’OS et la taille d’écran.</p>
+                                <p>L’utilisateur clique sur le bouton ou le lien BugsPointer, pointe l’élément concerné sur la page, décrit le problème puis envoie le rapport.</p>
+                                <p class="mt-3">Le rapport inclut l’URL, l’élément pointé, la description, le navigateur, l’OS, la langue du navigateur, le type d’appareil et la taille du viewport.</p>
                             </div>
                         </article>
 

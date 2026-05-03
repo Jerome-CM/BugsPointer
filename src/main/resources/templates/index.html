@@ -1,9 +1,19 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <meta name="description" content="Votre site web parfait grâce à BugsPointer et à vos utilisateurs. Télécharger notre outil de rapport de bug gratuitement.">
-    <meta name="keywords" content="rapport de bug, signalement de problème, outil de rapport, amélioration de site, expérience utilisateur, site web sans erreur">
-    <meta name="robots" content="all">
+    <title>BugsPointer - outil de signalement de bug pour site web</title>
+    <meta name="description" content="BugsPointer aide vos utilisateurs à signaler un bug depuis votre site. Recevez des rapports clairs avec contexte technique, capture HTML et dashboard de suivi.">
+    <meta name="keywords" content="rapport de bug, signalement de bug, bug report, outil de rapport, feedback utilisateur, expérience utilisateur">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bugspointer.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="BugsPointer - outil de signalement de bug pour site web">
+    <meta property="og:description" content="Ajoutez un bouton ou un lien de signalement sur votre site et recevez des rapports de bug exploitables.">
+    <meta property="og:url" content="https://bugspointer.com/">
+    <meta property="og:site_name" content="BugsPointer">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="BugsPointer - outil de signalement de bug pour site web">
+    <meta name="twitter:description" content="Collectez les bugs signalés par vos utilisateurs avec un widget simple à installer.">
     <script th:src="@{/js/tailwindcss-cdn.js}"></script>
     <script>
         tailwind.config = {
@@ -154,7 +164,7 @@
                 <div class="mx-auto mb-9 w-full max-w-5xl text-center">
                     <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Tarifs</p>
                     <h2 class="mx-auto w-full font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Choisissez le plan adapté à votre volume de rapports de bug.</h2>
-                    <p class="mx-auto mt-5 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">Commencez gratuitement par mail, puis passez au dashboard quand vous voulez centraliser, suivre et traiter les retours utilisateurs en continu.</p>
+                    <p class="mx-auto mt-5 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">Commencez gratuitement par e-mail, puis passez au dashboard quand vous voulez centraliser, suivre et traiter les retours utilisateurs en continu.</p>
                 </div>
                 <div class="home-pricing">
                     <div th:replace="~{include/pricingSection.html}"></div>
@@ -167,7 +177,7 @@
                 <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-4/12">
                     <img class="h-14 w-14 object-contain" src="/css/img/icones/reglage.gif" alt="Conception">
                     <h3 class="mt-4 text-left text-base font-black normal-case text-white">Conçu en France</h3>
-                    <p class="mt-2 text-sm leading-6 text-white/60">Bugspointer a été pensé et conçu entre Rouen et Blois.</p>
+                    <p class="mt-2 text-sm leading-6 text-white/60">BugsPointer a été pensé et conçu entre Rouen et Blois.</p>
                 </article>
                 <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-4/12">
                     <img class="h-14 w-14 object-contain" src="/css/img/icones/base-de-donnees.gif" alt="Base de données">

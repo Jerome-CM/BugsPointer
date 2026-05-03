@@ -1,10 +1,17 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Connexion et inscription BugsPointer - créer un compte bug reporting</title>
-    <meta name="description" content="Créez votre compte BugsPointer ou connectez-vous pour recevoir, centraliser et traiter les bugs signalés par vos utilisateurs.">
+    <title>Connexion BugsPointer - créer un compte de signalement de bug</title>
+    <meta name="description" content="Créez votre compte BugsPointer ou connectez-vous pour installer le widget, recevoir les bugs signalés par vos utilisateurs et suivre vos rapports.">
     <meta name="keywords" content="connexion BugsPointer, inscription BugsPointer, créer compte bug reporting, outil signalement bug">
-    <meta name="robots" content="all">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bugspointer.com/authentication">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Connexion BugsPointer - créer un compte de signalement de bug">
+    <meta property="og:description" content="Installez BugsPointer et collectez les bugs signalés par vos utilisateurs.">
+    <meta property="og:url" content="https://bugspointer.com/authentication">
+    <meta property="og:site_name" content="BugsPointer">
+    <meta name="twitter:card" content="summary">
     <script th:src="@{/js/tailwindcss-cdn.js}"></script>
     <script>
         tailwind.config = {
@@ -52,7 +59,7 @@
                     <div class="flex w-full flex-col gap-3 lg:w-5/12">
                         <div class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4">
                             <span class="h-3 w-3 flex-none rounded-full bg-pointer-green shadow-[0_0_20px_rgba(0,230,118,0.55)]"></span>
-                            <p class="text-sm leading-6 text-white/68"><strong class="text-white">Plan Free disponible.</strong> Testez vos premiers rapports par mail avant de passer au plan Target.</p>
+                            <p class="text-sm leading-6 text-white/68"><strong class="text-white">Plan Free disponible.</strong> Testez vos premiers rapports par e-mail avant de passer au plan Target.</p>
                         </div>
                         <div class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4">
                             <span class="h-3 w-3 flex-none rounded-full bg-pointer-lime shadow-[0_0_20px_rgba(183,255,74,0.45)]"></span>

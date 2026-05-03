@@ -1,10 +1,17 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Installer BugsPointer - script d’intégration</title>
-    <meta name="description" content="Installez BugsPointer sur votre site avec une simple balise script et votre clé publique.">
-    <meta name="keywords" content="installer BugsPointer, script BugsPointer, widget bug report, data-public-key, modalPointer">
-    <meta name="robots" content="all">
+    <title>Installer BugsPointer - bouton ou lien de signalement</title>
+    <meta name="description" content="Installez BugsPointer avec une balise script. Ajoutez un bouton flottant ou un lien de signalement dans votre footer, menu ou contenu.">
+    <meta name="keywords" content="installer BugsPointer, script BugsPointer, widget bug report, bouton signalement bug, lien signalement bug">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bugspointer.com/download">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Installer BugsPointer - bouton ou lien de signalement">
+    <meta property="og:description" content="Copiez le script BugsPointer et choisissez un bouton flottant ou un lien placé dans votre site.">
+    <meta property="og:url" content="https://bugspointer.com/download">
+    <meta property="og:site_name" content="BugsPointer">
+    <meta name="twitter:card" content="summary">
     <script th:src="@{/js/tailwindcss-cdn.js}"></script>
     <script>
         tailwind.config = {
@@ -48,7 +55,7 @@
                             Ajoutez BugsPointer avec une seule balise script.
                         </h1>
                         <p class="mt-6 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
-                            Plus de fichiers à télécharger, copier ou maintenir. Collez ce script dans votre site : la modal, le bouton, les styles et la configuration sont chargés automatiquement depuis BugsPointer.
+                            Plus de fichiers à maintenir. Collez le script dans votre site, puis choisissez un bouton flottant ou un lien placé dans un footer, un menu ou une page.
                         </p>
                     </div>
                     <div class="flex w-full flex-col gap-3 lg:w-5/12">
@@ -67,12 +74,16 @@
                     <div class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:p-7">
                         <div class="mb-6 border-b border-white/10 pb-5">
                             <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 1</p>
-                            <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl">Copiez le script</h2>
+                            <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl">Copiez le script du bouton</h2>
                         </div>
 
                         <label class="block">
-                            <span class="mb-2 block text-sm font-bold text-white/72">Code d’installation</span>
+                            <span class="mb-2 block text-sm font-bold text-white/72">Bouton flottant automatique</span>
                             <textarea class="install-code min-h-[76px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly th:text="'&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; defer&gt;&lt;/script&gt;'"></textarea>
+                        </label>
+                        <label class="mt-5 block">
+                            <span class="mb-2 block text-sm font-bold text-white/72">Lien placé dans le site</span>
+                            <textarea class="install-code min-h-[132px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly th:text="'&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; data-button-style=&quot;custom&quot; defer&gt;&lt;/script&gt;&#10;&#10;&lt;a href=&quot;#&quot; data-bugspointer-open data-bugspointer-key=&quot;' + ${publicKey} + '&quot;&gt;&lt;/a&gt;'"></textarea>
                         </label>
 
                         <div class="mt-5 grid gap-3 md:grid-cols-3">
@@ -82,7 +93,7 @@
                             </div>
                             <div class="rounded-lg border border-white/10 bg-black/15 p-4">
                                 <p class="text-sm font-black text-white">2. Tester</p>
-                                <p class="mt-2 text-sm leading-6 text-white/62">Ouvrez votre site et cliquez sur le bouton BugsPointer.</p>
+                                <p class="mt-2 text-sm leading-6 text-white/62">Ouvrez votre site et cliquez sur le bouton ou le lien BugsPointer.</p>
                             </div>
                             <div class="rounded-lg border border-white/10 bg-black/15 p-4">
                                 <p class="text-sm font-black text-white">3. Recevoir</p>
@@ -95,7 +106,7 @@
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 2</p>
                         <h2 class="mt-2 font-display text-3xl leading-none text-white">Configurer le widget</h2>
                         <p class="mt-5 text-base leading-7 text-white/68">
-                            Depuis la page Widget, vous pouvez modifier la couleur principale, le texte du bouton, le titre de la modal, le libellé du champ description et la position du bouton.
+                            Depuis la page Widget, vous pouvez modifier les couleurs, le titre de la modal, le texte du lien, l’apparence du bouton et la position du bouton flottant.
                         </p>
                         <div class="mt-5 flex flex-col gap-3">
                             <a th:href="@{/app/private/widget}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime">
