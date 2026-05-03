@@ -127,7 +127,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
         dto.setLinkTextColor(safeColor(preferences.getWidgetLinkTextColor()));
         dto.setLinkUnderline(preferences.isWidgetLinkUnderline());
         dto.setButtonText(safeText(preferences.getWidgetButtonText(), "Signaler un bug", 60));
-        dto.setButtonStyle(safeButtonStyle(preferences.getWidgetButtonStyle()));
+        dto.setButtonStyle("button");
         dto.setButtonSize(safeButtonSize(preferences.getWidgetButtonSize()));
         dto.setTitle(safeText(preferences.getWidgetTitle(), "Signaler un nouveau bug", 80));
         dto.setDescriptionLabel(safeText(preferences.getWidgetDescriptionLabel(), "Description du bug", 80));

@@ -61,9 +61,51 @@ public class BugService {
     }
 
     private String prettyPrintHtml(String code) {
+        if (code == null || code.trim().isEmpty()) {
+            return "";
+        }
+
+        String trimmed = code.trim();
+        if (!looksLikeMarkup(trimmed)) {
+            return normalizeIndentation(trimmed);
+        }
+
         Document document = Jsoup.parseBodyFragment(code);
         document.outputSettings().indentAmount(2).prettyPrint(true);
         return document.body().html().trim();
+    }
+
+    private boolean looksLikeMarkup(String code) {
+        return code.matches("(?s).*<\\s*/?\\s*[a-zA-Z][^>]*>.*");
+    }
+
+    private String normalizeIndentation(String code) {
+        String[] lines = code.replace("\r\n", "\n").replace('\r', '\n').split("\n", -1);
+        int minIndent = Integer.MAX_VALUE;
+        for (String line : lines) {
+            if (line.trim().isEmpty()) {
+                continue;
+            }
+            int indent = 0;
+            while (indent < line.length() && Character.isWhitespace(line.charAt(indent))) {
+                indent++;
+            }
+            minIndent = Math.min(minIndent, indent);
+        }
+        if (minIndent == Integer.MAX_VALUE || minIndent == 0) {
+            return code.trim();
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for (String line : lines) {
+            if (line.length() >= minIndent) {
+                builder.append(line.substring(minIndent));
+            } else {
+                builder.append(line.trim());
+            }
+            builder.append('\n');
+        }
+        return builder.toString().trim();
     }
 
 
