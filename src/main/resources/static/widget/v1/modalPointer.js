@@ -536,12 +536,16 @@
     }
 
     function findReadableParent(element) {
-        const readableContainers = ["ARTICLE", "ASIDE", "SECTION", "HEADER", "FOOTER", "NAV", "LI", "TR", "FORM"];
+        const readableContainers = ["ARTICLE", "ASIDE", "HEADER", "FOOTER", "NAV", "LI", "TR", "FORM"];
+        const maxSnippetLength = 5000;
         let readable = element;
 
         while (readable.parentElement && readable.parentElement !== document.body) {
             const parent = readable.parentElement;
-            if (readableContainers.includes(parent.tagName)) {
+            if (readableContainers.includes(parent.tagName) && parent.outerHTML.length <= maxSnippetLength) {
+                return parent;
+            }
+            if (parent.tagName === "SECTION" && parent.outerHTML.length <= maxSnippetLength) {
                 return parent;
             }
             if (parent.tagName === "MAIN") {

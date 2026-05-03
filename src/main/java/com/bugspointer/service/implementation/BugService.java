@@ -19,6 +19,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +86,7 @@ public class BugService {
 
     private String decodeCapturedMarkup(String code) {
         if (code.contains("&lt;") || code.contains("&gt;")) {
-            return Jsoup.parse(code).text();
+            return Parser.unescapeEntities(code, false);
         }
         return code;
     }
