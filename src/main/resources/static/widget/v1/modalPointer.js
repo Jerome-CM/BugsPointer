@@ -370,7 +370,7 @@
                         <input type="hidden" name="screenSize" data-bp-screen>
                         <input type="hidden" name="key" value="${escapeHtml(publicKey)}">
                         <div class="bp-actions">
-                            <p class="bp-help">bugspointer.com</p>
+                            <a class="bp-help" href="https://www.bugspointer.com">Bugspointer.com</a>
                             <button class="bp-button" type="submit" data-bp-submit disabled>Selectionnez le bug</button>
                         </div>
                     </div>

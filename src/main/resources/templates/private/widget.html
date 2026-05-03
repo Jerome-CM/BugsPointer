@@ -124,7 +124,7 @@
                                     <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="number" min="0" max="120" step="1" th:field="*{widgetMarginY}" id="widgetMarginY">
                                 </label>
                             </div>
-                            <label>
+                            <label data-trigger-option="custom">
                                 <span class="mb-2 block text-sm font-bold text-white/72">Texte du lien</span>
                                 <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{widgetButtonText}" id="widgetButtonText" maxlength="60">
                             </label>
@@ -169,7 +169,7 @@
                                         <label id="widgetPreviewLabel" class="mb-2 block text-sm font-bold opacity-75" th:text="${widget.getWidgetDescriptionLabel()}">Description du bug</label>
                                         <textarea class="min-h-[130px] w-full rounded-lg border border-slate-200 px-4 py-3" placeholder="Expliquez le problème rencontré"></textarea>
                                         <div class="mt-4 flex items-center justify-between gap-4">
-                                            <span class="text-sm font-black text-slate-400">bugspointer.com</span>
+                                            <a href="https://www.bugspointer.com" class="text-sm font-black text-slate-400 no-underline">Bugspointer.com</a>
                                             <button id="widgetPreviewSubmit" class="min-h-11 rounded-lg px-5 font-black text-white" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}">Envoyer le rapport</button>
                                         </div>
                                     </div>

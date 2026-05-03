@@ -82,7 +82,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/cgv").permitAll()
                 .antMatchers("/mentions").permitAll()
                 .antMatchers("/download").permitAll()
-                .antMatchers(HttpMethod.GET,"/modal").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")

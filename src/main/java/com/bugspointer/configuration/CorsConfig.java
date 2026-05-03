@@ -28,7 +28,7 @@ public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/css/**", "/js/**","/downloadableZip/**", "/widget/**" )
-                .addResourceLocations("classpath:/static/css/", "classpath:/static/js/", "classpath:/static/downloadableZip/", "classpath:/static/widget/");
+        registry.addResourceHandler("/css/**", "/js/**", "/widget/**" )
+                .addResourceLocations("classpath:/static/css/", "classpath:/static/js/", "classpath:/static/widget/");
     }
 }

@@ -83,12 +83,6 @@ public class Home {
         return "public/documentations";
     }
 
-    @GetMapping("modal")
-    String getModalForTest(Model model){
-        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        return "download/modal";
-    }
-
     @GetMapping("cgu")
     String getCgu(Model model){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());

@@ -48,7 +48,6 @@ public class ModalService implements IModal {
         Company company = null;
         Date dateJour = new Date();
         Date dateDernierEnvoi = null;
-        Date dateIpEnvoi;
         long timeSeconde = 60;
         boolean wantNewBugNotif = false;
 
@@ -100,16 +99,9 @@ public class ModalService implements IModal {
         }
 
         if (dto.getAdresseIp() != null && !test){
-            //On récupère la liste des bugs reçus de cette adresse Ip
-            List<Bug> bugs = bugRepository.findAllByAdresseIp(dto.getAdresseIp());
-
-            if (!bugs.isEmpty()){
-                int i = bugs.size()-1;
-                dateIpEnvoi = bugs.get(i).getDateCreation();
-                boolean ok = differenceDate(dateIpEnvoi, dateJour, timeSeconde);
-                if (!ok){
-                    return new Response(EnumStatus.ERROR, null, "Merci de ne pas envoyer plus d'un rapport toutes les minutes");
-                }
+            Optional<Date> lastIpSendDate = bugRepository.findLastDateCreationByAdresseIp(dto.getAdresseIp());
+            if (lastIpSendDate.isPresent() && !differenceDate(lastIpSendDate.get(), dateJour, timeSeconde)) {
+                return new Response(EnumStatus.ERROR, null, "Merci de ne pas envoyer plus d'un rapport toutes les minutes");
             }
         }
 
