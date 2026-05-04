@@ -17,10 +17,29 @@ public class BugDTO {
     @NotNull
     private String url;
 
+    private String description;
+
+    private String codeLocation;
+
     private EnumEtatBug etatBug;
+
+    private String os;
+
+    private String browser;
+
+    private String browserLanguage;
+
+    private String deviceType;
+
+    private String adresseIp;
+
+    private String screenSize;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:ii:ss")
     private Date dateCreation;
+
+    @JsonFormat(pattern = "dd-MM-yyyy HH:ii:ss")
+    private Date dateEnvoi;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:ii:ss")
     private Date dateView;

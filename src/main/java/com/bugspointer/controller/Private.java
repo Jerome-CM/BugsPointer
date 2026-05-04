@@ -375,6 +375,38 @@ public class Private {
         return "redirect:/app/private/bugReport/{id}";
     }
 
+    @GetMapping("bugList")
+    String getBugList(Model model,
+                      @RequestParam("publicKey") String publicKey,
+                      @RequestParam("state") String state,
+                      HttpServletRequest request,
+                      RedirectAttributes redirectAttributes) {
+        DashboardDTO company = companyService.getDashboardDto(companyService.getCompanyWithToken(request));
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        model.addAttribute("dataBug", company);
+        model.addAttribute("company", company);
+
+        if (company.getPublicKey() == null || !company.getPublicKey().equals(publicKey)) {
+            redirectAttributes.addFlashAttribute("status", String.valueOf(EnumStatus.ERROR));
+            redirectAttributes.addFlashAttribute("notification", "Vous ne pouvez consulter que les rapports de votre société.");
+            return "redirect:/app/private/dashboard";
+        }
+
+        Response responseBugList = bugService.getBugDTOByCompanyAndState(publicKey, state);
+        if (responseBugList.getStatus() != EnumStatus.OK) {
+            redirectAttributes.addFlashAttribute("status", String.valueOf(responseBugList.getStatus()));
+            redirectAttributes.addFlashAttribute("notification", responseBugList.getMessage());
+            return "redirect:/app/private/dashboard";
+        }
+
+        model.addAttribute("title", bugService.getTitle(state, true));
+        model.addAttribute("bugList", responseBugList.getContent());
+        model.addAttribute("publicKey", publicKey);
+        model.addAttribute("state", state);
+        model.addAttribute("emptyMessage", responseBugList.getMessage());
+        return "private/bugList";
+    }
+
     @GetMapping(value="thanks")
     String thanks(Model model, HttpServletRequest request){
 
