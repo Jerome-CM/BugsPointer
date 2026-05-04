@@ -163,9 +163,8 @@
                         <article class="mt-8">
                             <h3 id="public-key" class="text-2xl font-black text-white">Clé publique</h3>
                             <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
-                                <p><code>data-public-key</code> relie le widget au bon projet BugsPointer. Cette clé est publique : elle peut apparaître dans le HTML du site client.</p>
-                                <p class="mt-3">Elle ne doit jamais donner accès aux données sensibles. Le backend vérifie la clé et le domaine déclaré avant d’accepter un rapport.</p>
-                                <p class="mt-3">Format recommandé : <code>pk_xxxxx</code>.</p>
+                                <p><code>data-public-key</code> relie le widget a votre compte BugsPointer. Cette clé est publique : elle peut apparaître dans le HTML du site client.</p>
+                                <p class="mt-3">Format obligatoire : <code>pk_xxxxx</code>.</p>
                             </div>
                         </article>
 
@@ -175,6 +174,7 @@
                                 <p>Placez le script sur les pages où les utilisateurs peuvent signaler un bug. Le plus simple est de le coller avant la fermeture du <code>&lt;/body&gt;</code>.</p>
                                 <p class="mt-3">L’attribut <code>defer</code> laisse la page se charger correctement avant l’exécution du widget.</p>
                                 <p class="mt-3">Si vous utilisez un lien personnalisé, placez aussi la balise <code>&lt;a data-bugspointer-open&gt;</code> à l’endroit exact où le lien doit apparaître.</p>
+                                <p class="mt-5 italic ">Tips : Le plus simple est de placer le script dans un fichier présent dans toutes les pages</p>
                             </div>
                         </article>
                     </section>
@@ -219,21 +219,6 @@
                                     <li>la taille, la position et les marges du bouton flottant</li>
                                 </ul>
                                 <p class="mt-4">Le choix “bouton” ou “lien” dans la page Widget sert à prévisualiser les bons réglages. Il ne bloque pas l’autre déclencheur : si le code du bouton et le code du lien sont installés sur le site, les deux peuvent fonctionner.</p>
-                            </div>
-                        </article>
-
-                        <article class="mt-8">
-                            <h3 id="override" class="text-2xl font-black text-white">Attributs optionnels</h3>
-                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
-                                <p>Le dashboard reste la source principale. Pour un test rapide, certains attributs peuvent être ajoutés sur la balise script.</p>
-                                <textarea class="code-block mt-4 min-h-[172px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly>&lt;script
-  src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot;
-  data-public-key=&quot;pk_xxxxx&quot;
-  data-color=&quot;#27215F&quot;
-  data-button-text=&quot;Signaler un bug&quot;
-  data-position=&quot;bottom-right&quot;
-  defer&gt;&lt;/script&gt;</textarea>
-                                <p class="mt-3">Pour masquer le bouton flottant et utiliser uniquement un lien, ajoutez <code>data-button-style="custom"</code>.</p>
                             </div>
                         </article>
                     </section>
