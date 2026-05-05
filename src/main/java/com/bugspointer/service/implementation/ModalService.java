@@ -143,7 +143,7 @@ public class ModalService implements IModal {
             bug.setDateCreation(dateJour);
             bug.setEtatBug(EnumEtatBug.NEW);
             bug.setCompany(company);
-            bug.setAdresseIp(dto.getAdresseIp());
+            bug.setAdresseIp(dto.getAdresseIp() != null ? dto.getAdresseIp() : "Non collectée");
             if (envoi){
                 bug.setDateEnvoi(dateJour);
             }

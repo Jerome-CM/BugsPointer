@@ -48,9 +48,7 @@ public class ApiFormUser {
     @PostMapping("/modalControl")
     RedirectView modal(@Valid ModalDTO dto, BindingResult result, HttpServletRequest request){
         if (!result.hasErrors()){
-            String adresseIp = request.getRemoteAddr();
-            log.info("{} send a new bug", adresseIp);
-            dto.setAdresseIp(adresseIp);
+            log.info("A visitor sent a new bug report");
             Response response = modalService.saveModal(dto);
             if(response.getStatus().equals(EnumStatus.ERROR)){
                 log.info(response.getMessage());
