@@ -27,6 +27,7 @@ public interface ICompany {
     Response registerDomaine(Company company, AccountDTO dto);
     Response verifyDomainInstallation(String publicKey);
     Response verifyDomainInstallation(Company company);
+    Response verifyDomainInstallation(Company company, String verificationUrl);
     Response updateDomaine(Company company, AccountDTO dto);
     Response sendPwLost(AccountDTO dto);
     Response resetPassword(String publicKey, AccountDTO dto, String token);

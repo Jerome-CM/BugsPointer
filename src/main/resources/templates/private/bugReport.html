@@ -1,83 +1,197 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
     <link rel="stylesheet" th:href="@{/css/prism.css}">
     <script th:src="@{/js/prism.js}"></script>
     <title th:text="${title}"></title>
     <meta name="robots" content="noindex">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>
+        .bugspointer-logo{display:none;}
+        html.black,
+        body.bug-report-page{height:auto;min-height:100%;overflow-y:auto!important;}
+        .bug-report-page main{width:100%;overflow:visible!important;}
+        .bug-report-layout,
+        .bug-report-content,
+        .bug-report-main,
+        .bug-report-side{min-width:0;}
+        .bug-report-card{transform:none!important;}
+        pre.bug-code{margin:0;white-space:pre;tab-size:2;}
+        pre.bug-code code{display:block;max-width:100%;white-space:pre;overflow-x:auto;overflow-y:visible;}
+        .timeline-step::before{content:"";position:absolute;left:13px;top:34px;bottom:-18px;width:2px;background:rgba(255,255,255,.12);}
+        .timeline-step:last-child::before{display:none;}
+    </style>
 </head>
-<body>
+<body class="index home-modern bug-report-page min-h-screen bg-[#06100c] font-sans text-white">
 
 <div th:replace="~{include/navCompany.html}"></div>
 
 
-<div class="container-documentation">
-
-    <div th:replace="~{include/asideReport.html}"></div>
-
-    <div class="container anti-margin container-report-tablette">
-        <h1 th:text="${title}"></h1>
-
-        <div class="container-report">
-            <div class="aside decalage order2">
-                <div class="component">
-                    <h2>Chronologie</h2>
-                    <span class="indicator">Signalé</span>
-                    <span class="indicator-result" th:text="${bug.getDateCreation() != null ? #dates.format(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></span>
-                    <span class="indicator">Vu</span>
-                    <span class="indicator-result" th:text="${bug.getDateView() != null ? #dates.format(bug.getDateView(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></span>
-                    <span class="indicator">Résolu / Ignoré</span>
-                    <span class="indicator-result" th:text="${bug.getDateSolved() != null ? #dates.format(bug.getDateSolved(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></span>
+<main class="relative w-full px-5 pb-24 pr-6 pt-6 sm:px-8 sm:pr-10 lg:px-12 lg:pr-14">
+    <div class="home-noise"></div>
+    <div class="bug-report-layout relative z-10 mx-auto grid w-full max-w-[88rem] gap-6 xl:grid-cols-[300px_minmax(0,1fr)] xl:items-start">
+        <aside class="bug-report-card rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur xl:sticky xl:top-6">
+            <div class="border-b border-white/10 pb-5">
+                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Reports</p>
+                <h2 class="mt-2 font-display text-3xl leading-none text-white">Suivi</h2>
+            </div>
+            <div class="mt-5 grid gap-3">
+                <a th:href="@{/app/private/bugList(state='new', publicKey=${publicKey})}" class="flex min-h-12 items-center justify-between rounded-lg border border-white/10 bg-black/15 px-4 py-3 font-bold text-white transition hover:border-pointer-green/35 hover:bg-pointer-green/10">
+                    <span>Nouveau</span>
+                    <span class="rounded-full bg-pointer-green px-3 py-1 text-sm font-black text-pointer-ink" th:text="${dataBug.getNbNewBug()}">0</span>
+                </a>
+                <a th:href="@{/app/private/bugList(state='pending', publicKey=${publicKey})}" class="flex min-h-12 items-center justify-between rounded-lg border border-white/10 bg-black/15 px-4 py-3 font-bold text-white transition hover:border-amber-300/35 hover:bg-amber-300/10">
+                    <span>En cours</span>
+                    <span class="rounded-full bg-amber-300 px-3 py-1 text-sm font-black text-[#241800]" th:text="${dataBug.getNbPendingBug()}">0</span>
+                </a>
+                <a th:href="@{/app/private/bugList(state='solved', publicKey=${publicKey})}" class="flex min-h-12 items-center justify-between rounded-lg border border-white/10 bg-black/15 px-4 py-3 font-bold text-white transition hover:border-sky-300/35 hover:bg-sky-300/10">
+                    <span>Résolu</span>
+                    <span class="rounded-full bg-sky-300 px-3 py-1 text-sm font-black text-[#061426]" th:text="${dataBug.getNbSolvedBug()}">0</span>
+                </a>
+                <a th:href="@{/app/private/bugList(state='ignored', publicKey=${publicKey})}" class="flex min-h-12 items-center justify-between rounded-lg border border-white/10 bg-black/15 px-4 py-3 font-bold text-white transition hover:border-red-300/35 hover:bg-red-500/10">
+                    <span>Ignoré</span>
+                    <span class="rounded-full bg-red-300 px-3 py-1 text-sm font-black text-[#260606]" th:text="${dataBug.getNbIgnoredBug()}">0</span>
+                </a>
+            </div>
+            <div class="mt-5 border-t border-white/10 pt-5">
+                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">État du bug</p>
+                <div class="mt-4 rounded-lg border border-white/10 bg-black/15 p-4">
+                    <p class="text-xs font-black uppercase tracking-wider text-white/45">Statut actuel</p>
+                    <p class="mt-2 text-2xl font-black text-white" th:text="${bug.getEtatBug().name()}">NEW</p>
                 </div>
-                <div class="component">
-                    <h2>Environnement</h2>
-                    <span class="indicator">OS</span>
-                    <span class="indicator-result" th:text="${bug.getOs() != null ? bug.getOs() : '- -'}"></span>
-                    <span class="indicator">Navigateur</span>
-                    <span class="indicator-result" th:text="${bug.getBrowser() != null ? bug.getBrowser() : '- -'}"></span>
-                    <span class="indicator">Taille de l'écran</span>
-                    <span class="indicator-result" th:text="${bug.getScreenSize() != null ? bug.getScreenSize() : '- -'}"></span>
-                </div>
-                <div class="component content-btn-action">
-                    <a th:href="@{/app/private/dashboard}" class="pending">Retour</a>
+                <div class="mt-4 grid gap-3">
                     <form th:if="${bug.getEtatBug().name() != 'IGNORED' && bug.getEtatBug().name() != 'SOLVED'}" th:action="@{/app/private/confirmBug/{id}(id=${bug.getId()})}" method="post">
-                        <button type="submit" class="solved" th:text="${bug.getEtatBug().name == 'PENDING' ? 'Résoudre' : 'Confirmer'}">Confirmer</button>
+                        <button type="submit" class="min-h-11 w-full rounded-lg bg-pointer-green px-4 py-2 font-extrabold text-pointer-ink" th:text="${bug.getEtatBug().name == 'PENDING' ? 'Marquer résolu' : 'Passer en cours'}">Passer en cours</button>
                     </form>
-                    <form th:if="${bug.getEtatBug().name == 'SOLVED' || bug.getEtatBug().name() == 'IGNORED'}" th:action="@{/app/private/confirmBug/{id}(id=${bug.getId()})}" method="post">
-                        <button type="submit" class="new">Réouvrir</button>
+                    <form th:if="${bug.getEtatBug().name() == 'SOLVED' || bug.getEtatBug().name() == 'IGNORED'}" th:action="@{/app/private/confirmBug/{id}(id=${bug.getId()})}" method="post">
+                        <button type="submit" class="min-h-11 w-full rounded-lg bg-pointer-green px-4 py-2 font-extrabold text-pointer-ink">Réouvrir</button>
                     </form>
                     <form th:if="${bug.getEtatBug().name() != 'IGNORED' && bug.getEtatBug().name() != 'SOLVED'}" th:action="@{/app/private/ignoredBug/{id}(id=${bug.getId()})}" method="post">
-                        <button type="submit" class="ignored">Ignorer</button>
+                        <button type="submit" class="min-h-11 w-full rounded-lg border border-red-300/30 bg-red-500/15 px-4 py-2 font-extrabold text-red-100">Ignorer</button>
                     </form>
+                    <a th:href="@{/app/private/dashboard}" class="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-4 py-2 font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime">Retour au dashboard</a>
                 </div>
             </div>
-            <div class="aside w85 w100 order1">
-                <div class="component">
-                    <h2>Url contenant un bug</h2>
-                    <p th:text="${bug.getUrl()}"></p>
+            <div class="mt-5 border-t border-white/10 pt-5">
+                <p class="text-sm font-black uppercase tracking-wider text-white/45">Paramètres</p>
+                <div class="mt-3 grid gap-3">
+                    <a th:href="@{/app/private/notifications}" class="rounded-lg border border-white/10 bg-white/5 px-4 py-3 font-bold text-white/70 transition hover:text-pointer-lime">Notifications</a>
+                    <a th:href="@{/app/private/account}" class="rounded-lg border border-white/10 bg-white/5 px-4 py-3 font-bold text-white/70 transition hover:text-pointer-lime">Mon compte</a>
                 </div>
-                <div class="component">
-                    <h2>description</h2>
-                    <p th:text="${bug.getDescription() != null ? bug.getDescription() : ''}"></p>
-                    <hr>
+            </div>
+        </aside>
 
-                    <div class="warning border-orange" id="trick-find">
-                        <img th:src="@{/css/img/icones/facile-a-utiliser.gif}" alt="">
-                        <div id="div-detection-os"><span>Pour trouver la balise que l'utilisateur a pointé : <br> Utilisez </span><span class="btn-raccourcis"><img id="cmd" th:src="@{/css/img/icones/cmd.png}" alt="cmd"><span id="ctrl">Ctrl</span></span> <span> + <span class="btn-raccourcis">F</span>  et tapez : <strong>bugspointer-pointed-balise</strong></span></div>
-                        <div id="no-detection-os"><p><strong>La balise pointée par l'utilisateur est celle ayant la classe : bugspointer-pointed-balise</strong></p></div>
+        <section class="bug-report-content flex min-w-0 flex-col gap-6 mt-0">
+            <header class="bug-report-card rounded-lg border border-white/10 bg-white/[0.065] p-5 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur sm:p-6 lg:p-8">
+                <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                    <div>
+                        <p class="mb-4 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime">
+                            Rapport de bug
+                        </p>
+                        <h1 class="font-display text-4xl leading-none text-white sm:text-5xl" th:text="${title}">Bug report</h1>
                     </div>
-
-                    <pre style="padding: 0; margin:0;">
-                        <code class="language-html">
-                            <div th:text="${code}"></div>
-                        </code>
-                    </pre>
+                    <span class="inline-flex min-h-10 items-center justify-center rounded-full border px-4 py-2 text-sm font-black uppercase tracking-wider"
+                          th:classappend="${bug.getEtatBug().name() == 'NEW' ? ' border-pointer-green/30 bg-pointer-green/10 text-pointer-lime' : (bug.getEtatBug().name() == 'PENDING' ? ' border-amber-300/30 bg-amber-300/10 text-amber-100' : (bug.getEtatBug().name() == 'SOLVED' ? ' border-sky-300/30 bg-sky-300/10 text-sky-100' : ' border-red-300/30 bg-red-500/10 text-red-100'))}"
+                          th:text="${bug.getEtatBug().name()}">NEW</span>
                 </div>
+                <a class="mt-5 block break-all rounded-lg border border-pointer-green/20 bg-pointer-green/10 px-4 py-3 font-bold text-pointer-lime transition hover:text-pointer-green"
+                   th:href="${bug.getUrl()}" target="_blank" rel="noopener" th:text="${bug.getUrl()}">https://example.com</a>
+            </header>
 
-            </div>
-        </div>
+            <section class="bug-report-main flex min-w-0 flex-col gap-6 mt-0">
+                    <article class="bug-report-card rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Chronologie</p>
+                        <div class="mt-5 grid gap-3 text-sm md:grid-cols-3">
+                            <div class="rounded-lg border border-pointer-green/20 bg-pointer-green/10 p-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="flex h-3 w-3 rounded-full bg-pointer-green shadow-[0_0_18px_rgba(0,230,118,0.55)]"></span>
+                                    <p class="font-black text-white">Signalé</p>
+                                </div>
+                                <p class="mt-3 text-white/64" th:text="${bug.getDateCreation() != null ? #dates.format(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></p>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="flex h-3 w-3 rounded-full" th:classappend="${bug.getDateView() != null ? ' bg-amber-300 shadow-[0_0_18px_rgba(252,211,77,0.48)]' : ' bg-white/20'}"></span>
+                                    <p class="font-black text-white">Vu</p>
+                                </div>
+                                <p class="mt-3 text-white/64" th:text="${bug.getDateView() != null ? #dates.format(bug.getDateView(), 'dd/MM/yyyy - HH:mm:ss') : 'En attente'}"></p>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="flex h-3 w-3 rounded-full" th:classappend="${bug.getDateSolved() != null ? ' bg-sky-300 shadow-[0_0_18px_rgba(125,211,252,0.45)]' : ' bg-white/20'}"></span>
+                                    <p class="font-black text-white">Résolu / Ignoré</p>
+                                </div>
+                                <p class="mt-3 text-white/64" th:text="${bug.getDateSolved() != null ? #dates.format(bug.getDateSolved(), 'dd/MM/yyyy - HH:mm:ss') : 'En attente'}"></p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bug-report-card rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Données utilisateur</p>
+                        <dl class="mt-5 grid gap-3 text-sm md:grid-cols-2 xl:grid-cols-5">
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <dt class="font-black text-white">Appareil</dt>
+                                <dd class="mt-1 break-words text-white/64" th:text="${bug.getDeviceType() != null ? bug.getDeviceType() : '- -'}"></dd>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <dt class="font-black text-white">OS</dt>
+                                <dd class="mt-1 break-words text-white/64" th:text="${bug.getOs() != null ? bug.getOs() : '- -'}"></dd>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <dt class="font-black text-white">Navigateur</dt>
+                                <dd class="mt-1 break-words text-white/64" th:text="${bug.getBrowser() != null ? bug.getBrowser() : '- -'}"></dd>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <dt class="font-black text-white">Langue navigateur</dt>
+                                <dd class="mt-1 break-words text-white/64" th:text="${bug.getBrowserLanguage() != null ? bug.getBrowserLanguage() : '- -'}"></dd>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <dt class="font-black text-white">Taille d'écran</dt>
+                                <dd class="mt-1 break-words text-white/64" th:text="${bug.getScreenSize() != null ? bug.getScreenSize() : '- -'}"></dd>
+                            </div>
+                        </dl>
+                    </article>
+
+                    <article class="bug-report-card rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Description</p>
+                        <p class="mt-4 whitespace-pre-line leading-7 text-white/72" th:text="${bug.getDescription() != null ? bug.getDescription() : ''}"></p>
+                    </article>
+
+                    <article class="bug-report-card min-w-0 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                        <div class="mb-5 border-b border-white/10 pb-5">
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Code sélectionné</p>
+                            <p class="mt-2 text-sm leading-6 text-white/62">
+                                Utilisez
+                                <strong class="text-white" th:text="${bug.getOs() != null && bug.getOs().toLowerCase().contains('mac') ? 'Cmd + F' : 'Ctrl + F'}">Ctrl + F</strong>
+                                puis cherchez <strong class="text-white">bugspointer-pointed-balise</strong> pour retrouver l'élément pointé.
+                            </p>
+                        </div>
+                        <pre class="bug-code rounded-lg border border-white/10 bg-black/45 p-4 text-sm leading-6 text-white"><code class="language-markup" th:text="${code}"></code></pre>
+                    </article>
+            </section>
+        </section>
     </div>
-    </div>
+</main>
 <div th:replace="~{include/footer.html}"></div>
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.bugspointer.configuration;
 
 import com.bugspointer.jwtConfig.JwtTokenUtil;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -32,6 +33,19 @@ public class UserAuthenticationUtil {
             Date timeToToken = jwtTokenUtil.getExpirationDateFromToken(token);
             int comparisonResult = timeToToken.compareTo(dateNow);
             return comparisonResult > 0;
+        }
+        return false;
+    }
+
+    public boolean isAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return false;
+        }
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            if ("ROLE_ADMIN".equals(authority.getAuthority())) {
+                return true;
+            }
         }
         return false;
     }

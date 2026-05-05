@@ -1,22 +1,27 @@
-<nav class="navCompany">
-    <a th:href="@{/}" class="title">Bugspointer <img class="flag-nav" src="/css/img/france.jpg" alt="Drapeau français"></a>
-    <!--<button class="nav-toggler" id="nav-toggler">
-        <span class="navCompany-toggler-icon"></span>
-    </button>-->
-    <button class="nav-toggler" id="nav-toggler">
-        <img src="/css/img/menu_burger.svg" alt="">
-    </button>
-    <ul class="nav-menu company" id="nav-menu">
-        <li class="navCompany-item"><a th:href="@{/app/private/dashboard}">Dashboard</a></li>
-        <li class="navCompany-item"><a th:href="@{/app/admin/dashboard}">Dashboard</a></li>
-        <li class="navCompany-item"><a th:href="@{/app/admin/metrics}">Metrics</a></li>
-        <li class="navCompany-item"><a th:href="@{/app/admin/companiesList}">CompaniesList</a></li>
-        <li class="navCompany-item"><a th:href="@{/app/admin/addBilling}">Add billing</a></li>
-        <li class="navCompany-item"><a th:href="@{/app/admin/settings}">Settings</a></li>
-        <li class="navCompany-item">
-            <form th:action="@{/logout}" method="post">
-                <button type="submit">Déconnexion</button>
-            </form>
-        </li>
-    </ul>
+<nav class="sticky top-0 z-[1200] border-b border-white/10 bg-[#06100c]/88 px-5 py-4 font-sans text-white backdrop-blur-xl sm:px-8 lg:px-12">
+    <style>
+        .admin-nav-menu{display:flex;}
+        @media (max-width:1023px){
+            .admin-nav-menu{display:none;}
+            .admin-nav-menu.show{position:absolute;left:16px;right:16px;top:72px;display:grid;gap:10px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:#06100c;padding:16px;box-shadow:0 24px 80px rgba(0,0,0,.35);}
+        }
+    </style>
+    <div class="mx-auto flex max-w-[88rem] items-center justify-between gap-5">
+        <a th:href="@{/app/admin/dashboard}" class="font-display text-xl font-black leading-none text-white">BugsPointer Admin</a>
+        <button class="nav-toggler inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 lg:hidden" id="nav-toggler" type="button" aria-label="Ouvrir le menu">
+            <span class="block h-0.5 w-5 bg-white before:block before:h-0.5 before:w-5 before:-translate-y-2 before:bg-white before:content-[''] after:block after:h-0.5 after:w-5 after:translate-y-[6px] after:bg-white after:content-['']"></span>
+        </button>
+        <ul class="admin-nav-menu items-center gap-2" id="nav-menu">
+            <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/private/dashboard}">User dashboard</a></li>
+            <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/admin/dashboard}">Admin</a></li>
+            <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/admin/metrics}">Metrics</a></li>
+            <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/admin/companiesList}">Companies</a></li>
+            <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/admin/addBilling}">Add billing</a></li>
+            <li>
+                <form th:action="@{/logout}" method="post">
+                    <button class="inline-flex min-h-10 items-center justify-center rounded-lg border border-white/15 bg-white/5 px-4 py-2 text-sm font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime" type="submit">Déconnexion</button>
+                </form>
+            </li>
+        </ul>
+    </div>
 </nav>

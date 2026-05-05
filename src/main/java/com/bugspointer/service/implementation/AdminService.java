@@ -10,6 +10,7 @@ import com.bugspointer.entity.*;
 import com.bugspointer.entity.enumLogger.Action;
 import com.bugspointer.entity.enumLogger.What;
 import com.bugspointer.repository.BugRepository;
+import com.bugspointer.repository.AdminBillingRepository;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.repository.HomeLoggerRepository;
 import com.bugspointer.utility.Utility;
@@ -17,10 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 import java.util.stream.Collectors;
 
 
@@ -34,16 +37,110 @@ public class AdminService {
 
     private final BugRepository bugRepository;
 
+    private final AdminBillingRepository adminBillingRepository;
+
     private final ModelMapper modelMapper;
 
     private final Client client;
 
-    public AdminService(CompanyRepository companyRepository, HomeLoggerRepository homeLoggerRepository, BugRepository bugRepository, ModelMapper modelMapper, Client client) {
+    public AdminService(CompanyRepository companyRepository, HomeLoggerRepository homeLoggerRepository, BugRepository bugRepository, AdminBillingRepository adminBillingRepository, ModelMapper modelMapper, Client client) {
         this.companyRepository = companyRepository;
         this.homeLoggerRepository = homeLoggerRepository;
         this.bugRepository = bugRepository;
+        this.adminBillingRepository = adminBillingRepository;
         this.modelMapper = modelMapper;
         this.client = client;
+    }
+
+    public List<AdminBilling> getBillings() {
+        return adminBillingRepository.findAllByOrderByBillingDateDesc();
+    }
+
+    public Response saveBilling(AdminBillingDTO dto) {
+        AdminBilling billing = modelMapper.map(dto, AdminBilling.class);
+        try {
+            adminBillingRepository.save(billing);
+            return new Response(EnumStatus.OK, null, "Dépense ajoutée");
+        } catch (Exception e) {
+            log.error("Unable to save admin billing: {}", e.getMessage(), e);
+            return new Response(EnumStatus.ERROR, null, "Impossible d'ajouter cette dépense");
+        }
+    }
+
+    public BigDecimal getBillingTotal() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (AdminBilling billing : getBillings()) {
+            if (billing.getAmount() != null) {
+                total = total.add(billing.getAmount());
+            }
+        }
+        return total;
+    }
+
+    public long getPaidCompanyCount() {
+        return StreamSupport.stream(companyRepository.findAll().spliterator(), false)
+                .filter(company -> company.getPlan() != null && company.getPlan() != EnumPlan.FREE)
+                .count();
+    }
+
+    public long getTotalCompanyCount() {
+        return StreamSupport.stream(companyRepository.findAll().spliterator(), false).count();
+    }
+
+    public long getConfirmedCompanyCount() {
+        return StreamSupport.stream(companyRepository.findAll().spliterator(), false)
+                .filter(company -> company.getMotifEnable() == EnumMotif.VALIDATE)
+                .count();
+    }
+
+    public long getFreeCompanyCount() {
+        return getPlanCount("FREE");
+    }
+
+    public long getTargetCompanyCount() {
+        return getPlanCount("TARGET");
+    }
+
+    public long getUltimateCompanyCount() {
+        return getPlanCount("ULTIMATE");
+    }
+
+    private long getPlanCount(String planName) {
+        return StreamSupport.stream(companyRepository.findAll().spliterator(), false)
+                .filter(company -> company.getPlan() != null && company.getPlan().name().equals(planName))
+                .count();
+    }
+
+    public long getVerifiedDomainCount() {
+        return StreamSupport.stream(companyRepository.findAll().spliterator(), false)
+                .filter(Company::isDomainVerified)
+                .count();
+    }
+
+    public long getMissingDomainCount() {
+        return StreamSupport.stream(companyRepository.findAll().spliterator(), false)
+                .filter(company -> company.getDomaine() == null || company.getDomaine().trim().isEmpty())
+                .count();
+    }
+
+    public Long getTotalBugCount() {
+        return bugRepository.allBugCounted();
+    }
+
+    public long getBugCount(EnumEtatBug status) {
+        if (status == null) {
+            return 0;
+        }
+        Long count = bugRepository.countByEtatBug(status);
+        return count != null ? count : 0;
+    }
+
+    public BigDecimal getEstimatedAnnualRevenue() {
+        return BigDecimal.valueOf(getPaidCompanyCount()).multiply(BigDecimal.valueOf(15));
+    }
+
+    public BigDecimal getEstimatedProfit() {
+        return getEstimatedAnnualRevenue().subtract(getBillingTotal());
     }
 
     public List<CompanyListDTO> getAllCompanyForList(){
@@ -57,6 +154,7 @@ public class AdminService {
             compDTO.setCompanyId(company.getCompanyId());
             compDTO.setCompanyName(company.getCompanyName());
             compDTO.setDateDownload(Utility.dateFormator(company.getDateDownload(), "dd/MM/yyyy"));
+            compDTO.setDomainVerified(company.isDomainVerified());
             compDTO.setCreationDate(Utility.dateFormator(company.getDateCreation(), "dd/MM/yyyy"));
             compDTO.setMotifEnable(StringUtils.capitalize(String.valueOf(company.getMotifEnable()).toLowerCase()));
             compDTO.setPlan(StringUtils.capitalize(String.valueOf(company.getPlan()).toLowerCase()));

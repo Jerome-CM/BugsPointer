@@ -22,4 +22,32 @@ public class CompanyPreferenceDTO {
     private boolean smsInactivity;
 
     private boolean smsNewFeature;
+
+    private String widgetPrimaryColor;
+
+    private String widgetModalBackgroundColor;
+
+    private String widgetModalTextColor;
+
+    private String widgetTitleColor;
+
+    private String widgetLinkTextColor;
+
+    private boolean widgetLinkUnderline;
+
+    private String widgetButtonText;
+
+    private String widgetButtonStyle;
+
+    private Integer widgetButtonSize;
+
+    private String widgetTitle;
+
+    private String widgetDescriptionLabel;
+
+    private String widgetPosition;
+
+    private Integer widgetMarginX;
+
+    private Integer widgetMarginY;
 }

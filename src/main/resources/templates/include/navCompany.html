@@ -1,21 +1,24 @@
-<nav class="navCompany">
-    <a th:href="@{/}"  class="title">Bugspointer <img class="flag-nav" src="/css/img/france.jpg" alt="Drapeau français"></a>
-    <!--<button class="nav-toggler" id="nav-toggler">
-        <span class="navCompany-toggler-icon"></span>
-    </button>-->
-    <button class="nav-toggler" id="nav-toggler">
-        <img src="/css/img/menu_burger.svg" alt="">
-    </button>
-    <ul class="nav-menu company" id="nav-menu">
-        <li class="navCompany-item" th:if="${isLoggedIn == true}"><a th:href="@{/app/private/dashboard}">Dashboard</a></li>
-        <li class="navCompany-item" th:if="${isLoggedIn == true}"><a th:href="@{/download}">Download</a></li>
-        <li class="navCompany-item"><a th:href="@{/documentations}">Documentations</a></li>
-        <li class="navCompany-item"><a class="plan" th:href="@{/features}">Offres</a></li>
-        <li class="navCompany-item" th:if="${isLoggedIn == false}"><a th:href="@{/authentication}">Connexion</a></li>
-        <li class="navCompany-item" th:if="${isLoggedIn == true}">
-            <form th:action="@{/logout}" method="post">
-                <button type="submit">Déconnexion</button>
-            </form>
-        </li>
-    </ul>
+<nav class="sticky top-0 z-[1200] border-b border-white/10 bg-[#06100c]/88 px-5 py-4 font-sans text-white backdrop-blur-xl sm:px-8 lg:px-12">
+    <div class="mx-auto flex max-w-[88rem] items-center justify-between gap-5">
+        <a th:href="@{/}" class="font-display text-xl font-black leading-none text-white">
+            BugsPointer
+        </a>
+        <button class="nav-toggler inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 lg:hidden" id="nav-toggler" type="button" aria-label="Ouvrir le menu">
+            <span class="block h-0.5 w-5 bg-white before:block before:h-0.5 before:w-5 before:-translate-y-2 before:bg-white before:content-[''] after:block after:h-0.5 after:w-5 after:translate-y-[6px] after:bg-white after:content-['']"></span>
+        </button>
+        <ul class="nav-menu company items-center gap-2 lg:flex" id="nav-menu">
+            <li th:if="${isLoggedIn == true}"><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/private/dashboard}">Dashboard</a></li>
+            <li th:if="${isAdmin == true}"><a class="rounded-lg border border-yellow-200/35 bg-yellow-300/12 px-4 py-2 text-sm font-bold text-yellow-50 transition hover:border-yellow-100/60 hover:bg-yellow-300/20" th:href="@{/app/admin/dashboard}">DashboardAdmin</a></li>
+            <li th:if="${isLoggedIn == true}"><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/download}">Installation</a></li>
+            <li th:if="${isLoggedIn == true}"><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/private/widget}">Widget</a></li>
+            <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/documentations}">Documentations</a></li>
+            <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/features}">Fonctionnalités</a></li>
+            <li th:if="${isLoggedIn == false}"><a class="inline-flex min-h-10 items-center justify-center rounded-lg bg-pointer-green px-4 py-2 text-sm font-extrabold text-pointer-ink transition hover:bg-pointer-lime" th:href="@{/authentication}">Connexion</a></li>
+            <li th:if="${isLoggedIn == true}">
+                <form th:action="@{/logout}" method="post">
+                    <button class="inline-flex min-h-10 items-center justify-center rounded-lg border border-red-300/30 bg-red-500/12 px-4 py-2 text-sm font-extrabold text-red-100 transition hover:border-red-200/60 hover:bg-red-500/18" type="submit">Déconnexion</button>
+                </form>
+            </li>
+        </ul>
+    </div>
 </nav>

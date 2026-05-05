@@ -19,6 +19,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,22 +46,7 @@ public class BugService {
         Optional<Bug> bug = bugRepository.findById(idBug);
         if(bug.isPresent()){
             String codeHtml = bug.get().getCodeLocation();
-            // Charge HTML in Document JSoup objet
-            Document document = Jsoup.parse(codeHtml);
-
-            // Use output method to get indented HTML
-            document.outputSettings().indentAmount(4).prettyPrint();
-
-            // Get new HTML code
-            String codeHtmlIndente = document.html();
-            codeHtmlIndente = codeHtmlIndente.replace("<html>", "");
-            codeHtmlIndente = codeHtmlIndente.replace("</html>", "");
-            codeHtmlIndente = codeHtmlIndente.replace("<head>", "");
-            codeHtmlIndente = codeHtmlIndente.replace("</head>", "");
-            codeHtmlIndente = codeHtmlIndente.replace("<body>", "");
-            codeHtmlIndente = codeHtmlIndente.replace("</body>", "");
-
-            return codeHtmlIndente;
+            return prettyPrintHtml(codeHtml);
         }
 
         return "";
@@ -71,23 +57,75 @@ public class BugService {
         if (code == null){
             return "";
         }
-        // Charge HTML in Document JSoup objet
-        Document document = Jsoup.parse(code);
+        return prettyPrintHtml(code);
 
-        // Use output method to get indented HTML
-        document.outputSettings().indentAmount(4).prettyPrint();
+    }
 
-        // Get new HTML code
-        String codeHtmlIndente = document.html();
-        codeHtmlIndente = codeHtmlIndente.replace("<html>", "");
-        codeHtmlIndente = codeHtmlIndente.replace("</html>", "");
-        codeHtmlIndente = codeHtmlIndente.replace("<head>", "");
-        codeHtmlIndente = codeHtmlIndente.replace("</head>", "");
-        codeHtmlIndente = codeHtmlIndente.replace("<body>", "");
-        codeHtmlIndente = codeHtmlIndente.replace("</body>", "");
+    private String prettyPrintHtml(String code) {
+        if (code == null || code.trim().isEmpty()) {
+            return "";
+        }
 
-        return codeHtmlIndente;
+        String trimmed = decodeCapturedMarkup(code.trim());
+        if (!looksLikeMarkup(trimmed)) {
+            return normalizeIndentation(trimmed);
+        }
 
+        Document document = Jsoup.parseBodyFragment(trimmed);
+        document.outputSettings()
+                .indentAmount(2)
+                .prettyPrint(true)
+                .outline(false)
+                .syntax(Document.OutputSettings.Syntax.html);
+        return collapseExtraBlankLines(document.body().html());
+    }
+
+    private boolean looksLikeMarkup(String code) {
+        return code.matches("(?s).*<\\s*/?\\s*[a-zA-Z][^>]*>.*");
+    }
+
+    private String decodeCapturedMarkup(String code) {
+        if (code.contains("&lt;") || code.contains("&gt;")) {
+            return Parser.unescapeEntities(code, false);
+        }
+        return code;
+    }
+
+    private String collapseExtraBlankLines(String code) {
+        return code.replace("\r\n", "\n")
+                .replace('\r', '\n')
+                .replaceAll("(?m)^[ \\t]+$", "")
+                .replaceAll("\\n{3,}", "\n\n")
+                .trim();
+    }
+
+    private String normalizeIndentation(String code) {
+        String[] lines = code.replace("\r\n", "\n").replace('\r', '\n').split("\n", -1);
+        int minIndent = Integer.MAX_VALUE;
+        for (String line : lines) {
+            if (line.trim().isEmpty()) {
+                continue;
+            }
+            int indent = 0;
+            while (indent < line.length() && Character.isWhitespace(line.charAt(indent))) {
+                indent++;
+            }
+            minIndent = Math.min(minIndent, indent);
+        }
+        if (minIndent == Integer.MAX_VALUE || minIndent == 0) {
+            return code.trim();
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for (String line : lines) {
+            if (line.length() >= minIndent) {
+                builder.append(line.substring(minIndent));
+            } else {
+                builder.append(line.trim());
+            }
+            builder.append('\n');
+        }
+        return builder.toString().trim();
     }
 
 

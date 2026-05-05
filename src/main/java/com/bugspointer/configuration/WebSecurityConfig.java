@@ -10,8 +10,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
@@ -30,11 +28,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     @Override
@@ -62,16 +55,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // restricted url
+                .antMatchers("/app/private/thanks").permitAll()
                 .antMatchers("/app/admin/**").hasRole("ADMIN")
                 .antMatchers("/app/private/**").hasAnyRole("ADMIN","USER")
                 // public url
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
+                .antMatchers("/widget/**").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/authentication").permitAll()
                 .antMatchers("/testPage").permitAll()
                 .antMatchers("/pollUser").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user/modalControl").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/widget/config").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
                 .antMatchers("/registerConfirm").permitAll()
@@ -79,15 +75,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/newUser/*").permitAll()//TODO: demande de connexion puis redirection vers newUser ?
                 .antMatchers(HttpMethod.POST, "/newUser/*/verify").permitAll()
                 .antMatchers("/pwLost").permitAll()
-                .antMatchers("/resetPassword/*/*").permitAll()
+                .antMatchers("/resetPassword/**").permitAll()
                 .antMatchers("/features").permitAll()
                 .antMatchers("/documentations").permitAll()
                 .antMatchers("/cgu").permitAll()
                 .antMatchers("/cgv").permitAll()
                 .antMatchers("/mentions").permitAll()
                 .antMatchers("/download").permitAll()
-                .antMatchers("/app/private/thanks").permitAll()
-                .antMatchers(HttpMethod.GET,"/modal").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")
@@ -100,7 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe().disable()
                 .sessionManagement()
                 .sessionFixation().migrateSession()
-                .invalidSessionUrl("/authentication?status=ERROR&message=Session expirée")
+                .invalidSessionUrl("/authentication?status=ERROR&message=Session%20expir%C3%A9e")
                 .and()
                 .logout()
                 .logoutUrl("/logout")

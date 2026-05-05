@@ -14,6 +14,9 @@
     <div class="container">
         <section>
             <form action="#" th:action="@{/app/private/account/delete/confirm}" th:object="${company}" method="post">
+                <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                    <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                </div>
                 <div class="cards account">
                     <h3>E-mail</h3>
                     <input type="text" th:field="*{mail}" id="mail" th:value="${company.getMail()}" readonly>

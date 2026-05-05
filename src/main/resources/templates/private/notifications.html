@@ -1,58 +1,128 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-  <title>Notifications</title>
+    <title>Notifications - BugsPointer</title>
     <meta name="robots" content="noindex">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>
+        .bugspointer-logo{display:none;}
+        .bp-toggle{height:22px;width:42px;appearance:none;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.12);position:relative;cursor:pointer;transition:.2s;}
+        .bp-toggle:before{content:"";position:absolute;left:3px;top:3px;height:14px;width:14px;border-radius:999px;background:#fff;transition:.2s;}
+        .bp-toggle:checked{background:#00E676;border-color:#00E676;}
+        .bp-toggle:checked:before{transform:translateX(19px);background:#08110D;}
+    </style>
 </head>
-<body>
-
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
     <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/navCompany.html}"></div>
 
-  <h1>Notifications</h1>
+    <main>
+        <section class="relative px-5 pb-16 pt-12 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto flex max-w-5xl flex-col gap-7">
+                <div class="rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
+                    <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                        Notifications
+                    </p>
+                    <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
+                        Choisissez les alertes qui comptent.
+                    </h1>
+                    <p class="mt-6 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
+                        Gardez les notifications utiles, coupez le reste, et adaptez BugsPointer au rythme de votre équipe.
+                    </p>
+                </div>
 
-  <div class="container">
-      <section>
-        <form class="cards account" action="#" th:action="@{/app/private/notifications}" th:object="${company}" method="post">
-            <h4>E-mail</h4>
-            <div class="row notifications">
-                <label for="mailNewBug" class="lab-notifications">New bug</label>
-                <input type="checkbox" class="cb-notifications" th:field="*{mailNewBug}" id="mailNewBug" th:value="${company.isMailNewBug()}">
-            </div>
-            <div class="row notifications">
-                <label for="mailInactivity" class="lab-notifications">Inactivity</label>
-                <input type="checkbox" class="cb-notifications" th:field="*{mailInactivity}" id="mailInactivity" th:value="${company.isMailInactivity()}">
-            </div>
-            <div class="row notifications">
-                <label for="mailNewFeature" class="lab-notifications">New feature</label>
-                <input type="checkbox" class="cb-notifications" th:field="*{mailNewFeature}" id="mailNewFeature" th:value="${company.isMailNewFeature()}">
-            </div>
-            <input type="hidden" th:field="*{companyPublicKey}" th:value="${company.getCompanyPublicKey()}" readonly>
-            <button type="submit" class="submit" name="action" value="updateMail">Update</button>
-        </form>
-      </section>
+                <div class="grid gap-5 lg:grid-cols-2">
+                    <section>
+                        <form class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/notifications}" th:object="${company}" method="post">
+                            <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                                <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                            </div>
+                            <div class="mb-5 border-b border-white/10 pb-5">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Canal principal</p>
+                                <h2 class="mt-2 font-display text-3xl leading-none text-white">E-mail</h2>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <label class="flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-white/10 bg-black/15 p-4">
+                                    <span>
+                                        <span class="block font-bold text-white">New bug</span>
+                                        <span class="mt-1 block text-sm leading-5 text-white/58">Recevoir une alerte à chaque nouveau signalement.</span>
+                                    </span>
+                                    <input type="checkbox" class="bp-toggle" th:field="*{mailNewBug}" id="mailNewBug" th:value="${company.isMailNewBug()}">
+                                </label>
+                                <label class="flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-white/10 bg-black/15 p-4">
+                                    <span>
+                                        <span class="block font-bold text-white">Inactivity</span>
+                                        <span class="mt-1 block text-sm leading-5 text-white/58">Recevoir un rappel en cas d’inactivité.</span>
+                                    </span>
+                                    <input type="checkbox" class="bp-toggle" th:field="*{mailInactivity}" id="mailInactivity" th:value="${company.isMailInactivity()}">
+                                </label>
+                                <label class="flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-white/10 bg-black/15 p-4">
+                                    <span>
+                                        <span class="block font-bold text-white">New feature</span>
+                                        <span class="mt-1 block text-sm leading-5 text-white/58">Être prévenu des nouveautés importantes.</span>
+                                    </span>
+                                    <input type="checkbox" class="bp-toggle" th:field="*{mailNewFeature}" id="mailNewFeature" th:value="${company.isMailNewFeature()}">
+                                </label>
+                            </div>
+                            <input type="hidden" th:field="*{companyPublicKey}" th:value="${company.getCompanyPublicKey()}" readonly>
+                            <button type="submit" class="mt-5 min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" name="action" value="updateMail">Mettre à jour</button>
+                        </form>
+                    </section>
 
-      <section th:if="${company.getCompanyPhoneNumber() != null}">
-          <form class="cards account" action="#" th:action="@{/app/private/notifications}" th:object="${company}" method="post">
-              <h4>SMS</h4>
-              <div class="row notifications">
-                  <label for="smsNewBug" class="lab-notifications">New bug</label>
-                  <input type="checkbox" class="cb-notifications" th:field="*{smsNewBug}" id="smsNewBug" th:value="${company.isSmsNewBug()}">
-              </div>
-              <div class="row notifications">
-                  <label for="smsInactivity" class="lab-notifications">Inactivity</label>
-                  <input type="checkbox" class="cb-notifications" th:field="*{smsInactivity}" id="smsInactivity" th:value="${company.isSmsInactivity()}">
-              </div>
-              <div class="row notifications">
-                  <label for="smsNewFeature" class="lab-notifications">New feature</label>
-                  <input type="checkbox" class="cb-notifications" th:field="*{smsNewFeature}" id="smsNewFeature" th:value="${company.isSmsNewFeature()}">
-              </div>
-              <input type="hidden" id="phone" th:field="*{companyPhoneNumber}" th:value="${company.getCompanyPhoneNumber()}">
-              <input type="hidden" th:field="*{companyPublicKey}" th:value="${company.getCompanyPublicKey()}" readonly>
-              <button type="submit" class="submit" name="action" value="updateSms">Update</button>
-          </form>
-      </section>
-  </div>
+                    <section th:if="${company.getCompanyPhoneNumber() != null}">
+                        <form class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/notifications}" th:object="${company}" method="post">
+                            <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                                <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                            </div>
+                            <div class="mb-5 border-b border-white/10 pb-5">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Canal secondaire</p>
+                                <h2 class="mt-2 font-display text-3xl leading-none text-white">SMS</h2>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <label class="flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-white/10 bg-black/15 p-4">
+                                    <span class="font-bold text-white">New bug</span>
+                                    <input type="checkbox" class="bp-toggle" th:field="*{smsNewBug}" id="smsNewBug" th:value="${company.isSmsNewBug()}">
+                                </label>
+                                <label class="flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-white/10 bg-black/15 p-4">
+                                    <span class="font-bold text-white">Inactivity</span>
+                                    <input type="checkbox" class="bp-toggle" th:field="*{smsInactivity}" id="smsInactivity" th:value="${company.isSmsInactivity()}">
+                                </label>
+                                <label class="flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-white/10 bg-black/15 p-4">
+                                    <span class="font-bold text-white">New feature</span>
+                                    <input type="checkbox" class="bp-toggle" th:field="*{smsNewFeature}" id="smsNewFeature" th:value="${company.isSmsNewFeature()}">
+                                </label>
+                            </div>
+                            <input type="hidden" id="phone" th:field="*{companyPhoneNumber}" th:value="${company.getCompanyPhoneNumber()}">
+                            <input type="hidden" th:field="*{companyPublicKey}" th:value="${company.getCompanyPublicKey()}" readonly>
+                            <button type="submit" class="mt-5 min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" name="action" value="updateSms">Mettre à jour</button>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        </section>
+    </main>
 
+    <div th:replace="~{include/footer.html}"></div>
 </body>
 </html>

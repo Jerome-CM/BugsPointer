@@ -3,6 +3,7 @@ package com.bugspointer.controller;
 import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
+import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.entity.Poll;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
@@ -49,8 +50,8 @@ public class Home {
     String getHome(Model model){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("nbrBugReported", 277 ); // bugService.getNbrBugReportedForIndex());
-        model.addAttribute("averageBugByCompany", 4 ); //bugService.getAverageNbrBugByCompanyForIndex());
-        model.addAttribute("averageSatisfyingUser", pollService.getAverageSatisfyingUserForIndex());
+        model.addAttribute("companyCount", 32 );
+        model.addAttribute("averageSatisfyingUser", "9,4");
         viewCounterService.addVisit(EnumViewCounterPage.INDEX);
         return "index";
     }
@@ -59,11 +60,9 @@ public class Home {
     String getDownloadPage(Model model, HttpServletRequest request){
 
         if(userAuthenticationUtil.isUserLoggedIn()){
-            model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-            model.addAttribute("companyId", companyService.getCompanyWithToken(request).getCompanyId());
-            viewCounterService.addVisit(EnumViewCounterPage.DOWNLOAD);
-            return "public/download";
+            return "redirect:/app/private/onboarding/widget";
         } else {
+            request.getSession().setAttribute("redirectAfterLogin", "/app/private/onboarding/widget");
             return "redirect:authentication?status=ERROR&message=Merci de vous connecter";
         }
 
@@ -76,15 +75,12 @@ public class Home {
     }
 
     @GetMapping("documentations")
-    String getDocumentations(Model model){
+    String getDocumentations(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        if(userAuthenticationUtil.isUserLoggedIn()){
+            model.addAttribute("publicKey", companyService.getCompanyWithToken(request).getPublicKey());
+        }
         return "public/documentations";
-    }
-
-    @GetMapping("modal")
-    String getModalForTest(Model model){
-        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        return "download/modal";
     }
 
     @GetMapping("cgu")

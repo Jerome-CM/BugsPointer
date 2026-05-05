@@ -45,14 +45,13 @@ public class ModalService implements IModal {
         boolean description;
         boolean key;
         boolean envoi = false;
-        Company company;
+        Company company = null;
         Date dateJour = new Date();
         Date dateDernierEnvoi = null;
-        Date dateIpEnvoi;
         long timeSeconde = 60;
         boolean wantNewBugNotif = false;
 
-        if (dto.getBot().isEmpty())
+        if (dto.getBot() == null || dto.getBot().isEmpty())
         {
             bot = true;
         } else {
@@ -60,7 +59,7 @@ public class ModalService implements IModal {
             return new Response(EnumStatus.ERROR, null, "");
         }
 
-        if (dto.getDescription().length()>10){
+        if (dto.getDescription().length() >= 5){
             if(dto.getDescription().contains("<script>")){
                 description = false;
                 return new Response(EnumStatus.ERROR, null, "Merci de ne pas signaler de balise <script> dans la description");
@@ -73,10 +72,15 @@ public class ModalService implements IModal {
 
         if (dto.getKey().equals("LaClefDeTest")) {
             test = true;
+            if (dto.getMail() == null || dto.getMail().trim().isEmpty()) {
+                return new Response(EnumStatus.ERROR, null, "Merci d'indiquer votre e-mail pour recevoir le rapport de test");
+            }
         }
 
-        Optional<Company> companyOptional = companyRepository.findByPublicKey(dto.getKey());
-        if (companyOptional.isPresent()){
+        Optional<Company> companyOptional = test ? Optional.empty() : companyRepository.findByPublicKey(dto.getKey());
+        if (test) {
+            key = true;
+        } else if (companyOptional.isPresent()){
 
             company = companyOptional.get();
             if (company.isEnable()){
@@ -95,16 +99,9 @@ public class ModalService implements IModal {
         }
 
         if (dto.getAdresseIp() != null && !test){
-            //On récupère la liste des bugs reçus de cette adresse Ip
-            List<Bug> bugs = bugRepository.findAllByAdresseIp(dto.getAdresseIp());
-
-            if (!bugs.isEmpty()){
-                int i = bugs.size()-1;
-                dateIpEnvoi = bugs.get(i).getDateCreation();
-                boolean ok = differenceDate(dateIpEnvoi, dateJour, timeSeconde);
-                if (!ok){
-                    return new Response(EnumStatus.ERROR, null, "Merci de ne pas envoyer plus d'un rapport toutes les minutes");
-                }
+            Optional<Date> lastIpSendDate = bugRepository.findLastDateCreationByAdresseIp(dto.getAdresseIp());
+            if (lastIpSendDate.isPresent() && !differenceDate(lastIpSendDate.get(), dateJour, timeSeconde)) {
+                return new Response(EnumStatus.ERROR, null, "Merci de ne pas envoyer plus d'un rapport toutes les minutes");
             }
         }
 
@@ -140,24 +137,21 @@ public class ModalService implements IModal {
             bug.setCodeLocation(dto.getCodeLocation());
             bug.setOs(dto.getOs());
             bug.setBrowser(dto.getBrowser());
+            bug.setBrowserLanguage(dto.getBrowserLanguage());
+            bug.setDeviceType(dto.getDeviceType());
             bug.setScreenSize(dto.getScreenSize());
             bug.setDateCreation(dateJour);
             bug.setEtatBug(EnumEtatBug.NEW);
             bug.setCompany(company);
-            bug.setAdresseIp(dto.getAdresseIp());
+            bug.setAdresseIp(dto.getAdresseIp() != null ? dto.getAdresseIp() : "Non collectée");
             if (envoi){
                 bug.setDateEnvoi(dateJour);
             }
             try {
                 if (!test) {
-                    Bug savedBug = new Bug();
-                    try{
-                        savedBug = bugRepository.save(bug);
-                        Utility.saveLog(bug.getCompany().getCompanyId(), Action.SAVE, What.BUG, "#"+ savedBug.getId(), null, null);
-                        log.info("Company #{} save a new bug #{}",savedBug.getCompany().getCompanyId(), savedBug.getId());
-                    } catch (Exception e){
-                        log.error("Impossible to save a bug for company#{} : {}", bug.getCompany().getCompanyId(), e.getMessage());
-                    }
+                    Bug savedBug = bugRepository.save(bug);
+                    Utility.saveLog(bug.getCompany().getCompanyId(), Action.SAVE, What.BUG, "#"+ savedBug.getId(), null, null);
+                    log.info("Company #{} save a new bug #{}",savedBug.getCompany().getCompanyId(), savedBug.getId());
 
                     // Notification new mail si notification activée
                     Optional<CompanyPreferences> notifOpt = companyPreferencesRepository.findByCompany(company);
@@ -190,10 +184,6 @@ public class ModalService implements IModal {
                     }
 
                 } else {
-                    String codeLoc = dto.getCodeLocation();
-                    codeLoc = codeLoc.replace("<", "&lt;");
-                    codeLoc = codeLoc.replace(">", "&gt;");
-                    bug.setCodeLocation(codeLoc);
                     Response response = mailService.sendMailTest(dto.getMail(), bug);
                     if (response.getStatus().equals(EnumStatus.OK)) {
                         log.info("TestPage report send");
@@ -202,7 +192,7 @@ public class ModalService implements IModal {
                 return new Response(EnumStatus.OK, null, "Envoie avec succès");
             }
             catch (Exception e){
-                log.error("Error : {}", e.getMessage());
+                log.error("Impossible to save or notify bug report for key {}: {}", dto.getKey(), e.getMessage(), e);
                 return new Response(EnumStatus.ERROR, null, "Une erreur est survenue, merci de recommencer");
             }
         }

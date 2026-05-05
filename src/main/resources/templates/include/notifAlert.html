@@ -1,2 +1,94 @@
+<style>
+    .bp-notice {
+        position: fixed;
+        top: 18px;
+        left: 50%;
+        z-index: 9999;
+        display: grid;
+        grid-template-columns: 10px 1fr;
+        width: min(520px, calc(100vw - 32px));
+        gap: 12px;
+        padding: 13px 16px;
+        transform: translate(-50%, -140%);
+        animation: bp-notice-slide 5.8s cubic-bezier(.2, .8, .2, 1) forwards;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.76);
+        background: rgba(6, 16, 12, 0.94);
+        box-shadow: 0 18px 54px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(16px);
+        font-family: "Inter", "DM-Sans", system-ui, sans-serif;
+        pointer-events: none;
+    }
 
-  <div th:if="${status != null}" th:class="${status=='ERROR'} ? 'alert notifAlert' : 'notification notifAlert'" th:text="${notification}"></div>
+    .bp-notice::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        margin-top: 6px;
+        border-radius: 999px;
+        background: #00E676;
+        box-shadow: 0 0 24px rgba(0, 230, 118, 0.55);
+    }
+
+    .bp-notice-error {
+        border-color: rgba(248, 113, 113, 0.34);
+        background: linear-gradient(135deg, rgba(38, 10, 12, 0.96), rgba(6, 16, 12, 0.92));
+    }
+
+    .bp-notice-error::before {
+        background: #ff5f5f;
+        box-shadow: 0 0 24px rgba(255, 95, 95, 0.45);
+    }
+
+    .bp-notice-success {
+        border-color: rgba(0, 230, 118, 0.28);
+    }
+
+    .bp-notice-title {
+        margin: 0 0 4px 0;
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 900;
+        line-height: 1.15;
+        text-transform: uppercase;
+    }
+
+    .bp-notice-message {
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 700;
+        line-height: 1.38;
+    }
+
+    @keyframes bp-notice-slide {
+        0% {
+            opacity: 0;
+            transform: translate(-50%, -140%);
+        }
+        12%, 78% {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+        100% {
+            opacity: 0;
+            transform: translate(-50%, -140%);
+            visibility: hidden;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .bp-notice {
+            top: 12px;
+            width: calc(100vw - 24px);
+            padding: 12px 14px;
+        }
+    }
+</style>
+
+<div th:if="${status != null}" th:class="${status=='ERROR'} ? 'bp-notice bp-notice-error' : 'bp-notice bp-notice-success'" role="status" aria-live="polite">
+    <div>
+        <p class="bp-notice-title" th:text="${status=='ERROR'} ? 'Action requise' : 'Confirmation'">Confirmation</p>
+        <p class="bp-notice-message" th:text="${notification}">Notification</p>
+    </div>
+</div>

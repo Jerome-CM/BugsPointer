@@ -6,186 +6,114 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" th:href="@{/css/img/icones/BP.ico}" type="image/x-icon">
-    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
-    <link th:href="@{/css/modalStyleTestPage.css}" rel="stylesheet" />
-    <script type="text/javascript" th:src="@{/js/modalControlTestPage.js}"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
-    <title>Tester la puissance de BugsPointer</title>
-    <meta name="description" content="Notre page de test vous permet d'utiliser les fonctionnalités de BugsPointer. Déclarez un bug sur cette page et recevez un rapport de bug par mail">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <title>Tester BugsPointer - page de démonstration du signalement de bug</title>
+    <meta name="description" content="Essayez BugsPointer sur une page de démonstration. Signalez un bug, pointez une zone et recevez un rapport de test par e-mail.">
     <meta name="keywords" content="test, rapport de bug, signalement de problème, outil de rapport, expérience utilisateur, site web sans erreur">
-    <meta name="robots" content="all">
-    <style>
-        html,body{
-            padding: 0;
-            margin: 0;
-            font-family: "Raleway", sans-serif;
-        }
-        *{
-            box-sizing:border-box;
-        }
-
-        h1,h2,p,ul{
-            text-align:center;
-            margin:25px auto;
-        }
-
-        .container{
-            width:95%;
-            display:flex;
-            justify-content: space-around;
-            align-items: center;
-            margin: 0 auto;
-        }
-
-        .cards{
-            text-align:center;
-            padding: 5px 10px;
-            margin: 15px 0;
-            border-radius: 5px;
-            box-shadow: 0 0 5px grey;
-        }
-
-        li{
-            list-style: none;
-        }
-
-        footer{
-            width: 100%;
-            padding: 20px;
-            background-color: grey;
-            color: darkgrey;
-            text-align: center;
-        }
-
-        .container img {
-            width: 200px;
-        }
-
-        p span{
-            color: red;
-            font-family: sans-serif;
-        }
-
-        footer a{
-            font-weight: bold;
-            color: #FFFFFF;
-        }
-
-        @media only screen and (max-width: 599px){
-            .container{
-                flex-direction: column;
-                width: 100%;
-            }
-            ul{
-                padding: 0;
-            }
-
-            .cards{
-                width: 90%;
-                margin: 10px auto;
-
-            }
-        }
-
-    </style>
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bugspointer.com/testPage">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Tester BugsPointer - page de démonstration">
+    <meta property="og:description" content="Testez le widget BugsPointer sans créer de compte et recevez un rapport par e-mail.">
+    <meta property="og:url" content="https://bugspointer.com/testPage">
+    <meta property="og:site_name" content="BugsPointer">
+    <meta name="twitter:card" content="summary">
 </head>
-    <body>
+<body class="min-h-screen bg-[#06100c] font-sans text-white">
+    <main class="relative overflow-hidden px-5 py-10 sm:px-8 lg:px-12">
+        <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_10%,rgba(0,230,118,0.18),transparent_28rem),radial-gradient(circle_at_80%_25%,rgba(183,255,74,0.10),transparent_30rem)]"></div>
+        <div class="absolute inset-0 -z-10 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:72px_72px]"></div>
 
-    <h1>Tester Bugspointer ! </h1>
+        <section class="mx-auto max-w-5xl py-10 text-center">
+            <p class="mx-auto mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-black uppercase tracking-wider text-pointer-green">
+                Zone de test
+            </p>
+            <h1 class="font-display text-5xl leading-none text-white sm:text-6xl">
+                Tester BugsPointer
+            </h1>
+            <p class="mx-auto mt-6 max-w-3xl text-lg leading-8 text-white/70">
+                Voici une page volontairement imparfaite pour essayer le signalement de bug dans un environnement sans risque.
+            </p>
+        </section>
 
-    <h2>Voici une page de test avec certains bugs que vous pouvez utiliser afin de tester la puissance de Bugspointer.</h2>
+        <section class="mx-auto flex max-w-5xl flex-col gap-5 rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_32px_90px_rgba(0,0,0,0.28)] backdrop-blur md:flex-row md:p-7">
+            <div class="w-full md:w-5/12">
+                <h2 class="text-left text-2xl font-black text-white">Mode d'emploi</h2>
+                <p class="mt-3 text-left leading-7 text-white/65">
+                    Utilisez le bouton BugsPointer flottant, pointez une zone, puis recevez le rapport de test par e-mail.
+                </p>
+            </div>
+            <ul class="flex w-full flex-col gap-3 text-left text-white/75 md:w-7/12">
+                <li class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Cliquez sur le bouton BugsPointer.</li>
+                <li class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Suivez les indications du formulaire de signalement.</li>
+                <li class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Recevez les données de ce test par e-mail.</li>
+            </ul>
+        </section>
 
-    <p>Mode d'emploi : </p>
-    <ul>
-        <li>Cliquez sur le logo ou sur le lien "Signaler un bug" en bas de la page</li>
-        <li>Suivez les indications du formulaire</li>
-        <li>Recevez les données de ce test par mail</li>
-    </ul>
+        <section class="mx-auto mt-8 flex max-w-5xl flex-col flex-wrap gap-4 md:flex-row">
+            <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-[calc(50%-0.5rem)]">
+                <h2 class="text-left text-2xl font-black text-white">Mon titre 1</h2>
+                <p class="mt-3 text-left leading-7 text-white/65">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, voluptas?</p>
+            </article>
+            <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-[calc(50%-0.5rem)]">
+                <h2 class="text-left text-2xl font-black text-white">Mon titre 20</h2>
+                <p class="mt-3 text-left leading-7 text-white/65">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, commodi.</p>
+            </article>
+            <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-[calc(50%-0.5rem)]">
+                <h2 class="text-left text-2xl font-black text-white">Mon titre 3</h2>
+                <p class="mt-3 text-left leading-7 text-white/65">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, voluptas?</p>
+            </article>
+            <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-[calc(50%-0.5rem)]">
+                <h2 class="text-left text-2xl font-black text-white">Mon titre 4</h2>
+                <p class="mt-3 text-left leading-7 text-white/65">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, commodi.</p>
+            </article>
+        </section>
 
-    <br><hr><br>
+        <section class="mx-auto mt-8 flex max-w-5xl flex-col gap-4 md:flex-row">
+            <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 text-center shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-6/12">
+                <img class="mx-auto h-44 w-44 object-contain" src="/css/img/utilisateur.gif" alt="Security data">
+                <p class="mt-4 text-white/70">Un logo qui fonctionne correctement</p>
+            </article>
+            <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 text-center shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-6/12">
+                <img class="mx-auto h-44 w-44 object-contain" src="/css/img/icones/fileError.pg" alt="File error">
+                <p class="mb-4 text-white/70">Une erreur sur l'affichage d'une image</p>
+            </article>
+        </section>
 
-    <div class="container">
-        <div class="cards">
-            <h2>Mon titre 1</h2>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, voluptas?</p>
-        </div>
-        <div class="cards">
-            <h2>Mon titre 20</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, commodi.</p>
-        </div>
-    </div>
+        <section class="mx-auto my-8 max-w-5xl rounded-lg border border-red-400/20 bg-red-500/10 p-5 text-center">
+            <p class="text-lg text-white/85">Aujourd'hui nous sommes le : <span class="font-black text-red-300">Error 500 : Server is timeout</span></p>
+        </section>
+    </main>
 
-    <div class="container">
-        <div class="cards">
-            <h2>Mon titre 3</h2>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, voluptas?</p>
-        </div>
-        <div class="cards">
-            <h2>Mon titre 4</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, commodi.</p>
-        </div>
-    </div>
-    <div class="container">
-        <div class="cards">
-            <img src="/css/img/utilisateur.gif" alt="Security data">
-            <p>Un logo qui fonctionne correctement</p>
-        </div>
-        <div class="cards">
-            <p>La réponse est dans cette photo, regarder bien la voiture rouge : </p>
-            <img src="/css/img/icones/fileError.png" alt="File error">
-        </div>
-    </div>
-
-    <p>Aujourd'hui nous sommes le : <span>Error 500 : Server is timeout</span></p>
-    <button class="bugspointer-logo" id="bugspointer_logo">
-        <div class="bugspointer-objet-logo">
-            <div class="bugspointer-objet-ellispe"></div>
-            <span class="bugspointer-objet-report span-desktop">Signaler un bug</span>
-            <span class="bugspointer-objet-report span-mobile">Bug</span>
-        </div>
-    </button>
-    <footer>
-        <a class="bugspointer-open-popup" id="bugspointer_open_popup">Signaler un bug</a> - 2023 - Ceci est une page de test
+    <footer class="bg-[#101814] px-5 py-6 text-center text-white/60">
+        <span class="font-black text-pointer-green">BugsPointer</span> - 2026 - Ceci est une page de test
     </footer>
 
-    <div class="bugspointer-popup" id="bugspointer_popup">
-        <form class="bugspointer-popup-container" method="post" action="/api/user/modalControl">
-            <div class="bugspointer-popup-header">
-                <span class="bugspointer-popup-titre">Signaler un nouveau bug</span>
-                <span class="bugspointer-close-popup" id="bugspointer_close_popup">&times;</span>
-            </div>
-            <div id="bugspointer-message-success">
-                <p>Merci infiniment pour votre envoi <br><br><br>Donnez votre avis et façonnez l'avenir de notre produit</p>
-                <a class="bugspointer-btn-action" target="_blank" id="bugspointer-lien-success">Evaluer en 3 questions</a>
-            </div>
-            <div class="bugspointer-popup-content" id="bugspointer-affichage">
-                <label for="bugspointer-urlPointed">Url avec ce bug</label>
-                <input type="text" name="url" class="bugspointer-popup-content-texturl" id="bugspointer-urlPointed" value="" readonly>
-
-                <button class="bugspointer-popup-btn-submit" type="button" id="bugspointer-popup-btn-pointer" title="Cliquez-ici avant d'envoyer le formulaire">Pointer le bug</button>
-                <p class="bugspointer-popup-pointer-bug-text" id="bugspointer-popup-pointer-bug-text">Merci de sélectionner l'endroit contenant le bug en cliquant sur le bouton ci dessus</p>
-
-                <textarea name="codeLocation" id="bugspointer-popup-pointer-bug" readonly hidden></textarea>
-
-                <label>Description du bug</label>
-                <textarea class="bugspointer-popup-content-textdescription" name="description" minlength="10" required></textarea>
-                <input type="text" name="bot" class="bugspointer-popup-content-inputbot">
-
-                <input type="hidden" name="os" id="bugspointer-popup-os" readonly>
-                <input type="hidden" name="browser" id="bugspointer-popup-browser" readonly>
-                <input type="hidden" name="screenSize" id="bugspointer-popup-screen" readonly>
-                <input type="hidden" name="key" id="key" readonly>
-
-                <label for="bugspointer-mail-test">Afin de découvrir le rapport que vous recevrez, veuillez indiquer votre mail ci-dessous</label>
-                <input type="text" name="mail" class="bugspointer-popup-content-texturl" id="bugspointer-mail-test" placeholder="Mail">
-
-                <p class="small-text">Ce mail ne sera pas conservé ni utilisé à des fins commerciales</p>
-
-                <button class="bugspointer-popup-btn-submit" type="submit" id="bugspointer-popup-btn-submit" disabled title="Veuillez cliquer sur le bouton 'Pointer le bug' avant d'envoyer le formulaire">Envoyer mon rapport</button>
-            </div>
-        </form>
-    </div>
-    </body>
-    </html>
+    <script th:src="@{/widget/v1/modalPointer.js}"
+            data-public-key="LaClefDeTest"
+            data-collect-email="true"
+            data-button-text="Signaler un bug de test"
+            data-title="Tester BugsPointer"
+            data-description-label="Décrivez le bug à recevoir par e-mail"
+            defer></script>
+</body>
+</html>

@@ -1,234 +1,283 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Comment utiliser BugsPointer - Documentations / API</title>
-    <meta name="description" content="Trouvez toutes les réponses à vos questions sur l'utilisation de BugsPointer dans notre documentation">
-    <meta name="keywords" content="utiliser BugsPointer, comment avoir BugsPointer, download, téléchargement, API, clé de sécurité, publicKey, ">
-    <meta name="robots" content="all">
+    <title>Documentation BugsPointer - bouton, lien et personnalisation du widget</title>
+    <meta name="description" content="Installez BugsPointer avec un bouton flottant ou un lien placé dans votre site. Configurez la clé publique, vérifiez le domaine et personnalisez le widget.">
+    <meta name="keywords" content="documentation BugsPointer, modalPointer, data-public-key, widget bug report, bouton signalement bug, lien signalement bug">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bugspointer.com/documentations">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Documentation BugsPointer - bouton, lien et personnalisation du widget">
+    <meta property="og:description" content="Guide d’installation du widget BugsPointer avec bouton flottant ou lien intégré au site.">
+    <meta property="og:url" content="https://bugspointer.com/documentations">
+    <meta property="og:site_name" content="BugsPointer">
+    <meta name="twitter:card" content="summary">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>
+        .bugspointer-logo{display:none;}
+        .doc-hero{min-height:auto!important;}
+        .doc-sidebar-nav{overflow-y:visible;}
+        .doc-content section{scroll-margin-top:96px;}
+        .doc-content h2,.doc-content h3{scroll-margin-top:96px;}
+        .doc-content code{display:inline;max-width:100%;vertical-align:baseline;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(6,16,12,.86);padding:.18rem .42rem;color:#B7FF4A;font-size:.9rem;line-height:1.35;white-space:normal;}
+        .code-block{white-space:pre-wrap;word-break:break-word;}
+        @media (min-width:1024px){
+            .doc-sidebar-slot{position:sticky;top:20px;align-self:start;height:calc(100vh - 40px);height:calc(100dvh - 40px);}
+            .doc-sidebar{height:100%;display:flex;flex-direction:column;overflow:hidden;}
+            .doc-sidebar-nav{min-height:0;flex:1 1 auto;overflow-y:auto;}
+        }
+    </style>
 </head>
-<body>
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
+    <div th:replace="~{include/nav.html}"></div>
 
-    <div th:replace="~{include/navCompany.html}"></div>
-
-
-    <div class="container-documentation">
-        <div class="menu menu-documentation" id="menu">
-            <button class="nav-toggler" id="navDocumentation-toggler" onclick="window.location.href='#navDocumentation-toggler';">
-                <!--<span class="navDashboard-toggler-icon"></span>--><img src="/css/img/menu_burger_noir.png" alt="">
-             </button>
-            <h4><a href="#integration">Intégration</a></h4>
-            <ul>
-                <li><a href="#download">Télécharger les fichiers</a></li>
-                <li><a href="#implement">Implémenter les fichiers sur votre site</a></li>
-            </ul>
-            <h4><a href="#configuration">Configuration</a></h4>
-            <ul>
-                <li><a href="#key">Renseigner votre clé de sécurité</a></li>
-                <li><a href="#domain">Renseigner votre domaine</a></li>
-            </ul>
-            <h4><a href="#customisation">Customisation</a></h4>
-            <ul>
-                <li><a href="#link">Lien sur votre page</a></li>
-                <li><a href="#logo">Logo sur votre page</a></li>
-            </ul>
-            <h4><a href="#reportBug">Déclarer un bug</a></h4>
-            <ul>
-                <li><a href="#findBug">Comment déclarer un bug</a></li>
-            </ul>
-            <h4><a href="#manageBug">Gestion des bugs</a></h4>
-            <ul>
-                <li><a href="#newBug">Nouveau bug</a></li>
-                <li><a href="#pendingBug">Bug en cours</a></li>
-                <li><a href="#solvedBug">Bug résolu</a></li>
-                <li><a href="#ignoredBug">Bug ignoré</a></li>
-            </ul>
-        </div>
-
-        <div class="container anti-margin">
-            <h1>Documentations</h1>
-
-           <section>
-                <div class="cards w40 card-documentation-youtube">
-                    <h2>Retrouver nos tutos sur <span style="font-weight: bold">Youtube</span></h2>
-                    <div class="container-row">
-                        <p>Vous pouvez retrouver toutes nos vidéos sur notre chaine, qui vous guideront à travers l'utilisation de l'outil pour les différentes étapes d'intégration ou de customisation. <br><br>
-                            Il vous manque une aide ? <br> Faites-le savoir à : contact@bugspointer.com</p>
-                        <a href="https://www.youtube.com/channel/UCEN7__zrKoAiL57H4kMHQug" class="btn-action btn-all-youtube">Voir la chaine</a>
-                   </div>
-                </div>
-            </section>
-
-            <hr style="color: black;width: 100%;margin-bottom: 30px;">
-
-            <div class="text_align_left">
-                 <h2 class="space" id="integration">Intégration</h2>
-
-                <div class="warning border-orange">
-                    <img th:src="@{/css/img/icones/camera.gif}" alt="Caméra">
-                    <span>Une vidéo tuto est bientôt prévue pour cette section</span>
-                </div>
-                
-                <h3 id="download" class="h3_documentation">Télécharger les fichiers</h3>
-                <div class="card_doc"><p>Pour télécharger le projet rendez-vous sur l’url : <a target="_blank" th:href="@{/download}">https://www.bugspointer.com/download</a> <br>
-                    Vous devez avoir un compte valide pour obtenir les différents fichiers</p>
-                </div>
-                <h3 id="implement" class="h3_documentation">Implémenter les fichiers sur votre site</h3>
-                <div class="card_doc">
-                    <p>
-                    Pour profiter de BugsPointer sur votre site, il vous suffit de copier/coller les fichiers que vous avez téléchargés. <br>
-                    Placez-les dans votre arborescence : <br><br>
-
-                    lien.html<br>
-                    bouton.html<br>
-                    modalStyle.css a placé dans votre dossier de style<br>
-                    modalControl.js a placé dans votre dossier javascript<br>
-                    modal.html a placé à la racine de votre site
+    <main>
+        <section class="doc-hero relative px-5 pb-12 pt-12 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto max-w-7xl">
+                <div class="mx-auto max-w-4xl text-center">
+                    <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                        Documentation BugsPointer
                     </p>
-
-                    <p>Pour que les fichiers soient visibles sur votre page, vous devez ensuite : <br><br>
-                    <ul>
-                        <li>inclure un lien et/ou un bouton sur la page à débugger</li>
-                        <li>inclure le fichier modalStyle.css et modalControl.js dans votre balise <code>&lt;head&gt;&lt;/head&gt;</code> </li>
-                        <li>inclure en fin de page le fichier modal.html</li>
-                    </ul>
+                    <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
+                        Installer et personnaliser le widget BugsPointer.
+                    </h1>
+                    <p class="mx-auto mt-6 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
+                        Une clé publique, deux modes d’affichage et une personnalisation centralisée depuis votre dashboard. Le site client ne maintient aucun fichier BugsPointer.
                     </p>
-                    
-                    <div class="warning border-orange">
-                        <img th:src="@{/css/img/alerte.gif}" alt="Gyrophare">
-                        <span>L'intégration des fichiers est différente selon le langage utilisé : <a href="https://chat.openai.com/share/a7f57638-408a-4322-86c4-193b2f085c96">Voir des exemples</a></span>
-                    </div>
-
-                </div>
-
-                 <h2 class="space" id="configuration">Configuration</h2>
-
-                <div class="warning border-orange">
-                    <img th:src="@{/css/img/icones/camera.gif}" alt="Caméra">
-                    <span>Une vidéo tuto est bientôt prévue pour cette section</span>
-                </div>
-
-                <h3 id="key" class="h3_documentation">Renseigner votre clé public</h3>
-                <div class="card_doc">
-                    <p>
-                        Rendez-vous dans votre page Account pour trouver votre Public Key. <br><br>
-                        Coller là dans le fichier modalControl.js à la ligne 1, à la place de YOUR_KEY_HERE :<br><br>
-                        <code>1| const key = "YOUR_KEY_HERE"; /* Ajoutez votre clé publique ici, entre les "" */</code>
-                        <br><br>
-                    </p>
-                </div>
-
-                <h3 id="domain" class="h3_documentation">Renseigner votre domaine</h3>
-                <div class="card_doc">
-                    <p>Rendez-vous dans votre page Account et assurez-vous d'avoir correctement renseigné la partie " Domaine "
-                    <br><br>
-                    <p>Vous pouvez le vérifier ici ( si vous êtes connecté ) : <a th:href="@{/app/private/account#domain}">https://www.bugspointer.com/app/private/account#domain</a></p>
-                    </p>
-                </div>
-
-                <div class="warning border-orange">
-                    <img th:src="@{/css/img/alerte.gif}" alt="Gyrophare">
-                    <span>L'intégration de votre clé publique et de votre nom de domaine est obligatoire pour recevoir vos rapports de bugs</span>
-                </div>
-
-                 <h2 class="space" id="customisation">Customisation</h2>
-
-                <div class="warning border-orange">
-                    <img th:src="@{/css/img/icones/camera.gif}" alt="Caméra">
-                    <span>Une vidéo tuto est bientôt prévue pour cette section</span>
-                </div>
-
-                <h3 id="link" class="h3_documentation">Lien sur votre page</h3>
-                <div class="card_doc">
-                    <p>La customisation du lien contenant le formulaire n'appartient qu'à vous. Vous êtes libre d'appliquer le style ainsi que le message que vous souhaitez sur ces boutons</p>
-                    <br>
-                    <code>&lt;a class="bugspointer-open-popup" id="bugspointer_open_popup"&gt;Signaler un bug&lt;/a&gt;</code>
-                    <br><br>
-                    <p>Cependant, vous pouvez ajouter n'importe quelles classes <strong>en plus de bugspointer-open-popup</strong> mais, <span style="color:red; font-weight: bold;">vous ne devait en aucun cas toucher à l'id</span></p>
-                </div>
-
-                <h3 id="logo" class="h3_documentation">Logo sur votre page</h3>
-                <div class="card_doc">
-                    <p>La customisation du logo est également possible. Pour cela, rendez-vous dans le fichier modalStyle.css</p>
-                    <br>
-                    <p>Les couleurs et polices sont changeables dans la classe :root, cependant comme conformément à nos cgu, vous ne pouvez pas changer les ids et les classes du fichier modal.html et modalStyle.css, mais vous pouvez ajouter d'autres classes afin de parfaire le style, selon votre charte graphique.</p>
-                </div>
-
-                <div class="warning border-red">
-                    <img th:src="@{/css/img/alerte.gif}" alt="Gyrophare">
-                    <span>Changer les classes et les ids originales nuira au bon fonctionnement de l'application</span>
-                </div>
-
-                 <h2 class="space" id="reportBug">Déclarer un bug</h2>
-
-                <div class="center"><a class="btn-action btn-access-video" href="https://www.youtube.com/watch?v=T4ReMfM1xKU" target="_blank">
-                    <img th:src="@{/css/img/icones/video-blanche.png}" alt="camera">
-                    Voir le guide vidéo</a>
-                </div>
-
-                <h3 id="findBug" class="h3_documentation">Comment déclarer un bug</h3>
-                <div class="card_doc">
-                    <p>En tant qu'utilisateur d'un site internet possédant la technologie de BugsPointer, vous pouvez signaler un bug via un lien sur la page, ou via un logo visible sur la page. Le propriétaire du site est libre de choisir quelle méthode il souhaite utiliser.</p>
-                    <br>
-                    <p>En cliquant sur n'importe lequel des moyens, une fenêtre apparaît sur votre navigateur. <br><br>
-                    Cette fenêtre est constituée de l'url de la page sur laquelle vous êtes, un bouton permettant de pointer l'endroit de la page où le bug se situe et une description
-                        <br><br>
-                    Pointer un bug, ainsi qu'une description de minimum 10 caractères est nécessaire pour l'envoi d'un rapport de bug</p>
-                </div>
-
-                 <h2 class="space" id="manageBug">Gestion des bugs</h2>
-
-                <div class="warning border-orange">
-                    <img th:src="@{/css/img/icones/camera.gif}" alt="Caméra">
-                    <span>Une vidéo tuto est bientôt prévue pour cette section</span>
-                </div>
-
-                <h3 id="newBug" class="h3_documentation">Nouveau bug</h3>
-
-                <div class="card_doc">
-                    <p>Lors du signalement d'un bug sur votre site par votre utilisateur, un nouveau bug vous est ajouté dans votre Dashboard.
-                        <br>
-                        Suivant vos préférences de notifications, vous allez ( ou non ) recevoir un mail à la réception du bug.
-                        <br>
-                        Vous le retrouverez ensuite dans la tuile rouge "new bug".
-                        <br><br>
-                        Une fois sur la page du bug, vous pouvez le classer en 3 catégories :
-
-                        <ul>
-                            <li>En cours</li>
-                            <li>Résolu</li>
-                            <li>Ignoré</li>
-                        </ul>
-                    </p>
-                </div>
-
-                <h3 id="pendingBug" class="h3_documentation">Bug en cours</h3>
-
-                <div class="card_doc">
-                    <p>Lorsque vous classez un bug dans la catégorie "en cours", il lui est ajouté l'heure à laquelle vous l'avez vu afin de confirmer son déplacement dans cette catégorie.
-                        <br><br> Corriger ce bug et confirmer sa résolution</p>
-                </div>
-
-                <h3 id="solvedBug" class="h3_documentation">Bug résolu</h3>
-
-                <div class="card_doc">
-                    <p>Une fois un bug résolu, il sera déplacé dans cette catégorie afin de servir d'archive pour garder une trace de tous les bugs reçus dans votre Dashboard.
-
-                    <br><br>
-
-                    Toutefois, si vous vous apercevez que le bug n'est pas résolu, vous pouvez le réouvrir, ce qui le placera automatiquement dans la catégorie "en cours".</p>
-                </div>
-
-                <h3 id="ignoredBug" class="h3_documentation">Bug ignoré</h3>
-
-                <div class="card_doc">
-                    <p>Si un utilisateur vous a signalé un bug que vous connaissiez déjà, ou bien que ce n'est pas un bug pour vous, vous pouvez ignorer ce bug.
-                        <br><br>
-                    Comme un bug résolu, il sera gardé en archive. <br>
-                    Toutefois, si vous jugez que ce n'est plus un bug à ignorer, vous pouvez annuler l'ignorance, dans ce cas, le bug sera reclassé dans la catégorie "en cours".</p>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+
+        <section class="px-5 pb-16 sm:px-8 lg:px-12">
+            <div id="docLayout" class="doc-layout mx-auto grid max-w-7xl gap-6 lg:grid-cols-[18rem_1fr] xl:grid-cols-[20rem_1fr]">
+                <div class="doc-sidebar-slot">
+                    <aside class="doc-sidebar rounded-lg border border-white/10 bg-white/[0.075] p-4 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur">
+                        <div class="mb-4 border-b border-white/10 pb-4">
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Navigation</p>
+                            <p class="mt-2 text-sm leading-6 text-white/55">Accédez rapidement aux sections clés.</p>
+                        </div>
+
+                        <nav class="doc-sidebar-nav flex flex-col gap-4 pr-1 text-sm">
+                            <div>
+                                <a href="#integration" class="block rounded-lg px-3 py-2 font-black text-white transition hover:bg-white/10">Installation</a>
+                                <div class="mt-1 flex flex-col border-l border-white/10 pl-3">
+                                    <a href="#button-script" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Bouton flottant</a>
+                                    <a href="#link-script" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Lien placé</a>
+                                    <a href="#public-key" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Clé publique</a>
+                                    <a href="#placement" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Où le placer</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a href="#platforms" class="block rounded-lg px-3 py-2 font-black text-white transition hover:bg-white/10">Plateformes</a>
+                                <div class="mt-1 flex flex-col border-l border-white/10 pl-3">
+                                    <a href="#cms" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">CMS</a>
+                                    <a href="#frameworks" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Frameworks JS</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a href="#customisation" class="block rounded-lg px-3 py-2 font-black text-white transition hover:bg-white/10">Personnalisation</a>
+                                <div class="mt-1 flex flex-col border-l border-white/10 pl-3">
+                                    <a href="#dashboard-config" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Design du widget</a>
+                                    <a href="#override" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Attributs optionnels</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a href="#technical" class="block rounded-lg px-3 py-2 font-black text-white transition hover:bg-white/10">Points techniques</a>
+                                <div class="mt-1 flex flex-col border-l border-white/10 pl-3">
+                                    <a href="#cors" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">CORS</a>
+                                    <a href="#csp" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">CSP</a>
+                                    <a href="#security" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Sécurité</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a href="#usage" class="block rounded-lg px-3 py-2 font-black text-white transition hover:bg-white/10">Utilisation</a>
+                                <div class="mt-1 flex flex-col border-l border-white/10 pl-3">
+                                    <a href="#report" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Signaler un bug</a>
+                                    <a href="#manage" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Gérer les rapports</a>
+                                </div>
+                            </div>
+                        </nav>
+                    </aside>
+                </div>
+
+                <div class="doc-content min-w-0 rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur sm:p-8 lg:p-10">
+                    <section class="rounded-lg border border-pointer-green/20 bg-white/[0.055] p-5">
+                        <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+                            <div>
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Principe</p>
+                                <h2 class="mt-3 text-2xl font-black text-white">Le site client ajoute le script, puis choisit son déclencheur</h2>
+                                <p class="mt-3 max-w-2xl leading-7 text-white/65">BugsPointer charge la modal, récupère la configuration du projet et envoie les rapports vers votre dashboard. Le déclencheur peut être un bouton flottant ou un lien placé dans votre site.</p>
+                            </div>
+                            <a th:href="@{/download}" class="inline-flex min-h-12 shrink-0 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5">
+                                Voir mon script
+                            </a>
+                        </div>
+                    </section>
+
+                    <section id="integration" class="mt-10 border-t border-white/10 pt-10">
+                        <p class="mb-3 text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 1</p>
+                        <h2 class="font-display text-3xl leading-none text-white sm:text-4xl">Installation</h2>
+
+                        <article class="mt-8">
+                            <h3 id="button-script" class="text-2xl font-black text-white">Option 1 : bouton flottant</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>Copiez cette balise pour afficher automatiquement le bouton BugsPointer sur votre site. Elle contient votre clé publique et charge le widget depuis BugsPointer.</p>
+                                <textarea class="code-block mt-4 min-h-[128px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly th:text="${publicKey != null} ? '&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; defer&gt;&lt;/script&gt;' : '&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;pk_xxxxx&quot; defer&gt;&lt;/script&gt;'"></textarea>
+                            </div>
+                        </article>
+
+                        <article class="mt-8">
+                            <h3 id="link-script" class="text-2xl font-black text-white">Option 2 : lien placé dans le site</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>Utilisez cette option si vous voulez ouvrir la modal depuis un lien dans le footer, le menu, une page d’aide ou un bloc personnalisé. Le script charge la modal, mais n’affiche pas de bouton flottant.</p>
+                                <textarea class="code-block mt-4 min-h-[172px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly th:text="${publicKey != null} ? '&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; data-button-style=&quot;custom&quot; defer&gt;&lt;/script&gt;&#10;&#10;&lt;a href=&quot;#&quot; data-bugspointer-open data-bugspointer-key=&quot;' + ${publicKey} + '&quot;&gt;&lt;/a&gt;' : '&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;pk_xxxxx&quot; data-button-style=&quot;custom&quot; defer&gt;&lt;/script&gt;&#10;&#10;&lt;a href=&quot;#&quot; data-bugspointer-open data-bugspointer-key=&quot;pk_xxxxx&quot;&gt;&lt;/a&gt;'"></textarea>
+                                <p class="mt-3">Laissez le lien vide si vous souhaitez utiliser le texte enregistré dans la personnalisation du widget. Vous pouvez aussi écrire votre propre texte entre les balises <code>&lt;a&gt;</code>.</p>
+                            </div>
+                        </article>
+
+                        <article class="mt-8">
+                            <h3 id="public-key" class="text-2xl font-black text-white">Clé publique</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p><code>data-public-key</code> relie le widget a votre compte BugsPointer. Cette clé est publique : elle peut apparaître dans le HTML du site client.</p>
+                                <p class="mt-3">Format obligatoire : <code>pk_xxxxx</code>.</p>
+                            </div>
+                        </article>
+
+                        <article class="mt-8">
+                            <h3 id="placement" class="text-2xl font-black text-white">Où placer le script</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>Placez le script sur les pages où les utilisateurs peuvent signaler un bug. Le plus simple est de le coller avant la fermeture du <code>&lt;/body&gt;</code>.</p>
+                                <p class="mt-3">L’attribut <code>defer</code> laisse la page se charger correctement avant l’exécution du widget.</p>
+                                <p class="mt-3">Si vous utilisez un lien personnalisé, placez aussi la balise <code>&lt;a data-bugspointer-open&gt;</code> à l’endroit exact où le lien doit apparaître.</p>
+                                <p class="mt-5 italic ">Tips : Le plus simple est de placer le script dans un fichier présent dans toutes les pages</p>
+                            </div>
+                        </article>
+                    </section>
+
+                    <section id="platforms" class="mt-10 border-t border-white/10 pt-10">
+                        <p class="mb-3 text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 2</p>
+                        <h2 class="font-display text-3xl leading-none text-white sm:text-4xl">Plateformes compatibles</h2>
+
+                        <article class="mt-8">
+                            <h3 id="cms" class="text-2xl font-black text-white">WordPress, Joomla, Drupal, Webflow, Shopify</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>Ajoutez le script dans la zone de code personnalisé, le footer du thème, un module HTML ou un plugin d’injection de scripts.</p>
+                                <p class="mt-3">Sur certaines plateformes SaaS, l’ajout de JavaScript externe dépend du plan du client.</p>
+                            </div>
+                        </article>
+
+                        <article class="mt-8">
+                            <h3 id="frameworks" class="text-2xl font-black text-white">React, Angular, Vue, Next.js, sites from scratch</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>Ajoutez le script dans le layout global, le template HTML principal, ou injectez-le au montage de l’application.</p>
+                                <p class="mt-3">Pour une SPA, le widget reste disponible pendant la navigation et récupère l’URL courante au moment de l’ouverture de la modal.</p>
+                            </div>
+                        </article>
+                    </section>
+
+                    <section id="customisation" class="mt-10 border-t border-white/10 pt-10">
+                        <p class="mb-3 text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 3</p>
+                        <h2 class="font-display text-3xl leading-none text-white sm:text-4xl">Personnalisation</h2>
+
+                        <article class="mt-8">
+                            <h3 id="dashboard-config" class="text-2xl font-black text-white">Depuis le dashboard</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>Depuis <a th:href="@{/app/private/widget}" class="font-bold text-pointer-lime underline decoration-pointer-lime/40 underline-offset-4 transition hover:text-pointer-green">la page Widget</a>, vous pouvez modifier :</p>
+                                <ul class="mt-3 list-disc space-y-2 pl-5">
+                                    <li>la couleur principale du bouton et des actions</li>
+                                    <li>la couleur de fond, du texte et du titre de la modal</li>
+                                    <li>la couleur du lien placé dans le site</li>
+                                    <li>le soulignement du lien</li>
+                                    <li>le texte du lien</li>
+                                    <li>le titre de la modal</li>
+                                    <li>le libellé du champ description</li>
+                                    <li>la taille, la position et les marges du bouton flottant</li>
+                                </ul>
+                                <p class="mt-4">Le choix “bouton” ou “lien” dans la page Widget sert à prévisualiser les bons réglages. Il ne bloque pas l’autre déclencheur : si le code du bouton et le code du lien sont installés sur le site, les deux peuvent fonctionner.</p>
+                            </div>
+                        </article>
+                    </section>
+
+                    <section id="technical" class="mt-10 border-t border-white/10 pt-10">
+                        <p class="mb-3 text-sm font-black uppercase tracking-wider text-pointer-lime">À vérifier</p>
+                        <h2 class="font-display text-3xl leading-none text-white sm:text-4xl">Points techniques</h2>
+
+                        <article class="mt-8">
+                            <h3 id="cors" class="text-2xl font-black text-white">CORS</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>Le chargement de la balise <code>&lt;script&gt;</code> n’est pas bloqué par CORS. En revanche, le widget appelle l’API BugsPointer pour récupérer la configuration et envoyer les rapports.</p>
+                                <p class="mt-3">BugsPointer doit donc autoriser les routes publiques <code>GET /api/widget/config</code> et <code>POST /api/user/modalControl</code>.</p>
+                            </div>
+                        </article>
+
+                        <article class="mt-8">
+                            <h3 id="csp" class="text-2xl font-black text-white">Content Security Policy</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>Si le site client utilise une CSP stricte, il doit autoriser BugsPointer :</p>
+                                <textarea class="code-block mt-4 min-h-[104px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly>script-src https://bugspointer.com;
+connect-src https://bugspointer.com;</textarea>
+                                <p class="mt-3">Sans cela, le navigateur peut bloquer le script ou les appels API.</p>
+                            </div>
+                        </article>
+
+                        <article class="mt-8">
+                            <h3 id="security" class="text-2xl font-black text-white">Sécurité</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>La clé <code>pk_xxxxx</code> est publique. Elle identifie le projet, mais ne donne aucun accès privé.</p>
+                                <p class="mt-3">Pour limiter les abus, le domaine du site doit être renseigné dans le compte BugsPointer et comparé à l’URL du rapport.</p>
+                            </div>
+                        </article>
+                    </section>
+
+                    <section id="usage" class="mt-10 border-t border-white/10 pt-10">
+                        <p class="mb-3 text-sm font-black uppercase tracking-wider text-pointer-lime">Utilisation</p>
+                        <h2 class="font-display text-3xl leading-none text-white sm:text-4xl">Signaler et gérer les bugs</h2>
+
+                        <article class="mt-8">
+                            <h3 id="report" class="text-2xl font-black text-white">Signaler un bug</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>L’utilisateur clique sur le bouton ou le lien BugsPointer, pointe l’élément concerné sur la page, décrit le problème puis envoie le rapport.</p>
+                                <p class="mt-3">Le rapport inclut l’URL, l’élément pointé, la description, le navigateur, l’OS, la langue du navigateur, le type d’appareil et la taille du viewport.</p>
+                            </div>
+                        </article>
+
+                        <article class="mt-8">
+                            <h3 id="manage" class="text-2xl font-black text-white">Gérer les rapports</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>Les rapports arrivent dans le dashboard. Vous pouvez ensuite les classer en nouveau, en cours, résolu ou ignoré.</p>
+                                <p class="mt-3">Selon vos préférences de notification, vous pouvez recevoir un e-mail à la réception d’un nouveau bug.</p>
+                            </div>
+                        </article>
+                    </section>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <div th:replace="~{include/footer.html}"></div>
 </body>

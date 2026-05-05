@@ -2,12 +2,8 @@ package com.bugspointer.configuration;
 
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.EnumMotif;
-import com.bugspointer.entity.HomeLogger;
-import com.bugspointer.entity.enumLogger.Action;
-import com.bugspointer.entity.enumLogger.Raison;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
-import com.bugspointer.service.implementation.CompanyService;
-import com.bugspointer.utility.Utility;
+import com.bugspointer.repository.CompanyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -30,7 +27,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     private JwtTokenUtil jwtTest;
 
     @Autowired
-    private CompanyService companyService;
+    private CompanyRepository companyRepository;
 
 
 
@@ -43,7 +40,13 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         String mail = userDetails.getUsername();
-        Company company = (Company) companyService.getCompanyByMail(mail);
+        Optional<Company> companyOptional = companyRepository.findByMail(mail);
+        if (!companyOptional.isPresent()) {
+            response.sendRedirect("/authentication?status=ERROR&message=Compte introuvable");
+            return;
+        }
+
+        Company company = companyOptional.get();
 
         if (!company.isEnable()) {
             if (company.getMotifEnable() == EnumMotif.CONFIRMATION){
@@ -67,12 +70,26 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         }
 
         company.setLastVisit(new Date());
-        Company companySaved = companyService.companyTryUpdateLastVisit(company);
+        companyRepository.save(company);
 
-        if(company.getRole().equals("ROLE_ADMIN")){
+        if(isAdmin(company.getRole())){
             response.sendRedirect("app/admin/dashboard");
+        } else if (session.getAttribute("redirectAfterLogin") != null && String.valueOf(session.getAttribute("redirectAfterLogin")).startsWith("/")) {
+            String redirectAfterLogin = String.valueOf(session.getAttribute("redirectAfterLogin"));
+            session.removeAttribute("redirectAfterLogin");
+            response.sendRedirect(redirectAfterLogin);
+        } else if (company.getDomaine() == null || company.getDomaine().trim().isEmpty() || !company.isDomainVerified()) {
+            response.sendRedirect("/app/private/onboarding/widget");
         }else{
             response.sendRedirect("app/private/dashboard");
         }
+    }
+
+    private boolean isAdmin(String role) {
+        if (role == null) {
+            return false;
+        }
+        String normalized = role.trim().toUpperCase();
+        return "ADMIN".equals(normalized) || "ROLE_ADMIN".equals(normalized);
     }
 }

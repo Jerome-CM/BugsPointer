@@ -55,19 +55,28 @@ public class ApiCompany {
             // Create table for bugspointer send 2 reports on client website
             Response rep = firstReportService.initFirstReport(publicKey);
             if (rep.getStatus().equals(EnumStatus.OK)) {
-                return "redirect:/newUser/{publicKey}";
+                redirectAttributes.addFlashAttribute("notification", "Compte validé. Connectez-vous pour finaliser l'installation de votre site.");
+                redirectAttributes.addFlashAttribute("status", String.valueOf(EnumStatus.OK));
+                return "redirect:/authentication";
             }
+            redirectAttributes.addFlashAttribute("notification", rep.getMessage());
+            redirectAttributes.addFlashAttribute("status", String.valueOf(rep.getStatus()));
         }
         return "redirect:/authentication";
     }
 
     @PostMapping("/api/saveFirstReport")
-    public String saveFirstReport(@Valid FirstReportDTO firstReportDTO, BindingResult result){
+    public String saveFirstReport(@Valid @ModelAttribute("firstReportDTO") FirstReportDTO firstReportDTO, BindingResult result, Model model){
         if(!result.hasErrors()){
             log.info("in post : {}", firstReportDTO);
             firstReportService.saveReportSended(firstReportDTO);
+            return "redirect:/app/admin/dashboard";
         }
-        return "/admin/dashboard";
+        model.addAttribute("firstReports", firstReportService.getCandidateForFirstReport());
+        model.addAttribute("secondReports", firstReportService.getCandidateForSecondReport());
+        model.addAttribute("status", "ERROR");
+        model.addAttribute("notification", "Merci de corriger les champs indiqués.");
+        return "admin/dashboard";
     }
 
 

@@ -1,0 +1,305 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
+<div th:replace="~{include/head.html}"></div>
+    <title>Widget - BugsPointer</title>
+    <meta name="robots" content="noindex">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>
+        .bugspointer-logo{display:none;}
+        .widget-preview-shell{min-height:620px;}
+    </style>
+</head>
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
+    <div th:replace="~{include/notifAlert.html}"></div>
+    <div th:replace="~{include/navCompany.html}"></div>
+
+    <main>
+        <section class="relative px-5 pb-16 pt-6 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-1">
+                <div class="rounded-lg border border-white/10 bg-white/[0.065] p-6 text-center shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
+                    <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                        Widget
+                    </p>
+                    <h1 class="mx-auto max-w-5xl font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
+                        Personnalisez votre modal BugsPointer
+                    </h1>
+                    <p class="mx-auto mt-5 max-w-3xl text-base leading-7 text-white/70">
+                        Réglez les textes, la couleur et la position du bouton. L’aperçu se met à jour immédiatement avant enregistrement.
+                    </p>
+                </div>
+
+                <div th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}" class="rounded-lg border border-red-300/30 bg-red-500/15 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur">
+                    <p class="text-sm font-black uppercase tracking-wider text-red-100">Fonctionnalité Target</p>
+                    <p class="mt-2 leading-7 text-white/72">La personnalisation du widget est disponible avec le plan Target. Vous pouvez modifier l’aperçu, mais l’enregistrement est verrouillé sur votre plan actuel.</p>
+                    <a th:href="@{/features#targetplan}" class="mt-4 inline-flex min-h-11 items-center justify-center rounded-lg bg-pointer-green px-5 py-2.5 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.14)] transition hover:-translate-y-0.5 hover:bg-pointer-lime">Passer au plan Target</a>
+                </div>
+
+                <section class="grid gap-5 xl:grid-cols-[420px_1fr] xl:items-start">
+                    <form class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/widget}" th:object="${widget}" method="post">
+                        <div class="mb-5 border-b border-white/10 pb-5">
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Réglages</p>
+                            <h2 class="mt-2 font-display text-3xl leading-none text-white">Configuration</h2>
+                        </div>
+
+                        <input type="hidden" th:field="*{companyPublicKey}" th:value="${company.getPublicKey()}" readonly>
+
+                        <div class="grid gap-4">
+                            <label>
+                                <span class="mb-2 block text-sm font-bold text-white/72">Style du déclencheur</span>
+                                <select class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" th:field="*{widgetButtonStyle}" id="widgetButtonStyle">
+                                    <option value="button">Bouton</option>
+                                    <option value="custom">Lien placé dans le site</option>
+                                </select>
+                            </label>
+                            <label>
+                                <span class="mb-2 block text-sm font-bold text-white/72">Couleur principale</span>
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="color" th:field="*{widgetPrimaryColor}" id="widgetPrimaryColor">
+                            </label>
+                            <label>
+                                <span class="mb-2 block text-sm font-bold text-white/72">Fond de la modal</span>
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="color" th:field="*{widgetModalBackgroundColor}" id="widgetModalBackgroundColor">
+                            </label>
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <label>
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Texte de la modal</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="color" th:field="*{widgetModalTextColor}" id="widgetModalTextColor">
+                                </label>
+                                <label>
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Titre principal</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="color" th:field="*{widgetTitleColor}" id="widgetTitleColor">
+                                </label>
+                            </div>
+                            <label data-trigger-option="custom">
+                                <span class="mb-2 block text-sm font-bold text-white/72">Texte du lien</span>
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="color" th:field="*{widgetLinkTextColor}" id="widgetLinkTextColor">
+                            </label>
+                            <label data-trigger-option="custom" class="flex items-center justify-between gap-4 rounded-lg border border-white/10 bg-black/20 px-4 py-3">
+                                <span>
+                                    <span class="block text-sm font-bold text-white/82">Souligner le lien</span>
+                                    <span class="mt-1 block text-xs leading-5 text-white/52">Activez ou retirez le soulignement dans le footer.</span>
+                                </span>
+                                <input class="h-5 w-5 accent-pointer-green" type="checkbox" th:field="*{widgetLinkUnderline}" id="widgetLinkUnderline">
+                            </label>
+                            <label data-trigger-option="button">
+                                <span class="mb-2 block text-sm font-bold text-white/72">Taille du bouton</span>
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="number" min="44" max="96" step="1" th:field="*{widgetButtonSize}" id="widgetButtonSize">
+                            </label>
+                            <label data-trigger-option="button">
+                                <span class="mb-2 block text-sm font-bold text-white/72">Position</span>
+                                <select class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" th:field="*{widgetPosition}" id="widgetPosition">
+                                    <option value="bottom-right">Bas droite</option>
+                                    <option value="bottom-left">Bas gauche</option>
+                                    <option value="top-right">Haut droite</option>
+                                    <option value="top-left">Haut gauche</option>
+                                </select>
+                            </label>
+                            <div data-trigger-option="button" class="grid gap-4 sm:grid-cols-2">
+                                <label>
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Marge horizontale</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="number" min="0" max="120" step="1" th:field="*{widgetMarginX}" id="widgetMarginX">
+                                </label>
+                                <label>
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Marge verticale</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="number" min="0" max="120" step="1" th:field="*{widgetMarginY}" id="widgetMarginY">
+                                </label>
+                            </div>
+                            <label data-trigger-option="custom">
+                                <span class="mb-2 block text-sm font-bold text-white/72">Texte du lien</span>
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{widgetButtonText}" id="widgetButtonText" maxlength="60">
+                            </label>
+                            <label>
+                                <span class="mb-2 block text-sm font-bold text-white/72">Titre de la modal</span>
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{widgetTitle}" id="widgetTitle" maxlength="80">
+                            </label>
+                            <label>
+                                <span class="mb-2 block text-sm font-bold text-white/72">Libellé description</span>
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{widgetDescriptionLabel}" id="widgetDescriptionLabel" maxlength="80">
+                            </label>
+                        </div>
+
+                        <span class="block" th:title="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE} ? 'Vous devez avoir le plan Target minimum pour enregistrer le widget.' : ''">
+                            <button type="submit" class="mt-5 min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime disabled:cursor-not-allowed disabled:bg-white/20 disabled:text-white/45 disabled:shadow-none" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                                Enregistrer le widget
+                            </button>
+                        </span>
+                    </form>
+
+                    <aside class="flex flex-col gap-5">
+                        <section id="widgetPreviewModalBlock" class="widget-preview-shell rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 mt-0">
+                            <div class="mb-5 flex flex-col gap-2 border-b border-white/10 pb-5 md:flex-row md:items-end md:justify-between">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Aperçu de la modal</p>
+                                <span class="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm font-bold text-white/62">Site client</span>
+                            </div>
+
+                            <div class="relative min-h-[560px] overflow-hidden rounded-lg bg-[#eef0f7] p-8 text-[#25243f]">
+                                <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(39,33,95,.08)_1px,transparent_1px),linear-gradient(rgba(39,33,95,.08)_1px,transparent_1px)] bg-[size:44px_44px]"></div>
+                                <button id="widgetPreviewButton" type="button" class="absolute z-30 flex h-14 w-14 items-center justify-center rounded-full text-lg font-black text-white" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}" th:title="${widget.getWidgetButtonText()}">!</button>
+                                <div class="absolute inset-0 z-20 flex items-center justify-center bg-[rgba(39,33,95,0.50)] p-12">
+                                    <div id="widgetPreviewModal" class="w-full max-w-2xl rounded-[18px] bg-white p-8 shadow-[0_26px_80px_rgba(37,36,63,0.28)]" th:style="'background-color:' + ${widget.getWidgetModalBackgroundColor()} + '; color:' + ${widget.getWidgetModalTextColor()}">
+                                        <div class="mb-5 flex items-start justify-between gap-4">
+                                            <h3 id="widgetPreviewTitle" class="text-3xl font-black leading-tight" th:style="'color:' + ${widget.getWidgetTitleColor()}" th:text="${widget.getWidgetTitle()}">Signaler un nouveau bug</h3>
+                                            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-3xl leading-none text-slate-400">&times;</span>
+                                        </div>
+                                        <label class="mb-4 block">
+                                            <span class="mb-2 block text-sm font-bold opacity-75">URL concernée</span>
+                                            <input class="min-h-12 w-full rounded-lg border border-slate-200 px-4 text-slate-500" value="https://site-client.fr/page-exemple" readonly>
+                                        </label>
+                                        <button id="widgetPreviewPointer" class="mb-4 min-h-12 w-full rounded-lg px-4 font-black text-white" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}">Pointer le bug</button>
+                                        <label id="widgetPreviewLabel" class="mb-2 block text-sm font-bold opacity-75" th:text="${widget.getWidgetDescriptionLabel()}">Description du bug</label>
+                                        <textarea class="min-h-[130px] w-full rounded-lg border border-slate-200 px-4 py-3" placeholder="Expliquez le problème rencontré"></textarea>
+                                        <div class="mt-4 flex items-center justify-between gap-4">
+                                            <a href="https://www.bugspointer.com" class="text-sm font-black text-slate-400 no-underline">Bugspointer.com</a>
+                                            <button id="widgetPreviewSubmit" class="min-h-11 rounded-lg px-5 font-black text-white" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}">Envoyer le rapport</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="widgetPreviewLinkBlock" class="mt-0 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                            <div class="mb-5 border-b border-white/10 pb-5">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Aperçu d'un lien</p>
+                            </div>
+                            <div id="widgetPreviewCustomShell" class="rounded-lg border border-white/10 bg-white px-5 py-6 text-center text-sm font-bold text-[#25243f]">
+                                <span>&copy; Site client</span>
+                                <span class="mx-2">-</span>
+                                <a id="widgetPreviewCustomLink" href="#" th:style="'color:' + ${widget.getWidgetLinkTextColor()} + '; text-decoration:' + (${widget.isWidgetLinkUnderline()} ? 'underline' : 'none')" th:text="${widget.getWidgetButtonText()}">Signaler un bug</a>
+                            </div>
+                            <p class="mt-3 text-sm leading-6 text-white/62">Ce lien correspond au déclencheur à placer dans un footer, une navigation ou un bloc personnalisé.</p>
+                        </section>
+                    </aside>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <div th:replace="~{include/footer.html}"></div>
+    <script th:inline="javascript">
+        const widgetInputs = {
+            color: document.getElementById('widgetPrimaryColor'),
+            modalBackgroundColor: document.getElementById('widgetModalBackgroundColor'),
+            modalTextColor: document.getElementById('widgetModalTextColor'),
+            titleColor: document.getElementById('widgetTitleColor'),
+            linkTextColor: document.getElementById('widgetLinkTextColor'),
+            linkUnderline: document.getElementById('widgetLinkUnderline'),
+            buttonStyle: document.getElementById('widgetButtonStyle'),
+            buttonSize: document.getElementById('widgetButtonSize'),
+            position: document.getElementById('widgetPosition'),
+            marginX: document.getElementById('widgetMarginX'),
+            marginY: document.getElementById('widgetMarginY'),
+            buttonText: document.getElementById('widgetButtonText'),
+            title: document.getElementById('widgetTitle'),
+            descriptionLabel: document.getElementById('widgetDescriptionLabel')
+        };
+        const widgetPreview = {
+            button: document.getElementById('widgetPreviewButton'),
+            pointer: document.getElementById('widgetPreviewPointer'),
+            submit: document.getElementById('widgetPreviewSubmit'),
+            modal: document.getElementById('widgetPreviewModal'),
+            title: document.getElementById('widgetPreviewTitle'),
+            label: document.getElementById('widgetPreviewLabel')
+        };
+        const triggerOptionGroups = document.querySelectorAll('[data-trigger-option]');
+        const previewModalBlock = document.getElementById('widgetPreviewModalBlock');
+        const previewLinkBlock = document.getElementById('widgetPreviewLinkBlock');
+
+        function updateWidgetPreview() {
+            if (!widgetInputs.color || !widgetPreview.button) {
+                return;
+            }
+            const marginX = Math.max(0, Math.min(parseInt(widgetInputs.marginX.value || '15', 10), 120));
+            const marginY = Math.max(0, Math.min(parseInt(widgetInputs.marginY.value || '15', 10), 120));
+            const position = widgetInputs.position.value || 'bottom-right';
+            const isCustom = widgetInputs.buttonStyle.value === 'custom';
+            const buttonSize = Math.max(44, Math.min(parseInt(widgetInputs.buttonSize.value || '56', 10), 96));
+            const customLink = document.getElementById('widgetPreviewCustomLink');
+            const customShell = document.getElementById('widgetPreviewCustomShell');
+
+            triggerOptionGroups.forEach((group) => {
+                group.style.display = group.dataset.triggerOption === widgetInputs.buttonStyle.value ? '' : 'none';
+            });
+            if (previewModalBlock && previewLinkBlock) {
+                previewModalBlock.style.display = '';
+                previewLinkBlock.style.display = isCustom ? '' : 'none';
+                previewLinkBlock.style.order = isCustom ? '1' : '2';
+                previewModalBlock.style.order = isCustom ? '2' : '1';
+            }
+
+            widgetPreview.button.style.display = 'flex';
+            widgetPreview.button.style.backgroundColor = widgetInputs.color.value;
+            widgetPreview.button.style.color = '#ffffff';
+            widgetPreview.button.style.boxShadow = 'none';
+            widgetPreview.button.style.width = buttonSize + 'px';
+            widgetPreview.button.style.height = buttonSize + 'px';
+            widgetPreview.button.style.padding = '0';
+            widgetPreview.button.style.borderRadius = '999px';
+            widgetPreview.button.style.textDecoration = 'none';
+            widgetPreview.button.textContent = '!';
+            widgetPreview.button.title = widgetInputs.buttonText.value || 'Signaler un bug';
+            if (isCustom) {
+                widgetPreview.button.style.display = 'none';
+            }
+            if (customLink) {
+                customLink.style.display = 'inline';
+                customLink.style.color = widgetInputs.linkTextColor.value;
+                customLink.style.textDecoration = widgetInputs.linkUnderline && widgetInputs.linkUnderline.checked ? 'underline' : 'none';
+                customLink.style.textUnderlineOffset = '4px';
+                customLink.textContent = widgetInputs.buttonText.value || 'Signaler un bug';
+            }
+            if (customShell) {
+                customShell.style.opacity = isCustom ? '1' : '0.72';
+            }
+            widgetPreview.button.style.top = 'auto';
+            widgetPreview.button.style.right = 'auto';
+            widgetPreview.button.style.bottom = 'auto';
+            widgetPreview.button.style.left = 'auto';
+            if (position.includes('top')) {
+                widgetPreview.button.style.top = marginY + 'px';
+            } else {
+                widgetPreview.button.style.bottom = marginY + 'px';
+            }
+            if (position.includes('left')) {
+                widgetPreview.button.style.left = marginX + 'px';
+            } else {
+                widgetPreview.button.style.right = marginX + 'px';
+            }
+
+            widgetPreview.pointer.style.backgroundColor = widgetInputs.color.value;
+            widgetPreview.submit.style.backgroundColor = widgetInputs.color.value;
+            widgetPreview.modal.style.backgroundColor = widgetInputs.modalBackgroundColor.value;
+            widgetPreview.modal.style.color = widgetInputs.modalTextColor.value;
+            widgetPreview.title.style.color = widgetInputs.titleColor.value;
+            widgetPreview.title.textContent = widgetInputs.title.value || 'Signaler un nouveau bug';
+            widgetPreview.label.textContent = widgetInputs.descriptionLabel.value || 'Description du bug';
+        }
+        Object.values(widgetInputs).forEach((input) => {
+            if (input) {
+                input.addEventListener('input', updateWidgetPreview);
+                input.addEventListener('change', updateWidgetPreview);
+            }
+        });
+        updateWidgetPreview();
+    </script>
+</body>
+</html>

@@ -18,11 +18,17 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedHeaders("Content-Type")
                 .allowCredentials(false)
                 .maxAge(3600);
+        registry.addMapping("/api/widget/config")
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET")
+                .allowedHeaders("*")
+                .allowCredentials(false)
+                .maxAge(3600);
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/css/**", "/js/**","/downloadableZip/**" )
-                .addResourceLocations("classpath:/static/css/", "classpath:/static/js/", "classpath:/static/downloadableZip/");
+        registry.addResourceHandler("/css/**", "/js/**", "/widget/**" )
+                .addResourceLocations("classpath:/static/css/", "classpath:/static/js/", "classpath:/static/widget/");
     }
 }

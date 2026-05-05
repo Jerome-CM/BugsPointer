@@ -21,6 +21,7 @@ public class Bug {
     private Company company;
 
     @NotNull
+    @Column(columnDefinition = "TEXT")
     private String url;
 
     @NotNull
@@ -35,6 +36,10 @@ public class Bug {
 
     @NotNull
     private String browser;
+
+    private String browserLanguage;
+
+    private String deviceType;
 
     @NotNull
     private String adresseIp;

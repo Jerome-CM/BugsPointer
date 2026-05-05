@@ -1,26 +1,79 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Réinitialiser le mot de passe</title>
+    <title>Réinitialiser le mot de passe - BugsPointer</title>
     <meta name="robots" content="noindex">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}</style>
 </head>
-<body class="index">
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
     <div th:replace="~{include/notifAlert.html}"></div>
     <div th:replace="~{include/nav.html}"></div>
 
-    <div class="container">
-        <section>
-            <div class="cards cards_detail">
-                <h3>Réinitialisation du mot de passe</h3>
-                <form class="form" action="#" th:action="@{/resetPassword/{publicKey}/{token}(publicKey=${publicKey}, token=${token})}" th:object="${company}" method="post">
-                    <input type="password" th:field="*{password}" placeholder="Mot de passe">
-                    <input type="password" th:field="*{confirmPassword}" placeholder="Confirmation du mot de passe">
-                    <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}">
-                    <input class="btn-action" type="submit" value="Modifier le mot de passe">
-                </form>
+    <main>
+        <section class="relative px-5 py-16 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto flex max-w-6xl flex-col gap-7 lg:flex-row lg:items-stretch">
+                <div class="flex w-full flex-col justify-between rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8 lg:w-5/12">
+                    <div>
+                        <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                            Nouveau mot de passe
+                        </p>
+                        <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
+                            Sécurisez à nouveau votre compte.
+                        </h1>
+                    </div>
+                    <p class="mt-6 text-base leading-7 text-white/70 sm:text-lg">
+                        Choisissez un mot de passe robuste pour retrouver votre dashboard et continuer le suivi de vos rapports.
+                    </p>
+                </div>
+
+                <section class="w-full rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:w-7/12 lg:p-7">
+                    <div class="mb-6 border-b border-white/10 pb-5">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Réinitialisation</p>
+                        <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Définir un nouveau mot de passe</h2>
+                    </div>
+
+                    <form class="flex flex-col gap-4" action="#" th:action="@{/resetPassword/{publicKey}/{token}(publicKey=${publicKey}, token=${token})}" th:object="${company}" method="post">
+                        <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
+                            <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                        </div>
+                        <label>
+                            <span class="mb-2 block text-sm font-bold text-white/72">Nouveau mot de passe</span>
+                            <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" placeholder="Mot de passe">
+                        </label>
+                        <label>
+                            <span class="mb-2 block text-sm font-bold text-white/72">Confirmation</span>
+                            <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{confirmPassword}" placeholder="Confirmation du mot de passe">
+                        </label>
+                        <input type="hidden" th:field="*{publicKey}" th:value="${company.getPublicKey()}">
+                        <input class="mt-2 min-h-12 cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" type="submit" value="Modifier le mot de passe">
+                    </form>
+                </section>
             </div>
         </section>
-    </div>
+    </main>
 
+    <div th:replace="~{include/footer.html}"></div>
 </body>
 </html>

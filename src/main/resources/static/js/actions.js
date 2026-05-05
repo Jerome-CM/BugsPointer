@@ -7,12 +7,47 @@ window.addEventListener('DOMContentLoaded', function () {
         let domaine = document.getElementById('domaine');
         let domaineConfirme = document.getElementById('domaine-a-confirmer');
         let form = document.getElementById('form-confirmation');
+        let sitePreview = document.getElementById('site-preview');
+        let sitePreviewLink = document.getElementById('site-preview-link');
 
         let enterPressed = false;
 
+        function normalizeWebsiteUrl(value) {
+            let url = (value || "").trim();
+
+            if (url === "") {
+                return "";
+            }
+
+            if (!/^https?:\/\//i.test(url)) {
+                url = "https://" + url;
+            }
+
+            try {
+                let parsed = new URL(url);
+                let hostname = parsed.hostname.toLowerCase();
+
+                if (!hostname.startsWith("www.") && hostname.split(".").length === 2) {
+                    hostname = "www." + hostname;
+                }
+
+                return "https://" + hostname;
+            } catch (e) {
+                return url;
+            }
+        }
+
         function show() {
             /* Lorsque la fonction est appelée, elle ouvre la popup contenant le formulaire de bug */
-            domaineConfirme.value = domaine.value;
+            let normalizedUrl = normalizeWebsiteUrl(domaine.value);
+            domaineConfirme.value = normalizedUrl;
+            if (sitePreview != null && normalizedUrl !== "") {
+                sitePreview.src = normalizedUrl;
+            }
+            if (sitePreviewLink != null && normalizedUrl !== "") {
+                sitePreviewLink.href = normalizedUrl;
+                sitePreviewLink.textContent = normalizedUrl;
+            }
             popup.style.display = "flex";
             enterPressed = true;
         }
@@ -20,6 +55,9 @@ window.addEventListener('DOMContentLoaded', function () {
         function hidden() {
             /* Lorsque la fonction est appelée, elle ferme la popup contenant le formulaire de bug */
             popup.style.display = "none";
+            if (sitePreview != null) {
+                sitePreview.removeAttribute("src");
+            }
             enterPressed = false;
         }
 
@@ -150,4 +188,3 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
 });
-

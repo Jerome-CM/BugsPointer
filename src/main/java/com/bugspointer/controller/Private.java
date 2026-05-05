@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
@@ -73,7 +74,7 @@ public class Private {
     }
 
     @PostMapping("notifications")
-    String updateNotifications(@Valid CompanyPreferenceDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
+    String updateNotifications(@Valid @ModelAttribute("company") CompanyPreferenceDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
         String action = request.getParameter("action");
         log.info("buttonName : {}", action);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
@@ -87,9 +88,11 @@ public class Private {
                 model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());
             }
+        } else {
+            model.addAttribute("status", "ERROR");
+            model.addAttribute("notification", "Merci de corriger les champs indiqués.");
         }
-        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
-        return "redirect:account";
+        return "private/notifications";
     }
 
     @GetMapping("account/delete")
@@ -101,7 +104,7 @@ public class Private {
     }
 
     @PostMapping("account/delete/confirm")
-    String deleteAccount(@Valid AccountDeleteDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
+    String deleteAccount(@Validated(AccountDTO.Delete.class) @ModelAttribute("company") AccountDeleteDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         Company currentCompany = companyService.getCompanyWithToken(request);
         dto.setPublicKey(currentCompany.getPublicKey());
@@ -118,22 +121,134 @@ public class Private {
                 model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("notification", response.getMessage());
             }
+        } else {
+            model.addAttribute("status", "ERROR");
+            model.addAttribute("notification", "Merci de saisir votre mot de passe.");
         }
-        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
-        return "private/account";
+        AccountDeleteDTO current = companyService.getAccountDeleteDto(companyService.getCompanyWithToken(request));
+        dto.setMail(current.getMail());
+        dto.setPublicKey(current.getPublicKey());
+        dto.setNbNewBug(current.getNbNewBug());
+        dto.setNbPendingBug(current.getNbPendingBug());
+        dto.setDateLineFacturePlan(current.getDateLineFacturePlan());
+        return "private/deleteAccount";
     }
 
     @GetMapping("account")
     String getAccount(Model model, HttpServletRequest request) throws MollieException {
         HttpSession session = request.getSession();
-        model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
-        model.addAttribute("mandates", customerService.getMandateList(companyService.getCompanyWithToken(request)));
+        Company company = companyService.getCompanyWithToken(request);
+        model.addAttribute("company", companyService.getAccountDto(company));
+        model.addAttribute("mandates", customerService.getMandateList(company));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/account";
     }
 
+    @GetMapping("widget")
+    String getWidget(Model model, HttpServletRequest request) {
+        Company company = companyService.getCompanyWithToken(request);
+        model.addAttribute("company", companyService.getDashboardDto(company));
+        model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(company));
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "private/widget";
+    }
+
+    @GetMapping("onboarding/widget")
+    String getWidgetOnboarding(Model model, HttpServletRequest request) {
+        Company company = companyService.getCompanyWithToken(request);
+        boolean wasVerified = company.isDomainVerified();
+        if (company.getDomainVerificationUrl() != null && !company.getDomainVerificationUrl().trim().isEmpty()) {
+            Response verification = companyService.verifyDomainInstallation(company);
+            if (wasVerified && verification.getStatus().equals(EnumStatus.ERROR)) {
+                model.addAttribute("status", String.valueOf(verification.getStatus()));
+                model.addAttribute("notification", verification.getMessage());
+            }
+            company = companyService.getCompanyWithToken(request);
+        }
+        model.addAttribute("company", companyService.getAccountDto(company));
+        model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(company));
+        model.addAttribute("publicKey", company.getPublicKey());
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "private/widgetOnboarding";
+    }
+
+    @PostMapping("onboarding/widget/domain")
+    String updateOnboardingDomain(@Validated(AccountDTO.Domain.class) @ModelAttribute("company") AccountDTO dto,
+                                  BindingResult result,
+                                  Model model,
+                                  RedirectAttributes redirectAttributes,
+                                  HttpServletRequest request) {
+        Company company = companyService.getCompanyWithToken(request);
+        dto.setPublicKey(company.getPublicKey());
+
+        if (!result.hasErrors()) {
+            Response response = companyService.registerDomaine(company, dto);
+            redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+            redirectAttributes.addFlashAttribute("notification", response.getMessage());
+            return "redirect:/app/private/onboarding/widget";
+        }
+
+        model.addAttribute("status", "ERROR");
+        model.addAttribute("notification", "Merci de saisir un domaine valide.");
+        model.addAttribute("company", companyService.getAccountDto(company));
+        model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(company));
+        model.addAttribute("publicKey", company.getPublicKey());
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "private/widgetOnboarding";
+    }
+
+    @PostMapping("onboarding/widget/verify")
+    String verifyOnboardingDomain(@RequestParam("verificationUrl") String verificationUrl,
+                                  RedirectAttributes redirectAttributes,
+                                  HttpServletRequest request) {
+        Company company = companyService.getCompanyWithToken(request);
+        Response response = companyService.verifyDomainInstallation(company, verificationUrl);
+        redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+        redirectAttributes.addFlashAttribute("notification", response.getMessage());
+        if (response.getStatus().equals(EnumStatus.OK)) {
+            return "redirect:/app/private/dashboard";
+        }
+        return "redirect:/app/private/onboarding/widget";
+    }
+
+    @PostMapping("widget")
+    String updateWidget(@Valid @ModelAttribute("widget") CompanyPreferenceDTO dto,
+                        BindingResult result,
+                        Model model,
+                        RedirectAttributes redirectAttributes,
+                        HttpServletRequest request) {
+        Company currentCompany = companyService.getCompanyWithToken(request);
+        dto.setCompanyPublicKey(currentCompany.getPublicKey());
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        model.addAttribute("company", companyService.getDashboardDto(currentCompany));
+
+        if (currentCompany.getPlan().equals(EnumPlan.FREE)) {
+            model.addAttribute("status", String.valueOf(EnumStatus.ERROR));
+            model.addAttribute("notification", "La personnalisation du widget est disponible avec le plan Target.");
+            model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(currentCompany));
+            return "private/widget";
+        }
+
+        if (!result.hasErrors()) {
+            Response response = preferencesService.updatePreference(dto, "updateWidget");
+            if (response.getStatus().equals(EnumStatus.OK)) {
+                redirectAttributes.addFlashAttribute("notification", response.getMessage());
+                redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+                return "redirect:/app/private/widget";
+            }
+            model.addAttribute("status", String.valueOf(response.getStatus()));
+            model.addAttribute("notification", response.getMessage());
+        } else {
+            model.addAttribute("status", "ERROR");
+            model.addAttribute("notification", "Merci de corriger les champs indiqués.");
+        }
+
+        model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(currentCompany));
+        return "private/widget";
+    }
+
     @PostMapping("account/delete")
-    String delete(@Valid AccountDTO dto,
+    String delete(@Valid @ModelAttribute("company") AccountDTO dto,
                   BindingResult result,
                   Model model,
                   HttpServletRequest request) {
@@ -148,11 +263,11 @@ public class Private {
     }
 
     @PostMapping("account")
-    String update(@Valid AccountDTO dto,
+    String update(@Valid @ModelAttribute("company") AccountDTO dto,
                   BindingResult result,
                   Model model,
                   RedirectAttributes redirectAttributes,
-                  HttpServletRequest request){
+                  HttpServletRequest request) throws MollieException {
         String action = request.getParameter("action");
         log.info("buttonName : {}", action);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
@@ -194,13 +309,21 @@ public class Private {
         }
 
         model.addAttribute("company", companyService.getAccountDto(companyService.getCompanyWithToken(request)));
+        model.addAttribute("mandates", customerService.getMandateList(companyService.getCompanyWithToken(request)));
         return "private/account";
     }
 
     @GetMapping("dashboard")
-    String getDashboard(Model model, HttpServletRequest request){
-        model.addAttribute("company", companyService.getDashboardDto(companyService.getCompanyWithToken(request)));
+    String getDashboard(Model model, HttpServletRequest request,
+                        @RequestParam(value = "status", required = false) String status,
+                        @RequestParam(value = "message", required = false) String message){
+        Company company = companyService.getCompanyWithToken(request);
+        model.addAttribute("company", companyService.getDashboardDto(company));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        if (status != null && message != null) {
+            model.addAttribute("status", status);
+            model.addAttribute("notification", message);
+        }
         return "private/dashboard";
     }
 
@@ -253,31 +376,35 @@ public class Private {
     }
 
     @GetMapping("bugList")
-    String getbugList(Model map,@RequestParam("publicKey") String publicKey, @RequestParam("state") String state, HttpServletRequest request){
-        Company currentCompany = companyService.getCompanyWithToken(request);
-        map.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        map.addAttribute("dataBug", companyService.getDashboardDto(currentCompany));
-        Response responseBugList = bugService.getBugDTOByCompanyAndState(currentCompany.getPublicKey(), state);
-        List<BugDTO> bugDTOList = (List<BugDTO>) responseBugList.getContent();
+    String getBugList(Model model,
+                      @RequestParam("publicKey") String publicKey,
+                      @RequestParam("state") String state,
+                      HttpServletRequest request,
+                      RedirectAttributes redirectAttributes) {
+        DashboardDTO company = companyService.getDashboardDto(companyService.getCompanyWithToken(request));
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        model.addAttribute("dataBug", company);
+        model.addAttribute("company", company);
 
-        if(responseBugList.getContent() == null){
-            return "redirect:dashboard";
-        }
-        BugDTO bugDTO = bugDTOList.get(0);
-        if(bugDTOList.size() == 1){
-            map.addAttribute("title", bugService.getTitle(state, false));
-            map.addAttribute("state", bugDTO.getEtatBug());
-            map.addAttribute("publicKey", currentCompany.getPublicKey());
-            return "redirect:bugReport/"+bugDTO.getId();
-        } else {
-            map.addAttribute("title", bugService.getTitle(state, true));
-            map.addAttribute("bugList", bugDTOList);
-            map.addAttribute("state", bugDTO.getEtatBug());
-            map.addAttribute("publicKey", currentCompany.getPublicKey());
-
-            return "private/bugList";
+        if (company.getPublicKey() == null || !company.getPublicKey().equals(publicKey)) {
+            redirectAttributes.addFlashAttribute("status", String.valueOf(EnumStatus.ERROR));
+            redirectAttributes.addFlashAttribute("notification", "Vous ne pouvez consulter que les rapports de votre société.");
+            return "redirect:/app/private/dashboard";
         }
 
+        Response responseBugList = bugService.getBugDTOByCompanyAndState(publicKey, state);
+        if (responseBugList.getStatus() != EnumStatus.OK) {
+            redirectAttributes.addFlashAttribute("status", String.valueOf(responseBugList.getStatus()));
+            redirectAttributes.addFlashAttribute("notification", responseBugList.getMessage());
+            return "redirect:/app/private/dashboard";
+        }
+
+        model.addAttribute("title", bugService.getTitle(state, true));
+        model.addAttribute("bugList", responseBugList.getContent());
+        model.addAttribute("publicKey", publicKey);
+        model.addAttribute("state", state);
+        model.addAttribute("emptyMessage", responseBugList.getMessage());
+        return "private/bugList";
     }
 
     @GetMapping(value="thanks")

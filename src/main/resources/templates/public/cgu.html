@@ -1,60 +1,131 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
 <div th:replace="~{include/head.html}"></div>
-    <title>Conditions générales d'Utilisation</title>
+    <title>Conditions générales d'utilisation BugsPointer</title>
     <meta name="robots" content="noindex">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}.legal-hero{min-height:auto!important;}</style>
 </head>
-<body>
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
+    <div th:replace="~{include/nav.html}"></div>
 
-    <div th:replace="~{include/navCompany.html}"></div>
-
-    <div class="container-documentation">
-
-        <div class="container">
-            <h1>Conditions générales d'Utilisation (CGU)</h1>
-
-            <div class="text_align_left">
-                 <h2 class="space">Introduction</h2>
-                <br>
-                <p>Les présentes Conditions Générales d'Utilisation (CGU) régissent l'utilisation du site web de BugsPointer ("le Site"). Veuillez lire attentivement ces CGU avant d'utiliser notre site. En accédant ou en utilisant le Site, vous acceptez d'être lié par ces CGU.</p>
-                <br>
-                 <h2 class="space">Informations de contact</h2>
-                <br>
-                <p><a th:href="@{/mentions}">Ce reporter aux Mentions légales</a></p>
-                <br>
-                 <h2 class="space">Services proposés</h2>
-                <br>
-                <p>BugsPointer offre un formulaire et toute une interface permettant à des utilisateurs de site internet à signaler un bug sur ce dernier</p>
-                <br>
-                 <h2 class="space">Conditions spécifiques</h2>
-                <br>
-                <p>Les conditions spécifiques applicables à l'utilisation des services proposés par BugsPointer sont disponibles à l'adresse suivante : <a th:href="@{/cgv}">www.bugspointer.com/cgv</a>
-                </p>
-                <br>
-                 <h2 class="space">Confidentialité et protection des données</h2>
-                <br>
-                <p>BugsPointer respecte votre vie privée et met en place des mesures pour protéger vos données personnelles conformément à la réglementation en vigueur. Pour en savoir plus sur notre politique de confidentialité et sur la manière dont nous traitons vos données personnelles, veuillez vous référer aux préconisations de la CNIL.</p>
-                <br>
-                 <h2 class="space">Droits de propriété</h2>
-                <br>
-                <p>Tous les droits de propriété intellectuelle liés au contenu et aux éléments du Site, tels que les textes, les graphiques, les logos, les icônes, les images, les clips audio, les téléchargements numériques, les compilations de données et le logiciel, sont la propriété exclusive de BugsPointer ou de ses concédants de licence et sont protégés par les lois sur les droits d'auteur et autres droits de propriété intellectuelle.</p>
-                <br>
-                 <h2 class="space">Suspension de compte</h2>
-                <br>
-                <p>Les utilisateurs peuvent demander la suspension de leur compte en nous contactant par e-mail à l'adresse suivante : contact@bugspointer.com ou en désactivant leur compte via le chemin suivant : Connexion > Dashboard > Account.</p>
-                <br>
-                 <h2 class="space">Responsabilités de l'utilisateur</h2>
-                <br>
-                <p>Les utilisateurs s'engagent à n'entreprendre aucune action qui pourrait compromettre l'intégrité du site ou des formulaires fournis par BugsPointer. Toute violation de cette disposition pourra entraîner la résiliation ou la suspension du compte de l'utilisateur, sans préjudice de tout autre recours disponible en droit et à tout instant sans préavis, même avec une offre payante qui n'est pas arrivée à terme.</p>
-                <br>
-                 <h2 class="space">Licence</h2>
-                <br>
-                <p>Les fichiers fournis par Bugspointer sont soumis à licence Creative Common CC-BY-NC 2.0 <a href="https://creativecommons.org/licenses/by-nc/2.0/deed.fr">Voir les détails de cette licence</a>
-                <br>Attention à la <a th:href="@{documentations#customisation}">documentation</a> qui vous expliquera ce que vous pouvez <strong>ou non</strong> modifier afin de garantir l'intégrité et la validation du formulaire</p>
-                <br>
+    <main>
+        <section class="legal-hero relative px-5 pb-12 pt-12 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto max-w-7xl">
+                <div class="mx-auto max-w-4xl text-center">
+                    <p class="mx-auto mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
+                        Cadre d'utilisation
+                    </p>
+                    <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
+                        Conditions générales d'utilisation
+                    </h1>
+                    <p class="mx-auto mt-6 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
+                        Retrouvez les règles qui encadrent l'utilisation du site BugsPointer et des services associés.
+                    </p>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
+
+        <section class="px-5 pb-16 sm:px-8 lg:px-12">
+            <div class="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.35fr_0.65fr]">
+                <aside class="h-fit rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur">
+                    <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Documents liés</p>
+                    <div class="mt-5 flex flex-col gap-3">
+                        <a th:href="@{/mentions}" class="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white/75 transition hover:border-pointer-green/40 hover:text-white">
+                            Mentions légales
+                        </a>
+                        <a th:href="@{/cgv}" class="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white/75 transition hover:border-pointer-green/40 hover:text-white">
+                            Conditions générales de vente
+                        </a>
+                        <a th:href="@{/documentations#customisation}" class="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white/75 transition hover:border-pointer-green/40 hover:text-white">
+                            Documentation
+                        </a>
+                    </div>
+                </aside>
+
+                <div class="rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur sm:p-8 lg:p-10">
+                    <div class="space-y-8 text-base leading-7 text-white/70">
+                        <article>
+                            <h2 class="text-2xl font-black text-white">Introduction</h2>
+                            <p class="mt-3">Les présentes Conditions Générales d'Utilisation (CGU) régissent l'utilisation du site web de BugsPointer ("le Site"). Veuillez lire attentivement ces CGU avant d'utiliser notre site. En accédant ou en utilisant le Site, vous acceptez d'être lié par ces CGU.</p>
+                        </article>
+
+                        <article>
+                            <h2 class="text-2xl font-black text-white">Informations de contact</h2>
+                            <p class="mt-3">
+                                <a th:href="@{/mentions}" class="font-bold text-pointer-lime underline decoration-pointer-lime/40 underline-offset-4 transition hover:text-pointer-green">Se reporter aux Mentions légales</a>
+                            </p>
+                        </article>
+
+                        <article>
+                            <h2 class="text-2xl font-black text-white">Services proposés</h2>
+                            <p class="mt-3">BugsPointer offre un formulaire et toute une interface permettant à des utilisateurs de site internet de signaler un bug sur ce dernier.</p>
+                        </article>
+
+                        <article>
+                            <h2 class="text-2xl font-black text-white">Conditions spécifiques</h2>
+                            <p class="mt-3">
+                                Les conditions spécifiques applicables à l'utilisation des services proposés par BugsPointer sont disponibles à l'adresse suivante :
+                                <a th:href="@{/cgv}" class="font-bold text-pointer-lime underline decoration-pointer-lime/40 underline-offset-4 transition hover:text-pointer-green">www.bugspointer.com/cgv</a>
+                            </p>
+                        </article>
+
+                        <article>
+                            <h2 class="text-2xl font-black text-white">Confidentialité et protection des données</h2>
+                            <p class="mt-3">BugsPointer respecte votre vie privée et met en place des mesures pour protéger vos données personnelles conformément à la réglementation en vigueur. Pour en savoir plus sur notre politique de confidentialité et sur la manière dont nous traitons vos données personnelles, veuillez vous référer aux préconisations de la CNIL.</p>
+                        </article>
+
+                        <article>
+                            <h2 class="text-2xl font-black text-white">Droits de propriété</h2>
+                            <p class="mt-3">Tous les droits de propriété intellectuelle liés au contenu et aux éléments du Site, tels que les textes, les graphiques, les logos, les icônes, les images, les clips audio, les téléchargements numériques, les compilations de données et le logiciel, sont la propriété exclusive de BugsPointer ou de ses concédants de licence et sont protégés par les lois sur les droits d'auteur et autres droits de propriété intellectuelle.</p>
+                        </article>
+
+                        <article>
+                            <h2 class="text-2xl font-black text-white">Suspension de compte</h2>
+                            <p class="mt-3">Les utilisateurs peuvent demander la suspension de leur compte en nous contactant par e-mail à l'adresse suivante : contact@bugspointer.com ou en désactivant leur compte via le chemin suivant : Connexion &gt; Dashboard &gt; Account.</p>
+                        </article>
+
+                        <article>
+                            <h2 class="text-2xl font-black text-white">Responsabilités de l'utilisateur</h2>
+                            <p class="mt-3">Les utilisateurs s'engagent à n'entreprendre aucune action qui pourrait compromettre l'intégrité du site ou des formulaires fournis par BugsPointer. Toute violation de cette disposition pourra entraîner la résiliation ou la suspension du compte de l'utilisateur, sans préjudice de tout autre recours disponible en droit et à tout instant sans préavis, même avec une offre payante qui n'est pas arrivée à terme.</p>
+                        </article>
+
+                        <article>
+                            <h2 class="text-2xl font-black text-white">Licence</h2>
+                            <p class="mt-3">
+                                Les fichiers fournis par BugsPointer sont soumis à licence Creative Common CC-BY-NC 2.0.
+                                <a href="https://creativecommons.org/licenses/by-nc/2.0/deed.fr" class="font-bold text-pointer-lime underline decoration-pointer-lime/40 underline-offset-4 transition hover:text-pointer-green">Voir les détails de cette licence</a>.
+                            </p>
+                            <p class="mt-3">
+                                Attention à la <a th:href="@{/documentations#customisation}" class="font-bold text-pointer-lime underline decoration-pointer-lime/40 underline-offset-4 transition hover:text-pointer-green">documentation</a> qui vous expliquera ce que vous pouvez <strong class="text-white">ou non</strong> modifier afin de garantir l'intégrité et la validation du formulaire.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <div th:replace="~{include/footer.html}"></div>
 </body>
