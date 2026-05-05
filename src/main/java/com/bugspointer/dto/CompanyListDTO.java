@@ -21,6 +21,8 @@ public class CompanyListDTO {
 
     private String dateDownload;
 
+    private boolean domainVerified;
+
     private String plan;
 
 }

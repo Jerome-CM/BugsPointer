@@ -154,6 +154,7 @@ public class AdminService {
             compDTO.setCompanyId(company.getCompanyId());
             compDTO.setCompanyName(company.getCompanyName());
             compDTO.setDateDownload(Utility.dateFormator(company.getDateDownload(), "dd/MM/yyyy"));
+            compDTO.setDomainVerified(company.isDomainVerified());
             compDTO.setCreationDate(Utility.dateFormator(company.getDateCreation(), "dd/MM/yyyy"));
             compDTO.setMotifEnable(StringUtils.capitalize(String.valueOf(company.getMotifEnable()).toLowerCase()));
             compDTO.setPlan(StringUtils.capitalize(String.valueOf(company.getPlan()).toLowerCase()));

@@ -331,7 +331,7 @@ public class MailService {
                 "Nouveau rapport",
                 "Nouveau bug signalé",
                 paragraph("Un utilisateur vient de déclarer un nouveau bug sur votre site.") +
-                        paragraph("Votre plan gratuit inclut un rapport détaillé tous les 30 jours. Pour voir toutes les informations de ce nouveau signalement, passez au plan Target."),
+                        paragraph("Vous avez déjà reçu votre rapport détaillé du mois avec le plan Free. Pour voir ce nouveau signalement dans votre dashboard et recevoir tous les rapports, passez au plan Target."),
                 "Voir les détails du plan",
                 emailUrl("features/"),
                 null

@@ -8,6 +8,7 @@
         </button>
         <ul class="nav-menu company items-center gap-2 lg:flex" id="nav-menu">
             <li th:if="${isLoggedIn == true}"><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/private/dashboard}">Dashboard</a></li>
+            <li th:if="${isAdmin == true}"><a class="rounded-lg border border-yellow-200/35 bg-yellow-300/12 px-4 py-2 text-sm font-bold text-yellow-50 transition hover:border-yellow-100/60 hover:bg-yellow-300/20" th:href="@{/app/admin/dashboard}">DashboardAdmin</a></li>
             <li th:if="${isLoggedIn == true}"><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/download}">Installation</a></li>
             <li th:if="${isLoggedIn == true}"><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/private/widget}">Widget</a></li>
             <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/documentations}">Documentations</a></li>

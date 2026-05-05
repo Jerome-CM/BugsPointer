@@ -39,11 +39,19 @@ public class DomainRequiredInterceptor implements HandlerInterceptor {
         }
 
         Company company = companyOptional.get();
-        if (!"ROLE_ADMIN".equals(company.getRole()) && (company.getDomaine() == null || company.getDomaine().trim().isEmpty() || !company.isDomainVerified())) {
+        if (!isAdmin(company.getRole()) && (company.getDomaine() == null || company.getDomaine().trim().isEmpty() || !company.isDomainVerified())) {
             response.sendRedirect("/app/private/onboarding/widget");
             return false;
         }
 
         return true;
+    }
+
+    private boolean isAdmin(String role) {
+        if (role == null) {
+            return false;
+        }
+        String normalized = role.trim().toUpperCase();
+        return "ADMIN".equals(normalized) || "ROLE_ADMIN".equals(normalized);
     }
 }

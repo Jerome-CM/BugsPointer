@@ -26,7 +26,7 @@
                                     <th class="px-4 py-3">Company</th>
                                     <th class="px-4 py-3">Creation</th>
                                     <th class="px-4 py-3">Status</th>
-                                    <th class="px-4 py-3">Download</th>
+                                    <th class="px-4 py-3">Site vérifié</th>
                                     <th class="px-4 py-3">Received</th>
                                     <th class="px-4 py-3">Solved</th>
                                     <th class="px-4 py-3">Plan</th>
@@ -43,10 +43,16 @@
                                         <span th:if="${company.motifEnable.equals('Suppression')}" class="rounded-full border border-red-300/25 bg-red-500/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-red-100" th:text="${company.motifEnable}"></span>
                                         <span th:if="${company.motifEnable.equals('Admin')}" class="rounded-full border border-sky-300/25 bg-sky-400/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-sky-100" th:text="${company.motifEnable}"></span>
                                     </td>
-                                    <td class="border-t border-white/10 px-4 py-3" th:text="${company.getDateDownload()}"></td>
+                                    <td class="border-t border-white/10 px-4 py-3">
+                                        <span th:if="${company.isDomainVerified()}" class="rounded-full border border-pointer-green/25 bg-pointer-green/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-pointer-lime">Oui</span>
+                                        <span th:if="${!company.isDomainVerified()}" class="rounded-full border border-red-300/25 bg-red-500/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-red-100">Non</span>
+                                    </td>
                                     <td class="border-t border-white/10 px-4 py-3" th:text="${company.getNbrTotalBug()}"></td>
                                     <td class="border-t border-white/10 px-4 py-3" th:text="${company.getNbrSolved()}"></td>
-                                    <td class="border-t border-white/10 px-4 py-3"><span class="rounded-full border border-pointer-green/25 bg-pointer-green/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-pointer-lime" th:text="${company.getPlan()}"></span></td>
+                                    <td class="border-t border-white/10 px-4 py-3">
+                                        <span th:if="${company.getPlan().equals('Target')}" class="rounded-full border border-yellow-200/55 bg-yellow-300/25 px-3 py-1 text-xs font-black uppercase tracking-wider text-yellow-50 shadow-[0_0_24px_rgba(253,224,71,0.18)]" th:text="${company.getPlan()}"></span>
+                                        <span th:if="${!company.getPlan().equals('Target')}" class="rounded-full border border-pointer-green/25 bg-pointer-green/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-pointer-lime" th:text="${company.getPlan()}"></span>
+                                    </td>
                                     <td class="border-t border-white/10 px-4 py-3"><a class="font-bold text-pointer-lime transition hover:text-pointer-green" target="_blank" th:href="@{/app/admin/companyDetails/{id}(id=${company.getCompanyId()})}">Details</a></td>
                                 </tr>
                             </tbody>
