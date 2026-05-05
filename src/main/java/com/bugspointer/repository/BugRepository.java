@@ -28,4 +28,6 @@ public interface BugRepository extends CrudRepository<Bug, Long> {
     @Query(value="SELECT COUNT(*) FROM bug;", nativeQuery = true)
     Long allBugCounted();
 
+    Long countByEtatBug(EnumEtatBug status);
+
 }

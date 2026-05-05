@@ -128,9 +128,11 @@ public class AdminService {
     }
 
     public long getBugCount(EnumEtatBug status) {
-        return StreamSupport.stream(bugRepository.findAll().spliterator(), false)
-                .filter(bug -> bug.getEtatBug() == status)
-                .count();
+        if (status == null) {
+            return 0;
+        }
+        Long count = bugRepository.countByEtatBug(status);
+        return count != null ? count : 0;
     }
 
     public BigDecimal getEstimatedAnnualRevenue() {

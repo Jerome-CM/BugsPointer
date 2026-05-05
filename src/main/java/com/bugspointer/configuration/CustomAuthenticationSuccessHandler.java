@@ -72,7 +72,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         company.setLastVisit(new Date());
         companyRepository.save(company);
 
-        if(company.getRole().equals("ROLE_ADMIN")){
+        if(isAdmin(company.getRole())){
             response.sendRedirect("app/admin/dashboard");
         } else if (session.getAttribute("redirectAfterLogin") != null && String.valueOf(session.getAttribute("redirectAfterLogin")).startsWith("/")) {
             String redirectAfterLogin = String.valueOf(session.getAttribute("redirectAfterLogin"));
@@ -83,5 +83,13 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         }else{
             response.sendRedirect("app/private/dashboard");
         }
+    }
+
+    private boolean isAdmin(String role) {
+        if (role == null) {
+            return false;
+        }
+        String normalized = role.trim().toUpperCase();
+        return "ADMIN".equals(normalized) || "ROLE_ADMIN".equals(normalized);
     }
 }

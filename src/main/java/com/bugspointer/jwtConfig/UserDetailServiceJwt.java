@@ -43,10 +43,22 @@ public class UserDetailServiceJwt implements UserDetailsService {
         if (company.isPresent()){
             companyGet = company.get();
         }
+        if (companyGet == null) {
+            throw new UsernameNotFoundException(mail);
+        }
         /* load username, password and Authorities in a User Spring */
-        UserDetails userAuth = org.springframework.security.core.userdetails.User.withUsername(companyGet.getMail()).password(companyGet.getPassword()).authorities(companyGet.getRole().toString()).build();
+        String role = normalizeRole(companyGet.getRole());
+        UserDetails userAuth = org.springframework.security.core.userdetails.User.withUsername(companyGet.getMail()).password(companyGet.getPassword()).authorities(role).build();
         //log.info("Connexion User : {}", userAuth);
         return userAuth;
+    }
+
+    private String normalizeRole(String role) {
+        if (role == null || role.trim().isEmpty()) {
+            return "ROLE_USER";
+        }
+        String normalized = role.trim().toUpperCase(Locale.ROOT);
+        return normalized.startsWith("ROLE_") ? normalized : "ROLE_" + normalized;
     }
 
     public List<String> getRoleList(UserDetails userDetails) {
