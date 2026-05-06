@@ -127,21 +127,21 @@
                                     <span class="flex h-3 w-3 rounded-full bg-pointer-green shadow-[0_0_18px_rgba(0,230,118,0.55)]"></span>
                                     <p class="font-black text-white">Signalé</p>
                                 </div>
-                                <p class="mt-3 text-white/64" th:text="${bug.getDateCreation() != null ? #dates.format(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}"></p>
+                                <p class="mt-3 text-white/64" th:text="${T(com.bugspointer.utility.Utility).dateFormator(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss')}"></p>
                             </div>
                             <div class="rounded-lg border border-white/10 bg-black/15 p-4">
                                 <div class="flex items-center gap-3">
                                     <span class="flex h-3 w-3 rounded-full" th:classappend="${bug.getDateView() != null ? ' bg-amber-300 shadow-[0_0_18px_rgba(252,211,77,0.48)]' : ' bg-white/20'}"></span>
                                     <p class="font-black text-white">Vu</p>
                                 </div>
-                                <p class="mt-3 text-white/64" th:text="${bug.getDateView() != null ? #dates.format(bug.getDateView(), 'dd/MM/yyyy - HH:mm:ss') : 'En attente'}"></p>
+                                <p class="mt-3 text-white/64" th:text="${bug.getDateView() != null ? T(com.bugspointer.utility.Utility).dateFormator(bug.getDateView(), 'dd/MM/yyyy - HH:mm:ss') : 'En attente'}"></p>
                             </div>
                             <div class="rounded-lg border border-white/10 bg-black/15 p-4">
                                 <div class="flex items-center gap-3">
                                     <span class="flex h-3 w-3 rounded-full" th:classappend="${bug.getDateSolved() != null ? ' bg-sky-300 shadow-[0_0_18px_rgba(125,211,252,0.45)]' : ' bg-white/20'}"></span>
                                     <p class="font-black text-white">Résolu / Ignoré</p>
                                 </div>
-                                <p class="mt-3 text-white/64" th:text="${bug.getDateSolved() != null ? #dates.format(bug.getDateSolved(), 'dd/MM/yyyy - HH:mm:ss') : 'En attente'}"></p>
+                                <p class="mt-3 text-white/64" th:text="${bug.getDateSolved() != null ? T(com.bugspointer.utility.Utility).dateFormator(bug.getDateSolved(), 'dd/MM/yyyy - HH:mm:ss') : 'En attente'}"></p>
                             </div>
                         </div>
                     </article>

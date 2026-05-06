@@ -100,6 +100,7 @@ public class Utility {
             return "--";
         } else {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            simpleDateFormat.setTimeZone(java.util.TimeZone.getTimeZone("Europe/Paris"));
             return simpleDateFormat.format(date);
         }
     }

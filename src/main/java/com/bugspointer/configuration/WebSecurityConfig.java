@@ -94,7 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe().disable()
                 .sessionManagement()
                 .sessionFixation().migrateSession()
-                .invalidSessionUrl("/authentication?status=ERROR&message=Session%20expir%C3%A9e")
+                .invalidSessionUrl("/")
                 .and()
                 .logout()
                 .logoutUrl("/logout")

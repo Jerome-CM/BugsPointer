@@ -106,19 +106,19 @@
                     <div class="mt-5 grid gap-3 text-sm md:grid-cols-4">
                         <div class="rounded-lg border border-white/10 bg-black/15 p-4">
                             <p class="font-black text-white">Signalé</p>
-                            <p class="mt-1 text-white/62" th:text="${bug.getDateCreation() != null ? #dates.format(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}">- -</p>
+                            <p class="mt-1 text-white/62" th:text="${T(com.bugspointer.utility.Utility).dateFormator(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss')}">- -</p>
                         </div>
                         <div class="rounded-lg border border-white/10 bg-black/15 p-4">
                             <p class="font-black text-white">E-mail envoyé</p>
-                            <p class="mt-1 text-white/62" th:text="${bug.getDateEnvoi() != null ? #dates.format(bug.getDateEnvoi(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}">- -</p>
+                            <p class="mt-1 text-white/62" th:text="${bug.getDateEnvoi() != null ? T(com.bugspointer.utility.Utility).dateFormator(bug.getDateEnvoi(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}">- -</p>
                         </div>
                         <div class="rounded-lg border border-white/10 bg-black/15 p-4">
                             <p class="font-black text-white">Vu</p>
-                            <p class="mt-1 text-white/62" th:text="${bug.getDateView() != null ? #dates.format(bug.getDateView(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}">- -</p>
+                            <p class="mt-1 text-white/62" th:text="${bug.getDateView() != null ? T(com.bugspointer.utility.Utility).dateFormator(bug.getDateView(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}">- -</p>
                         </div>
                         <div class="rounded-lg border border-white/10 bg-black/15 p-4">
                             <p class="font-black text-white">Résolu / Ignoré</p>
-                            <p class="mt-1 text-white/62" th:text="${bug.getDateSolved() != null ? #dates.format(bug.getDateSolved(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}">- -</p>
+                            <p class="mt-1 text-white/62" th:text="${bug.getDateSolved() != null ? T(com.bugspointer.utility.Utility).dateFormator(bug.getDateSolved(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}">- -</p>
                         </div>
                     </div>
 
