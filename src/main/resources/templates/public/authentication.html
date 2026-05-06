@@ -33,7 +33,11 @@
         };
     </script>
     <link th:href="@{/css/home.css}" rel="stylesheet" />
-    <style>.bugspointer-logo{display:none;}</style>
+    <style>
+        .bugspointer-logo{display:none;}
+        .password-help:hover .password-help-content,
+        .password-help:focus-within .password-help-content{display:block;}
+    </style>
 </head>
 <body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
     <div th:replace="~{include/notifAlert.html}"></div>
@@ -100,12 +104,20 @@
 
                             <div class="flex flex-col gap-4 md:flex-row">
                                 <label class="w-full md:w-6/12">
-                                    <span class="mb-2 block text-sm font-bold text-white/72">Mot de passe</span>
+                                    <span class="mb-2 flex items-center gap-2 text-sm font-bold text-white/72">
+                                        Mot de passe
+                                        <span class="password-help relative inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-white/8 text-xs font-black text-white/80" tabindex="0">?
+                                            <span class="password-help-content absolute bottom-8 left-1/2 z-20 hidden w-72 -translate-x-1/2 rounded-lg border border-white/10 bg-[#08110D] p-3 text-left text-xs font-medium leading-5 text-white/72 shadow-[0_18px_45px_rgba(0,0,0,0.35)]">
+                                                Utilisez au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial. Évitez les mots de passe déjà utilisés ailleurs.
+                                            </span>
+                                        </span>
+                                    </span>
                                     <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" id="registerPassword" placeholder="Mot de passe" required>
                                 </label>
                                 <label class="w-full md:w-6/12">
                                     <span class="mb-2 block text-sm font-bold text-white/72">Confirmation</span>
                                     <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmez le mot de passe" required>
+                                    <span id="passwordMatchMessage" class="mt-2 hidden text-sm font-bold text-red-200">Les deux mots de passe doivent être identiques.</span>
                                 </label>
                             </div>
 
@@ -158,5 +170,24 @@
     </main>
 
     <div th:replace="~{include/footer.html}"></div>
+    <script>
+        const registerPassword = document.getElementById('registerPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const passwordMatchMessage = document.getElementById('passwordMatchMessage');
+
+        function validatePasswordMatch() {
+            if (!registerPassword || !confirmPassword || !passwordMatchMessage) {
+                return;
+            }
+            const hasMismatch = confirmPassword.value.length > 0 && registerPassword.value !== confirmPassword.value;
+            confirmPassword.setCustomValidity(hasMismatch ? 'Les deux mots de passe doivent être identiques.' : '');
+            passwordMatchMessage.classList.toggle('hidden', !hasMismatch);
+        }
+
+        if (registerPassword && confirmPassword) {
+            registerPassword.addEventListener('input', validatePasswordMatch);
+            confirmPassword.addEventListener('input', validatePasswordMatch);
+        }
+    </script>
 </body>
 </html>

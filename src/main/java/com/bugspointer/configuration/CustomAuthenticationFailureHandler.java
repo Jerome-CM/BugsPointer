@@ -17,6 +17,6 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse responseHttp, AuthenticationException exception) throws IOException, ServletException {
         log.info("--- Method onAuthenticationFailure ---");
-        responseHttp.sendRedirect("/authentication");
+        responseHttp.sendRedirect("/authentication?status=ERROR&message=Identifiants%20incorrects");
     }
 }
