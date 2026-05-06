@@ -222,15 +222,9 @@ public class Private {
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("company", companyService.getDashboardDto(currentCompany));
 
-        if (currentCompany.getPlan().equals(EnumPlan.FREE)) {
-            model.addAttribute("status", String.valueOf(EnumStatus.ERROR));
-            model.addAttribute("notification", "La personnalisation du widget est disponible avec le plan Target.");
-            model.addAttribute("widget", preferencesService.getCompanyPreferenceDTO(currentCompany));
-            return "private/widget";
-        }
-
         if (!result.hasErrors()) {
-            Response response = preferencesService.updatePreference(dto, "updateWidget");
+            String action = currentCompany.getPlan().equals(EnumPlan.FREE) ? "updateWidgetFree" : "updateWidget";
+            Response response = preferencesService.updatePreference(dto, action);
             if (response.getStatus().equals(EnumStatus.OK)) {
                 redirectAttributes.addFlashAttribute("notification", response.getMessage());
                 redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));

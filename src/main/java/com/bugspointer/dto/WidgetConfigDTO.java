@@ -7,6 +7,8 @@ public class WidgetConfigDTO {
 
     private String publicKey;
 
+    private boolean targetPlan;
+
     private String primaryColor = "#27215F";
 
     private String modalBackgroundColor = "#FFFFFF";
