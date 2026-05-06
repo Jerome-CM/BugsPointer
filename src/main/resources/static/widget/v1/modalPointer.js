@@ -58,7 +58,9 @@
             if (!response.ok) {
                 return localConfig;
             }
-            return { ...(await response.json()), ...localConfig };
+            const remoteConfig = await response.json();
+            const allowedLocalConfig = remoteConfig.targetPlan ? localConfig : readFreeDatasetConfig(localConfig);
+            return { ...remoteConfig, ...allowedLocalConfig };
         } catch (error) {
             console.warn("Bugspointer: unable to load widget config.", error);
             return localConfig;
@@ -83,6 +85,16 @@
         if (script.dataset.marginX) config.marginX = script.dataset.marginX;
         if (script.dataset.marginY) config.marginY = script.dataset.marginY;
         return config;
+    }
+
+    function readFreeDatasetConfig(config) {
+        const freeConfig = {};
+        if (config.primaryColor) freeConfig.primaryColor = config.primaryColor;
+        if (config.linkTextColor) freeConfig.linkTextColor = config.linkTextColor;
+        if (typeof config.linkUnderline !== "undefined") freeConfig.linkUnderline = config.linkUnderline;
+        if (config.buttonStyle) freeConfig.buttonStyle = config.buttonStyle;
+        if (config.collectEmail) freeConfig.collectEmail = config.collectEmail;
+        return freeConfig;
     }
 
     function normalizeConfig(config) {

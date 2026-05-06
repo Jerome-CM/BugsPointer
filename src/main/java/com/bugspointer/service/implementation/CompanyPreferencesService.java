@@ -6,6 +6,7 @@ import com.bugspointer.dto.Response;
 import com.bugspointer.dto.WidgetConfigDTO;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.CompanyPreferences;
+import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.entity.enumLogger.Action;
 import com.bugspointer.entity.enumLogger.What;
 import com.bugspointer.repository.CompanyRepository;
@@ -92,6 +93,10 @@ public class CompanyPreferencesService implements ICompanyPreferences {
                 preferences.setWidgetPosition(safePosition(dto.getWidgetPosition()));
                 preferences.setWidgetMarginX(safeMargin(dto.getWidgetMarginX()));
                 preferences.setWidgetMarginY(safeMargin(dto.getWidgetMarginY()));
+            } else if (action.equals("updateWidgetFree")) {
+                preferences.setWidgetPrimaryColor(safeColor(dto.getWidgetPrimaryColor()));
+                preferences.setWidgetLinkTextColor(safeColor(dto.getWidgetLinkTextColor()));
+                preferences.setWidgetLinkUnderline(dto.isWidgetLinkUnderline());
             } else {
                 return new Response(EnumStatus.ERROR, null, "Une erreur s'est produite");
             }
@@ -120,14 +125,19 @@ public class CompanyPreferencesService implements ICompanyPreferences {
         }
 
         CompanyPreferences preferences = getOrCreatePreferences(company);
+        dto.setTargetPlan(company.getPlan() != EnumPlan.FREE);
         dto.setPrimaryColor(safeColor(preferences.getWidgetPrimaryColor()));
+        dto.setLinkTextColor(safeColor(preferences.getWidgetLinkTextColor()));
+        dto.setLinkUnderline(preferences.isWidgetLinkUnderline());
+        dto.setButtonStyle("button");
+        if (company.getPlan() == EnumPlan.FREE) {
+            return dto;
+        }
+
         dto.setModalBackgroundColor(safeColor(preferences.getWidgetModalBackgroundColor(), "#FFFFFF"));
         dto.setModalTextColor(safeColor(preferences.getWidgetModalTextColor(), "#24233D"));
         dto.setTitleColor(safeColor(preferences.getWidgetTitleColor(), "#24233D"));
-        dto.setLinkTextColor(safeColor(preferences.getWidgetLinkTextColor()));
-        dto.setLinkUnderline(preferences.isWidgetLinkUnderline());
         dto.setButtonText(safeText(preferences.getWidgetButtonText(), "Signaler un bug", 60));
-        dto.setButtonStyle("button");
         dto.setButtonSize(safeButtonSize(preferences.getWidgetButtonSize()));
         dto.setTitle(safeText(preferences.getWidgetTitle(), "Signaler un nouveau bug", 80));
         dto.setDescriptionLabel(safeText(preferences.getWidgetDescriptionLabel(), "Description du bug", 80));
