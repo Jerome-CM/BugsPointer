@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black" lang="fr">
 <div th:replace="~{include/head.html}"></div>
     <title>Documentation BugsPointer - bouton, lien et personnalisation du widget</title>
     <meta name="description" content="Installez BugsPointer avec un bouton flottant ou un lien placé dans votre site. Configurez la clé publique, vérifiez le domaine et personnalisez le widget.">
@@ -94,6 +94,7 @@
                                 <div class="mt-1 flex flex-col border-l border-white/10 pl-3">
                                     <a href="#cms" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">CMS</a>
                                     <a href="#frameworks" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Frameworks JS</a>
+                                    <a href="#ai-prompt" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Prompt IA</a>
                                 </div>
                             </div>
 
@@ -163,7 +164,7 @@
                         <article class="mt-8">
                             <h3 id="public-key" class="text-2xl font-black text-white">Clé publique</h3>
                             <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
-                                <p><code>data-public-key</code> relie le widget a votre compte BugsPointer. Cette clé est publique : elle peut apparaître dans le HTML du site client.</p>
+                                <p><code>data-public-key</code> relie le widget à votre compte BugsPointer. Cette clé est publique : elle peut apparaître dans le HTML du site client.</p>
                                 <p class="mt-3">Format obligatoire : <code>pk_xxxxx</code>.</p>
                             </div>
                         </article>
@@ -196,6 +197,30 @@
                             <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
                                 <p>Ajoutez le script dans le layout global, le template HTML principal, ou injectez-le au montage de l’application.</p>
                                 <p class="mt-3">Pour une SPA, le widget reste disponible pendant la navigation et récupère l’URL courante au moment de l’ouverture de la modal.</p>
+                            </div>
+                        </article>
+
+                        <article class="mt-8">
+                            <h3 id="ai-prompt" class="text-2xl font-black text-white">Se faire aider par une IA</h3>
+                            <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
+                                <p>Générez un prompt prêt à coller dans votre assistant IA pour installer BugsPointer sur votre site.</p>
+
+                                <label class="mt-5 block">
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Langage ou CMS</span>
+                                    <input id="aiPromptLanguage" class="min-h-12 w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/45 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" value="WordPress" placeholder="WordPress, Shopify, React, Next.js..." />
+                                </label>
+
+                                <div class="mt-5 flex flex-col gap-3 sm:flex-row">
+                                    <button id="showAiPrompt" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" type="button">
+                                        Afficher le prompt IA
+                                    </button>
+                                    <button id="copyAiPrompt" class="hidden inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5 hover:border-pointer-green/40 hover:text-pointer-lime" type="button">
+                                        Copier le prompt
+                                    </button>
+                                </div>
+
+                                <textarea id="aiPromptOutput" class="code-block mt-5 hidden min-h-[260px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly th:attr="data-public-key=${publicKey != null ? publicKey : 'pk_xxxxx'}"></textarea>
+                                <p id="aiPromptCopyStatus" class="mt-3 hidden text-sm font-bold text-pointer-lime">Prompt copié.</p>
                             </div>
                         </article>
                     </section>
@@ -280,5 +305,53 @@ connect-src https://bugspointer.com;</textarea>
     </main>
 
     <div th:replace="~{include/footer.html}"></div>
+    <script>
+        const aiPromptLanguage = document.getElementById('aiPromptLanguage');
+        const aiPromptOutput = document.getElementById('aiPromptOutput');
+        const showAiPrompt = document.getElementById('showAiPrompt');
+        const copyAiPrompt = document.getElementById('copyAiPrompt');
+        const aiPromptCopyStatus = document.getElementById('aiPromptCopyStatus');
+
+        function buildAiPrompt() {
+            const language = (aiPromptLanguage.value || 'WordPress').trim();
+            const publicKey = aiPromptOutput.dataset.publicKey || 'pk_xxxxx';
+            const scriptTag = '<scr' + `ipt src="https://bugspointer.com/widget/v1/modalPointer.js" data-public-key="${publicKey}" defer></scr` + 'ipt>';
+
+            return `Langage ou CMS : ${language}
+
+J'ai un site web en ${language} et j'aimerais intégrer la solution proposée par BugsPointer.
+
+Objectif : intégrer dans mon code le script BugsPointer pour permettre à mes utilisateurs de me rapporter des bugs directement depuis mon site.
+
+Voici le script à installer :
+${scriptTag}
+
+Voici le lien de la documentation :
+https://bugspointer.com/documentations#integration
+
+Aide-moi à mettre cette solution en place, indique précisément dans quel fichier ou quelle zone d'administration je dois ajouter le script, puis donne-moi les étapes pour tester que le bouton BugsPointer s'affiche et que l'envoi d'un rapport fonctionne.
+
+J'ai le plan Free.`;
+        }
+
+        function showPrompt() {
+            aiPromptOutput.value = buildAiPrompt();
+            aiPromptOutput.classList.remove('hidden');
+            copyAiPrompt.classList.remove('hidden');
+            aiPromptCopyStatus.classList.add('hidden');
+        }
+
+        showAiPrompt.addEventListener('click', showPrompt);
+        aiPromptLanguage.addEventListener('input', () => {
+            if (!aiPromptOutput.classList.contains('hidden')) {
+                showPrompt();
+            }
+        });
+        copyAiPrompt.addEventListener('click', async () => {
+            showPrompt();
+            await navigator.clipboard.writeText(aiPromptOutput.value);
+            aiPromptCopyStatus.classList.remove('hidden');
+        });
+    </script>
 </body>
 </html>

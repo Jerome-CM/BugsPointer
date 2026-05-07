@@ -8,8 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.HttpStatusRequestRejectedHandler;
 import org.springframework.security.web.firewall.RequestRejectedHandler;
@@ -43,6 +45,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity webSecurity) {
+        webSecurity.ignoring()
+                .antMatchers("/css/**", "/js/**", "/widget/**", "/favicon.ico");
+    }
+
+    @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
        httpSecurity
                 .cors()
@@ -57,6 +65,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .maxAgeInSeconds(31536000)
                 .and()
                 .contentTypeOptions()
+                .and()
+                .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+                .and()
+                .permissionsPolicy().policy("camera=(), microphone=(), geolocation=(), payment=()")
+                .and()
+                .contentSecurityPolicy("default-src 'self'; script-src 'self' 'unsafe-inline' https://bugspointer.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://bugspointer.com; frame-ancestors 'self'; form-action 'self'; base-uri 'self'")
                 .and()
                 .frameOptions().sameOrigin()
                 .and()
