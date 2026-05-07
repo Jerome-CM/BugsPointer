@@ -34,7 +34,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="text-sm text-white/72" th:each="company : ${companies}">
+                                <tr class="group text-sm text-white/72 transition hover:bg-pointer-green/12 hover:text-white hover:shadow-[inset_4px_0_0_#00E676]" th:each="company : ${companies}">
                                     <td class="border-t border-white/10 px-4 py-3 font-bold text-white" th:text="${company.getCompanyName()}"></td>
                                     <td class="border-t border-white/10 px-4 py-3" th:text="${company.getCreationDate}"></td>
                                     <td class="border-t border-white/10 px-4 py-3">

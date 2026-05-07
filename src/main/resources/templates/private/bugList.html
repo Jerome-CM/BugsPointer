@@ -103,14 +103,10 @@
                         </a>
                     </div>
 
-                    <div class="mt-5 grid gap-3 text-sm md:grid-cols-4">
+                    <div class="mt-5 grid gap-3 text-sm md:grid-cols-3">
                         <div class="rounded-lg border border-white/10 bg-black/15 p-4">
                             <p class="font-black text-white">Signalé</p>
                             <p class="mt-1 text-white/62" th:text="${T(com.bugspointer.utility.Utility).dateFormator(bug.getDateCreation(), 'dd/MM/yyyy - HH:mm:ss')}">- -</p>
-                        </div>
-                        <div class="rounded-lg border border-white/10 bg-black/15 p-4">
-                            <p class="font-black text-white">E-mail envoyé</p>
-                            <p class="mt-1 text-white/62" th:text="${bug.getDateEnvoi() != null ? T(com.bugspointer.utility.Utility).dateFormator(bug.getDateEnvoi(), 'dd/MM/yyyy - HH:mm:ss') : '- -'}">- -</p>
                         </div>
                         <div class="rounded-lg border border-white/10 bg-black/15 p-4">
                             <p class="font-black text-white">Vu</p>
