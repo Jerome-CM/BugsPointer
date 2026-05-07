@@ -224,9 +224,9 @@ public class AdminService {
 
 
         // Add date last bug
-        List<Bug> bugsList = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.NEW);
+        List<Bug> bugsList = bugRepository.findAllByCompany(company);
 
-        bugsList = bugsList.stream().sorted(Comparator.comparing(Bug::getDateCreation)).collect(Collectors.toList());
+        bugsList = bugsList.stream().sorted(Comparator.comparing(Bug::getDateCreation).reversed()).collect(Collectors.toList());
         log.info("----- buglist after sorted : {}",bugsList);
 
         if(bugsList.size() != 0){

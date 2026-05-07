@@ -46,7 +46,7 @@
                         <button class="mt-5 min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)]" type="submit">Ajouter</button>
                     </form>
 
-                    <section class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                    <section class="mt-0 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
                         <div class="mb-5 border-b border-white/10 pb-5">
                             <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Historique</p>
                             <h2 class="mt-2 font-display text-3xl leading-none text-white">Dépenses saisies</h2>
@@ -56,7 +56,7 @@
                                 <thead><tr class="bg-black/25 text-sm uppercase tracking-wider text-white/58"><th class="px-4 py-3">Date</th><th class="px-4 py-3">Libellé</th><th class="px-4 py-3">Catégorie</th><th class="px-4 py-3 text-right">Montant</th></tr></thead>
                                 <tbody>
                                     <tr class="text-sm text-white/72" th:each="item : ${billings}">
-                                        <td class="border-t border-white/10 px-4 py-3" th:text="${item.billingDate}"></td>
+                                        <td class="border-t border-white/10 px-4 py-3" th:text="${item.billingDate != null ? T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy').format(item.billingDate) : '- -'}"></td>
                                         <td class="border-t border-white/10 px-4 py-3" th:text="${item.label}"></td>
                                         <td class="border-t border-white/10 px-4 py-3" th:text="${item.category}"></td>
                                         <td class="border-t border-white/10 px-4 py-3 text-right"><span th:text="${item.amount}"></span>€</td>

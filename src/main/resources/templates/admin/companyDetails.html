@@ -23,7 +23,7 @@
                     <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                         <div>
                             <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl" th:text="${company.getCompanyName()}">Company</h1>
-                            <a class="mt-4 inline-flex text-sm font-bold text-pointer-lime transition hover:text-pointer-green" target="_blank" th:href="@{${company.getDomaine()}}" th:text="${company.getDomaine()}">domain</a>
+                            <a class="mt-4 inline-flex text-sm font-bold text-pointer-lime transition hover:text-pointer-green" target="_blank" rel="noopener" th:href="${company.getDomaine() != null && !#strings.isEmpty(company.getDomaine()) ? (#strings.startsWith(company.getDomaine(), 'http') ? company.getDomaine() : 'https://' + company.getDomaine()) : '#'}" th:text="${company.getDomaine()}">domain</a>
                         </div>
                         <form class="w-full lg:w-auto" th:action="@{/app/admin/lockCompany/{id}(id=${company.getCompanyId()})}" method="post">
                             <button class="min-h-12 w-full rounded-lg border px-5 py-3 font-extrabold transition lg:w-auto" th:classappend="${company.isEnable()} ? ' border-red-300/30 bg-red-500/12 text-red-100 hover:border-red-200/60' : ' border-pointer-green/30 bg-pointer-green/10 text-pointer-lime hover:border-pointer-green/60'" type="submit" th:text="${company.isEnable()} ? 'Lock account' : 'Unlock account'">Lock</button>
@@ -43,11 +43,25 @@
                         <section class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
                             <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Account</p>
                             <dl class="mt-5 grid gap-4 text-sm">
-                                <div><dt class="text-white/48">Date register</dt><dd class="mt-1 font-bold text-white" th:text="${company.getDateCreation()}"></dd></div>
-                                <div><dt class="text-white/48">Status</dt><dd class="mt-1"><span class="rounded-full border border-white/10 bg-white/8 px-3 py-1 text-xs font-black uppercase tracking-wider" th:text="${company.getMotifEnable()}"></span></dd></div>
-                                <div><dt class="text-white/48">Last visit</dt><dd class="mt-1 font-bold text-white" th:text="${company.getLastVisit()}"></dd></div>
-                                <div><dt class="text-white/48">Last report</dt><dd class="mt-1 font-bold text-white" th:text="${company.getLastReport()}"></dd></div>
-                                <div><dt class="text-white/48">Plan</dt><dd class="mt-1 font-bold text-pointer-lime" th:text="${company.getPlan()}"></dd></div>
+                                <div>
+                                    <dt class="text-white/48">Status</dt>
+                                    <dd class="mt-1">
+                                        <span class="rounded-full border px-3 py-1 text-xs font-black uppercase tracking-wider"
+                                              th:classappend="${company.getMotifEnable() != null && company.getMotifEnable() == 'VALIDATE'} ? ' border-pointer-green/35 bg-pointer-green/12 text-pointer-lime' : ' border-red-300/35 bg-red-500/12 text-red-100'"
+                                              th:text="${company.getMotifEnable() != null && company.getMotifEnable() == 'VALIDATE'} ? 'Validé' : 'Non validé'">Validé</span>
+                                    </dd>
+                                </div>
+                                <div><dt class="text-white/48">Date register</dt><dd class="mt-1 font-bold text-white" th:text="${T(com.bugspointer.utility.Utility).dateFormator(company.getDateCreation(), 'dd/MM/yyyy HH:mm')}"></dd></div>
+                                <div><dt class="text-white/48">Last visit</dt><dd class="mt-1 font-bold text-white" th:text="${T(com.bugspointer.utility.Utility).dateFormator(company.getLastVisit(), 'dd/MM/yyyy HH:mm')}"></dd></div>
+                                <div><dt class="text-white/48">Last report</dt><dd class="mt-1 font-bold text-white" th:text="${T(com.bugspointer.utility.Utility).dateFormator(company.getLastReport(), 'dd/MM/yyyy HH:mm')}"></dd></div>
+                                <div>
+                                    <dt class="text-white/48">Plan</dt>
+                                    <dd class="mt-1">
+                                        <span class="rounded-full border px-3 py-1 text-xs font-black uppercase tracking-wider"
+                                              th:classappend="${company.getPlan() != null && company.getPlan().name() != 'FREE'} ? ' border-yellow-200/55 bg-yellow-300/25 text-yellow-50 shadow-[0_0_24px_rgba(253,224,71,0.18)]' : ' border-white/12 bg-white/8 text-white/72'"
+                                              th:text="${company.getPlan()}">FREE</span>
+                                    </dd>
+                                </div>
                             </dl>
                         </section>
 
