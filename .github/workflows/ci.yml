@@ -26,5 +26,8 @@ jobs:
           java-version: "11"
           cache: maven
 
+      - name: Prepare application configuration
+        run: cp src/main/resources/application.properties.example src/main/resources/application.properties
+
       - name: Package jar
         run: ./mvnw -DskipTests package
