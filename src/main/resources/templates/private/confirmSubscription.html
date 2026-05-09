@@ -40,7 +40,7 @@
                             <div class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-5" th:if="${subscription.getNewPlan() != null}">
                                 <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Nouveau plan</p>
                                 <h2 class="mt-2 font-display text-3xl leading-none text-white" th:text="${subscription.getNewPlan().name()}">TARGET</h2>
-                                <p class="mt-3 text-sm leading-6 text-white/68"><span th:text="${subscription.getNewPlan().getValeur()}"></span>€ par an</p>
+                                <p class="mt-3 text-sm leading-6 text-white/68"><span th:text="${newPlanPrice}"></span>€ par an</p>
                             </div>
                         </div>
 

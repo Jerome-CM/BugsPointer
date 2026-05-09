@@ -10,6 +10,7 @@ import be.woutschoovaerts.mollie.data.mandate.MandateStatus;
 import be.woutschoovaerts.mollie.data.subscription.SubscriptionRequest;
 import be.woutschoovaerts.mollie.data.subscription.SubscriptionResponse;
 import be.woutschoovaerts.mollie.data.subscription.SubscriptionStatus;
+import be.woutschoovaerts.mollie.data.subscription.UpdateSubscriptionRequest;
 import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.dto.*;
 import com.bugspointer.entity.Company;
@@ -24,10 +25,12 @@ import com.bugspointer.repository.CustomerRepository;
 import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -49,13 +52,16 @@ public class PaymentService {
 
     private final Client client;
 
-    public PaymentService(CompanyRepository companyRepository, CompanyService companyService, MailService mailService, CustomerRepository customerRepository, ModelMapper modelMapper, Client client) {
+    private final PlanPricingService planPricingService;
+
+    public PaymentService(CompanyRepository companyRepository, CompanyService companyService, MailService mailService, CustomerRepository customerRepository, ModelMapper modelMapper, Client client, PlanPricingService planPricingService) {
         this.companyRepository = companyRepository;
         this.companyService = companyService;
         this.mailService = mailService;
         this.customerRepository = customerRepository;
         this.modelMapper = modelMapper;
         this.client = client;
+        this.planPricingService = planPricingService;
     }
     
     public Response createNewCustomer(CustomerDTO customerDTO) throws MollieException {
@@ -308,7 +314,7 @@ public class PaymentService {
                 log.info("Mandate statut : {}", subscriptionResponse.getStatus());
                 if (subscriptionResponse.getStatus().equals(SubscriptionStatus.ACTIVE) ||
                         subscriptionResponse.getStatus().equals(SubscriptionStatus.PENDING)) {
-                    if (String.valueOf(subscriptionResponse.getAmount().getValue()).equals(customerDTO.getPlan().getValeur())) {
+                    if (sameAmount(subscriptionResponse.getAmount().getValue(), planPricingService.getNewSubscriptionAmount(customerDTO.getPlan()))) {
                         log.info("\r -------  ");
                         log.info("Mollie Subscription : {} - {}", customer.getCustomerId(), subscriptionResponse.getDescription());
                         log.info("\r -------  ");
@@ -371,7 +377,14 @@ public class PaymentService {
 
         SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
 
-        subscriptionRequest.setAmount(new Amount("EUR", new BigDecimal(plan.getValeur())));
+        BigDecimal subscriptionAmount = planPricingService.getNewSubscriptionAmount(plan);
+        BigDecimal renewalAmount = planPricingService.getRenewalAmount(plan);
+
+        if (subscriptionAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return saveFreeFirstYearSubscription(plan, customer, company, mandateId, renewalAmount);
+        }
+
+        subscriptionRequest.setAmount(new Amount("EUR", subscriptionAmount));
         subscriptionRequest.setDescription("Subscribe to " + plan.name() + " Plan");
         subscriptionRequest.setTimes(Optional.of(4));
         subscriptionRequest.setInterval("12 months");
@@ -404,6 +417,86 @@ public class PaymentService {
         }
 
         return new Response(EnumStatus.ERROR, null, "Erreur lors de la souscription");
+    }
+
+    private Response saveFreeFirstYearSubscription(EnumPlan plan, Customer customer, Company company, String mandateId, BigDecimal renewalAmount) throws MollieException {
+        SubscriptionRequest renewalSubscriptionRequest = new SubscriptionRequest();
+        LocalDate firstRenewalDate = LocalDate.now().plusYears(1);
+
+        renewalSubscriptionRequest.setAmount(new Amount("EUR", renewalAmount));
+        renewalSubscriptionRequest.setDescription("Subscribe to " + plan.name() + " Plan");
+        renewalSubscriptionRequest.setTimes(Optional.of(4));
+        renewalSubscriptionRequest.setInterval("12 months");
+        renewalSubscriptionRequest.setStartDate(Optional.of(firstRenewalDate));
+        renewalSubscriptionRequest.setMandateId(Optional.ofNullable(mandateId));
+
+        SubscriptionResponse subscriptionResponse = client.subscriptions().createSubscription(customer.getCustomerId(), renewalSubscriptionRequest);
+
+        if (subscriptionResponse.getStatus() == SubscriptionStatus.PENDING || subscriptionResponse.getStatus() == SubscriptionStatus.ACTIVE) {
+            mailService.sendMailChangePlan(plan, company.getMail());
+
+            Date dateLine = Date.from(firstRenewalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            customer.setDateStartSubscribe(String.valueOf(LocalDate.now()));
+            customer.setPlan(plan);
+            customerRepository.save(customer);
+            Response responseUpdate = companyService.updatePlan(company, dateLine, plan);
+
+            if (responseUpdate.getStatus().equals(EnumStatus.ERROR)) {
+                return new Response(EnumStatus.ERROR, responseUpdate, "Une erreur est survenu, merci de nous contacter à l'adresse mail ci-dessous");
+            }
+
+            Utility.saveLog(customer.getCompany().getCompanyId(), Action.UPDATE, What.SUBSCRIPTION, subscriptionResponse.getId(), null, null);
+            return new Response(EnumStatus.OK, null, "La souscription au plan : " + plan.name() + " est validé");
+        }
+
+        return new Response(EnumStatus.ERROR, null, "Erreur lors de la souscription");
+    }
+
+    @Scheduled(cron = "0 5 0 * * *")
+    public void restoreRenewalPrices() {
+        for (Customer customer : customerRepository.findAll()) {
+            EnumPlan plan = customer.getPlan();
+            if (plan == null || plan == EnumPlan.FREE || customer.getCustomerId() == null) {
+                continue;
+            }
+
+            try {
+                List<SubscriptionResponse> subscriptions = client.subscriptions().listSubscriptions(customer.getCustomerId()).getEmbedded().getSubscriptions();
+                for (SubscriptionResponse subscription : subscriptions) {
+                    if (!subscription.getStatus().equals(SubscriptionStatus.ACTIVE) && !subscription.getStatus().equals(SubscriptionStatus.PENDING)) {
+                        continue;
+                    }
+                    if (!subscription.getNextPaymentDate().isPresent() || subscription.getNextPaymentDate().get().isAfter(LocalDate.now())) {
+                        continue;
+                    }
+
+                    BigDecimal currentAmount = normalize(subscription.getAmount().getValue());
+                    BigDecimal renewalAmount = planPricingService.getRenewalAmount(plan);
+                    if (currentAmount.compareTo(renewalAmount) == 0) {
+                        continue;
+                    }
+
+                    UpdateSubscriptionRequest updateRequest = new UpdateSubscriptionRequest();
+                    updateRequest.setAmount(Optional.of(new Amount("EUR", renewalAmount)));
+                    updateRequest.setDescription(Optional.of("Subscribe to " + plan.name() + " Plan"));
+                    client.subscriptions().updateSubscription(customer.getCustomerId(), subscription.getId(), updateRequest);
+                    log.info("Subscription {} for customer {} restored to {} EUR", subscription.getId(), customer.getCustomerId(), renewalAmount);
+                }
+            } catch (Exception e) {
+                log.error("Unable to restore renewal price for customer {}: {}", customer.getCustomerId(), e.getMessage(), e);
+            }
+        }
+    }
+
+    private boolean sameAmount(BigDecimal left, BigDecimal right) {
+        return normalize(left).compareTo(normalize(right)) == 0;
+    }
+
+    private BigDecimal normalize(BigDecimal amount) {
+        if (amount == null) {
+            return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+        }
+        return amount.setScale(2, RoundingMode.HALF_UP);
     }
 
     public SubscriptionDTO getSubscriptionDTO(SubscriptionResponse subscriptionResponse) {
@@ -573,8 +666,6 @@ public class PaymentService {
         return null;
     }
 }
-
-
 
 
 

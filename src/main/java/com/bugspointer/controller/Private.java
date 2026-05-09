@@ -41,6 +41,8 @@ public class Private {
 
     private final PaymentService paymentService;
 
+    private final PlanPricingService planPricingService;
+
     @ModelAttribute("plans")
     public EnumPlan[] getFilteredPlans(){
         return Arrays.stream(EnumPlan.values())
@@ -49,7 +51,7 @@ public class Private {
     }
 
 
-    public Private(CompanyService companyService, BugService bugService, CompanyPreferencesService preferencesService, CustomerService customerService, JwtTokenUtil jwtTokenUtil, UserAuthenticationUtil userAuthenticationUtil, PaymentService paymentService) {
+    public Private(CompanyService companyService, BugService bugService, CompanyPreferencesService preferencesService, CustomerService customerService, JwtTokenUtil jwtTokenUtil, UserAuthenticationUtil userAuthenticationUtil, PaymentService paymentService, PlanPricingService planPricingService) {
         this.companyService = companyService;
         this.bugService = bugService;
         this.preferencesService = preferencesService;
@@ -57,6 +59,7 @@ public class Private {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userAuthenticationUtil = userAuthenticationUtil;
         this.paymentService = paymentService;
+        this.planPricingService = planPricingService;
     }
 
     @GetMapping("invoices")
@@ -429,6 +432,7 @@ public class Private {
         }
 
         model.addAttribute("product", selectedProduct);
+        model.addAttribute("productPrice", planPricingService.format(planPricingService.getNewSubscriptionAmount(selectedProduct)));
         /*model.addAttribute("selectedProduct", selectedProduct);*/
         model.addAttribute("customer", customer);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
@@ -448,6 +452,7 @@ public class Private {
         log.info("customer : {}", customerDTO);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("customer", customerDTO);
+        model.addAttribute("productPrice", planPricingService.format(planPricingService.getNewSubscriptionAmount(customerDTO.getPlan())));
         return "private/bankAccount";
     }
 
@@ -467,6 +472,7 @@ public class Private {
 
         model.addAttribute("produit", produit);
         model.addAttribute("nextPaymentDate", nextPaymentDate);
+        model.addAttribute("newPlanPrice", planPricingService.format(planPricingService.getNewSubscriptionAmount(subscriptionDTO.getNewPlan())));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/confirmSubscription";
     }

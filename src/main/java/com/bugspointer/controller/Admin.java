@@ -6,10 +6,12 @@ import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.FirstReportDTO;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.EnumEtatBug;
+import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.service.implementation.AdminService;
 import com.bugspointer.service.implementation.ChartService;
 import com.bugspointer.service.implementation.FirstReportService;
+import com.bugspointer.service.implementation.PlanPricingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
+import java.math.BigDecimal;
 import javax.validation.Valid;
 
 @Controller
@@ -35,10 +38,13 @@ public class Admin {
 
     private final ChartService chartService;
 
-    public Admin(AdminService adminService, FirstReportService firstReportService, ChartService chartService) {
+    private final PlanPricingService planPricingService;
+
+    public Admin(AdminService adminService, FirstReportService firstReportService, ChartService chartService, PlanPricingService planPricingService) {
         this.adminService = adminService;
         this.firstReportService = firstReportService;
         this.chartService = chartService;
+        this.planPricingService = planPricingService;
     }
 
     @GetMapping("dashboard")
@@ -60,7 +66,18 @@ public class Admin {
         model.addAttribute("totalBugCount", adminService.getTotalBugCount());
         model.addAttribute("pendingBugCount", adminService.getBugCount(EnumEtatBug.PENDING));
         model.addAttribute("solvedBugCount", adminService.getBugCount(EnumEtatBug.SOLVED));
+        model.addAttribute("planPrices", planPricingService.getPlanPrices());
         return "admin/dashboard";
+    }
+
+    @PostMapping("planPrice")
+    String updatePlanPrice(@RequestParam("plan") EnumPlan plan,
+                           @RequestParam("newSubscriptionAmount") BigDecimal newSubscriptionAmount,
+                           RedirectAttributes redirectAttributes) {
+        Response response = planPricingService.updateNewSubscriptionAmount(plan, newSubscriptionAmount);
+        redirectAttributes.addFlashAttribute("notification", response.getMessage());
+        redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+        return "redirect:/app/admin/dashboard";
     }
 
     @GetMapping("addBilling")

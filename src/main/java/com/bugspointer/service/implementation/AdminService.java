@@ -43,13 +43,16 @@ public class AdminService {
 
     private final Client client;
 
-    public AdminService(CompanyRepository companyRepository, HomeLoggerRepository homeLoggerRepository, BugRepository bugRepository, AdminBillingRepository adminBillingRepository, ModelMapper modelMapper, Client client) {
+    private final PlanPricingService planPricingService;
+
+    public AdminService(CompanyRepository companyRepository, HomeLoggerRepository homeLoggerRepository, BugRepository bugRepository, AdminBillingRepository adminBillingRepository, ModelMapper modelMapper, Client client, PlanPricingService planPricingService) {
         this.companyRepository = companyRepository;
         this.homeLoggerRepository = homeLoggerRepository;
         this.bugRepository = bugRepository;
         this.adminBillingRepository = adminBillingRepository;
         this.modelMapper = modelMapper;
         this.client = client;
+        this.planPricingService = planPricingService;
     }
 
     public List<AdminBilling> getBillings() {
@@ -136,7 +139,13 @@ public class AdminService {
     }
 
     public BigDecimal getEstimatedAnnualRevenue() {
-        return BigDecimal.valueOf(getPaidCompanyCount()).multiply(BigDecimal.valueOf(15));
+        BigDecimal total = BigDecimal.ZERO;
+        for (Company company : companyRepository.findAll()) {
+            if (company.getPlan() != null && company.getPlan() != EnumPlan.FREE) {
+                total = total.add(planPricingService.getRenewalAmount(company.getPlan()));
+            }
+        }
+        return total;
     }
 
     public BigDecimal getEstimatedProfit() {

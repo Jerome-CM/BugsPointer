@@ -268,11 +268,20 @@ nav ul li button {
 /* Index */
 
 .messageOnNav{
-    background-color: #6a0cff;
-    color: white;
+    width: 100%;
+    background: linear-gradient(90deg, #00E676 0%, #B7FF4A 100%);
+    color: #08110D;
     font-family: "RalewayBold", sans-serif;
     text-align: center;
-    font-size: 18px;
+    font-size: 15px;
+    line-height: 1.35;
+    padding: 8px 12px;
+}
+
+.messageOnNav a{
+    color: #08110D;
+    font-weight: 900;
+    text-decoration: none;
 }
 
 .citation{
