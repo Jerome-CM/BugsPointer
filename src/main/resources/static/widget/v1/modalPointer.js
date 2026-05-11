@@ -349,6 +349,7 @@
                     <div class="bp-success" data-bp-success>
                         <strong>Merci pour votre retour.</strong>
                         <span>Votre rapport a bien été transmis.</span>
+                        <span>Pensez à vérifier vos spams ou courriers indésirables si vous ne voyez pas l'e-mail dans quelques minutes.</span>
                         <div class="bp-success-url">
                             <span>Lien signalé</span>
                             <a href="#" target="_blank" rel="noopener" data-bp-success-url></a>
@@ -373,7 +374,7 @@
                         <label>
                             <span class="bp-label">Votre e-mail</span>
                             <input class="bp-input" type="email" name="mail" required placeholder="vous@exemple.fr">
-                            <span class="bp-help">Recevez le rapport de test sans créer de compte.</span>
+                            <span class="bp-help">Recevez le rapport de test sans créer de compte. Votre e-mail ne sera pas utilisé à des fins commerciales.</span>
                         </label>
                         ` : ""}
                         <input class="bp-honeypot" type="text" name="bot" tabindex="-1" autocomplete="off">
