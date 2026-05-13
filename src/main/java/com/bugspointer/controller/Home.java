@@ -74,6 +74,12 @@ public class Home {
         return "public/features";
     }
 
+    @GetMapping("outil-remontee-bugs")
+    String getBugReportingLanding(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "public/bugReportingTool";
+    }
+
     @GetMapping("documentations")
     String getDocumentations(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());

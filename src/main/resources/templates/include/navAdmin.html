@@ -1,9 +1,10 @@
-<nav class="sticky top-0 z-[1200] border-b border-white/10 bg-[#06100c]/88 px-5 py-4 font-sans text-white backdrop-blur-xl sm:px-8 lg:px-12">
+<nav class="bp-main-nav sticky top-0 z-[1200] border-b border-white/10 bg-[#06100c]/88 px-5 py-4 font-sans text-white backdrop-blur-xl sm:px-8 lg:px-12">
     <style>
         .admin-nav-menu{display:flex;}
         @media (max-width:1023px){
             .admin-nav-menu{display:none;}
-            .admin-nav-menu.show{position:absolute;left:16px;right:16px;top:72px;display:grid;gap:10px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:#06100c;padding:16px;box-shadow:0 24px 80px rgba(0,0,0,.35);}
+            .admin-nav-menu.show{position:fixed;inset:0;z-index:1300;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:18px;border:0;border-radius:0;background:#020503;padding:96px 24px 32px;box-shadow:none;}
+            .admin-nav-menu.show a,.admin-nav-menu.show button{width:100%;min-height:52px;justify-content:center;text-align:center;}
         }
     </style>
     <div class="mx-auto flex max-w-[88rem] items-center justify-between gap-5">
@@ -11,7 +12,7 @@
         <button class="nav-toggler inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 lg:hidden" id="nav-toggler" type="button" aria-label="Ouvrir le menu">
             <span class="block h-0.5 w-5 bg-white before:block before:h-0.5 before:w-5 before:-translate-y-2 before:bg-white before:content-[''] after:block after:h-0.5 after:w-5 after:translate-y-[6px] after:bg-white after:content-['']"></span>
         </button>
-        <ul class="admin-nav-menu items-center gap-2" id="nav-menu">
+        <ul class="admin-nav-menu bp-nav-menu items-center gap-2" id="nav-menu">
             <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/private/dashboard}">User dashboard</a></li>
             <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/admin/dashboard}">Admin</a></li>
             <li><a class="rounded-lg px-4 py-2 text-sm font-bold text-white/72 transition hover:bg-white/8 hover:text-pointer-lime" th:href="@{/app/admin/metrics}">Metrics</a></li>
