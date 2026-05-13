@@ -93,7 +93,15 @@ window.addEventListener('DOMContentLoaded', function () {
 
     if (document.getElementById('nav-toggler') != null) {
         document.getElementById('nav-toggler').addEventListener('click', function () {
-            document.getElementById('nav-menu').classList.toggle('show');
+            const menu = document.getElementById('nav-menu');
+            menu.classList.toggle('show');
+            document.body.classList.toggle('nav-open', menu.classList.contains('show'));
+        });
+        document.querySelectorAll('#nav-menu a, #nav-menu button').forEach(function (item) {
+            item.addEventListener('click', function () {
+                document.getElementById('nav-menu').classList.remove('show');
+                document.body.classList.remove('nav-open');
+            });
         });
     }
 

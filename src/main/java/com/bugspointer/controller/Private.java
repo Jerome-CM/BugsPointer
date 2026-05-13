@@ -374,11 +374,14 @@ public class Private {
 
     @GetMapping("bugList")
     String getBugList(Model model,
-                      @RequestParam("publicKey") String publicKey,
+                      @RequestParam(value = "publicKey", required = false) String publicKey,
                       @RequestParam("state") String state,
                       HttpServletRequest request,
                       RedirectAttributes redirectAttributes) {
         DashboardDTO company = companyService.getDashboardDto(companyService.getCompanyWithToken(request));
+        if (publicKey == null || publicKey.trim().isEmpty()) {
+            publicKey = company.getPublicKey();
+        }
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("dataBug", company);
         model.addAttribute("company", company);

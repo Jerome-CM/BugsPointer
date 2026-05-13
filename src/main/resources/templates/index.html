@@ -11,9 +11,52 @@
     <meta property="og:description" content="Ajoutez un bouton ou un lien de signalement sur votre site et recevez des rapports de bug exploitables.">
     <meta property="og:url" content="https://bugspointer.com/">
     <meta property="og:site_name" content="BugsPointer">
+    <meta property="og:locale" content="fr_FR">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="BugsPointer - outil de signalement de bug pour site web">
     <meta name="twitter:description" content="Collectez les bugs signalés par vos utilisateurs avec un widget simple à installer.">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "Organization",
+                    "@id": "https://bugspointer.com/#organization",
+                    "name": "BugsPointer",
+                    "url": "https://bugspointer.com/",
+                    "logo": "https://bugspointer.com/css/img/icones/logo.png",
+                    "email": "contact@bugspointer.com"
+                },
+                {
+                    "@type": "WebSite",
+                    "@id": "https://bugspointer.com/#website",
+                    "url": "https://bugspointer.com/",
+                    "name": "BugsPointer",
+                    "publisher": {
+                        "@id": "https://bugspointer.com/#organization"
+                    },
+                    "inLanguage": "fr-FR"
+                },
+                {
+                    "@type": "SoftwareApplication",
+                    "@id": "https://bugspointer.com/#software",
+                    "name": "BugsPointer",
+                    "applicationCategory": "BusinessApplication",
+                    "operatingSystem": "Web",
+                    "url": "https://bugspointer.com/",
+                    "description": "Widget de signalement de bugs pour site web avec rapports exploitables et dashboard de suivi.",
+                    "offers": {
+                        "@type": "Offer",
+                        "url": "https://bugspointer.com/#pricing",
+                        "priceCurrency": "EUR"
+                    },
+                    "publisher": {
+                        "@id": "https://bugspointer.com/#organization"
+                    }
+                }
+            ]
+        }
+    </script>
     <script th:src="@{/js/tailwindcss-cdn.js}"></script>
     <script>
         tailwind.config = {
@@ -64,8 +107,8 @@
                             <span class="h-2.5 w-2.5 rounded-full bg-pointer-green"></span><span class="h-2.5 w-2.5 rounded-full bg-white/30"></span><span class="h-2.5 w-2.5 rounded-full bg-white/30"></span>
                             <p class="ml-auto">bugs-pointer.js</p>
                         </div>
-                        <img class="intro block w-full rounded-md bg-[#eff4ef]" th:src="@{/css/img/motion/intro.gif}" alt="Demonstration d'integration et d'utilisation de BugsPointer">
-                        <img class="intro_mobile w-full rounded-md bg-[#eff4ef]" th:src="@{/css/img/motion/intro_mobile.gif}" alt="Demonstration mobile de BugsPointer">
+                        <img class="intro block w-full rounded-md bg-[#eff4ef]" th:src="@{/css/img/motion/intro.gif}" width="1500" height="270" fetchpriority="high" decoding="async" alt="Demonstration d'integration et d'utilisation de BugsPointer">
+                        <img class="intro_mobile w-full rounded-md bg-[#eff4ef]" th:src="@{/css/img/motion/intro_mobile.gif}" width="280" height="600" fetchpriority="high" decoding="async" alt="Demonstration mobile de BugsPointer">
                     </div>
                 </div>
             </div>
@@ -106,7 +149,7 @@
                     </p>
                 </div>
                 <div id="guidelineMotionDiv" class="home-demo-frame w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.075] p-2 shadow-[0_32px_90px_rgba(0,0,0,0.28)] backdrop-blur sm:p-3 lg:w-7/12">
-                    <img id="guidelineMotion" th:src="@{/css/img/motion/guideline.gif}" alt="Parcours de signalement d'un bug">
+                    <img id="guidelineMotion" th:src="@{/css/img/motion/guideline.gif}" loading="lazy" decoding="async" alt="Parcours de signalement d'un bug">
                 </div>
             </div>
         </section>
@@ -175,18 +218,15 @@
         <section class="px-5 py-16 sm:px-8 lg:px-12">
             <div class="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row">
                 <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-4/12">
-                    <img class="h-14 w-14 object-contain" src="/css/img/icones/reglage.gif" alt="Conception">
-                    <h3 class="mt-4 text-left text-base font-black normal-case text-white">Conçu en France</h3>
+                    <h3 class="text-left text-base font-black normal-case text-white">Conçu en France</h3>
                     <p class="mt-2 text-sm leading-6 text-white/60">BugsPointer a été pensé et conçu entre Rouen et Blois.</p>
                 </article>
                 <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-4/12">
-                    <img class="h-14 w-14 object-contain" src="/css/img/icones/base-de-donnees.gif" alt="Base de données">
-                    <h3 class="mt-4 text-left text-base font-black normal-case text-white">Données hébergées en France</h3>
+                    <h3 class="text-left text-base font-black normal-case text-white">Données hébergées en France</h3>
                     <p class="mt-2 text-sm leading-6 text-white/60">Les données sont hébergées entre Paris et Lille.</p>
                 </article>
                 <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-4/12">
-                    <img class="h-14 w-14 object-contain" src="/css/img/icones/eco.gif" alt="Gestion responsable">
-                    <h3 class="mt-4 text-left text-base font-black normal-case text-white">Gestion responsable</h3>
+                    <h3 class="text-left text-base font-black normal-case text-white">Gestion responsable</h3>
                     <p class="mt-2 text-sm leading-6 text-white/60">Une approche attentive aux données et à l'impact environnemental.</p>
                 </article>
             </div>
