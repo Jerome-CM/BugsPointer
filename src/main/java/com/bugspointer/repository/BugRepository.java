@@ -22,6 +22,14 @@ public interface BugRepository extends CrudRepository<Bug, Long> {
     //Liste des bugs selon la company
     List<Bug> findAllByCompany(Company company);
 
+    int countByCompany(Company company);
+
+    int countByCompanyAndEtatBug(Company company, EnumEtatBug etatBug);
+
+    int countByCompanyAndDateEnvoiIsNotNull(Company company);
+
+    Optional<Bug> findTopByCompanyAndDateEnvoiIsNotNullOrderByDateEnvoiDesc(Company company);
+
     @Query(value = "SELECT date_creation FROM bug WHERE adresse_ip = :adresseIp ORDER BY date_creation DESC LIMIT 1", nativeQuery = true)
     Optional<Date> findLastDateCreationByAdresseIp(@Param("adresseIp") String adresseIp);
 

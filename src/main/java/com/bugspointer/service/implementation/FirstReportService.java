@@ -124,12 +124,12 @@ public class FirstReportService {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         calendar.add(Calendar.DAY_OF_MONTH, -15);
-        String dateLessThreeDay = dateFormat.format(calendar.getTime());
+        String dateLessFifteenDay = dateFormat.format(calendar.getTime());
 
         calendar.add(Calendar.DAY_OF_MONTH, -25);
-        String dateLessTenDay = dateFormat.format(calendar.getTime());
+        String dateLessFortyDay = dateFormat.format(calendar.getTime());
 
-        List<FirstReport> listCandidates = firstReportRepository.findFirstCandidates(dateLessTenDay, dateLessThreeDay);
+        List<FirstReport> listCandidates = firstReportRepository.findSecondCandidates(dateLessFortyDay, dateLessFifteenDay);
 
         for (FirstReport first : listCandidates){
             FirstReportDTO dto = new FirstReportDTO();
@@ -137,8 +137,8 @@ public class FirstReportService {
             dto.setCompanyId(first.getCompanyId());
             dto.setCompanyName(first.getCompanyName());
             dto.setDomaine("http://www."+first.getDomaine());
-            dto.setSendIsChecked(first.isFirstReport());
-            dto.setDescription(first.getFirstDescription());
+            dto.setSendIsChecked(first.isSecondReport());
+            dto.setDescription(first.getSecondDescription());
             listCandidatesFormatted.add(dto);
         }
         return listCandidatesFormatted;

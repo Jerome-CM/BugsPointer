@@ -21,4 +21,8 @@ public class DashboardDTO {
     private int nbSolvedBug;
 
     private int nbIgnoredBug;
+
+    private int nbReceivedReports;
+
+    private int nbMissedReports;
 }
