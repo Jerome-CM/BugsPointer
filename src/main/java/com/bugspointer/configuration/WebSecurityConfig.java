@@ -70,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .permissionsPolicy().policy("camera=(), microphone=(), geolocation=(), payment=()")
                 .and()
-                .contentSecurityPolicy("default-src 'self'; script-src 'self' 'unsafe-inline' https://bugspointer.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://bugspointer.com; frame-ancestors 'self'; form-action 'self'; base-uri 'self'")
+                .contentSecurityPolicy("default-src 'self'; script-src 'self' 'unsafe-inline' https://bugspointer.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://bugspointer.com; frame-ancestors 'self'; form-action 'self'; base-uri 'self'")
                 .and()
                 .frameOptions().sameOrigin()
                 .and()

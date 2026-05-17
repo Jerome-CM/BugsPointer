@@ -1,6 +1,5 @@
 package com.bugspointer.service.implementation;
 
-import com.bugspointer.configuration.CustomExceptions;
 import com.bugspointer.dto.ChartResponse;
 import com.bugspointer.dto.Dataset;
 import com.bugspointer.entity.Company;
@@ -8,7 +7,6 @@ import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.entity.ViewCounter;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.repository.ViewCounterRepository;
-import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -89,48 +88,23 @@ public class ChartService {
      * @param dayBeforeInit
      * @return
      */
-    private List<String> getDayLabels(Date dateToStart, int dayBeforeInit){
-
-        List<String> labelsForXaxis = new ArrayList<>();
-        List<String> dateOfProvisoryLabels = new ArrayList<>();
-
-        // Date actuelle = dateToStart
+    private List<LocalDate> getDays(Date dateToStart, int dayBeforeInit){
+        List<LocalDate> days = new ArrayList<>();
         LocalDate localStartDate = dateToStart.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-        // Format pour les objets LocalDate
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        for (int i = dayBeforeInit; i >= 0; i--){
-            int dayToSubstract = dayBeforeInit - i;
-            if(dayToSubstract == 0){
-                dateOfProvisoryLabels.add(dateFormat.format(Date.from(localStartDate.atStartOfDay(ZoneId.systemDefault()).toInstant())));
-            } else {
-                // Retirer x jours = dayBefore
-                LocalDate beforeDays = localStartDate.minusDays(dayToSubstract);
-                dateOfProvisoryLabels.add(dateFormat.format(Date.from(beforeDays.atStartOfDay(ZoneId.systemDefault()).toInstant())));
-            }
+        for (int i = dayBeforeInit; i >= 0; i--) {
+            days.add(localStartDate.minusDays(i));
         }
 
-        Collections.sort(dateOfProvisoryLabels, (dateStr1, dateStr2) -> {
-            try {
-                Date date1 = dateFormat.parse(dateStr1);
-                Date date2 = dateFormat.parse(dateStr2);
-                return date1.compareTo(date2);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return 0;
-            }
-        });
+        return days;
+    }
 
-        for (String label : dateOfProvisoryLabels){
-            label = label.substring(5);
-            String[] parts = label.split("-");
+    private List<String> getDayLabels(List<LocalDate> days){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M");
+        List<String> labelsForXaxis = new ArrayList<>();
 
-            int month = Integer.parseInt(parts[0]);
-            int day = Integer.parseInt(parts[1]);
-
-            String labelFinally = day + "/" + month;
-            labelsForXaxis.add(labelFinally);
+        for (LocalDate day : days) {
+            labelsForXaxis.add(day.format(formatter));
         }
 
         return labelsForXaxis;
@@ -143,7 +117,7 @@ public class ChartService {
      * @param nameOfData
      * @return
      */
-    private Dataset getValuesForVisitsChart(List<ViewCounter> counterList, List<String> labelsForXaxis, String nameOfData){
+    private Dataset getValuesForVisitsChart(List<ViewCounter> counterList, List<LocalDate> days, String nameOfData){
         
         Dataset dataset = new Dataset();
         List<Integer> values = new ArrayList<>();
@@ -152,36 +126,31 @@ public class ChartService {
         // Ajouter les data dans l'ordre de l'axe X
 
 
-        for( String label : labelsForXaxis){
+        for(LocalDate day : days){
+            Integer nbrVisit = 0;
 
-            try {
-                LocalDate localDateForLabel = Utility.dateFormatToLocalDate(null, label,"dd/MM");
-
-                Integer nbrVisit = 0;
-
-                for( ViewCounter counter : counterList){
-
-                    // LocalDate pour la date du ViewCounter
-
-                    LocalDate localDateForViewCounter = Utility.dateFormatToLocalDate(counter.getDateView(), null, "yyyy-MM-dd");
-
-                    // Match de la date
-                    if(localDateForViewCounter.equals(localDateForLabel)){
-                        nbrVisit++;
-                    }
+            for(ViewCounter counter : counterList){
+                if(counter.getDateView() == null){
+                    continue;
                 }
 
-                values.add(nbrVisit);
+                LocalDate localDateForViewCounter = dateToLocalDate(counter.getDateView());
 
-            } catch (ParseException e) {
-                e.printStackTrace();
-            } catch (CustomExceptions.GetLocalDateException e) {
-                throw new RuntimeException(e);
+                // Match de la date
+                if(localDateForViewCounter.equals(day)){
+                    nbrVisit++;
+                }
             }
+
+            values.add(nbrVisit);
         }
         dataset.setValue(values);
 
         return dataset;
+    }
+
+    private LocalDate dateToLocalDate(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     /**
@@ -231,15 +200,16 @@ public class ChartService {
         List<ViewCounter> dataForChartPollcompany = allDataResponse.get(EnumViewCounterPage.POLLCOMPANY);
         List<ViewCounter> dataForChartDownload = allDataResponse.get(EnumViewCounterPage.DOWNLOAD);
 
-        List<String> labelsForXaxis = getDayLabels(rangeDate.get("actualDate"), daysToSubtract);
+        List<LocalDate> days = getDays(rangeDate.get("actualDate"), daysToSubtract);
+        List<String> labelsForXaxis = getDayLabels(days);
         List<Dataset> datasets = new ArrayList<>();
 
-        Dataset datasetIndex = getValuesForVisitsChart(dataForChartIndex, labelsForXaxis, "Index");
-        Dataset datasetTestpage = getValuesForVisitsChart(dataForChartTestpage, labelsForXaxis, "TestPage");
-        Dataset datasetNewuser = getValuesForVisitsChart(dataForChartNewuser, labelsForXaxis, "NewUser");
-        Dataset datasetPolluser = getValuesForVisitsChart(dataForChartPolluser, labelsForXaxis, "PollUser");
-        Dataset datasetPollcompany = getValuesForVisitsChart(dataForChartPollcompany, labelsForXaxis, "PollCompany");
-        Dataset datasetDownload = getValuesForVisitsChart(dataForChartDownload, labelsForXaxis, "Download");
+        Dataset datasetIndex = getValuesForVisitsChart(dataForChartIndex, days, "Index");
+        Dataset datasetTestpage = getValuesForVisitsChart(dataForChartTestpage, days, "TestPage");
+        Dataset datasetNewuser = getValuesForVisitsChart(dataForChartNewuser, days, "NewUser");
+        Dataset datasetPolluser = getValuesForVisitsChart(dataForChartPolluser, days, "PollUser");
+        Dataset datasetPollcompany = getValuesForVisitsChart(dataForChartPollcompany, days, "PollCompany");
+        Dataset datasetDownload = getValuesForVisitsChart(dataForChartDownload, days, "Download");
 
         datasets.add(datasetIndex);
         datasets.add(datasetTestpage);
@@ -279,9 +249,7 @@ public class ChartService {
      * @return
      * @throws ParseException
      */
-    public Dataset getValuesForNewUsers(int daysToSubtract, String nameOfData, List<Company> companies, List<String> labelsForXaxis) throws ParseException {
-        Map<String,Date> rangeDate = getRangeDate(daysToSubtract);
-
+    public Dataset getValuesForNewUsers(String nameOfData, List<Company> companies, List<LocalDate> days) {
         Dataset dataset = new Dataset();
 
         dataset.setNameOfData(nameOfData);
@@ -289,38 +257,25 @@ public class ChartService {
         List<Integer> values = new ArrayList<>();
 
 
-        for( String label : labelsForXaxis){
+        for(LocalDate day : days){
+            Integer nbrNewUser = 0;
 
-            try {
-                LocalDate localDateForLabel = Utility.dateFormatToLocalDate(null, label,"dd/MM");
-
-                Integer nbrNewUser = 0;
-
-                for( Company company : companies){
-
-                    // LocalDate pour la date du NewUser
-
-                    LocalDate localDateForNewUser = Utility.dateFormatToLocalDate(company.getDateCreation(), null, "yyyy-MM-dd HH:mm:ss");
-
-                    // Match de la date
-                    if(localDateForNewUser.equals(localDateForLabel)){
-                        nbrNewUser++;
-                    }
+            for(Company company : companies){
+                if(company.getDateCreation() == null){
+                    continue;
                 }
 
-                values.add(nbrNewUser);
+                LocalDate localDateForNewUser = dateToLocalDate(company.getDateCreation());
 
-            } catch (ParseException e) {
-                e.printStackTrace();
-            } catch (CustomExceptions.GetLocalDateException e) {
-                throw new RuntimeException(e);
+                // Match de la date
+                if(localDateForNewUser.equals(day)){
+                    nbrNewUser++;
+                }
             }
+
+            values.add(nbrNewUser);
         }
         dataset.setValue(values);
-
-
-
-
 
         return dataset;
     }
@@ -334,59 +289,47 @@ public class ChartService {
      * @return
      * @throws ParseException
      */
-    public Dataset getValuesForAllUsers(int daysToSubtract, String nameOfData, List<Company> companies, List<String> labelsForXaxis) throws ParseException {
-        Map<String,Date> rangeDate = getRangeDate(daysToSubtract);
-
+    public Dataset getValuesForAllUsers(String nameOfData, Iterable<Company> companies, List<LocalDate> days) {
         Dataset dataset = new Dataset();
 
         dataset.setNameOfData(nameOfData);
 
         List<Integer> values = new ArrayList<>();
 
-        for( String label : labelsForXaxis){
+        for(LocalDate day : days){
+            Integer nbrCompanies = 0;
 
-            try {
-                LocalDate localDateForLabel = Utility.dateFormatToLocalDate(null, label,"dd/MM");
-
-                Integer nbrCompanies = 0;
-
-                for( Company company : companies){
-
-                    // LocalDate pour la date du DateCreation
-                    LocalDate localDateForDateCreation = Utility.dateFormatToLocalDate(company.getDateCreation(), null, "yyyy-MM-dd HH:mm:ss");
-
-                    // Match de la date
-                    if(localDateForDateCreation.equals(localDateForLabel) || localDateForDateCreation.isBefore(localDateForLabel)){
-                        nbrCompanies++;
-                    }
+            for(Company company : companies){
+                if(company.getDateCreation() == null){
+                    continue;
                 }
 
-                values.add(nbrCompanies);
+                LocalDate localDateForDateCreation = dateToLocalDate(company.getDateCreation());
 
-            } catch (ParseException e) {
-                e.printStackTrace();
-            } catch (CustomExceptions.GetLocalDateException e) {
-                throw new RuntimeException(e);
+                // Match de la date
+                if(localDateForDateCreation.equals(day) || localDateForDateCreation.isBefore(day)){
+                    nbrCompanies++;
+                }
             }
+
+            values.add(nbrCompanies);
         }
         dataset.setValue(values);
-
-
-
-
 
         return dataset;
     }
     public ChartResponse getDataForViewForLastestXdaysForUsers(int daysToSubtract) throws ParseException {
         Map<String,Date> rangeDate = getRangeDate(daysToSubtract);
 
-        List<Company> allDataResponse = getAllCompaniesFromLastestXDays(rangeDate.get("pasteDate"),rangeDate.get("actualDate"));
+        List<Company> newCompanies = getAllCompaniesFromLastestXDays(rangeDate.get("pasteDate"),rangeDate.get("actualDate"));
+        Iterable<Company> allCompanies = companyRepository.findAll();
 
-        List<String> labelsForXaxis = getDayLabels(rangeDate.get("actualDate"), daysToSubtract);
+        List<LocalDate> days = getDays(rangeDate.get("actualDate"), daysToSubtract);
+        List<String> labelsForXaxis = getDayLabels(days);
         List<Dataset> datasets = new ArrayList<>();
 
-        Dataset datasetNewUsers = getValuesForNewUsers(daysToSubtract, "New",allDataResponse, labelsForXaxis);
-        Dataset datasetAllUsers = getValuesForAllUsers(daysToSubtract, "All",allDataResponse, labelsForXaxis);
+        Dataset datasetNewUsers = getValuesForNewUsers("New", newCompanies, days);
+        Dataset datasetAllUsers = getValuesForAllUsers("All", allCompanies, days);
 
         datasets.add(datasetNewUsers);
         datasets.add(datasetAllUsers);
