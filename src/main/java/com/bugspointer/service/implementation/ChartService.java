@@ -3,6 +3,7 @@ package com.bugspointer.service.implementation;
 import com.bugspointer.dto.ChartResponse;
 import com.bugspointer.dto.Dataset;
 import com.bugspointer.entity.Company;
+import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.entity.ViewCounter;
 import com.bugspointer.repository.CompanyRepository;
@@ -10,6 +11,7 @@ import com.bugspointer.repository.ViewCounterRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -26,9 +28,12 @@ public class ChartService {
 
     private final CompanyRepository companyRepository;
 
-    public ChartService(ViewCounterRepository viewCounterRepository, CompanyRepository companyRepository) {
+    private final PlanPricingService planPricingService;
+
+    public ChartService(ViewCounterRepository viewCounterRepository, CompanyRepository companyRepository, PlanPricingService planPricingService) {
         this.viewCounterRepository = viewCounterRepository;
         this.companyRepository = companyRepository;
+        this.planPricingService = planPricingService;
     }
 
     /**
@@ -49,7 +54,6 @@ public class ChartService {
         List<ViewCounter> dataForChartNewUser = new ArrayList<>();
         List<ViewCounter> dataForChartPollUser = new ArrayList<>();
         List<ViewCounter> dataForChartPollCompany = new ArrayList<>();
-        List<ViewCounter> dataForChartDownload = new ArrayList<>();
 
         // Un case par page
         for (ViewCounter view : counterList) {
@@ -64,8 +68,7 @@ public class ChartService {
                 break;
                 case POLLCOMPANY: dataForChartPollCompany.add(view);
                 break;
-                case DOWNLOAD: dataForChartDownload.add(view);
-                break;
+                case DOWNLOAD: break;
             }
         }
 
@@ -77,7 +80,6 @@ public class ChartService {
         allDataResponse.put(EnumViewCounterPage.NEWUSER,dataForChartNewUser);
         allDataResponse.put(EnumViewCounterPage.POLLUSER,dataForChartPollUser);
         allDataResponse.put(EnumViewCounterPage.POLLCOMPANY,dataForChartPollCompany);
-        allDataResponse.put(EnumViewCounterPage.DOWNLOAD,dataForChartDownload);
 
         return allDataResponse;
 
@@ -150,6 +152,31 @@ public class ChartService {
         return dataset;
     }
 
+    private Dataset getValuesForDomainValidations(Iterable<Company> companies, List<LocalDate> days) {
+        Dataset dataset = new Dataset();
+        List<Integer> values = new ArrayList<>();
+        dataset.setNameOfData("Domaines valides");
+
+        for (LocalDate day : days) {
+            int nbrValidated = 0;
+
+            for (Company company : companies) {
+                if (company.getDomainVerifiedAt() == null) {
+                    continue;
+                }
+
+                if (dateToLocalDate(company.getDomainVerifiedAt()).equals(day)) {
+                    nbrValidated++;
+                }
+            }
+
+            values.add(nbrValidated);
+        }
+
+        dataset.setValue(values);
+        return dataset;
+    }
+
     private LocalDate dateToLocalDate(Date date) {
         return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
     }
@@ -199,7 +226,6 @@ public class ChartService {
         List<ViewCounter> dataForChartNewuser = allDataResponse.get(EnumViewCounterPage.NEWUSER);
         List<ViewCounter> dataForChartPolluser = allDataResponse.get(EnumViewCounterPage.POLLUSER);
         List<ViewCounter> dataForChartPollcompany = allDataResponse.get(EnumViewCounterPage.POLLCOMPANY);
-        List<ViewCounter> dataForChartDownload = allDataResponse.get(EnumViewCounterPage.DOWNLOAD);
 
         List<LocalDate> days = getDays(rangeDate.get("actualDate"), daysToSubtract);
         List<String> labelsForXaxis = getDayLabels(days);
@@ -210,14 +236,14 @@ public class ChartService {
         Dataset datasetNewuser = getValuesForVisitsChart(dataForChartNewuser, days, "NewUser");
         Dataset datasetPolluser = getValuesForVisitsChart(dataForChartPolluser, days, "PollUser");
         Dataset datasetPollcompany = getValuesForVisitsChart(dataForChartPollcompany, days, "PollCompany");
-        Dataset datasetDownload = getValuesForVisitsChart(dataForChartDownload, days, "Download");
+        Dataset datasetDomainValidations = getValuesForDomainValidations(companyRepository.findAll(), days);
 
         datasets.add(datasetIndex);
         datasets.add(datasetTestpage);
         datasets.add(datasetNewuser);
         datasets.add(datasetPolluser);
         datasets.add(datasetPollcompany);
-        datasets.add(datasetDownload);
+        datasets.add(datasetDomainValidations);
 
         ChartResponse chartResponse = new ChartResponse();
 
@@ -342,6 +368,51 @@ public class ChartService {
         chartResponse.setDatasets(datasets);
 
         return chartResponse;
+    }
+
+    public ChartResponse getDataForViewForLastestXdaysForRevenue(int daysToSubtract) throws ParseException {
+        Map<String,Date> rangeDate = getRangeDate(daysToSubtract);
+        Iterable<Company> allCompanies = companyRepository.findAll();
+
+        List<LocalDate> days = getDays(rangeDate.get("actualDate"), daysToSubtract);
+        List<String> labelsForXaxis = getDayLabels(days);
+        List<Dataset> datasets = new ArrayList<>();
+
+        Dataset estimatedAnnualRevenue = getValuesForEstimatedAnnualRevenue("CA annuel estime", allCompanies, days);
+        datasets.add(estimatedAnnualRevenue);
+
+        ChartResponse chartResponse = new ChartResponse();
+        chartResponse.setChartName("Revenue");
+        chartResponse.setLabels(labelsForXaxis);
+        chartResponse.setDatasets(datasets);
+
+        return chartResponse;
+    }
+
+    private Dataset getValuesForEstimatedAnnualRevenue(String nameOfData, Iterable<Company> companies, List<LocalDate> days) {
+        Dataset dataset = new Dataset();
+        dataset.setNameOfData(nameOfData);
+        List<Integer> values = new ArrayList<>();
+
+        for (LocalDate day : days) {
+            BigDecimal revenue = BigDecimal.ZERO;
+
+            for (Company company : companies) {
+                if (company.getPlan() == null || company.getPlan() == EnumPlan.FREE || company.getDateCreation() == null) {
+                    continue;
+                }
+
+                LocalDate localDateForDateCreation = dateToLocalDate(company.getDateCreation());
+                if (localDateForDateCreation.equals(day) || localDateForDateCreation.isBefore(day)) {
+                    revenue = revenue.add(planPricingService.getRenewalAmount(company.getPlan()));
+                }
+            }
+
+            values.add(revenue.intValue());
+        }
+
+        dataset.setValue(values);
+        return dataset;
     }
 
 

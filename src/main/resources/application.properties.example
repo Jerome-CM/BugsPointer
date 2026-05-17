@@ -44,3 +44,6 @@ server.ssl.key-alias=${SERVER_SSL_KEY_ALIAS:tomcat}
 
 ################### Payment Provider Configuration ##########################
 mollie.key=${MOLLIE_KEY}
+
+################### Metrics Configuration ##########################
+metrics.excluded-ips=${METRICS_EXCLUDED_IPS:}

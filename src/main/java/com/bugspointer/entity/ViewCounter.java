@@ -18,9 +18,17 @@ public class ViewCounter {
     @Temporal(TemporalType.DATE)
     private Date dateView = new Date();
 
+    private String adresseIp;
+
     public ViewCounter(EnumViewCounterPage page, Date dateView) {
         this.page = page;
         this.dateView = dateView;
+    }
+
+    public ViewCounter(EnumViewCounterPage page, Date dateView, String adresseIp) {
+        this.page = page;
+        this.dateView = dateView;
+        this.adresseIp = adresseIp;
     }
 
     public ViewCounter() {

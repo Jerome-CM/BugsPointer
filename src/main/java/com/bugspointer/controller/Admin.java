@@ -123,6 +123,7 @@ public class Admin {
         }
         model.addAttribute("nbrVisit", chartService.getDataForViewForLastestXdaysForVisits(day));
         model.addAttribute("nbrUser", chartService.getDataForViewForLastestXdaysForUsers(day));
+        model.addAttribute("revenue", chartService.getDataForViewForLastestXdaysForRevenue(day));
         return "admin/metrics";
     }
 

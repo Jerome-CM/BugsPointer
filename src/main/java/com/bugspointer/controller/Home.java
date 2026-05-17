@@ -47,12 +47,12 @@ public class Home {
 
 
     @GetMapping("/")
-    String getHome(Model model){
+    String getHome(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("nbrBugReported", 277 ); // bugService.getNbrBugReportedForIndex());
         model.addAttribute("companyCount", 32 );
         model.addAttribute("averageSatisfyingUser", "9,4");
-        viewCounterService.addVisit(EnumViewCounterPage.INDEX);
+        viewCounterService.addVisit(EnumViewCounterPage.INDEX, request);
         return "index";
     }
 
@@ -108,20 +108,20 @@ public class Home {
     }
 
     @GetMapping("testPage")
-    String getTestPage(Model model){
+    String getTestPage(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        viewCounterService.addVisit(EnumViewCounterPage.TESTPAGE);
+        viewCounterService.addVisit(EnumViewCounterPage.TESTPAGE, request);
         return "public/testPage";
     }
 
     @GetMapping("pollUser")
-    String getPullUser(Model model){
+    String getPullUser(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         int[] ranks = new int[] { 0,1,2,3,4,5,6,7,8,9,10 };
         model.addAttribute("ranks", ranks);
         model.addAttribute("user", "yes");
         model.addAttribute("pollUser", new Poll());
-        viewCounterService.addVisit(EnumViewCounterPage.POLLUSER);
+        viewCounterService.addVisit(EnumViewCounterPage.POLLUSER, request);
         return "public/poll";
     }
 
