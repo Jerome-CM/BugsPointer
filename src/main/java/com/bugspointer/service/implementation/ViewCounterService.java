@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 @Service
 public class ViewCounterService {
 
+    public static final String EXCLUDE_COOKIE_NAME = "bugspointer_metrics_ignore";
+
     private final ViewCounterRepository viewCounterRepository;
 
     private final Set<String> excludedIps;
@@ -29,6 +31,10 @@ public class ViewCounterService {
     }
 
     public void addVisit(EnumViewCounterPage page, HttpServletRequest request){
+        if (hasExcludeCookie(request)) {
+            return;
+        }
+
         String adresseIp = getClientIp(request);
         if (excludedIps.contains(adresseIp)) {
             return;
@@ -37,6 +43,15 @@ public class ViewCounterService {
         ViewCounter view = new ViewCounter(page, new Date(), adresseIp);
         viewCounterRepository.save(view);
 
+    }
+
+    private boolean hasExcludeCookie(HttpServletRequest request) {
+        if (request == null || request.getCookies() == null) {
+            return false;
+        }
+
+        return Arrays.stream(request.getCookies())
+                .anyMatch(cookie -> EXCLUDE_COOKIE_NAME.equals(cookie.getName()) && "true".equals(cookie.getValue()));
     }
 
     private String getClientIp(HttpServletRequest request) {
