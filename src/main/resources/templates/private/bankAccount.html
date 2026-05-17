@@ -45,7 +45,7 @@
                             <input class="min-h-12 rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none placeholder:text-white/38 focus:border-pointer-green" type="text" th:field="*{bic}" placeholder="BIC : CCOPFRPP" th:value="${customer.getBic()}" required>
                             <div class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-4">
                                 <span class="text-xs font-black uppercase tracking-wider text-pointer-lime">Montant annuel</span>
-                                <p class="mt-2 font-display text-3xl leading-none text-white"><span th:text="*{plan.getValeur()}">15.00</span>€</p>
+                                <p class="mt-2 font-display text-3xl leading-none text-white"><span th:text="${productPrice}">15.00</span>€</p>
                             </div>
                         </div>
 
@@ -55,7 +55,7 @@
 
                         <label class="mt-5 flex gap-3 rounded-lg border border-white/10 bg-black/15 p-4 text-sm leading-6 text-white/70">
                             <input class="mt-1 h-4 w-4 accent-[#00E676]" type="checkbox" th:field="*{signature}" required>
-                            <span>Je signe le mandat SEPA et j'autorise BugsPointer à prélever <strong class="text-white"><span th:text="*{plan.getValeur()}"></span>€ par an</strong>.</span>
+                            <span>Je signe le mandat SEPA et j'autorise BugsPointer à prélever <strong class="text-white"><span th:text="${productPrice}"></span>€ par an</strong>.</span>
                         </label>
 
                         <div class="mt-5 flex justify-end">

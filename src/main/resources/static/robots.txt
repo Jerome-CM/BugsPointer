@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+Disallow: /app/
+Disallow: /api/
+Disallow: /login
+Disallow: /logout
+Disallow: /testPage
+Disallow: /pollUser
+Disallow: /resetPassword/
+Disallow: /newUser/
+Disallow: /confirmRegister/
+
+Sitemap: https://bugspointer.com/sitemap.xml

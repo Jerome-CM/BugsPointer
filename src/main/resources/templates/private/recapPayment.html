@@ -25,7 +25,7 @@
                     <div class="mt-6 grid gap-3 lg:mt-auto">
                         <div class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-4">
                             <span class="text-xs font-black uppercase tracking-wider text-pointer-lime">Prix annuel</span>
-                            <p class="mt-2 font-display text-4xl leading-none text-white"><span th:text="${product.getValeur()}">15.00</span>€</p>
+                            <p class="mt-2 font-display text-4xl leading-none text-white"><span th:text="${productPrice}">15.00</span>€</p>
                         </div>
                         <div class="grid grid-cols-3 gap-2 text-center text-xs font-black uppercase tracking-wider">
                             <span class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 px-2 py-3 text-pointer-lime">Plan</span>
@@ -65,7 +65,7 @@
                         </label>
 
                         <div class="mt-5 flex justify-end">
-                            <button class="min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime md:w-auto" type="submit" th:text="'Passer au paiement de ' + ${product.getValeur()} + '€ / an'">Passer au paiement</button>
+                            <button class="min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime md:w-auto" type="submit" th:text="'Passer au paiement de ' + ${productPrice} + '€ / an'">Passer au paiement</button>
                         </div>
                     </form>
                 </section>

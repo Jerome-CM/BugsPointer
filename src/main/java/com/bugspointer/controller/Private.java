@@ -41,6 +41,8 @@ public class Private {
 
     private final PaymentService paymentService;
 
+    private final PlanPricingService planPricingService;
+
     @ModelAttribute("plans")
     public EnumPlan[] getFilteredPlans(){
         return Arrays.stream(EnumPlan.values())
@@ -49,7 +51,7 @@ public class Private {
     }
 
 
-    public Private(CompanyService companyService, BugService bugService, CompanyPreferencesService preferencesService, CustomerService customerService, JwtTokenUtil jwtTokenUtil, UserAuthenticationUtil userAuthenticationUtil, PaymentService paymentService) {
+    public Private(CompanyService companyService, BugService bugService, CompanyPreferencesService preferencesService, CustomerService customerService, JwtTokenUtil jwtTokenUtil, UserAuthenticationUtil userAuthenticationUtil, PaymentService paymentService, PlanPricingService planPricingService) {
         this.companyService = companyService;
         this.bugService = bugService;
         this.preferencesService = preferencesService;
@@ -57,6 +59,7 @@ public class Private {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userAuthenticationUtil = userAuthenticationUtil;
         this.paymentService = paymentService;
+        this.planPricingService = planPricingService;
     }
 
     @GetMapping("invoices")
@@ -313,6 +316,7 @@ public class Private {
                         @RequestParam(value = "message", required = false) String message){
         Company company = companyService.getCompanyWithToken(request);
         model.addAttribute("company", companyService.getDashboardDto(company));
+        addTargetPlanPrice(model);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         if (status != null && message != null) {
             model.addAttribute("status", status);
@@ -371,11 +375,14 @@ public class Private {
 
     @GetMapping("bugList")
     String getBugList(Model model,
-                      @RequestParam("publicKey") String publicKey,
+                      @RequestParam(value = "publicKey", required = false) String publicKey,
                       @RequestParam("state") String state,
                       HttpServletRequest request,
                       RedirectAttributes redirectAttributes) {
         DashboardDTO company = companyService.getDashboardDto(companyService.getCompanyWithToken(request));
+        if (publicKey == null || publicKey.trim().isEmpty()) {
+            publicKey = company.getPublicKey();
+        }
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("dataBug", company);
         model.addAttribute("company", company);
@@ -429,6 +436,7 @@ public class Private {
         }
 
         model.addAttribute("product", selectedProduct);
+        model.addAttribute("productPrice", planPricingService.format(planPricingService.getNewSubscriptionAmount(selectedProduct)));
         /*model.addAttribute("selectedProduct", selectedProduct);*/
         model.addAttribute("customer", customer);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
@@ -448,6 +456,7 @@ public class Private {
         log.info("customer : {}", customerDTO);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("customer", customerDTO);
+        model.addAttribute("productPrice", planPricingService.format(planPricingService.getNewSubscriptionAmount(customerDTO.getPlan())));
         return "private/bankAccount";
     }
 
@@ -467,8 +476,16 @@ public class Private {
 
         model.addAttribute("produit", produit);
         model.addAttribute("nextPaymentDate", nextPaymentDate);
+        model.addAttribute("newPlanPrice", planPricingService.format(planPricingService.getNewSubscriptionAmount(subscriptionDTO.getNewPlan())));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/confirmSubscription";
+    }
+
+    private void addTargetPlanPrice(Model model) {
+        String targetPlanPrice = planPricingService.format(planPricingService.getNewSubscriptionAmount(EnumPlan.TARGET));
+        String targetPlanPriceLabel = "0.00".equals(targetPlanPrice) ? "0€ jusqu'au 1er juillet" : targetPlanPrice + "€ / an";
+        model.addAttribute("targetPlanPrice", targetPlanPrice);
+        model.addAttribute("targetPlanPriceLabel", targetPlanPriceLabel);
     }
 
 }

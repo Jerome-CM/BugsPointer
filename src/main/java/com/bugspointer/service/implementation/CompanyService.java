@@ -193,17 +193,19 @@ public class CompanyService implements ICompany {
     public DashboardDTO getDashboardDto(Company company) {
         DashboardDTO dto;
         dto = modelMapper.map(company, DashboardDTO.class);
-        if (company.getPlan().equals(EnumPlan.FREE)){
-            return dto;
-        }
-        int nbNewBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.NEW).size();
-        int nbPendingBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.PENDING).size();
-        int nbSolvedBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.SOLVED).size();
-        int nbIgnoredBug = bugRepository.findAllByCompanyAndEtatBug(company, EnumEtatBug.IGNORED).size();
+        int nbNewBug = bugRepository.countByCompanyAndEtatBug(company, EnumEtatBug.NEW);
+        int nbPendingBug = bugRepository.countByCompanyAndEtatBug(company, EnumEtatBug.PENDING);
+        int nbSolvedBug = bugRepository.countByCompanyAndEtatBug(company, EnumEtatBug.SOLVED);
+        int nbIgnoredBug = bugRepository.countByCompanyAndEtatBug(company, EnumEtatBug.IGNORED);
+        int nbReceivedReports = bugRepository.countByCompanyAndDateEnvoiIsNotNull(company);
+        int nbTotalReports = bugRepository.countByCompany(company);
+
         dto.setNbNewBug(nbNewBug);
         dto.setNbPendingBug(nbPendingBug);
         dto.setNbSolvedBug(nbSolvedBug);
         dto.setNbIgnoredBug(nbIgnoredBug);
+        dto.setNbReceivedReports(nbReceivedReports);
+        dto.setNbMissedReports(Math.max(0, nbTotalReports - nbReceivedReports));
 
         return dto;
     }

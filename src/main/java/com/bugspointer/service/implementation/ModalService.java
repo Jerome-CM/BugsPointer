@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -47,7 +46,6 @@ public class ModalService implements IModal {
         boolean envoi = false;
         Company company = null;
         Date dateJour = new Date();
-        Date dateDernierEnvoi = null;
         long timeSeconde = 60;
         boolean wantNewBugNotif = false;
 
@@ -107,21 +105,11 @@ public class ModalService implements IModal {
 
         if (!test) {
             if (company.getPlan().equals(EnumPlan.FREE)) {
-                //On récupère la liste des bugs reçus
-                List<Bug> bugs = bugRepository.findAllByCompany(company);
-                int i = bugs.size() - 1;
-
-                //On cherche la dernière dateEnvoi
-                while (i >= 0 && dateDernierEnvoi == null) {
-                    if (bugs.get(i).getDateEnvoi() != null) {
-                        dateDernierEnvoi = bugs.get(i).getDateEnvoi();
-                    }
-                    i--;
-                }
+                Optional<Bug> lastSentBug = bugRepository.findTopByCompanyAndDateEnvoiIsNotNullOrderByDateEnvoiDesc(company);
 
                 // Si la différence est bien de + de 30jours
-                if (dateDernierEnvoi != null) {
-                    if (differenceDate(dateDernierEnvoi, dateJour, TimeUnit.SECONDS.convert(30, TimeUnit.DAYS))) {
+                if (lastSentBug.isPresent()) {
+                    if (differenceDate(lastSentBug.get().getDateEnvoi(), dateJour, TimeUnit.SECONDS.convert(30, TimeUnit.DAYS))) {
                         envoi = true;
                     }
                 } else {

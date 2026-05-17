@@ -4,6 +4,7 @@ import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Company;
+import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.entity.Poll;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
@@ -34,8 +35,9 @@ public class Home {
 
     private final ViewCounterService viewCounterService;
 
+    private final PlanPricingService planPricingService;
 
-    public Home(CompanyService companyService, MailService mailService, BugService bugService, UserAuthenticationUtil userAuthenticationUtil, JwtTokenUtil jwtTokenUtil, PollService pollService, ViewCounterService viewCounterService) {
+    public Home(CompanyService companyService, MailService mailService, BugService bugService, UserAuthenticationUtil userAuthenticationUtil, JwtTokenUtil jwtTokenUtil, PollService pollService, ViewCounterService viewCounterService, PlanPricingService planPricingService) {
         this.companyService = companyService;
         this.mailService = mailService;
         this.bugService = bugService;
@@ -43,16 +45,18 @@ public class Home {
         this.jwtTokenUtil = jwtTokenUtil;
         this.pollService = pollService;
         this.viewCounterService = viewCounterService;
+        this.planPricingService = planPricingService;
     }
 
 
     @GetMapping("/")
-    String getHome(Model model){
+    String getHome(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("nbrBugReported", 277 ); // bugService.getNbrBugReportedForIndex());
         model.addAttribute("companyCount", 32 );
         model.addAttribute("averageSatisfyingUser", "9,4");
-        viewCounterService.addVisit(EnumViewCounterPage.INDEX);
+        addTargetPlanPrice(model);
+        viewCounterService.addVisit(EnumViewCounterPage.INDEX, request);
         return "index";
     }
 
@@ -71,7 +75,14 @@ public class Home {
     @GetMapping("features")
     String getFeatures(Model model){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        addTargetPlanPrice(model);
         return "public/features";
+    }
+
+    @GetMapping("outil-remontee-bugs")
+    String getBugReportingLanding(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "public/bugReportingTool";
     }
 
     @GetMapping("documentations")
@@ -102,20 +113,20 @@ public class Home {
     }
 
     @GetMapping("testPage")
-    String getTestPage(Model model){
+    String getTestPage(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        viewCounterService.addVisit(EnumViewCounterPage.TESTPAGE);
+        viewCounterService.addVisit(EnumViewCounterPage.TESTPAGE, request);
         return "public/testPage";
     }
 
     @GetMapping("pollUser")
-    String getPullUser(Model model){
+    String getPullUser(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         int[] ranks = new int[] { 0,1,2,3,4,5,6,7,8,9,10 };
         model.addAttribute("ranks", ranks);
         model.addAttribute("user", "yes");
         model.addAttribute("pollUser", new Poll());
-        viewCounterService.addVisit(EnumViewCounterPage.POLLUSER);
+        viewCounterService.addVisit(EnumViewCounterPage.POLLUSER, request);
         return "public/poll";
     }
 
@@ -127,6 +138,13 @@ public class Home {
             return "private/thanks";
         }
         return "redirect:/pollUser";
+    }
+
+    private void addTargetPlanPrice(Model model) {
+        String targetPlanPrice = planPricingService.format(planPricingService.getNewSubscriptionAmount(EnumPlan.TARGET));
+        String targetPlanPriceLabel = "0.00".equals(targetPlanPrice) ? "0€ jusqu'au 1er juillet" : targetPlanPrice + "€ / an";
+        model.addAttribute("targetPlanPrice", targetPlanPrice);
+        model.addAttribute("targetPlanPriceLabel", targetPlanPriceLabel);
     }
 
 }

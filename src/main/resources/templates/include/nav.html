@@ -1,13 +1,16 @@
-<!--<div class="messageOnNav"><p>Beta en cours jusqu'au 07/07/2023</p></div>-->
-<nav class="nav">
-    <a th:href="@{/}" class="title">Bugspointer <img class="flag-nav" src="/css/img/france.jpg" alt="Drapeau français"></a>
+<div class="messageOnNav">
+    <a th:href="@{/features#targetplan}">Offre promotionnelle: Target gratuit jusqu'au 1er juillet</a>
+</div>
+<nav class="nav bp-main-nav">
+    <a th:href="@{/}" class="title">Bugspointer <img class="flag-nav" src="/css/img/france.jpg" width="34" height="24" loading="eager" decoding="async" alt="Drapeau français"></a>
     <button class="nav-toggler" id="nav-toggler">
-        <img src="/css/img/menu_burger.svg" alt="Menu burger">
+        <img src="/css/img/menu_burger.svg" width="24" height="24" loading="eager" decoding="async" alt="Menu burger">
     </button>
-    <ul class="nav-menu nav-black" id="nav-menu">
+    <ul class="nav-menu nav-black bp-nav-menu" id="nav-menu">
         <li class="nav-item" th:if="${isLoggedIn == true}"><a class="a_action" th:href="@{/app/private/dashboard}">Dashboard</a></li>
         <li class="nav-item"><a th:href="@{/features}">Fonctionnalités</a></li>
         <li class="nav-item"><a th:href="@{/documentations}">Documentations</a></li>
+        <li class="nav-item"><a th:href="@{/outil-remontee-bugs}">Remontée de bugs</a></li>
         <li class="nav-item"><a th:href="@{/#pricing}">Prix</a></li>
         <li class="nav-item" th:if="${isLoggedIn == false}"><a class="a_action" th:href="@{/authentication}"><img th:src="@{/css/img/icones/arrow.gif}" alt=""> Connexion</a></li>
         <li class="nav-item" th:if="${isLoggedIn == true}">

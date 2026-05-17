@@ -21,7 +21,7 @@
             <th:block th:replace="~{include/targetPlanContent.html}"></th:block>
         </ul>
         <div class="pricing-card-action">
-            <span class="price-in-card">15€ / an</span>
+            <span class="price-in-card" th:text="${targetPlanPriceLabel != null ? targetPlanPriceLabel : '0€ jusqu''au 1er juillet'}">0€ jusqu'au 1er juillet</span>
             <a th:href="@{/features#targetplan}" class="btn-action">Voir le détail</a>
         </div>
     </div>
@@ -30,7 +30,7 @@
         <h3 class="h-in-price-card margin-bottom">Ultimate</h3>
         Target Plan <br><br> + <br><br>
         <ul>
-            <li>L'Url de la page</li>
+            <li>L’URL de la page</li>
             <li>Une simple description</li>
             <li th:replace="~{include/targetPlanContent.html}"></li>
         </ul>

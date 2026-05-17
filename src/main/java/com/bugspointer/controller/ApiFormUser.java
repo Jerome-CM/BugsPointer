@@ -9,6 +9,7 @@ import com.bugspointer.service.implementation.CompanyService;
 import com.bugspointer.service.implementation.CustomerService;
 import com.bugspointer.service.implementation.ModalService;
 import com.bugspointer.service.implementation.PaymentService;
+import com.bugspointer.service.implementation.PlanPricingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,12 +37,15 @@ public class ApiFormUser {
 
     private  final UserAuthenticationUtil userAuthenticationUtil;
 
-    public ApiFormUser(ModalService modalService, PaymentService paymentService, CustomerService customerService, CompanyService companyService, UserAuthenticationUtil userAuthenticationUtil) {
+    private final PlanPricingService planPricingService;
+
+    public ApiFormUser(ModalService modalService, PaymentService paymentService, CustomerService customerService, CompanyService companyService, UserAuthenticationUtil userAuthenticationUtil, PlanPricingService planPricingService) {
         this.modalService = modalService;
         this.paymentService = paymentService;
         this.customerService = customerService;
         this.companyService = companyService;
         this.userAuthenticationUtil = userAuthenticationUtil;
+        this.planPricingService = planPricingService;
     }
 
 
@@ -102,6 +106,7 @@ public class ApiFormUser {
 
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         model.addAttribute("product", customer.getPlan());
+        model.addAttribute("productPrice", planPricingService.format(planPricingService.getNewSubscriptionAmount(customer.getPlan())));
         model.addAttribute("status", "ERROR");
         model.addAttribute("notification", "Merci de corriger les champs indiqués.");
         return "private/recapPayment";
@@ -150,6 +155,7 @@ public class ApiFormUser {
             }
         }
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        model.addAttribute("productPrice", planPricingService.format(planPricingService.getNewSubscriptionAmount(customer.getPlan())));
         model.addAttribute("status", "ERROR");
         model.addAttribute("notification", "Merci de corriger les champs indiqués.");
         return "private/bankAccount";
@@ -221,6 +227,7 @@ public class ApiFormUser {
         model.addAttribute("status", "ERROR");
         model.addAttribute("notification", "Merci de corriger les champs indiqués.");
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        model.addAttribute("newPlanPrice", planPricingService.format(planPricingService.getNewSubscriptionAmount(subscription.getNewPlan())));
         return "private/confirmSubscription";
     }
 

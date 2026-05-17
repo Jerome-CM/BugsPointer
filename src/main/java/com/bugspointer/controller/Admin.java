@@ -6,10 +6,13 @@ import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.FirstReportDTO;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.EnumEtatBug;
+import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.service.implementation.AdminService;
 import com.bugspointer.service.implementation.ChartService;
 import com.bugspointer.service.implementation.FirstReportService;
+import com.bugspointer.service.implementation.PlanPricingService;
+import com.bugspointer.service.implementation.ViewCounterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +26,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
+import java.math.BigDecimal;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Controller
@@ -35,10 +41,13 @@ public class Admin {
 
     private final ChartService chartService;
 
-    public Admin(AdminService adminService, FirstReportService firstReportService, ChartService chartService) {
+    private final PlanPricingService planPricingService;
+
+    public Admin(AdminService adminService, FirstReportService firstReportService, ChartService chartService, PlanPricingService planPricingService) {
         this.adminService = adminService;
         this.firstReportService = firstReportService;
         this.chartService = chartService;
+        this.planPricingService = planPricingService;
     }
 
     @GetMapping("dashboard")
@@ -60,7 +69,18 @@ public class Admin {
         model.addAttribute("totalBugCount", adminService.getTotalBugCount());
         model.addAttribute("pendingBugCount", adminService.getBugCount(EnumEtatBug.PENDING));
         model.addAttribute("solvedBugCount", adminService.getBugCount(EnumEtatBug.SOLVED));
+        model.addAttribute("planPrices", planPricingService.getPlanPrices());
         return "admin/dashboard";
+    }
+
+    @PostMapping("planPrice")
+    String updatePlanPrice(@RequestParam("plan") EnumPlan plan,
+                           @RequestParam("newSubscriptionAmount") BigDecimal newSubscriptionAmount,
+                           RedirectAttributes redirectAttributes) {
+        Response response = planPricingService.updateNewSubscriptionAmount(plan, newSubscriptionAmount);
+        redirectAttributes.addFlashAttribute("notification", response.getMessage());
+        redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+        return "redirect:/app/admin/dashboard";
     }
 
     @GetMapping("addBilling")
@@ -106,7 +126,32 @@ public class Admin {
         }
         model.addAttribute("nbrVisit", chartService.getDataForViewForLastestXdaysForVisits(day));
         model.addAttribute("nbrUser", chartService.getDataForViewForLastestXdaysForUsers(day));
+        model.addAttribute("revenue", chartService.getDataForViewForLastestXdaysForRevenue(day));
         return "admin/metrics";
+    }
+
+    @PostMapping("metrics/exclude-browser")
+    String excludeBrowserFromMetrics(HttpServletResponse response, RedirectAttributes redirectAttributes){
+        Cookie cookie = new Cookie(ViewCounterService.EXCLUDE_COOKIE_NAME, "true");
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(60 * 60 * 24 * 365);
+        response.addCookie(cookie);
+        redirectAttributes.addFlashAttribute("notification", "Ce navigateur ne sera plus comptabilisé dans les métriques.");
+        redirectAttributes.addFlashAttribute("status", String.valueOf(EnumStatus.OK));
+        return "redirect:/app/admin/metrics";
+    }
+
+    @PostMapping("metrics/include-browser")
+    String includeBrowserInMetrics(HttpServletResponse response, RedirectAttributes redirectAttributes){
+        Cookie cookie = new Cookie(ViewCounterService.EXCLUDE_COOKIE_NAME, "");
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        redirectAttributes.addFlashAttribute("notification", "Ce navigateur sera à nouveau comptabilisé dans les métriques.");
+        redirectAttributes.addFlashAttribute("status", String.valueOf(EnumStatus.OK));
+        return "redirect:/app/admin/metrics";
     }
 
     @GetMapping("companiesList")

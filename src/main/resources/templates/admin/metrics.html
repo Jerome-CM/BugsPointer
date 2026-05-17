@@ -18,19 +18,24 @@
         <section class="relative px-5 pb-16 pt-12 sm:px-8 lg:px-12">
             <div class="home-noise"></div>
             <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-7">
-                <div class="rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
-                    <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime">Metrics</p>
-                    <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">Trafic et comptes.</h1>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-2 rounded-lg border border-white/10 bg-white/[0.055] p-4">
-                    <span class="mr-2 text-sm font-black uppercase tracking-wider text-pointer-lime">Période</span>
-                    <a th:href="@{?dayOpt=7}" class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 hover:text-pointer-lime">7j</a>
-                    <a th:href="@{?dayOpt=15}" class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 hover:text-pointer-lime">15j</a>
-                    <a th:href="@{?dayOpt=30}" class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 hover:text-pointer-lime">1 mois</a>
-                    <a th:href="@{?dayOpt=90}" class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 hover:text-pointer-lime">3 mois</a>
-                    <a th:href="@{?dayOpt=180}" class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 hover:text-pointer-lime">6 mois</a>
-                    <a th:href="@{?dayOpt=365}" class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 hover:text-pointer-lime">1 an</a>
+                <div class="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-white/10 bg-white/[0.055] p-4">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="mr-2 text-sm font-black uppercase tracking-wider text-pointer-lime">Période</span>
+                        <a th:href="@{?dayOpt=7}" class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 hover:text-pointer-lime">7j</a>
+                        <a th:href="@{?dayOpt=15}" class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 hover:text-pointer-lime">15j</a>
+                        <a th:href="@{?dayOpt=30}" class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 hover:text-pointer-lime">1 mois</a>
+                        <a th:href="@{?dayOpt=90}" class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 hover:text-pointer-lime">3 mois</a>
+                        <a th:href="@{?dayOpt=180}" class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 hover:text-pointer-lime">6 mois</a>
+                        <a th:href="@{?dayOpt=365}" class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 hover:text-pointer-lime">1 an</a>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <form th:action="@{/app/admin/metrics/exclude-browser}" method="post">
+                            <button class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 px-3 py-2 text-sm font-bold text-pointer-lime transition hover:border-pointer-green/50" type="submit">Ignorer ce navigateur</button>
+                        </form>
+                        <form th:action="@{/app/admin/metrics/include-browser}" method="post">
+                            <button class="rounded-lg border border-white/10 bg-black/15 px-3 py-2 text-sm font-bold text-white/70 transition hover:text-pointer-lime" type="submit">Compter ce navigateur</button>
+                        </form>
+                    </div>
                 </div>
 
                 <section class="grid gap-5">
@@ -44,6 +49,12 @@
                         <h2 class="mb-5 font-display text-3xl leading-none text-white">Users</h2>
                         <div class="h-[360px]">
                             <canvas id="newUser" class="block h-full w-full"></canvas>
+                        </div>
+                    </div>
+                    <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                        <h2 class="mb-5 font-display text-3xl leading-none text-white">Chiffre d'affaires</h2>
+                        <div class="h-[360px]">
+                            <canvas id="revenue" class="block h-full w-full"></canvas>
                         </div>
                     </div>
                 </section>
@@ -60,6 +71,10 @@
         const users = document.getElementById('newUser');
         const dataFromSpringForUser = [[${nbrUser}]];
         new Chart(users, { type: 'line', data: { labels: dataFromSpringForUser.labels, datasets: dataFromSpringForUser.datasets.map((dataset, index) => ({ label: dataset.nameOfData, data: dataset.value, borderWidth: 3, fill: false, borderColor: ['#B7FF4A','#00E676','#38bdf8'][index] || '#00E676', tension: 0.3 })) }, options: options });
+        const revenue = document.getElementById('revenue');
+        const dataFromSpringForRevenue = [[${revenue}]];
+        const revenueOptions = { ...options, scales: { ...options.scales, y: { ...options.scales.y, ticks: { ...options.scales.y.ticks, callback: value => value + '€' } } } };
+        new Chart(revenue, { type: 'line', data: { labels: dataFromSpringForRevenue.labels, datasets: dataFromSpringForRevenue.datasets.map((dataset, index) => ({ label: dataset.nameOfData, data: dataset.value, borderWidth: 3, fill: false, borderColor: ['#00E676','#B7FF4A','#38bdf8'][index] || '#00E676', tension: 0.3 })) }, options: revenueOptions });
     </script>
 </body>
 </html>
