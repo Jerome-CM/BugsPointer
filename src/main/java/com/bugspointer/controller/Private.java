@@ -316,6 +316,7 @@ public class Private {
                         @RequestParam(value = "message", required = false) String message){
         Company company = companyService.getCompanyWithToken(request);
         model.addAttribute("company", companyService.getDashboardDto(company));
+        addTargetPlanPrice(model);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         if (status != null && message != null) {
             model.addAttribute("status", status);
@@ -478,6 +479,13 @@ public class Private {
         model.addAttribute("newPlanPrice", planPricingService.format(planPricingService.getNewSubscriptionAmount(subscriptionDTO.getNewPlan())));
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "private/confirmSubscription";
+    }
+
+    private void addTargetPlanPrice(Model model) {
+        String targetPlanPrice = planPricingService.format(planPricingService.getNewSubscriptionAmount(EnumPlan.TARGET));
+        String targetPlanPriceLabel = "0.00".equals(targetPlanPrice) ? "0€ jusqu'au 1er juillet" : targetPlanPrice + "€ / an";
+        model.addAttribute("targetPlanPrice", targetPlanPrice);
+        model.addAttribute("targetPlanPriceLabel", targetPlanPriceLabel);
     }
 
 }

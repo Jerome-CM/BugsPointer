@@ -4,6 +4,7 @@ import com.bugspointer.configuration.UserAuthenticationUtil;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Company;
+import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.entity.Poll;
 import com.bugspointer.jwtConfig.JwtTokenUtil;
@@ -34,8 +35,9 @@ public class Home {
 
     private final ViewCounterService viewCounterService;
 
+    private final PlanPricingService planPricingService;
 
-    public Home(CompanyService companyService, MailService mailService, BugService bugService, UserAuthenticationUtil userAuthenticationUtil, JwtTokenUtil jwtTokenUtil, PollService pollService, ViewCounterService viewCounterService) {
+    public Home(CompanyService companyService, MailService mailService, BugService bugService, UserAuthenticationUtil userAuthenticationUtil, JwtTokenUtil jwtTokenUtil, PollService pollService, ViewCounterService viewCounterService, PlanPricingService planPricingService) {
         this.companyService = companyService;
         this.mailService = mailService;
         this.bugService = bugService;
@@ -43,6 +45,7 @@ public class Home {
         this.jwtTokenUtil = jwtTokenUtil;
         this.pollService = pollService;
         this.viewCounterService = viewCounterService;
+        this.planPricingService = planPricingService;
     }
 
 
@@ -52,6 +55,7 @@ public class Home {
         model.addAttribute("nbrBugReported", 277 ); // bugService.getNbrBugReportedForIndex());
         model.addAttribute("companyCount", 32 );
         model.addAttribute("averageSatisfyingUser", "9,4");
+        addTargetPlanPrice(model);
         viewCounterService.addVisit(EnumViewCounterPage.INDEX, request);
         return "index";
     }
@@ -71,6 +75,7 @@ public class Home {
     @GetMapping("features")
     String getFeatures(Model model){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        addTargetPlanPrice(model);
         return "public/features";
     }
 
@@ -133,6 +138,13 @@ public class Home {
             return "private/thanks";
         }
         return "redirect:/pollUser";
+    }
+
+    private void addTargetPlanPrice(Model model) {
+        String targetPlanPrice = planPricingService.format(planPricingService.getNewSubscriptionAmount(EnumPlan.TARGET));
+        String targetPlanPriceLabel = "0.00".equals(targetPlanPrice) ? "0€ jusqu'au 1er juillet" : targetPlanPrice + "€ / an";
+        model.addAttribute("targetPlanPrice", targetPlanPrice);
+        model.addAttribute("targetPlanPriceLabel", targetPlanPriceLabel);
     }
 
 }
