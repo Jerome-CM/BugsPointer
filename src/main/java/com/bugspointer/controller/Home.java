@@ -62,14 +62,21 @@ public class Home {
 
     @GetMapping("download")
     String getDownloadPage(Model model, HttpServletRequest request){
+        return redirectToWidgetInstallation(request);
+    }
 
+    @GetMapping("installation")
+    String getInstallationPage(HttpServletRequest request){
+        return redirectToWidgetInstallation(request);
+    }
+
+    private String redirectToWidgetInstallation(HttpServletRequest request) {
         if(userAuthenticationUtil.isUserLoggedIn()){
             return "redirect:/app/private/onboarding/widget";
         } else {
             request.getSession().setAttribute("redirectAfterLogin", "/app/private/onboarding/widget");
             return "redirect:authentication?status=ERROR&message=Merci de vous connecter";
         }
-
     }
 
     @GetMapping("features")

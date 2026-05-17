@@ -62,18 +62,18 @@
                         <h2 class="mt-2 font-display text-3xl leading-none text-white">Nouvelles souscriptions</h2>
                     </div>
                     <div class="grid gap-4 md:grid-cols-2">
-                        <form th:each="planPrice : ${planPrices}" th:action="@{/app/admin/planPrice}" method="post" class="grid gap-4 rounded-lg border border-white/10 bg-black/15 p-4 md:grid-cols-[1fr_auto] md:items-end">
+                        <form th:each="planPrice : ${planPrices}" th:action="@{/app/admin/planPrice}" method="post" class="grid gap-4 rounded-lg border border-white/10 bg-black/15 p-4 md:grid-cols-[minmax(0,22rem)_auto] md:items-center">
                             <div>
                                 <p class="text-xs font-black uppercase tracking-wider text-white/55" th:text="${planPrice.plan.name()}">TARGET</p>
                                 <label class="mt-3 block text-sm font-bold text-white/68">Prix pour les nouveaux clients</label>
                                 <div class="mt-2 flex items-center gap-2">
                                     <input type="hidden" name="plan" th:value="${planPrice.plan.name()}">
-                                    <input class="min-h-11 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none focus:border-pointer-green" type="number" name="newSubscriptionAmount" min="0" step="0.01" th:value="${planPrice.newSubscriptionAmount}" required>
-                                    <span class="font-black text-white">€</span>
+                                    <input class="min-h-11 w-40 rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none focus:border-pointer-green sm:w-48" type="number" name="newSubscriptionAmount" min="0" step="0.01" th:value="${planPrice.newSubscriptionAmount}" required>
+                                    <span class="text-white/70">€</span>
                                 </div>
                                 <p class="mt-2 text-xs leading-5 text-white/50">Renouvellement standard: <span th:text="${planPrice.plan.getValeur()}">15.00</span>€ / an</p>
                             </div>
-                            <button class="min-h-11 cursor-pointer rounded-lg bg-pointer-green px-4 py-2 font-extrabold text-pointer-ink transition hover:bg-pointer-lime" type="submit">Enregistrer</button>
+                            <button class="min-h-11 cursor-pointer self-start rounded-lg bg-pointer-green px-4 py-2 font-extrabold text-pointer-ink transition hover:bg-pointer-lime md:self-center" type="submit">Enregistrer</button>
                         </form>
                     </div>
                 </section>
