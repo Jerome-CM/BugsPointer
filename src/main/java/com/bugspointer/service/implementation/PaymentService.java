@@ -246,7 +246,7 @@ public class PaymentService {
         mandateRequest.setConsumerAccount(customerDTO.getIban().replace(" ", ""));
         mandateRequest.setConsumerBic(Optional.of(customerDTO.getBic().replace(" ", "")));
         mandateRequest.setSignatureDate(Optional.of(LocalDate.now()));
-        mandateRequest.setMandateReference(Optional.of(customer.getCustomerId() + "-" + customer.getCompany().getCompanyName() + "-Mandate-BugsPointer-directdebit-" + LocalDate.now()));
+        mandateRequest.setMandateReference(Optional.of(getMandateReference(customer)));
 
         try {
             MandateResponse mandateResponse = client.mandates().createMandate(customer.getCustomerId(), mandateRequest);
@@ -265,6 +265,12 @@ public class PaymentService {
         }
 
         return new Response(EnumStatus.ERROR, null, "Oups, le mandat est non valide, merci de vérifier");
+    }
+
+    private String getMandateReference(Customer customer) {
+        String customerId = customer.getCustomerId() == null ? "customer" : customer.getCustomerId();
+        String shortCustomerId = customerId.length() <= 6 ? customerId : customerId.substring(customerId.length() - 6);
+        return "BugsPointer-" + customer.getCompany().getCompanyId() + "-" + shortCustomerId + "-" + LocalDate.now();
     }
 
 
@@ -666,7 +672,6 @@ public class PaymentService {
         return null;
     }
 }
-
 
 
 
