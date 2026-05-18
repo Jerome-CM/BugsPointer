@@ -2,6 +2,7 @@ package com.bugspointer.controller;
 
 import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.dto.AdminBillingDTO;
+import com.bugspointer.dto.AdminScraperJobDTO;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.FirstReportDTO;
 import com.bugspointer.dto.Response;
@@ -55,17 +56,16 @@ public class Admin {
     }
 
     @GetMapping("dashboard")
-    String getDashboard(Model model){
+    String getDashboard(Model model, @RequestParam(required = false) String scraperJobId){
         addDashboardAttributes(model);
+        addScraperJobAttributes(model, scraperJobId);
         return "admin/dashboard";
     }
 
     @PostMapping("scraper")
-    String scanWebsite(@RequestParam("websiteUrl") String websiteUrl, Model model){
-        addDashboardAttributes(model);
-        model.addAttribute("scraperUrl", websiteUrl);
-        model.addAttribute("scraperResult", adminScraperService.scan(websiteUrl));
-        return "admin/dashboard";
+    String scanWebsite(@RequestParam("websiteUrl") String websiteUrl){
+        AdminScraperJobDTO job = adminScraperService.startScan(websiteUrl);
+        return "redirect:/app/admin/dashboard?scraperJobId=" + job.getId() + "#scrapping";
     }
 
     private void addDashboardAttributes(Model model) {
@@ -87,6 +87,19 @@ public class Admin {
         model.addAttribute("pendingBugCount", adminService.getBugCount(EnumEtatBug.PENDING));
         model.addAttribute("solvedBugCount", adminService.getBugCount(EnumEtatBug.SOLVED));
         model.addAttribute("planPrices", planPricingService.getPlanPrices());
+    }
+
+    private void addScraperJobAttributes(Model model, String scraperJobId) {
+        AdminScraperJobDTO scraperJob = adminScraperService.getJob(scraperJobId);
+        if (scraperJob == null) {
+            return;
+        }
+
+        model.addAttribute("scraperJob", scraperJob);
+        model.addAttribute("scraperUrl", scraperJob.getWebsiteUrl());
+        if (!scraperJob.isRunning() && scraperJob.getResult() != null) {
+            model.addAttribute("scraperResult", scraperJob.getResult());
+        }
     }
 
     @PostMapping("planPrice")

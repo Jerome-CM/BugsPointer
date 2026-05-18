@@ -56,7 +56,7 @@
                     </article>
                 </section>
 
-                <section class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                <section id="scrapping" class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 scroll-mt-24">
                     <div class="mb-5 border-b border-white/10 pb-5">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Prix des offres</p>
                         <h2 class="mt-2 font-display text-3xl leading-none text-white">Nouvelles souscriptions</h2>
@@ -90,6 +90,17 @@
                         </div>
                         <button class="min-h-11 cursor-pointer rounded-lg bg-pointer-green px-5 py-2 font-extrabold text-pointer-ink transition hover:bg-pointer-lime" type="submit">Contrôler</button>
                     </form>
+
+                    <div class="mt-5 rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-4" th:if="${scraperJob != null && scraperJob.running}">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Scan en cours</p>
+                        <p class="mt-2 text-sm leading-6 text-white/70">
+                            Le contrôle tourne en arrière-plan. La page se mettra à jour automatiquement sans bloquer le reste du site.
+                        </p>
+                    </div>
+
+                    <div class="mt-5 rounded-lg border border-red-300/25 bg-red-300/10 p-4" th:if="${scraperJob != null && !scraperJob.running && scraperJob.error != null}">
+                        <p class="text-sm font-bold text-red-100" th:text="${scraperJob.error}">Erreur pendant le scan.</p>
+                    </div>
 
                     <div class="mt-5 grid gap-4" th:if="${scraperResult != null}">
                         <div class="rounded-lg border border-red-300/25 bg-red-300/10 p-4" th:if="${scraperResult.globalError != null}">
@@ -189,5 +200,11 @@
             </div>
         </section>
     </main>
+    <script th:if="${scraperJob != null && scraperJob.running}" th:inline="javascript">
+        const scraperRefreshUrl = /*[[@{/app/admin/dashboard(scraperJobId=${scraperJob.id})}]]*/ '';
+        window.setTimeout(() => {
+            window.location.href = scraperRefreshUrl + '#scrapping';
+        }, 2500);
+    </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.bugspointer.service.implementation;
 
 import com.bugspointer.dto.AdminScraperResourceDTO;
+import com.bugspointer.dto.AdminScraperJobDTO;
 import com.bugspointer.dto.AdminScraperResultDTO;
 import org.jsoup.Connection;
 import org.jsoup.HttpStatusException;
@@ -10,14 +11,20 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 public class AdminScraperService {
@@ -25,7 +32,49 @@ public class AdminScraperService {
     private static final int MAX_INTERNAL_PAGES = 100;
     private static final int MAX_RESOURCES = 600;
     private static final int TIMEOUT_MS = 8000;
-    private static final String USER_AGENT = "BugsPointer-admin-scraper/1.0";
+    private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
+    private static final long JOB_TTL_MS = 30 * 60 * 1000;
+
+    private final ExecutorService scanExecutor = Executors.newFixedThreadPool(3);
+
+    private final Map<String, AdminScraperJobDTO> jobs = new ConcurrentHashMap<>();
+
+    public AdminScraperJobDTO startScan(String rawUrl) {
+        cleanOldJobs();
+        String jobId = UUID.randomUUID().toString();
+        AdminScraperJobDTO job = new AdminScraperJobDTO(jobId, normalizeStartUrl(rawUrl));
+        jobs.put(jobId, job);
+
+        scanExecutor.submit(() -> {
+            try {
+                job.complete(scan(rawUrl));
+            } catch (Exception e) {
+                job.fail(e.getMessage());
+            }
+        });
+
+        return job;
+    }
+
+    public AdminScraperJobDTO getJob(String jobId) {
+        if (jobId == null || jobId.trim().isEmpty()) {
+            return null;
+        }
+        cleanOldJobs();
+        return jobs.get(jobId);
+    }
+
+    @PreDestroy
+    public void shutdown() {
+        scanExecutor.shutdownNow();
+    }
+
+    private void cleanOldJobs() {
+        long now = System.currentTimeMillis();
+        jobs.entrySet().removeIf(entry -> !entry.getValue().isRunning()
+                && entry.getValue().getCompletedAt() > 0
+                && now - entry.getValue().getCompletedAt() > JOB_TTL_MS);
+    }
 
     public AdminScraperResultDTO scan(String rawUrl) {
         AdminScraperResultDTO result = new AdminScraperResultDTO();
@@ -66,7 +115,7 @@ public class AdminScraperService {
                 document = fetchDocument(pageUrl);
                 result.setCheckedPageCount(visitedPages.size());
             } catch (HttpStatusException e) {
-                result.addError(new AdminScraperResourceDTO(pageUrl, pageUrl, "Page", e.getStatusCode(), "Réponse HTTP " + e.getStatusCode(), true));
+                result.addError(new AdminScraperResourceDTO(pageUrl, pageUrl, "Page", e.getStatusCode(), getHttpErrorMessage(e.getStatusCode()), true));
                 continue;
             } catch (UnsupportedMimeTypeException e) {
                 result.addError(new AdminScraperResourceDTO(pageUrl, pageUrl, "Page", 0, "Contenu non HTML", true));
@@ -140,29 +189,31 @@ public class AdminScraperService {
     }
 
     private Document fetchDocument(String url) throws IOException {
-        return Jsoup.connect(url)
-                .userAgent(USER_AGENT)
-                .timeout(TIMEOUT_MS)
+        Connection.Response response = configureRequest(Jsoup.connect(url))
                 .followRedirects(true)
-                .ignoreHttpErrors(false)
-                .get();
+                .ignoreHttpErrors(true)
+                .execute();
+
+        if (response.statusCode() != 200) {
+            throw new HttpStatusException(getHttpErrorMessage(response.statusCode()), response.statusCode(), url);
+        }
+
+        return response.parse();
     }
 
     private StatusCheck checkStatus(String url) {
         try {
-            Connection.Response response = Jsoup.connect(url)
-                    .userAgent(USER_AGENT)
-                    .timeout(TIMEOUT_MS)
+            Connection.Response response = configureRequest(Jsoup.connect(url))
                     .followRedirects(true)
                     .ignoreHttpErrors(true)
                     .ignoreContentType(true)
                     .method(Connection.Method.HEAD)
                     .execute();
             int statusCode = response.statusCode();
-            if (statusCode == 405 || statusCode == 403) {
+            if (statusCode < 200 || statusCode >= 400) {
                 return checkStatusWithGet(url);
             }
-            return new StatusCheck(statusCode, statusCode == 200 ? "" : "Réponse HTTP " + statusCode, response.contentType());
+            return new StatusCheck(statusCode, "", response.contentType());
         } catch (IOException | IllegalArgumentException e) {
             return checkStatusWithGet(url);
         }
@@ -170,19 +221,40 @@ public class AdminScraperService {
 
     private StatusCheck checkStatusWithGet(String url) {
         try {
-            Connection.Response response = Jsoup.connect(url)
-                    .userAgent(USER_AGENT)
-                    .timeout(TIMEOUT_MS)
+            Connection.Response response = configureRequest(Jsoup.connect(url))
                     .followRedirects(true)
                     .ignoreHttpErrors(true)
                     .ignoreContentType(true)
                     .maxBodySize(1024)
                     .execute();
             int statusCode = response.statusCode();
-            return new StatusCheck(statusCode, statusCode == 200 ? "" : "Réponse HTTP " + statusCode, response.contentType());
+            return new StatusCheck(statusCode, statusCode == 200 ? "" : getHttpErrorMessage(statusCode), response.contentType());
         } catch (IOException | IllegalArgumentException e) {
             return new StatusCheck(0, e.getMessage(), "");
         }
+    }
+
+    private Connection configureRequest(Connection connection) {
+        return connection
+                .userAgent(USER_AGENT)
+                .timeout(TIMEOUT_MS)
+                .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8")
+                .header("Accept-Language", "fr-FR,fr;q=0.9,en;q=0.8")
+                .header("Cache-Control", "no-cache")
+                .referrer("https://www.google.com/");
+    }
+
+    private String getHttpErrorMessage(int statusCode) {
+        if (statusCode == 401 || statusCode == 403 || statusCode == 429) {
+            return "Accès bloqué par le site (HTTP " + statusCode + ")";
+        }
+        if (statusCode == 404) {
+            return "Page ou fichier introuvable (HTTP 404)";
+        }
+        if (statusCode >= 500) {
+            return "Erreur serveur (HTTP " + statusCode + ")";
+        }
+        return "Réponse HTTP " + statusCode;
     }
 
     private boolean shouldCrawlAsPage(URI uri, String contentType) {
