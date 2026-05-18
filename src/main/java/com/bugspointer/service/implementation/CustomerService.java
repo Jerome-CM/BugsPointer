@@ -19,12 +19,15 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class CustomerService implements ICustomer {
+
+    private static final DateTimeFormatter MANDATE_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private final CompanyRepository companyRepository;
 
@@ -60,14 +63,15 @@ public class CustomerService implements ICustomer {
             if (mandates.size() > 0) {
                 MandateResponse mandateResponse = client.mandates().getMandate(company.getCustomer().getCustomerId(), mandates.get(0).getId());
                 if (mandateResponse.getStatus().equals(MandateStatus.VALID)) {
+                    LocalDate signatureDate = mandateResponse.getSignatureDate();
 
                     contentData.put("status", "OK");
-                    contentData.put("reference", mandateResponse.getMandateReference());
-                    contentData.put("dateSignature", String.valueOf(mandateResponse.getSignatureDate()));
-                    contentData.put("dateExpiration", Utility.handlerDateForYear(String.valueOf(mandateResponse.getSignatureDate()), 4));
-                    contentData.put("dateNextPayment", Utility.handlerDateForYear(String.valueOf(mandateResponse.getSignatureDate()), 1));
-                    contentData.put("iban", mandateResponse.getDetails().getConsumerAccount().get());
-                    contentData.put("bic", mandateResponse.getDetails().getConsumerBic().get());
+                    contentData.put("reference", formatMandateReference(mandateResponse.getMandateReference(), signatureDate));
+                    contentData.put("dateSignature", formatMandateDate(signatureDate));
+                    contentData.put("dateExpiration", formatMandateDate(signatureDate == null ? null : signatureDate.plusYears(4)));
+                    contentData.put("dateNextPayment", formatMandateDate(signatureDate == null ? null : signatureDate.plusYears(1)));
+                    contentData.put("iban", maskIban(mandateResponse.getDetails().getConsumerAccount().orElse("")));
+                    contentData.put("bic", maskBic(mandateResponse.getDetails().getConsumerBic().orElse("")));
 
                 } else {
                     contentData.put("status", "ERROR");
@@ -82,6 +86,50 @@ public class CustomerService implements ICustomer {
         }
 
         return contentData;
+    }
+
+    private String formatMandateDate(LocalDate date) {
+        if (date == null) {
+            return "--";
+        }
+        return date.format(MANDATE_DATE_FORMAT);
+    }
+
+    private String formatMandateReference(String reference, LocalDate signatureDate) {
+        if (signatureDate != null && reference != null && reference.contains("-Mandate-BugsPointer-directdebit-")) {
+            return "Mandat BugsPointer - " + formatMandateDate(signatureDate);
+        }
+        if (reference == null || reference.trim().isEmpty()) {
+            return "Mandat BugsPointer - " + formatMandateDate(signatureDate);
+        }
+        return reference;
+    }
+
+    private String maskIban(String iban) {
+        String normalized = iban == null ? "" : iban.replaceAll("\\s+", "").toUpperCase(Locale.ROOT);
+        return groupByFour(maskMiddle(normalized, 4, 4));
+    }
+
+    private String maskBic(String bic) {
+        String normalized = bic == null ? "" : bic.replaceAll("\\s+", "").toUpperCase(Locale.ROOT);
+        return maskMiddle(normalized, 4, 2);
+    }
+
+    private String maskMiddle(String value, int visibleStart, int visibleEnd) {
+        if (value == null || value.isEmpty()) {
+            return "--";
+        }
+        if (value.length() <= visibleStart + visibleEnd) {
+            return value.charAt(0) + "****" + value.charAt(value.length() - 1);
+        }
+        return value.substring(0, visibleStart) + "****" + value.substring(value.length() - visibleEnd);
+    }
+
+    private String groupByFour(String value) {
+        if (value == null || value.equals("--")) {
+            return "--";
+        }
+        return value.replaceAll("(.{4})(?=.)", "$1 ");
     }
 
     public CustomerDTO getMetadata(CustomerDTO customer, String customerId) throws MollieException {
