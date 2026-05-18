@@ -9,6 +9,7 @@ import com.bugspointer.entity.EnumEtatBug;
 import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.service.implementation.AdminService;
+import com.bugspointer.service.implementation.AdminScraperService;
 import com.bugspointer.service.implementation.ChartService;
 import com.bugspointer.service.implementation.FirstReportService;
 import com.bugspointer.service.implementation.PlanPricingService;
@@ -43,15 +44,31 @@ public class Admin {
 
     private final PlanPricingService planPricingService;
 
-    public Admin(AdminService adminService, FirstReportService firstReportService, ChartService chartService, PlanPricingService planPricingService) {
+    private final AdminScraperService adminScraperService;
+
+    public Admin(AdminService adminService, FirstReportService firstReportService, ChartService chartService, PlanPricingService planPricingService, AdminScraperService adminScraperService) {
         this.adminService = adminService;
         this.firstReportService = firstReportService;
         this.chartService = chartService;
         this.planPricingService = planPricingService;
+        this.adminScraperService = adminScraperService;
     }
 
     @GetMapping("dashboard")
     String getDashboard(Model model){
+        addDashboardAttributes(model);
+        return "admin/dashboard";
+    }
+
+    @PostMapping("scraper")
+    String scanWebsite(@RequestParam("websiteUrl") String websiteUrl, Model model){
+        addDashboardAttributes(model);
+        model.addAttribute("scraperUrl", websiteUrl);
+        model.addAttribute("scraperResult", adminScraperService.scan(websiteUrl));
+        return "admin/dashboard";
+    }
+
+    private void addDashboardAttributes(Model model) {
         model.addAttribute("firstReports", firstReportService.getCandidateForFirstReport());
         model.addAttribute("secondReports", firstReportService.getCandidateForSecondReport());
         model.addAttribute("firstReportDTO", new FirstReportDTO());
@@ -70,7 +87,6 @@ public class Admin {
         model.addAttribute("pendingBugCount", adminService.getBugCount(EnumEtatBug.PENDING));
         model.addAttribute("solvedBugCount", adminService.getBugCount(EnumEtatBug.SOLVED));
         model.addAttribute("planPrices", planPricingService.getPlanPrices());
-        return "admin/dashboard";
     }
 
     @PostMapping("planPrice")
