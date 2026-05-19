@@ -1,20 +1,20 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black" lang="fr">
 <div th:replace="~{include/head.html}"></div>
-    <title>BugsPointer - outil de signalement de bug pour site web</title>
-    <meta name="description" content="BugsPointer aide vos utilisateurs à signaler un bug depuis votre site. Recevez des rapports clairs avec contexte technique, capture HTML et dashboard de suivi.">
-    <meta name="keywords" content="rapport de bug, signalement de bug, bug report, outil de rapport, feedback utilisateur, expérience utilisateur">
+    <title>BugsPointer - rapports de bug exploitables depuis votre site</title>
+    <meta name="description" content="BugsPointer transforme les signalements utilisateurs en rapports de bug clairs, contextualisés et faciles à traiter.">
+    <meta name="keywords" content="rapport de bug, signalement de bug, bug report, feedback utilisateur, widget bug, expérience utilisateur">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://bugspointer.com/">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="BugsPointer - outil de signalement de bug pour site web">
-    <meta property="og:description" content="Ajoutez un bouton ou un lien de signalement sur votre site et recevez des rapports de bug exploitables.">
+    <meta property="og:title" content="BugsPointer - rapports de bug exploitables depuis votre site">
+    <meta property="og:description" content="Installez un widget de signalement et recevez les informations utiles pour corriger plus vite.">
     <meta property="og:url" content="https://bugspointer.com/">
     <meta property="og:site_name" content="BugsPointer">
     <meta property="og:locale" content="fr_FR">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="BugsPointer - outil de signalement de bug pour site web">
-    <meta name="twitter:description" content="Collectez les bugs signalés par vos utilisateurs avec un widget simple à installer.">
+    <meta name="twitter:title" content="BugsPointer - rapports de bug exploitables depuis votre site">
+    <meta name="twitter:description" content="Collectez des retours utilisateurs précis et actionnables avec un widget simple à installer.">
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -86,97 +86,163 @@
     <div th:replace="~{include/nav.html}"></div>
 
     <main>
-        <section class="relative min-h-[calc(100vh-72px)] px-5 pb-12 pt-5 sm:px-8 lg:px-12">
-            <div class="home-noise"></div>
-            <div class="mx-auto flex max-w-[88rem] flex-col items-center gap-10 lg:flex-row">
-                <div class="relative z-10 w-full max-w-3xl lg:w-5/12">
-                    <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
-                        Outil de signalement de bug pour site web
-                    </p>
-                    <h1 class="text-left font-display text-4xl leading-[0.98] tracking-normal text-white sm:text-5xl lg:text-6xl">
-                        Recevez des rapports de bug clairs, directement depuis votre site.
+        <section class="home-hero relative px-5 pb-14 pt-8 sm:px-8 lg:px-12">
+            <div class="home-grid" aria-hidden="true"></div>
+            <div class="home-hero-inner mx-auto grid max-w-[88rem] items-center gap-10 lg:grid-cols-[0.92fr_1.08fr]">
+                <div class="relative z-10 max-w-3xl">
+                    <p class="home-eyebrow">Widget de signalement pour sites web</p>
+                    <h1 class="font-display text-4xl leading-[0.96] text-white sm:text-6xl lg:text-7xl">
+                        Les bugs vus par vos utilisateurs deviennent enfin corrigeables.
                     </h1>
-                    <p class="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg">
-                        BugsPointer aide vos visiteurs à signaler une erreur, une faute, un problème d’affichage ou un blocage en quelques secondes. Votre équipe récupère le contexte utile pour corriger plus vite et améliorer l’expérience utilisateur.
+                    <p class="mt-6 max-w-2xl text-base leading-7 text-white/72 sm:text-lg">
+                        BugsPointer ajoute à votre site un point de contact clair: l'utilisateur montre le problème, décrit ce qu'il voit, et votre équipe reçoit un rapport structuré avec le contexte utile.
                     </p>
+                    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                        <a th:href="@{/authentication}" class="home-primary-action">Démarrer gratuitement</a>
+                        <a th:href="@{/testPage}" target="_blank" class="home-secondary-action">Tester le widget</a>
+                    </div>
+                    <div class="mt-8 grid gap-3 text-sm font-bold text-white/68 sm:grid-cols-3">
+                        <span class="home-mini-proof">Installation rapide</span>
+                        <span class="home-mini-proof">Rapports exploitables</span>
+                        <span class="home-mini-proof">Suivi centralisé</span>
+                    </div>
                 </div>
 
-                <div class="relative z-10 w-full lg:w-7/12">
-                    <div class="relative overflow-hidden rounded-lg border border-white/10 bg-white/[0.075] p-2.5 shadow-[0_32px_90px_rgba(0,0,0,0.28)] backdrop-blur sm:p-3">
-                        <div class="flex items-center gap-2 px-1.5 pb-2.5 pt-1 text-xs font-extrabold text-white/50">
-                            <span class="h-2.5 w-2.5 rounded-full bg-pointer-green"></span><span class="h-2.5 w-2.5 rounded-full bg-white/30"></span><span class="h-2.5 w-2.5 rounded-full bg-white/30"></span>
-                            <p class="ml-auto">bugs-pointer.js</p>
+                <div class="relative z-10">
+                    <div class="home-product-shell" aria-label="Aperçu du tableau de bord BugsPointer">
+                        <div class="home-window-bar">
+                            <span></span><span></span><span></span>
+                            <p>dashboard.bugspointer</p>
                         </div>
-                        <img class="intro block w-full rounded-md bg-[#eff4ef]" th:src="@{/css/img/motion/intro.gif}" width="1500" height="270" fetchpriority="high" decoding="async" alt="Demonstration d'integration et d'utilisation de BugsPointer">
-<!--                        <img class="intro_mobile w-full rounded-md bg-[#eff4ef]" th:src="@{/css/img/motion/intro_mobile.gif}" width="280" height="600" fetchpriority="high" decoding="async" alt="Demonstration mobile de BugsPointer">-->
+                        <div class="home-product-grid">
+                            <aside class="home-product-sidebar">
+                                <strong>BugsPointer</strong>
+                                <span class="active">Nouveaux rapports</span>
+                                <span>Priorités</span>
+                                <span>Équipe</span>
+                            </aside>
+                            <div class="home-product-main">
+                                <div class="home-product-topline">
+                                    <div>
+                                        <span>Rapport reçu il y a 2 min</span>
+                                        <strong>Bouton de connexion invisible sur mobile</strong>
+                                    </div>
+                                    <b>Critique</b>
+                                </div>
+                                <div class="home-report-card">
+                                    <div class="home-report-preview">
+                                        <div class="home-fake-browser">
+                                            <span></span><span></span><span></span>
+                                        </div>
+                                        <div class="home-target-page">
+                                            <div class="home-page-line wide"></div>
+                                            <div class="home-page-line"></div>
+                                            <div class="home-page-box"></div>
+                                            <div class="home-pointer-pin">!</div>
+                                        </div>
+                                    </div>
+                                    <div class="home-report-details">
+                                        <span class="home-tag">URL capturée</span>
+                                        <p>/authentication</p>
+                                        <span class="home-tag">Contexte</span>
+                                        <p>Safari iOS, 390 x 844</p>
+                                        <span class="home-tag">Message utilisateur</span>
+                                        <p>"Je ne peux pas me connecter, le bouton passe sous le clavier."</p>
+                                    </div>
+                                </div>
+                                <div class="home-product-stats">
+                                    <span><b>12</b> ouverts</span>
+                                    <span><b>7</b> corrigés</span>
+                                    <span><b>4m</b> pour qualifier</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="relative z-10 mx-auto mt-9 flex max-w-[88rem] flex-col items-center justify-center gap-3 sm:flex-row">
-                <a th:href="@{/authentication}" class="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.24)] transition hover:-translate-y-0.5 sm:w-auto">
-                    Essayer gratuitement
-                </a>
-                <a th:href="@{/testPage}" target="_blank" class="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5 sm:w-auto">
-                    Essayer avec notre page de test
-                </a>
-            </div>
-            <div class="relative z-10 mx-auto mt-10 flex max-w-[88rem] flex-col overflow-hidden rounded-lg border border-pointer-green/20 bg-[#07120d]/80 shadow-[0_22px_70px_rgba(0,255,114,0.10)] backdrop-blur sm:flex-row">
-                <div class="w-full border-b border-white/10 p-5 sm:w-4/12 sm:border-b-0 sm:border-r sm:border-white/10 lg:p-7">
-                    <span class="text-xs font-black uppercase tracking-wider text-white/45">Depuis le lancement</span>
-                    <strong id="counterDisplay" class="mt-2 block text-4xl leading-none text-pointer-lime lg:text-5xl">0</strong>
-                    <span class="mt-2 block text-sm font-bold text-white/65">bugs signalés par les utilisateurs</span>
+            <div class="relative z-10 mx-auto mt-10 grid max-w-[88rem] overflow-hidden rounded-lg border border-pointer-green/20 bg-[#07120d]/80 shadow-[0_22px_70px_rgba(0,255,114,0.10)] backdrop-blur sm:grid-cols-3">
+                <div class="home-stat">
+                    <span>Depuis le lancement</span>
+                    <strong id="counterDisplay">0</strong>
+                    <p>bugs signalés</p>
                 </div>
-                <div class="w-full border-b border-white/10 p-5 sm:w-4/12 sm:border-b-0 sm:border-r sm:border-white/10 lg:p-7">
-                    <span class="text-xs font-black uppercase tracking-wider text-white/45">Adoption produit</span>
-                    <strong id="companyCounterDisplay" class="mt-2 block text-4xl leading-none text-pointer-lime lg:text-5xl">0</strong>
-                    <span class="mt-2 block text-sm font-bold text-white/65">entreprises déjà équipées</span>
+                <div class="home-stat">
+                    <span>Adoption produit</span>
+                    <strong id="companyCounterDisplay">0</strong>
+                    <p>entreprises équipées</p>
                 </div>
-                <div class="w-full p-5 sm:w-4/12 lg:p-7">
-                    <span class="text-xs font-black uppercase tracking-wider text-white/45">Retour utilisateur</span>
-                    <strong class="mt-2 block text-4xl leading-none text-pointer-lime lg:text-5xl"><span th:text="${averageSatisfyingUser}">9,4</span>/10</strong>
-                    <span class="mt-2 block text-sm font-bold text-white/65">note moyenne de satisfaction</span>
+                <div class="home-stat">
+                    <span>Retour utilisateur</span>
+                    <strong><span th:text="${averageSatisfyingUser}">9,4</span>/10</strong>
+                    <p>satisfaction moyenne</p>
                 </div>
             </div>
         </section>
 
         <section class="px-5 py-16 sm:px-8 lg:px-12">
-            <div class="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:items-center">
-                <div class="w-full lg:w-5/12">
-                    <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Comment ça fonctionne</p>
-                    <h2 class="max-w-3xl text-left font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Un formulaire de bug simple pour vos utilisateurs, utile pour votre équipe.</h2>
-                    <p class="mt-5 text-base leading-7 text-white/70 sm:text-lg">
-                        Ajoutez le bouton BugsPointer à votre site, laissez l’utilisateur pointer la zone concernée, puis recevez un rapport exploitable avec l’URL, la description et les informations nécessaires au diagnostic.
-                    </p>
+            <div class="mx-auto max-w-7xl">
+                <div class="max-w-3xl">
+                    <p class="home-section-label">Le problème</p>
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-5xl">Les retours arrivent partout, rarement avec le bon contexte.</h2>
                 </div>
-                <div id="guidelineMotionDiv" class="home-demo-frame w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.075] p-2 shadow-[0_32px_90px_rgba(0,0,0,0.28)] backdrop-blur sm:p-3 lg:w-7/12">
+                <div class="mt-8 grid gap-4 md:grid-cols-3">
+                    <article class="home-card">
+                        <span>01</span>
+                        <h3>Le signalement est flou</h3>
+                        <p>"Ça ne marche pas" ne suffit pas pour reproduire un bug, surtout quand l'utilisateur n'a ni capture ni détail technique.</p>
+                    </article>
+                    <article class="home-card">
+                        <span>02</span>
+                        <h3>Le contexte se perd</h3>
+                        <p>Page, navigateur, résolution, zone concernée: les infos utiles sont dispersées ou oubliées au moment de traiter.</p>
+                    </article>
+                    <article class="home-card">
+                        <span>03</span>
+                        <h3>La priorite reste subjective</h3>
+                        <p>Sans liste centralisée, les irritants les plus visibles peuvent attendre pendant que l'équipe corrige à l'aveugle.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="px-5 py-16 sm:px-8 lg:px-12">
+            <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.86fr_1.14fr] lg:items-center">
+                <div>
+                    <p class="home-section-label">La solution</p>
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-5xl">Un parcours de signalement assez simple pour vos visiteurs, assez précis pour vos équipes.</h2>
+                    <p class="mt-5 text-base leading-7 text-white/70 sm:text-lg">
+                        L'utilisateur sélectionne le type de problème, pointe la zone concernée et ajoute son commentaire. BugsPointer transforme ce geste en rapport lisible, classé et prêt à traiter.
+                    </p>
+                    <div class="mt-6 grid gap-3">
+                        <div class="home-step"><b>1</b><span>Le widget s'ouvre depuis votre site</span></div>
+                        <div class="home-step"><b>2</b><span>L'utilisateur montre ce qui bloque</span></div>
+                        <div class="home-step"><b>3</b><span>Votre équipe reçoit un rapport actionnable</span></div>
+                    </div>
+                </div>
+                <div id="guidelineMotionDiv" class="home-demo-frame overflow-hidden rounded-lg border border-white/10 bg-white/[0.075] p-2 shadow-[0_32px_90px_rgba(0,0,0,0.28)] backdrop-blur sm:p-3">
                     <img id="guidelineMotion" th:src="@{/css/img/motion/guideline.gif}" loading="lazy" decoding="async" alt="Parcours de signalement d'un bug">
                 </div>
             </div>
         </section>
 
         <section class="px-5 py-16 sm:px-8 lg:px-12">
-            <div class="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:items-center">
-                <div class="w-full lg:w-4/12">
-                    <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Cas détectés</p>
-                    <h2 class="max-w-xl text-left font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Collectez les retours qui dégradent vraiment l’expérience.</h2>
+            <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
+                <div>
+                    <p class="home-section-label">Cas détectés</p>
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-5xl">Repérez les irritants que vos tests internes ne croisent pas toujours.</h2>
                     <p class="mt-5 text-base leading-7 text-white/70 sm:text-lg">
-                        Orthographe, contenu cassé, bouton mal placé ou erreur serveur: chaque signalement aide à repérer les irritants que les tests internes ne voient pas toujours.
+                        Fautes, liens cassés, erreurs serveur, problèmes d'affichage ou boutons introuvables: chaque signalement devient une preuve visuelle et contextualisée.
                     </p>
-                    <div class="mt-6 flex flex-col gap-3 text-sm font-bold text-white/70">
-                        <span class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Priorisez les irritants visibles.</span>
-                        <span class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Repérez les erreurs de contenu ou d’interface.</span>
-                        <span class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Traitez les blocages techniques avec plus de contexte.</span>
-                    </div>
                 </div>
-                <div class="home-signal-panel flex w-full flex-col gap-4 rounded-lg border border-white/10 bg-white/[0.075] p-4 shadow-[0_24px_70px_rgba(0,0,0,0.24)] backdrop-blur sm:p-5 lg:w-8/12 lg:flex-row">
-                    <ul class="ul-index home-signal-tabs flex flex-col gap-3 p-0 text-base lg:w-3/12">
-                        <li class="li-what-signal active-li rounded-lg border border-white/10 bg-white/5 px-5 py-4 text-left text-white/70 shadow-none">Orthographe</li>
-                        <li class="li-what-signal rounded-lg border border-white/10 bg-white/5 px-5 py-4 text-left text-white/70 shadow-none">Syntaxe</li>
-                        <li class="li-what-signal rounded-lg border border-white/10 bg-white/5 px-5 py-4 text-left text-white/70 shadow-none">Chemin de fichier</li>
-                        <li class="li-what-signal rounded-lg border border-white/10 bg-white/5 px-5 py-4 text-left text-white/70 shadow-none">Design</li>
-                        <li class="li-what-signal rounded-lg border border-white/10 bg-white/5 px-5 py-4 text-left text-white/70 shadow-none">Erreur système</li>
+                <div class="home-signal-panel grid gap-4 rounded-lg border border-white/10 bg-white/[0.075] p-4 shadow-[0_24px_70px_rgba(0,0,0,0.24)] backdrop-blur lg:grid-cols-[14rem_1fr]">
+                    <ul class="ul-index home-signal-tabs grid gap-3 p-0 text-base">
+                        <li class="li-what-signal active-li">Orthographe</li>
+                        <li class="li-what-signal">Syntaxe</li>
+                        <li class="li-what-signal">Chemin de fichier</li>
+                        <li class="li-what-signal">Design</li>
+                        <li class="li-what-signal">Erreur système</li>
                     </ul>
-                    <div class="container-slider-index home-signal-preview !static !h-full !min-h-52 !w-full overflow-hidden rounded-lg bg-[#f5f7f4] lg:!min-h-[360px] lg:w-9/12">
+                    <div class="container-slider-index home-signal-preview !static !h-full !min-h-52 !w-full overflow-hidden rounded-lg bg-[#f5f7f4] lg:!min-h-[360px]">
                         <img class="img-slider-index !h-full !min-h-52 !w-full object-contain lg:!min-h-[360px]" th:src="@{/css/img/sliderIndex/Orthographe.jpg}" alt="Erreur d'orthographe">
                         <img class="img-slider-index !h-full !min-h-52 !w-full object-contain lg:!min-h-[360px]" th:src="@{/css/img/sliderIndex/Indeed - Bugs synthaxe.jpg}" alt="Erreur de syntaxe">
                         <img class="img-slider-index !h-full !min-h-52 !w-full object-contain lg:!min-h-[360px]" th:src="@{/css/img/sliderIndex/error_path.png}" alt="Erreur de chemin de fichier">
@@ -188,16 +254,22 @@
         </section>
 
         <section class="px-5 py-16 sm:px-8 lg:px-12">
-            <div class="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:items-center">
-                <div class="processus home-demo-frame w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.075] p-4 shadow-[0_32px_90px_rgba(0,0,0,0.28)] backdrop-blur sm:p-6 lg:w-7/12">
-                    <img id="processus" th:src="@{/css/img/isometrie/processus.gif}" alt="Processus d'envoi et de traitement des bugs">
+            <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+                <div class="processus home-demo-frame overflow-hidden rounded-lg border border-white/10 bg-white/[0.075] p-4 shadow-[0_32px_90px_rgba(0,0,0,0.28)] backdrop-blur sm:p-6">
+                    <img id="processus" th:src="@{/css/img/isometrie/processus.gif}" loading="lazy" decoding="async" alt="Processus d'envoi et de traitement des bugs">
                 </div>
-                <div class="w-full lg:w-5/12">
-                    <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Processus unique</p>
-                    <h2 class="max-w-3xl text-left font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Passez du retour utilisateur à la correction sans perdre le contexte.</h2>
+                <div>
+                    <p class="home-section-label">Workflow</p>
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-5xl">Du retour utilisateur à la correction, sans chasse aux informations.</h2>
                     <p class="mt-5 text-base leading-7 text-white/70 sm:text-lg">
-                        Vos visiteurs n’ont pas besoin de connaître votre outil ou votre stack. Ils montrent le problème, BugsPointer structure la remontée, et vous priorisez les corrections qui comptent.
+                        Centralisez les retours, qualifiez les problèmes et gardez une trace claire des corrections à faire. Votre backlog gagne en précision sans ajouter de friction côté utilisateur.
                     </p>
+                    <div class="mt-6 grid grid-cols-2 gap-3">
+                        <span class="home-mini-proof">Moins d'allers-retours</span>
+                        <span class="home-mini-proof">Priorisation plus claire</span>
+                        <span class="home-mini-proof">Trace des signalements</span>
+                        <span class="home-mini-proof">Équipe alignée</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -205,9 +277,9 @@
         <section id="pricing" class="px-5 py-16 sm:px-8 lg:px-12">
             <div class="mx-auto max-w-7xl">
                 <div class="mx-auto mb-9 w-full max-w-5xl text-center">
-                    <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Tarifs</p>
-                    <h2 class="mx-auto w-full font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Choisissez le plan adapté à votre volume de rapports de bug.</h2>
-                    <p class="mx-auto mt-5 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">Commencez gratuitement par e-mail, puis passez au dashboard quand vous voulez centraliser, suivre et traiter les retours utilisateurs en continu.</p>
+                    <p class="home-section-label justify-center">Tarifs</p>
+                    <h2 class="mx-auto w-full font-display text-3xl leading-none text-white sm:text-5xl">Commencez petit, centralisez quand les retours deviennent réguliers.</h2>
+                    <p class="mx-auto mt-5 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">Le plan gratuit suffit pour tester le parcours. Le plan Target ajoute le suivi et le contexte complet pour traiter les retours en continu.</p>
                 </div>
                 <div class="home-pricing">
                     <div th:replace="~{include/pricingSection.html}"></div>
@@ -216,18 +288,21 @@
         </section>
 
         <section class="px-5 py-16 sm:px-8 lg:px-12">
-            <div class="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row">
-                <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-4/12">
-                    <h3 class="text-left text-base font-black normal-case text-white">Conçu en France</h3>
-                    <p class="mt-2 text-sm leading-6 text-white/60">BugsPointer a été pensé et conçu entre Rouen et Blois.</p>
+            <div class="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
+                <article class="home-card">
+                    <span>FR</span>
+                    <h3>Conçu en France</h3>
+                    <p>BugsPointer est pensé entre Rouen et Blois, avec une approche produit sobre et directe.</p>
                 </article>
-                <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-4/12">
-                    <h3 class="text-left text-base font-black normal-case text-white">Données hébergées en France</h3>
-                    <p class="mt-2 text-sm leading-6 text-white/60">Les données sont hébergées entre Paris et Lille.</p>
+                <article class="home-card">
+                    <span>Data</span>
+                    <h3>Hébergement en France</h3>
+                    <p>Les données sont hébergées entre Paris et Lille pour garder une chaîne claire et locale.</p>
                 </article>
-                <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-4/12">
-                    <h3 class="text-left text-base font-black normal-case text-white">Gestion responsable</h3>
-                    <p class="mt-2 text-sm leading-6 text-white/60">Une approche attentive aux données et à l'impact environnemental.</p>
+                <article class="home-card">
+                    <span>Impact</span>
+                    <h3>Gestion responsable</h3>
+                    <p>Un outil concentré sur l'essentiel: mieux corriger, sans multiplier les flux inutiles.</p>
                 </article>
             </div>
         </section>

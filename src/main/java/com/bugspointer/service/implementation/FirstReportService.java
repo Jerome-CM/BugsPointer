@@ -6,7 +6,6 @@ import com.bugspointer.dto.Response;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.FirstReport;
 import com.bugspointer.entity.enumLogger.Action;
-import com.bugspointer.entity.enumLogger.Raison;
 import com.bugspointer.entity.enumLogger.What;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.repository.FirstReportRepository;
@@ -14,8 +13,6 @@ import com.bugspointer.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -32,14 +29,28 @@ public class FirstReportService {
     }
 
     public Response initFirstReport(String publicKey){
+        Optional<Company> companyOptional = companyRepository.findByPublicKey(publicKey);
+        if (!companyOptional.isPresent()) {
+            return new Response(EnumStatus.ERROR, null, "Company not found");
+        }
+        return initFirstReport(companyOptional.get());
+    }
 
-        Company company = companyRepository.findByPublicKey(publicKey).get();
+    public Response initFirstReport(Company company){
+        if (company == null || company.getCompanyId() == null) {
+            return new Response(EnumStatus.ERROR, null, "Company not found");
+        }
 
-        FirstReport firstReport = new FirstReport();
-
+        FirstReport firstReport = firstReportRepository.findByCompanyId(company.getCompanyId()).orElse(new FirstReport());
         firstReport.setCompanyId(company.getCompanyId());
         firstReport.setCompanyName(company.getCompanyName());
-        firstReport.setDateConfirm(new Date());
+        firstReport.setDomaine(company.getDomaine());
+
+        if (!firstReport.isFirstReport()) {
+            firstReport.setDateConfirm(company.getDomainVerifiedAt() != null ? company.getDomainVerifiedAt() : new Date());
+        } else if (firstReport.getDateConfirm() == null) {
+            firstReport.setDateConfirm(company.getDomainVerifiedAt() != null ? company.getDomainVerifiedAt() : new Date());
+        }
 
         try{
             firstReportRepository.save(firstReport);
@@ -49,6 +60,34 @@ public class FirstReportService {
         } catch (Exception e){
             log.error("Impossible init firstReport table : {}", e.getMessage());
             return new Response(EnumStatus.ERROR, null, null);
+        }
+    }
+
+    public void markFirstReportReceived(Company company, Date reportArrivalDate, String description) {
+        if (company == null || company.getCompanyId() == null) {
+            return;
+        }
+
+        FirstReport firstReport = firstReportRepository.findByCompanyId(company.getCompanyId()).orElse(new FirstReport());
+        firstReport.setCompanyId(company.getCompanyId());
+        firstReport.setCompanyName(company.getCompanyName());
+        firstReport.setDomaine(company.getDomaine());
+        if (firstReport.getDateConfirm() == null) {
+            firstReport.setDateConfirm(company.getDomainVerifiedAt() != null ? company.getDomainVerifiedAt() : new Date());
+        }
+
+        if (!firstReport.isFirstReport()) {
+            firstReport.setFirstReport(true);
+            firstReport.setFirstSend(reportArrivalDate != null ? reportArrivalDate : new Date());
+            firstReport.setFirstDescription(limitDescription(description));
+
+            try {
+                firstReportRepository.save(firstReport);
+                log.info("Company #{} received first user report", firstReport.getCompanyId());
+                Utility.saveLog(firstReport.getCompanyId(), Action.HAVE, What.REPORT, "first user report", null, null);
+            } catch (Exception e) {
+                log.error("Impossible to mark first user report for company #{}: {}", company.getCompanyId(), e.getMessage());
+            }
         }
     }
 
@@ -86,26 +125,15 @@ public class FirstReportService {
 
         List<FirstReportDTO> listCandidatesFormatted = new ArrayList<>();
 
-        Date date = new Date();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        calendar.add(Calendar.DAY_OF_MONTH, -3);
-        String dateLessThreeDay = dateFormat.format(calendar.getTime());
-
-        calendar.add(Calendar.DAY_OF_MONTH, -10);
-        String dateLessTenDay = dateFormat.format(calendar.getTime());
-
-        List<FirstReport> listCandidates = firstReportRepository.findFirstCandidates(dateLessTenDay, dateLessThreeDay);
+        List<FirstReport> listCandidates = firstReportRepository.findByFirstReportFalseOrderByDateConfirmAsc();
 
         for (FirstReport first : listCandidates){
             FirstReportDTO dto = new FirstReportDTO();
             dto.setId(first.getId());
             dto.setCompanyId(first.getCompanyId());
             dto.setCompanyName(first.getCompanyName());
-            dto.setDomaine("http://www."+first.getDomaine());
+            dto.setDomaine(formatDomainUrl(first.getDomaine()));
+            dto.setDateConfirm(first.getDateConfirm());
             dto.setSendIsChecked(first.isFirstReport());
             dto.setDescription(first.getFirstDescription());
             listCandidatesFormatted.add(dto);
@@ -117,31 +145,38 @@ public class FirstReportService {
 
         List<FirstReportDTO> listCandidatesFormatted = new ArrayList<>();
 
-        Date date = new Date();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        calendar.add(Calendar.DAY_OF_MONTH, -15);
-        String dateLessFifteenDay = dateFormat.format(calendar.getTime());
-
-        calendar.add(Calendar.DAY_OF_MONTH, -25);
-        String dateLessFortyDay = dateFormat.format(calendar.getTime());
-
-        List<FirstReport> listCandidates = firstReportRepository.findSecondCandidates(dateLessFortyDay, dateLessFifteenDay);
+        List<FirstReport> listCandidates = firstReportRepository.findByFirstReportTrueAndSecondReportFalseOrderByFirstSendAsc();
 
         for (FirstReport first : listCandidates){
             FirstReportDTO dto = new FirstReportDTO();
             dto.setId(first.getId());
             dto.setCompanyId(first.getCompanyId());
             dto.setCompanyName(first.getCompanyName());
-            dto.setDomaine("http://www."+first.getDomaine());
+            dto.setDomaine(formatDomainUrl(first.getDomaine()));
+            dto.setDateConfirm(first.getDateConfirm());
             dto.setSendIsChecked(first.isSecondReport());
             dto.setDescription(first.getSecondDescription());
+            dto.setSend(first.getFirstSend());
             listCandidatesFormatted.add(dto);
         }
         return listCandidatesFormatted;
+    }
+
+    private String formatDomainUrl(String domain) {
+        if (domain == null || domain.trim().isEmpty()) {
+            return "#";
+        }
+        if (domain.startsWith("http://") || domain.startsWith("https://")) {
+            return domain;
+        }
+        return "https://" + domain;
+    }
+
+    private String limitDescription(String description) {
+        if (description == null) {
+            return null;
+        }
+        return description.length() > 500 ? description.substring(0, 500) : description;
     }
 
 }

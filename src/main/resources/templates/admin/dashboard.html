@@ -188,6 +188,10 @@
                         <div class="flex flex-col gap-3" th:if="${firstReports.size() > 0}">
                             <form action="#" th:action="@{/api/saveFirstReport}" method="post" th:object="${firstReportDTO}" class="grid gap-3 rounded-lg border border-white/10 bg-black/15 p-4" th:each="first : ${firstReports}">
                                 <a class="font-bold text-pointer-lime" target="_blank" th:href="@{${first.domaine}}" th:text="${first.companyName}"></a>
+                                <p class="text-sm font-bold text-white/62">
+                                    Domaine validé le
+                                    <span class="text-white" th:text="${#dates.format(first.dateConfirm, 'dd/MM/yyyy HH:mm')}">01/01/2026 12:00</span>
+                                </p>
                                 <label class="inline-flex items-center gap-2 text-sm text-white/68">First <input class="h-4 w-4 accent-[#00E676]" type="checkbox" th:field="*{sendIsChecked}"></label>
                                 <input class="min-h-11 rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none" type="text" th:field="*{description}" placeholder="Description du bug signalé">
                                 <input type="hidden" name="id" th:value="${first.getId()}">
@@ -205,6 +209,10 @@
                         <div class="flex flex-col gap-3" th:if="${secondReports.size() > 0}">
                             <form action="#" th:action="@{/api/saveFirstReport}" method="post" th:object="${firstReportDTO}" class="grid gap-3 rounded-lg border border-white/10 bg-black/15 p-4" th:each="second : ${secondReports}">
                                 <a class="font-bold text-pointer-lime" target="_blank" th:href="@{${second.domaine}}" th:text="${second.companyName}"></a>
+                                <p class="text-sm font-bold text-white/62">
+                                    Premier rapport reçu le
+                                    <span class="text-white" th:text="${#dates.format(second.send, 'dd/MM/yyyy HH:mm')}">01/01/2026 12:00</span>
+                                </p>
                                 <label class="inline-flex items-center gap-2 text-sm text-white/68">Second <input class="h-4 w-4 accent-[#00E676]" type="checkbox" th:field="*{sendIsChecked}"></label>
                                 <input class="min-h-11 rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none" type="text" th:field="*{description}" placeholder="Description du bug signalé">
                                 <input type="hidden" name="id" th:value="${second.getId()}">
