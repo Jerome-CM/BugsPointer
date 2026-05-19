@@ -24,11 +24,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -66,6 +69,24 @@ public class Admin {
     String scanWebsite(@RequestParam("websiteUrl") String websiteUrl){
         AdminScraperJobDTO job = adminScraperService.startScan(websiteUrl);
         return "redirect:/app/admin/dashboard?scraperJobId=" + job.getId() + "#scrapping";
+    }
+
+    @GetMapping("scraper/status")
+    @ResponseBody
+    Map<String, Object> getScraperStatus(@RequestParam("scraperJobId") String scraperJobId) {
+        Map<String, Object> response = new HashMap<>();
+        AdminScraperJobDTO job = adminScraperService.getJob(scraperJobId);
+        if (job == null) {
+            response.put("running", false);
+            response.put("finished", true);
+            response.put("missing", true);
+            return response;
+        }
+
+        response.put("running", job.isRunning());
+        response.put("finished", !job.isRunning());
+        response.put("hasError", job.getError() != null);
+        return response;
     }
 
     private void addDashboardAttributes(Model model) {
