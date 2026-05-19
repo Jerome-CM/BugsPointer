@@ -56,24 +56,24 @@
                     </article>
                 </section>
 
-                <section id="scrapping" class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 scroll-mt-24">
+                <section class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
                     <div class="mb-5 border-b border-white/10 pb-5">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Prix des offres</p>
                         <h2 class="mt-2 font-display text-3xl leading-none text-white">Nouvelles souscriptions</h2>
                     </div>
                     <div class="grid gap-4 md:grid-cols-2">
-                        <form th:each="planPrice : ${planPrices}" th:action="@{/app/admin/planPrice}" method="post" class="grid gap-4 rounded-lg border border-white/10 bg-black/15 p-4 md:grid-cols-[minmax(0,22rem)_auto] md:items-center">
+                        <form th:each="planPrice : ${planPrices}" th:action="@{/app/admin/planPrice}" method="post" class="grid gap-4 rounded-lg border border-white/10 bg-black/15 p-4 md:grid-cols-[minmax(0,18rem)_auto] md:items-start">
                             <div>
                                 <p class="text-xs font-black uppercase tracking-wider text-white/55" th:text="${planPrice.plan.name()}">TARGET</p>
                                 <label class="mt-3 block text-sm font-bold text-white/68">Prix pour les nouveaux clients</label>
                                 <div class="mt-2 flex items-center gap-2">
                                     <input type="hidden" name="plan" th:value="${planPrice.plan.name()}">
-                                    <input class="min-h-11 w-40 rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none focus:border-pointer-green sm:w-48" type="number" name="newSubscriptionAmount" min="0" step="0.01" th:value="${planPrice.newSubscriptionAmount}" required>
+                                    <input class="min-h-11 w-36 rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none focus:border-pointer-green sm:w-44" type="number" name="newSubscriptionAmount" min="0" step="0.01" th:value="${planPrice.newSubscriptionAmount}" required>
                                     <span class="text-white/70">€</span>
                                 </div>
                                 <p class="mt-2 text-xs leading-5 text-white/50">Renouvellement standard: <span th:text="${planPrice.plan.getValeur()}">15.00</span>€ / an</p>
                             </div>
-                            <button class="min-h-11 cursor-pointer self-start rounded-lg bg-pointer-green px-4 py-2 font-extrabold text-pointer-ink transition hover:bg-pointer-lime md:self-center" type="submit">Enregistrer</button>
+                            <button class="min-h-11 cursor-pointer self-start rounded-lg bg-pointer-green px-4 py-2 font-extrabold text-pointer-ink transition hover:bg-pointer-lime md:mt-[3.2rem]" type="submit">Enregistrer</button>
                         </form>
                     </div>
                 </section>
@@ -91,7 +91,7 @@
                         <button class="min-h-11 cursor-pointer rounded-lg bg-pointer-green px-5 py-2 font-extrabold text-pointer-ink transition hover:bg-pointer-lime" type="submit">Contrôler</button>
                     </form>
 
-                    <div class="mt-5 flex items-center gap-4 rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-4" th:if="${scraperJob != null && scraperJob.running}">
+                    <div class="mt-5 flex flex-col gap-4 rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-4 sm:flex-row sm:items-center" th:if="${scraperJob != null && scraperJob.running}">
                         <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-pointer-green/30 bg-black/20 text-pointer-lime">
                             <svg class="h-5 w-5 animate-spin" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M17 1l4 4-4 4"></path>
@@ -100,12 +100,19 @@
                                 <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
                             </svg>
                         </div>
-                        <div>
+                        <div class="min-w-0 flex-1">
                             <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Scan en cours</p>
                             <p class="mt-2 text-sm leading-6 text-white/70">
                                 Le contrôle tourne en arrière-plan. Cette page s'actualisera automatiquement quand le scan sera terminé.
                             </p>
+                            <p id="scraperWaitingText" class="mt-3 min-h-6 text-sm font-bold text-white">Récupération des liens...</p>
                         </div>
+                        <form th:action="@{/app/admin/scraper/cancel}" method="post" class="shrink-0">
+                            <input type="hidden" name="scraperJobId" th:value="${scraperJob.id}">
+                            <button class="min-h-10 rounded-lg border border-red-300/30 bg-red-500/10 px-4 py-2 text-sm font-extrabold text-red-100 transition hover:border-red-200/60 hover:bg-red-500/20" type="submit">
+                                Arrêter
+                            </button>
+                        </form>
                     </div>
 
                     <div class="mt-5 rounded-lg border border-red-300/25 bg-red-300/10 p-4" th:if="${scraperJob != null && !scraperJob.running && scraperJob.error != null}">
@@ -213,6 +220,23 @@
     <script th:if="${scraperJob != null && scraperJob.running}" th:inline="javascript">
         const scraperStatusUrl = /*[[@{/app/admin/scraper/status(scraperJobId=${scraperJob.id})}]]*/ '';
         const scraperResultUrl = /*[[@{/app/admin/dashboard(scraperJobId=${scraperJob.id})}]]*/ '';
+        const scraperWaitingText = document.getElementById('scraperWaitingText');
+        const waitingMessages = [
+            'Récupération des liens...',
+            'Contrôle des ressources...',
+            'Vérification des images...',
+            'Détection des erreurs...',
+            'Préparation du rapport...'
+        ];
+        let waitingMessageIndex = 0;
+
+        window.setInterval(() => {
+            if (!scraperWaitingText) {
+                return;
+            }
+            waitingMessageIndex = (waitingMessageIndex + 1) % waitingMessages.length;
+            scraperWaitingText.textContent = waitingMessages[waitingMessageIndex];
+        }, 1600);
 
         const waitForScraper = async () => {
             try {

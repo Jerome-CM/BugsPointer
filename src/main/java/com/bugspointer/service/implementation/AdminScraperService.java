@@ -25,6 +25,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Service
 public class AdminScraperService {
@@ -39,19 +40,24 @@ public class AdminScraperService {
 
     private final Map<String, AdminScraperJobDTO> jobs = new ConcurrentHashMap<>();
 
+    private final Map<String, Future<?>> runningTasks = new ConcurrentHashMap<>();
+
     public AdminScraperJobDTO startScan(String rawUrl) {
         cleanOldJobs();
         String jobId = UUID.randomUUID().toString();
         AdminScraperJobDTO job = new AdminScraperJobDTO(jobId, normalizeStartUrl(rawUrl));
         jobs.put(jobId, job);
 
-        scanExecutor.submit(() -> {
+        Future<?> task = scanExecutor.submit(() -> {
             try {
-                job.complete(scan(rawUrl));
+                job.complete(scan(rawUrl, job));
             } catch (Exception e) {
                 job.fail(e.getMessage());
+            } finally {
+                runningTasks.remove(jobId);
             }
         });
+        runningTasks.put(jobId, task);
 
         return job;
     }
@@ -62,6 +68,20 @@ public class AdminScraperService {
         }
         cleanOldJobs();
         return jobs.get(jobId);
+    }
+
+    public boolean cancelScan(String jobId) {
+        AdminScraperJobDTO job = getJob(jobId);
+        if (job == null || !job.isRunning()) {
+            return false;
+        }
+
+        job.cancel();
+        Future<?> task = runningTasks.remove(jobId);
+        if (task != null) {
+            task.cancel(true);
+        }
+        return true;
     }
 
     @PreDestroy
@@ -77,6 +97,10 @@ public class AdminScraperService {
     }
 
     public AdminScraperResultDTO scan(String rawUrl) {
+        return scan(rawUrl, null);
+    }
+
+    private AdminScraperResultDTO scan(String rawUrl, AdminScraperJobDTO job) {
         AdminScraperResultDTO result = new AdminScraperResultDTO();
         String startUrl = normalizeStartUrl(rawUrl);
         result.setStartUrl(startUrl);
@@ -104,7 +128,7 @@ public class AdminScraperService {
         }
         pagesToVisit.add(normalizedStartUri.toString());
 
-        while (!pagesToVisit.isEmpty() && visitedPages.size() < MAX_INTERNAL_PAGES && checkedLinks.size() + checkedImages.size() < MAX_RESOURCES) {
+        while (!isCancelled(job) && !pagesToVisit.isEmpty() && visitedPages.size() < MAX_INTERNAL_PAGES && checkedLinks.size() + checkedImages.size() < MAX_RESOURCES) {
             String pageUrl = pagesToVisit.poll();
             if (!visitedPages.add(pageUrl)) {
                 continue;
@@ -125,8 +149,8 @@ public class AdminScraperService {
                 continue;
             }
 
-            collectLinks(document, pageUrl, startUri, pagesToVisit, visitedPages, checkedLinks, result);
-            collectImages(document, pageUrl, startUri, checkedImages, result);
+            collectLinks(document, pageUrl, startUri, pagesToVisit, visitedPages, checkedLinks, result, job);
+            collectImages(document, pageUrl, startUri, checkedImages, result, job);
         }
 
         result.setCheckedPageCount(visitedPages.size());
@@ -142,8 +166,12 @@ public class AdminScraperService {
                               Queue<String> pagesToVisit,
                               Set<String> visitedPages,
                               Set<String> checkedLinks,
-                              AdminScraperResultDTO result) {
+                              AdminScraperResultDTO result,
+                              AdminScraperJobDTO job) {
         for (Element link : document.select("a[href]")) {
+            if (isCancelled(job)) {
+                return;
+            }
             String href = link.absUrl("href");
             URI uri = normalizeUrl(href);
             if (uri == null || !isHttpUrl(uri)) {
@@ -169,8 +197,12 @@ public class AdminScraperService {
                                String pageUrl,
                                URI startUri,
                                Set<String> checkedImages,
-                               AdminScraperResultDTO result) {
+                               AdminScraperResultDTO result,
+                               AdminScraperJobDTO job) {
         for (Element image : document.select("img[src]")) {
+            if (isCancelled(job)) {
+                return;
+            }
             String src = image.absUrl("src");
             URI uri = normalizeUrl(src);
             if (uri == null || !isHttpUrl(uri)) {
@@ -199,6 +231,10 @@ public class AdminScraperService {
         }
 
         return response.parse();
+    }
+
+    private boolean isCancelled(AdminScraperJobDTO job) {
+        return Thread.currentThread().isInterrupted() || (job != null && job.isCancelled());
     }
 
     private StatusCheck checkStatus(String url) {

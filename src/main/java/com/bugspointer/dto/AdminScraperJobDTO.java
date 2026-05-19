@@ -12,6 +12,8 @@ public class AdminScraperJobDTO {
 
     private volatile String error;
 
+    private volatile boolean cancelled;
+
     private final long createdAt;
 
     private volatile long completedAt;
@@ -42,6 +44,10 @@ public class AdminScraperJobDTO {
         return error;
     }
 
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
     public long getCreatedAt() {
         return createdAt;
     }
@@ -51,13 +57,26 @@ public class AdminScraperJobDTO {
     }
 
     public void complete(AdminScraperResultDTO result) {
+        if (cancelled) {
+            return;
+        }
         this.result = result;
         this.running = false;
         this.completedAt = System.currentTimeMillis();
     }
 
     public void fail(String error) {
+        if (cancelled) {
+            return;
+        }
         this.error = error;
+        this.running = false;
+        this.completedAt = System.currentTimeMillis();
+    }
+
+    public void cancel() {
+        this.cancelled = true;
+        this.error = "Scan arrêté.";
         this.running = false;
         this.completedAt = System.currentTimeMillis();
     }

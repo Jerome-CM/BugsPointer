@@ -71,6 +71,12 @@ public class Admin {
         return "redirect:/app/admin/dashboard?scraperJobId=" + job.getId() + "#scrapping";
     }
 
+    @PostMapping("scraper/cancel")
+    String cancelScraper(@RequestParam("scraperJobId") String scraperJobId){
+        adminScraperService.cancelScan(scraperJobId);
+        return "redirect:/app/admin/dashboard?scraperJobId=" + scraperJobId + "#scrapping";
+    }
+
     @GetMapping("scraper/status")
     @ResponseBody
     Map<String, Object> getScraperStatus(@RequestParam("scraperJobId") String scraperJobId) {
@@ -86,6 +92,7 @@ public class Admin {
         response.put("running", job.isRunning());
         response.put("finished", !job.isRunning());
         response.put("hasError", job.getError() != null);
+        response.put("cancelled", job.isCancelled());
         return response;
     }
 
