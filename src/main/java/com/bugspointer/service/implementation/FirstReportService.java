@@ -3,10 +3,12 @@ package com.bugspointer.service.implementation;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.FirstReportDTO;
 import com.bugspointer.dto.Response;
+import com.bugspointer.entity.Bug;
 import com.bugspointer.entity.Company;
 import com.bugspointer.entity.FirstReport;
 import com.bugspointer.entity.enumLogger.Action;
 import com.bugspointer.entity.enumLogger.What;
+import com.bugspointer.repository.BugRepository;
 import com.bugspointer.repository.CompanyRepository;
 import com.bugspointer.repository.FirstReportRepository;
 import com.bugspointer.utility.Utility;
@@ -23,9 +25,12 @@ public class FirstReportService {
 
       private final CompanyRepository companyRepository;
 
-    public FirstReportService(FirstReportRepository firstReportRepository, CompanyRepository companyRepository) {
+      private final BugRepository bugRepository;
+
+    public FirstReportService(FirstReportRepository firstReportRepository, CompanyRepository companyRepository, BugRepository bugRepository) {
         this.firstReportRepository = firstReportRepository;
         this.companyRepository = companyRepository;
+        this.bugRepository = bugRepository;
     }
 
     public Response initFirstReport(String publicKey){
@@ -125,18 +130,18 @@ public class FirstReportService {
 
         List<FirstReportDTO> listCandidatesFormatted = new ArrayList<>();
 
-        List<FirstReport> listCandidates = firstReportRepository.findByFirstReportFalseOrderByDateConfirmAsc();
+        Iterable<FirstReport> listCandidates = firstReportRepository.findAll();
 
         for (FirstReport first : listCandidates){
-            FirstReportDTO dto = new FirstReportDTO();
-            dto.setId(first.getId());
-            dto.setCompanyId(first.getCompanyId());
-            dto.setCompanyName(first.getCompanyName());
-            dto.setDomaine(formatDomainUrl(first.getDomaine()));
-            dto.setDateConfirm(first.getDateConfirm());
-            dto.setSendIsChecked(first.isFirstReport());
-            dto.setDescription(first.getFirstDescription());
-            listCandidatesFormatted.add(dto);
+            Optional<Company> companyOptional = companyRepository.findById(first.getCompanyId());
+            if (companyOptional.isPresent()) {
+                Company company = companyOptional.get();
+                if (company.isDomainVerified() && bugRepository.countByCompany(company) == 0) {
+                    FirstReportDTO dto = toDTO(first, company);
+                    dto.setDateConfirm(company.getDomainVerifiedAt() != null ? company.getDomainVerifiedAt() : first.getDateConfirm());
+                    listCandidatesFormatted.add(dto);
+                }
+            }
         }
         return listCandidatesFormatted;
     }
@@ -145,21 +150,30 @@ public class FirstReportService {
 
         List<FirstReportDTO> listCandidatesFormatted = new ArrayList<>();
 
-        List<FirstReport> listCandidates = firstReportRepository.findByFirstReportTrueAndSecondReportFalseOrderByFirstSendAsc();
+        Iterable<FirstReport> listCandidates = firstReportRepository.findAll();
 
         for (FirstReport first : listCandidates){
-            FirstReportDTO dto = new FirstReportDTO();
-            dto.setId(first.getId());
-            dto.setCompanyId(first.getCompanyId());
-            dto.setCompanyName(first.getCompanyName());
-            dto.setDomaine(formatDomainUrl(first.getDomaine()));
-            dto.setDateConfirm(first.getDateConfirm());
-            dto.setSendIsChecked(first.isSecondReport());
-            dto.setDescription(first.getSecondDescription());
-            dto.setSend(first.getFirstSend());
-            listCandidatesFormatted.add(dto);
+            Optional<Company> companyOptional = companyRepository.findById(first.getCompanyId());
+            if (companyOptional.isPresent()) {
+                Company company = companyOptional.get();
+                if (company.isDomainVerified() && bugRepository.countByCompany(company) == 1) {
+                    Optional<Bug> firstBug = bugRepository.findTopByCompanyOrderByDateCreationAsc(company);
+                    FirstReportDTO dto = toDTO(first, company);
+                    dto.setSend(firstBug.map(Bug::getDateCreation).orElse(first.getFirstSend()));
+                    listCandidatesFormatted.add(dto);
+                }
+            }
         }
         return listCandidatesFormatted;
+    }
+
+    private FirstReportDTO toDTO(FirstReport first, Company company) {
+        FirstReportDTO dto = new FirstReportDTO();
+        dto.setId(first.getId());
+        dto.setCompanyId(company.getCompanyId());
+        dto.setCompanyName(company.getCompanyName());
+        dto.setDomaine(formatDomainUrl(company.getDomaine() != null ? company.getDomaine() : first.getDomaine()));
+        return dto;
     }
 
     private String formatDomainUrl(String domain) {

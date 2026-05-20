@@ -30,6 +30,8 @@ public interface BugRepository extends CrudRepository<Bug, Long> {
 
     Optional<Bug> findTopByCompanyAndDateEnvoiIsNotNullOrderByDateEnvoiDesc(Company company);
 
+    Optional<Bug> findTopByCompanyOrderByDateCreationAsc(Company company);
+
     @Query(value = "SELECT date_creation FROM bug WHERE adresse_ip = :adresseIp ORDER BY date_creation DESC LIMIT 1", nativeQuery = true)
     Optional<Date> findLastDateCreationByAdresseIp(@Param("adresseIp") String adresseIp);
 
