@@ -38,6 +38,8 @@ public class CompanyService implements ICompany {
 
     private final MailService mailService;
 
+    private final FirstReportService firstReportService;
+
     private final CompanyTokenService companyTokenService;
 
     private final Utility utility;
@@ -47,11 +49,12 @@ public class CompanyService implements ICompany {
 
     private final ModelMapper modelMapper;
 
-    public CompanyService(CompanyRepository companyRepository, BugRepository bugRepository, CompanyPreferencesRepository preferencesRepository, MailService mailService, CompanyTokenService companyTokenService, Utility utility, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ModelMapper modelMapper) {
+    public CompanyService(CompanyRepository companyRepository, BugRepository bugRepository, CompanyPreferencesRepository preferencesRepository, MailService mailService, FirstReportService firstReportService, CompanyTokenService companyTokenService, Utility utility, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ModelMapper modelMapper) {
         this.companyRepository = companyRepository;
         this.bugRepository = bugRepository;
         this.preferencesRepository = preferencesRepository;
         this.mailService = mailService;
+        this.firstReportService = firstReportService;
         this.companyTokenService = companyTokenService;
         this.utility = utility;
         this.passwordEncoder = passwordEncoder;
@@ -470,7 +473,11 @@ public class CompanyService implements ICompany {
                 company.setDomainVerified(true);
                 company.setDomainVerifiedAt(new Date());
                 company.setDomainVerificationUrl(url);
-                return companyTryRegistration(company, "Installation Bugspointer vérifiée");
+                Response registrationResponse = companyTryRegistration(company, "Installation Bugspointer vérifiée");
+                if (registrationResponse.getStatus().equals(EnumStatus.OK)) {
+                    firstReportService.initFirstReport(company);
+                }
+                return registrationResponse;
             }
 
             markDomainAsNotVerified(company, normalizedDomain, url);

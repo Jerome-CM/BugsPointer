@@ -2,6 +2,7 @@ package com.bugspointer.controller;
 
 import be.woutschoovaerts.mollie.exception.MollieException;
 import com.bugspointer.dto.AdminBillingDTO;
+import com.bugspointer.dto.AdminScraperJobDTO;
 import com.bugspointer.dto.EnumStatus;
 import com.bugspointer.dto.FirstReportDTO;
 import com.bugspointer.dto.Response;
@@ -9,6 +10,7 @@ import com.bugspointer.entity.EnumEtatBug;
 import com.bugspointer.entity.EnumPlan;
 import com.bugspointer.entity.EnumViewCounterPage;
 import com.bugspointer.service.implementation.AdminService;
+import com.bugspointer.service.implementation.AdminScraperService;
 import com.bugspointer.service.implementation.ChartService;
 import com.bugspointer.service.implementation.FirstReportService;
 import com.bugspointer.service.implementation.PlanPricingService;
@@ -22,11 +24,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -43,15 +48,55 @@ public class Admin {
 
     private final PlanPricingService planPricingService;
 
-    public Admin(AdminService adminService, FirstReportService firstReportService, ChartService chartService, PlanPricingService planPricingService) {
+    private final AdminScraperService adminScraperService;
+
+    public Admin(AdminService adminService, FirstReportService firstReportService, ChartService chartService, PlanPricingService planPricingService, AdminScraperService adminScraperService) {
         this.adminService = adminService;
         this.firstReportService = firstReportService;
         this.chartService = chartService;
         this.planPricingService = planPricingService;
+        this.adminScraperService = adminScraperService;
     }
 
     @GetMapping("dashboard")
-    String getDashboard(Model model){
+    String getDashboard(Model model, @RequestParam(required = false) String scraperJobId){
+        addDashboardAttributes(model);
+        addScraperJobAttributes(model, scraperJobId);
+        return "admin/dashboard";
+    }
+
+    @PostMapping("scraper")
+    String scanWebsite(@RequestParam("websiteUrl") String websiteUrl){
+        AdminScraperJobDTO job = adminScraperService.startScan(websiteUrl);
+        return "redirect:/app/admin/dashboard?scraperJobId=" + job.getId() + "#scrapping";
+    }
+
+    @PostMapping("scraper/cancel")
+    String cancelScraper(@RequestParam("scraperJobId") String scraperJobId){
+        adminScraperService.cancelScan(scraperJobId);
+        return "redirect:/app/admin/dashboard?scraperJobId=" + scraperJobId + "#scrapping";
+    }
+
+    @GetMapping("scraper/status")
+    @ResponseBody
+    Map<String, Object> getScraperStatus(@RequestParam("scraperJobId") String scraperJobId) {
+        Map<String, Object> response = new HashMap<>();
+        AdminScraperJobDTO job = adminScraperService.getJob(scraperJobId);
+        if (job == null) {
+            response.put("running", false);
+            response.put("finished", true);
+            response.put("missing", true);
+            return response;
+        }
+
+        response.put("running", job.isRunning());
+        response.put("finished", !job.isRunning());
+        response.put("hasError", job.getError() != null);
+        response.put("cancelled", job.isCancelled());
+        return response;
+    }
+
+    private void addDashboardAttributes(Model model) {
         model.addAttribute("firstReports", firstReportService.getCandidateForFirstReport());
         model.addAttribute("secondReports", firstReportService.getCandidateForSecondReport());
         model.addAttribute("firstReportDTO", new FirstReportDTO());
@@ -70,7 +115,19 @@ public class Admin {
         model.addAttribute("pendingBugCount", adminService.getBugCount(EnumEtatBug.PENDING));
         model.addAttribute("solvedBugCount", adminService.getBugCount(EnumEtatBug.SOLVED));
         model.addAttribute("planPrices", planPricingService.getPlanPrices());
-        return "admin/dashboard";
+    }
+
+    private void addScraperJobAttributes(Model model, String scraperJobId) {
+        AdminScraperJobDTO scraperJob = adminScraperService.getJob(scraperJobId);
+        if (scraperJob == null) {
+            return;
+        }
+
+        model.addAttribute("scraperJob", scraperJob);
+        model.addAttribute("scraperUrl", scraperJob.getWebsiteUrl());
+        if (!scraperJob.isRunning() && scraperJob.getResult() != null) {
+            model.addAttribute("scraperResult", scraperJob.getResult());
+        }
     }
 
     @PostMapping("planPrice")

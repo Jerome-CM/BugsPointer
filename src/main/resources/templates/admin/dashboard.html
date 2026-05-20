@@ -62,19 +62,120 @@
                         <h2 class="mt-2 font-display text-3xl leading-none text-white">Nouvelles souscriptions</h2>
                     </div>
                     <div class="grid gap-4 md:grid-cols-2">
-                        <form th:each="planPrice : ${planPrices}" th:action="@{/app/admin/planPrice}" method="post" class="grid gap-4 rounded-lg border border-white/10 bg-black/15 p-4 md:grid-cols-[1fr_auto] md:items-end">
+                        <form th:each="planPrice : ${planPrices}" th:action="@{/app/admin/planPrice}" method="post" class="grid gap-4 rounded-lg border border-white/10 bg-black/15 p-4 md:grid-cols-[minmax(0,18rem)_auto] md:items-start">
                             <div>
                                 <p class="text-xs font-black uppercase tracking-wider text-white/55" th:text="${planPrice.plan.name()}">TARGET</p>
                                 <label class="mt-3 block text-sm font-bold text-white/68">Prix pour les nouveaux clients</label>
                                 <div class="mt-2 flex items-center gap-2">
                                     <input type="hidden" name="plan" th:value="${planPrice.plan.name()}">
-                                    <input class="min-h-11 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none focus:border-pointer-green" type="number" name="newSubscriptionAmount" min="0" step="0.01" th:value="${planPrice.newSubscriptionAmount}" required>
-                                    <span class="font-black text-white">€</span>
+                                    <input class="min-h-11 w-36 rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none focus:border-pointer-green sm:w-44" type="number" name="newSubscriptionAmount" min="0" step="0.01" th:value="${planPrice.newSubscriptionAmount}" required>
+                                    <span class="text-white/70">€</span>
                                 </div>
                                 <p class="mt-2 text-xs leading-5 text-white/50">Renouvellement standard: <span th:text="${planPrice.plan.getValeur()}">15.00</span>€ / an</p>
                             </div>
-                            <button class="min-h-11 cursor-pointer rounded-lg bg-pointer-green px-4 py-2 font-extrabold text-pointer-ink transition hover:bg-pointer-lime" type="submit">Enregistrer</button>
+                            <button class="min-h-11 cursor-pointer self-start rounded-lg bg-pointer-green px-4 py-2 font-extrabold text-pointer-ink transition hover:bg-pointer-lime md:mt-[3.2rem]" type="submit">Enregistrer</button>
                         </form>
+                    </div>
+                </section>
+
+                <section id="scrapping" class="scroll-mt-24 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                    <div class="mb-5 border-b border-white/10 pb-5">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Scrapping</p>
+                        <h2 class="mt-2 font-display text-3xl leading-none text-white">Contrôle liens et images</h2>
+                    </div>
+                    <form th:action="@{/app/admin/scraper}" method="post" class="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+                        <div>
+                            <label class="block text-sm font-bold text-white/68" for="websiteUrl">URL du site client</label>
+                            <input id="websiteUrl" name="websiteUrl" type="text" inputmode="url" th:value="${scraperUrl}" placeholder="https://exemple.com" class="mt-2 min-h-11 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none focus:border-pointer-green" required>
+                        </div>
+                        <button class="min-h-11 cursor-pointer rounded-lg bg-pointer-green px-5 py-2 font-extrabold text-pointer-ink transition hover:bg-pointer-lime" type="submit">Contrôler</button>
+                    </form>
+
+                    <div class="mt-5 flex flex-col gap-4 rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-4 sm:flex-row sm:items-center" th:if="${scraperJob != null && scraperJob.running}">
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-pointer-green/30 bg-black/20 text-pointer-lime">
+                            <svg class="h-5 w-5 animate-spin" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 1l4 4-4 4"></path>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                                <path d="M7 23l-4-4 4-4"></path>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                            </svg>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Scan en cours</p>
+                            <p class="mt-2 text-sm leading-6 text-white/70">
+                                Le contrôle tourne en arrière-plan. Cette page s'actualisera automatiquement quand le scan sera terminé.
+                            </p>
+                            <p id="scraperWaitingText" class="mt-3 min-h-6 text-sm font-bold text-white">Récupération des liens...</p>
+                        </div>
+                        <form th:action="@{/app/admin/scraper/cancel}" method="post" class="shrink-0">
+                            <input type="hidden" name="scraperJobId" th:value="${scraperJob.id}">
+                            <button class="min-h-10 rounded-lg border border-red-300/30 bg-red-500/10 px-4 py-2 text-sm font-extrabold text-red-100 transition hover:border-red-200/60 hover:bg-red-500/20" type="submit">
+                                Arrêter
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="mt-5 rounded-lg border border-red-300/25 bg-red-300/10 p-4" th:if="${scraperJob != null && !scraperJob.running && scraperJob.error != null}">
+                        <p class="text-sm font-bold text-red-100" th:text="${scraperJob.error}">Erreur pendant le scan.</p>
+                    </div>
+
+                    <div class="mt-5 grid gap-4" th:if="${scraperResult != null}">
+                        <div class="rounded-lg border border-red-300/25 bg-red-300/10 p-4" th:if="${scraperResult.globalError != null}">
+                            <p class="text-sm font-bold text-red-100" th:text="${scraperResult.globalError}">URL invalide.</p>
+                        </div>
+
+                        <div class="grid gap-3 sm:grid-cols-4" th:if="${scraperResult.globalError == null}">
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <span class="text-xs font-bold uppercase tracking-wider text-white/55">Pages internes</span>
+                                <p class="mt-2 font-display text-3xl leading-none text-white" th:text="${scraperResult.checkedPageCount}">0</p>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <span class="text-xs font-bold uppercase tracking-wider text-white/55">Liens vérifiés</span>
+                                <p class="mt-2 font-display text-3xl leading-none text-white" th:text="${scraperResult.checkedLinkCount}">0</p>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                <span class="text-xs font-bold uppercase tracking-wider text-white/55">Images vérifiées</span>
+                                <p class="mt-2 font-display text-3xl leading-none text-white" th:text="${scraperResult.checkedImageCount}">0</p>
+                            </div>
+                            <div class="rounded-lg border border-red-300/25 bg-red-300/10 p-4">
+                                <span class="text-xs font-bold uppercase tracking-wider text-red-100">Erreurs</span>
+                                <p class="mt-2 font-display text-3xl leading-none text-white" th:text="${scraperResult.errorCount}">0</p>
+                            </div>
+                        </div>
+
+                        <p class="rounded-lg border border-yellow-300/25 bg-yellow-300/10 p-4 text-sm leading-6 text-yellow-50" th:if="${scraperResult.limitReached}">
+                            Limite de test atteinte : le scan s'arrête à 100 pages internes ou 600 ressources.
+                        </p>
+                        <p class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-4 text-sm font-bold text-pointer-lime" th:if="${scraperResult.globalError == null && scraperResult.errorCount == 0}">
+                            Aucun lien ni fichier image en erreur détecté.
+                        </p>
+
+                        <div class="overflow-x-auto rounded-lg border border-white/10" th:if="${scraperResult.errorCount > 0}">
+                            <table class="min-w-full divide-y divide-white/10 text-left text-sm">
+                                <thead class="bg-black/20 text-xs uppercase tracking-wider text-white/55">
+                                    <tr>
+                                        <th class="px-4 py-3">Type</th>
+                                        <th class="px-4 py-3">Code</th>
+                                        <th class="px-4 py-3">URL en erreur</th>
+                                        <th class="px-4 py-3">Trouvée sur</th>
+                                        <th class="px-4 py-3">Erreur</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/10">
+                                    <tr th:each="error : ${scraperResult.errors}">
+                                        <td class="px-4 py-3 font-bold text-white" th:text="${error.type}">Lien interne</td>
+                                        <td class="px-4 py-3 text-red-100" th:text="${error.statusCode == 0 ? '-' : error.statusCode}">404</td>
+                                        <td class="max-w-[22rem] px-4 py-3">
+                                            <a class="break-all text-pointer-lime hover:text-white" target="_blank" rel="noreferrer" th:href="${error.url}" th:text="${error.url}">https://exemple.com</a>
+                                        </td>
+                                        <td class="max-w-[18rem] px-4 py-3">
+                                            <a class="break-all text-white/70 hover:text-white" target="_blank" rel="noreferrer" th:href="${error.sourceUrl}" th:text="${error.sourceUrl}">https://exemple.com/page</a>
+                                        </td>
+                                        <td class="px-4 py-3 text-white/62" th:text="${error.error}">Réponse HTTP 404</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </section>
 
@@ -85,13 +186,22 @@
                             <h2 class="mt-2 font-display text-3xl leading-none text-white">À envoyer</h2>
                         </div>
                         <div class="flex flex-col gap-3" th:if="${firstReports.size() > 0}">
-                            <form action="#" th:action="@{/api/saveFirstReport}" method="post" th:object="${firstReportDTO}" class="grid gap-3 rounded-lg border border-white/10 bg-black/15 p-4" th:each="first : ${firstReports}">
-                                <a class="font-bold text-pointer-lime" target="_blank" th:href="@{${first.domaine}}" th:text="${first.companyName}"></a>
-                                <label class="inline-flex items-center gap-2 text-sm text-white/68">First <input class="h-4 w-4 accent-[#00E676]" type="checkbox" th:field="*{sendIsChecked}"></label>
-                                <input class="min-h-11 rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none" type="text" th:field="*{description}" placeholder="Description du bug signalé">
-                                <input type="hidden" name="id" th:value="${first.getId()}">
-                                <input class="min-h-11 cursor-pointer rounded-lg bg-pointer-green px-4 py-2 font-extrabold text-pointer-ink" type="submit" value="Valider">
-                            </form>
+                            <article class="flex flex-col gap-4 rounded-lg border border-white/10 bg-black/15 p-4 sm:flex-row sm:items-center sm:justify-between" th:each="first : ${firstReports}">
+                                <div>
+                                    <p class="font-bold text-pointer-lime" th:text="${first.companyName}">Bugspointer</p>
+                                    <p class="mt-1 text-sm font-bold text-white/62">
+                                        Domaine validé le
+                                        <span class="text-white" th:text="${#dates.format(first.dateConfirm, 'dd/MM/yyyy HH:mm')}">09/05/2026 08:34</span>
+                                    </p>
+                                </div>
+                                <div class="flex flex-col gap-2 sm:flex-row">
+                                    <form th:action="@{/app/admin/scraper}" method="post">
+                                        <input type="hidden" name="websiteUrl" th:value="${first.domaine}">
+                                        <button class="min-h-10 w-full rounded-lg border border-pointer-green/30 bg-pointer-green/10 px-4 py-2 text-sm font-extrabold text-pointer-lime transition hover:bg-pointer-green hover:text-pointer-ink sm:w-auto" type="submit">Scrapper</button>
+                                    </form>
+                                    <a class="inline-flex min-h-10 items-center justify-center rounded-lg border border-white/10 bg-white/8 px-4 py-2 text-sm font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime" target="_blank" rel="noreferrer" th:href="@{${first.domaine}}">Voir le site</a>
+                                </div>
+                            </article>
                         </div>
                         <p class="text-sm leading-6 text-white/62" th:if="${firstReports.size() == 0}">Aucun premier rapport en attente.</p>
                     </section>
@@ -102,13 +212,22 @@
                             <h2 class="mt-2 font-display text-3xl leading-none text-white">À envoyer</h2>
                         </div>
                         <div class="flex flex-col gap-3" th:if="${secondReports.size() > 0}">
-                            <form action="#" th:action="@{/api/saveFirstReport}" method="post" th:object="${firstReportDTO}" class="grid gap-3 rounded-lg border border-white/10 bg-black/15 p-4" th:each="second : ${secondReports}">
-                                <a class="font-bold text-pointer-lime" target="_blank" th:href="@{${second.domaine}}" th:text="${second.companyName}"></a>
-                                <label class="inline-flex items-center gap-2 text-sm text-white/68">Second <input class="h-4 w-4 accent-[#00E676]" type="checkbox" th:field="*{sendIsChecked}"></label>
-                                <input class="min-h-11 rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none" type="text" th:field="*{description}" placeholder="Description du bug signalé">
-                                <input type="hidden" name="id" th:value="${second.getId()}">
-                                <input class="min-h-11 cursor-pointer rounded-lg bg-pointer-green px-4 py-2 font-extrabold text-pointer-ink" type="submit" value="Valider">
-                            </form>
+                            <article class="flex flex-col gap-4 rounded-lg border border-white/10 bg-black/15 p-4 sm:flex-row sm:items-center sm:justify-between" th:each="second : ${secondReports}">
+                                <div>
+                                    <p class="font-bold text-pointer-lime" th:text="${second.companyName}">Bugspointer</p>
+                                    <p class="mt-1 text-sm font-bold text-white/62">
+                                        Premier rapport reçu le
+                                        <span class="text-white" th:text="${#dates.format(second.send, 'dd/MM/yyyy HH:mm')}">09/05/2026 08:34</span>
+                                    </p>
+                                </div>
+                                <div class="flex flex-col gap-2 sm:flex-row">
+                                    <form th:action="@{/app/admin/scraper}" method="post">
+                                        <input type="hidden" name="websiteUrl" th:value="${second.domaine}">
+                                        <button class="min-h-10 w-full rounded-lg border border-pointer-green/30 bg-pointer-green/10 px-4 py-2 text-sm font-extrabold text-pointer-lime transition hover:bg-pointer-green hover:text-pointer-ink sm:w-auto" type="submit">Scrapper</button>
+                                    </form>
+                                    <a class="inline-flex min-h-10 items-center justify-center rounded-lg border border-white/10 bg-white/8 px-4 py-2 text-sm font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime" target="_blank" rel="noreferrer" th:href="@{${second.domaine}}">Voir le site</a>
+                                </div>
+                            </article>
                         </div>
                         <p class="text-sm leading-6 text-white/62" th:if="${secondReports.size() == 0}">Aucun second rapport en attente.</p>
                     </section>
@@ -116,5 +235,44 @@
             </div>
         </section>
     </main>
+    <script th:if="${scraperJob != null && scraperJob.running}" th:inline="javascript">
+        const scraperStatusUrl = /*[[@{/app/admin/scraper/status(scraperJobId=${scraperJob.id})}]]*/ '';
+        const scraperResultUrl = /*[[@{/app/admin/dashboard(scraperJobId=${scraperJob.id})}]]*/ '';
+        const scraperWaitingText = document.getElementById('scraperWaitingText');
+        const waitingMessages = [
+            'Récupération des liens...',
+            'Contrôle des ressources...',
+            'Vérification des images...',
+            'Détection des erreurs...',
+            'Préparation du rapport...'
+        ];
+        let waitingMessageIndex = 0;
+
+        window.setInterval(() => {
+            if (!scraperWaitingText) {
+                return;
+            }
+            waitingMessageIndex = (waitingMessageIndex + 1) % waitingMessages.length;
+            scraperWaitingText.textContent = waitingMessages[waitingMessageIndex];
+        }, 1600);
+
+        const waitForScraper = async () => {
+            try {
+                const response = await fetch(scraperStatusUrl, { headers: { 'Accept': 'application/json' } });
+                const status = await response.json();
+                if (status.finished) {
+                    window.location.href = scraperResultUrl + '#scrapping';
+                    return;
+                }
+            } catch (error) {
+                window.location.href = scraperResultUrl + '#scrapping';
+                return;
+            }
+
+            window.setTimeout(waitForScraper, 2500);
+        };
+
+        window.setTimeout(waitForScraper, 2500);
+    </script>
 </body>
 </html>

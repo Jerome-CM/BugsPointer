@@ -181,6 +181,104 @@ html:has(.home-modern) {
     mask-image: linear-gradient(to bottom, #000 0%, transparent 82%);
 }
 
+.home-section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 24px 0;
+    color: #B7FF4A;
+    font-size: 0.9rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.home-section-label::before {
+    content: "";
+    width: 11px;
+    height: 11px;
+    border-radius: 999px;
+    background: #00E676;
+    box-shadow: 0 0 24px rgba(0, 230, 118, 0.70);
+}
+
+.home-feature-title {
+    max-width: 68rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.home-card {
+    min-height: 250px;
+    padding: clamp(22px, 3vw, 30px);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 8px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035));
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(16px);
+}
+
+.home-card span {
+    display: inline-flex;
+    min-width: 42px;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+    border-radius: 8px;
+    color: #06100c;
+    background: #00E676;
+    font-size: 0.82rem;
+    font-weight: 900;
+}
+
+.home-card h3 {
+    margin: 0;
+    color: #fff;
+    font-family: "RalewayBold", "Inter", sans-serif;
+    font-size: 1.38rem;
+    line-height: 1.08;
+    text-align: left;
+    text-transform: none;
+}
+
+.home-card p {
+    margin: 13px 0 0 0;
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 0.98rem;
+    line-height: 1.65;
+}
+
+.home-step {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 68px;
+    padding: 14px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.74);
+    background: rgba(255, 255, 255, 0.055);
+    font-weight: 900;
+}
+
+.home-step b {
+    display: grid;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    border-radius: 8px;
+    color: #06100c;
+    background: #B7FF4A;
+    font-size: 1.3rem;
+}
+
+.home-step span {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    line-height: 1.2;
+}
+
 .home-demo-frame img,
 .processus img {
     display: block;

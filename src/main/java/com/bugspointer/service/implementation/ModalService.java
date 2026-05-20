@@ -27,13 +27,15 @@ public class ModalService implements IModal {
     private final BugRepository bugRepository;
     private final CompanyRepository companyRepository;
     private final MailService mailService;
+    private final FirstReportService firstReportService;
 
     private final CompanyPreferencesRepository companyPreferencesRepository;
 
-    public ModalService(BugRepository bugRepository, CompanyRepository companyRepository, MailService mailService, CompanyPreferencesRepository companyPreferencesRepository) {
+    public ModalService(BugRepository bugRepository, CompanyRepository companyRepository, MailService mailService, FirstReportService firstReportService, CompanyPreferencesRepository companyPreferencesRepository) {
         this.bugRepository = bugRepository;
         this.companyRepository = companyRepository;
         this.mailService = mailService;
+        this.firstReportService = firstReportService;
         this.companyPreferencesRepository = companyPreferencesRepository;
     }
 
@@ -140,6 +142,7 @@ public class ModalService implements IModal {
                     Bug savedBug = bugRepository.save(bug);
                     Utility.saveLog(bug.getCompany().getCompanyId(), Action.SAVE, What.BUG, "#"+ savedBug.getId(), null, null);
                     log.info("Company #{} save a new bug #{}",savedBug.getCompany().getCompanyId(), savedBug.getId());
+                    firstReportService.markFirstReportReceived(company, savedBug.getDateCreation(), savedBug.getDescription());
 
                     // Notification new mail si notification activée
                     Optional<CompanyPreferences> notifOpt = companyPreferencesRepository.findByCompany(company);
