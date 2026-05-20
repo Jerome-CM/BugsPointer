@@ -178,7 +178,7 @@
                         <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Plan Target</p>
                         <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Centralisez et gérez les bugs dans un dashboard</h2>
                     </div>
-                    <a th:href="@{/app/private/recapPayment(product='TARGET')}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)]" th:text="${targetPlanPriceLabel != null ? targetPlanPriceLabel : '0€ jusqu''au 1er juillet'}">
+                    <a th:href="${isLoggedIn == true} ? @{/app/private/recapPayment(product='TARGET')} : @{/authentication(redirect='/app/private/recapPayment?product=TARGET')}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)]" th:text="${targetPlanPriceLabel != null ? targetPlanPriceLabel : '0€ jusqu''au 1er juillet'}">
                         0€ jusqu'au 1er juillet
                     </a>
                 </div>

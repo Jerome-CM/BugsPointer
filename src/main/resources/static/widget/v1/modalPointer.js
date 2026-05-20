@@ -119,6 +119,7 @@
 
     function render() {
         const cfg = state.config;
+        const isTestModal = publicKey === "LaClefDeTest";
         shadow.innerHTML = `
             <style>
                 :host {
@@ -348,8 +349,9 @@
                     </div>
                     <div class="bp-success" data-bp-success>
                         <strong>Merci pour votre retour.</strong>
-                        <span>Votre rapport a bien été transmis.</span>
-                        <span>Pensez à vérifier vos spams ou courriers indésirables si vous ne voyez pas l'e-mail dans quelques minutes.</span>
+                        ${isTestModal
+                            ? `<span>Votre rapport de test a bien été transmis.</span><span>Pensez à vérifier vos spams ou courriers indésirables si vous ne voyez pas l'e-mail dans quelques minutes.</span>`
+                            : `<span>Merci d'avoir signalé ce bug. Votre retour a bien été transmis à l'équipe du site.</span>`}
                         <div class="bp-success-url">
                             <span>Lien signalé</span>
                             <a href="#" target="_blank" rel="noopener" data-bp-success-url></a>
