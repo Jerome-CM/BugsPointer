@@ -47,7 +47,7 @@ public class Authentication {
             model.addAttribute("status", request.getParameter("status"));
             model.addAttribute("notification", request.getParameter("message"));
         }
-        if (request.getParameter("redirect") != null && request.getParameter("redirect").startsWith("/")) {
+        if (request.getParameter("redirect") != null && request.getParameter("redirect").startsWith("/") && !request.getParameter("redirect").startsWith("//")) {
             request.getSession().setAttribute("redirectAfterLogin", request.getParameter("redirect"));
         }
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
