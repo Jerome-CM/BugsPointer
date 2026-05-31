@@ -92,6 +92,13 @@ public class Home {
         return "public/bugReportingTool";
     }
 
+    @GetMapping("agences-web")
+    String getWebAgenciesLanding(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        addTargetPlanPrice(model);
+        return "public/agencies";
+    }
+
     @GetMapping("documentations")
     String getDocumentations(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
