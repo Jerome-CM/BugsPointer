@@ -89,14 +89,26 @@ public class Home {
     @GetMapping("outil-remontee-bugs")
     String getBugReportingLanding(Model model){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        return "public/bugReportingTool";
+        return "seo/bugReportingTool";
     }
 
     @GetMapping("agences-web")
     String getWebAgenciesLanding(Model model){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         addTargetPlanPrice(model);
-        return "public/agencies";
+        return "seo/agencies";
+    }
+
+    @GetMapping("signalement-bug-site-web")
+    String getWebsiteBugReportLanding(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "seo/websiteBugReport";
+    }
+
+    @GetMapping("debuguer-site-web")
+    String getDebugWebsiteLanding(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "seo/debugWebsite";
     }
 
     @GetMapping("documentations")

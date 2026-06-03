@@ -1,0 +1,245 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black" lang="fr">
+<div th:replace="~{include/head.html}"></div>
+    <title>Débuguer un site web avec les retours utilisateurs | BugsPointer</title>
+    <meta name="description" content="Débuguez votre site web plus vite avec BugsPointer: collectez les problèmes vus par les utilisateurs, centralisez les rapports et corrigez les irritants prioritaires.">
+    <meta name="keywords" content="debuguer site web, débuguer un site, corriger bug site web, outil debug site, rapport bug utilisateur">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bugspointer.com/debuguer-site-web">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Débuguer un site web avec les retours utilisateurs | BugsPointer">
+    <meta property="og:description" content="Collectez les bugs vus par les utilisateurs et recevez des rapports utiles pour corriger plus vite.">
+    <meta property="og:url" content="https://bugspointer.com/debuguer-site-web">
+    <meta property="og:site_name" content="BugsPointer">
+    <meta property="og:locale" content="fr_FR">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Débuguer un site web avec les retours utilisateurs | BugsPointer">
+    <meta name="twitter:description" content="Un canal simple pour transformer les bugs utilisateurs en actions de correction.">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "WebPage",
+                    "name": "Débuguer un site web avec les retours utilisateurs",
+                    "url": "https://bugspointer.com/debuguer-site-web",
+                    "description": "Page dédiée aux équipes qui veulent débuguer un site web à partir de retours utilisateurs structurés.",
+                    "isPartOf": { "@id": "https://bugspointer.com/#website" },
+                    "about": { "@id": "https://bugspointer.com/#software" },
+                    "inLanguage": "fr-FR"
+                },
+                {
+                    "@type": "HowTo",
+                    "name": "Comment débuguer un site web avec des retours utilisateurs",
+                    "description": "Méthode simple pour capter, comprendre et prioriser les bugs vus par les utilisateurs.",
+                    "step": [
+                        { "@type": "HowToStep", "name": "Installer un bouton de signalement", "text": "Placez BugsPointer sur les pages où les utilisateurs peuvent rencontrer des blocages." },
+                        { "@type": "HowToStep", "name": "Collecter un rapport contextualisé", "text": "L'utilisateur décrit le problème et indique la zone concernée directement depuis la page." },
+                        { "@type": "HowToStep", "name": "Prioriser les corrections", "text": "Centralisez les signalements dans le dashboard pour traiter les bugs les plus visibles." }
+                    ]
+                },
+                {
+                    "@type": "FAQPage",
+                    "mainEntity": [
+                        {
+                            "@type": "Question",
+                            "name": "Quel est le meilleur moyen de débuguer un site web après sa mise en ligne ?",
+                            "acceptedAnswer": {
+                                "@type": "Answer",
+                                "text": "Après la mise en ligne, les retours utilisateurs sont essentiels. BugsPointer aide à collecter ces retours sous forme de rapports structurés pour comprendre et corriger les bugs plus vite."
+                            }
+                        },
+                        {
+                            "@type": "Question",
+                            "name": "Pourquoi les bugs utilisateurs sont-ils difficiles à reproduire ?",
+                            "acceptedAnswer": {
+                                "@type": "Answer",
+                                "text": "Les bugs sont souvent signalés sans page précise, sans zone concernée et sans description claire. Un widget de signalement réduit cette perte de contexte."
+                            }
+                        },
+                        {
+                            "@type": "Question",
+                            "name": "BugsPointer remplace-t-il les outils de monitoring technique ?",
+                            "acceptedAnswer": {
+                                "@type": "Answer",
+                                "text": "Non. BugsPointer complète le monitoring technique en captant les problèmes visibles par les utilisateurs: parcours bloqué, contenu cassé, affichage incorrect, faute ou incompréhension."
+                            }
+                        }
+                    ]
+                },
+                {
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://bugspointer.com/" },
+                        { "@type": "ListItem", "position": 2, "name": "Débuguer un site web", "item": "https://bugspointer.com/debuguer-site-web" }
+                    ]
+                }
+            ]
+        }
+    </script>
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pointer: {
+                            green: '#00E676',
+                            lime: '#B7FF4A',
+                            ink: '#08110D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'DM-Sans', 'system-ui', 'sans-serif'],
+                        display: ['RalewayBold', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}.seo-hero{min-height:calc(100vh - 72px);}</style>
+</head>
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
+    <div th:replace="~{include/notifAlert.html}"></div>
+    <div th:replace="~{include/nav.html}"></div>
+
+    <main>
+        <section class="seo-hero relative px-5 pb-14 pt-10 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto grid max-w-[88rem] gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+                <div>
+                    <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-black uppercase tracking-wide text-pointer-lime">
+                        Débuguer un site web
+                    </p>
+                    <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
+                        Les vrais bugs apparaissent souvent après la mise en ligne.
+                    </h1>
+                    <p class="mt-6 max-w-2xl text-base leading-7 text-white/72 sm:text-lg">
+                        BugsPointer aide votre équipe à capter les problèmes vus par les utilisateurs: erreurs d'affichage, boutons bloqués, liens cassés, fautes, problèmes de parcours ou bugs difficiles à reproduire.
+                    </p>
+                    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                        <a th:href="@{/authentication}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.24)] transition hover:-translate-y-0.5">
+                            Recevoir des rapports
+                        </a>
+                        <a th:href="@{/outil-remontee-bugs}" class="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5">
+                            Voir l'outil
+                        </a>
+                    </div>
+                </div>
+                <div class="overflow-hidden rounded-lg border border-pointer-green/25 bg-white/[0.075] p-3 shadow-[0_32px_90px_rgba(0,230,118,0.12)] backdrop-blur">
+                    <img class="block w-full rounded-md bg-[#eff4ef]" th:src="@{/css/img/sliderPlan/dashboard.png}" fetchpriority="high" decoding="async" alt="Dashboard BugsPointer pour suivre les bugs a corriger">
+                </div>
+            </div>
+        </section>
+
+        <section class="px-5 py-14 sm:px-8 lg:px-12">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-8 max-w-4xl">
+                    <p class="home-section-label">Réponse courte</p>
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">
+                        Pour débuguer un site web en production, combinez tests internes, monitoring technique et retours utilisateurs structurés.
+                    </h2>
+                    <p class="mt-5 text-base leading-7 text-white/70 sm:text-lg">
+                        Les tests détectent une partie des erreurs. Les utilisateurs détectent le reste: ce qui bloque, ce qui surprend, ce qui casse sur un vrai parcours. BugsPointer sert à transformer ce signal terrain en liste de corrections.
+                    </p>
+                </div>
+                <div class="grid gap-5 md:grid-cols-3">
+                    <article class="rounded-lg border border-white/10 bg-white/[0.075] p-5">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Visibilité</span>
+                        <h3 class="mt-4 text-xl font-black text-white">Repérer les bugs que l'équipe ne voit pas</h3>
+                        <p class="mt-3 leading-7 text-white/65">Un écran, un navigateur ou un usage réel peut révéler un problème invisible en recette.</p>
+                    </article>
+                    <article class="rounded-lg border border-white/10 bg-white/[0.075] p-5">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Contexte</span>
+                        <h3 class="mt-4 text-xl font-black text-white">Comprendre sans vingt allers-retours</h3>
+                        <p class="mt-3 leading-7 text-white/65">Le rapport centralise la page, la description et le point de friction.</p>
+                    </article>
+                    <article class="rounded-lg border border-white/10 bg-white/[0.075] p-5">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Priorité</span>
+                        <h3 class="mt-4 text-xl font-black text-white">Corriger ce qui abîme vraiment l'expérience</h3>
+                        <p class="mt-3 leading-7 text-white/65">Les retours utilisateurs aident à distinguer les irritants visibles des détails secondaires.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="px-5 py-14 sm:px-8 lg:px-12">
+            <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+                <div>
+                    <p class="home-section-label">Méthode</p>
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">
+                        Une boucle de debug simple pour les sites vivants.
+                    </h2>
+                    <p class="mt-5 text-base leading-7 text-white/70 sm:text-lg">
+                        BugsPointer n'est pas un remplaçant de vos logs. C'est le canal humain qui révèle ce que vos visiteurs subissent vraiment.
+                    </p>
+                </div>
+                <div class="grid gap-4">
+                    <article class="flex gap-5 rounded-lg border border-white/10 bg-white/[0.075] p-5">
+                        <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-pointer-lime text-2xl font-black text-pointer-ink">1</span>
+                        <div>
+                            <h3 class="text-xl font-black text-white">Installez le widget sur les pages sensibles</h3>
+                            <p class="mt-2 leading-7 text-white/65">Commencez par inscription, paiement, espace client, formulaire de contact ou documentation.</p>
+                        </div>
+                    </article>
+                    <article class="flex gap-5 rounded-lg border border-white/10 bg-white/[0.075] p-5">
+                        <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-pointer-lime text-2xl font-black text-pointer-ink">2</span>
+                        <div>
+                            <h3 class="text-xl font-black text-white">Laissez les utilisateurs signaler au moment du bug</h3>
+                            <p class="mt-2 leading-7 text-white/65">Le retour arrive avec un contexte bien plus frais qu'un email envoyé plus tard.</p>
+                        </div>
+                    </article>
+                    <article class="flex gap-5 rounded-lg border border-white/10 bg-white/[0.075] p-5">
+                        <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-pointer-lime text-2xl font-black text-pointer-ink">3</span>
+                        <div>
+                            <h3 class="text-xl font-black text-white">Traitez les rapports dans le dashboard</h3>
+                            <p class="mt-2 leading-7 text-white/65">Regroupez les irritants, corrigez les problèmes récurrents et suivez ce qui reste à faire.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="px-5 py-14 sm:px-8 lg:px-12">
+            <div class="mx-auto max-w-7xl">
+                <div class="mx-auto mb-9 max-w-5xl text-center">
+                    <p class="home-section-label justify-center">Questions fréquentes</p>
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">
+                        Débuguer un site avec BugsPointer, en clair.
+                    </h2>
+                </div>
+                <div class="grid gap-4 md:grid-cols-3">
+                    <article class="rounded-lg border border-white/10 bg-white/[0.075] p-5">
+                        <h3 class="text-xl font-black text-white">Est-ce un outil pour développeurs ?</h3>
+                        <p class="mt-3 leading-7 text-white/65">Oui, mais il sert aussi aux équipes produit, support, agences et propriétaires de sites.</p>
+                    </article>
+                    <article class="rounded-lg border border-white/10 bg-white/[0.075] p-5">
+                        <h3 class="text-xl font-black text-white">Quels bugs peut-on remonter ?</h3>
+                        <p class="mt-3 leading-7 text-white/65">Affichage, faute, lien cassé, formulaire bloqué, problème de bouton, contenu incohérent ou erreur de parcours.</p>
+                    </article>
+                    <article class="rounded-lg border border-white/10 bg-white/[0.075] p-5">
+                        <h3 class="text-xl font-black text-white">Pourquoi pas juste un email support ?</h3>
+                        <p class="mt-3 leading-7 text-white/65">Un email arrive souvent sans contexte. BugsPointer rapproche le signalement de la page où le problème se produit.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="px-5 py-14 sm:px-8 lg:px-12">
+            <div class="mx-auto rounded-lg border border-pointer-green/25 bg-white/[0.075] p-6 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur md:p-8 lg:flex lg:max-w-7xl lg:items-center lg:justify-between lg:gap-8">
+                <div class="max-w-3xl">
+                    <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Debug continu</p>
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-4xl">Ajoutez une boucle de retour directement dans votre site.</h2>
+                    <p class="mt-5 text-base leading-7 text-white/70">Installez BugsPointer, recevez les premiers rapports et corrigez les problèmes visibles par vos utilisateurs.</p>
+                </div>
+                <a th:href="@{/authentication}" class="mt-7 inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.24)] transition hover:-translate-y-0.5 lg:mt-0">
+                    Commencer
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <div th:replace="~{include/footer.html}"></div>
+</body>
+</html>
