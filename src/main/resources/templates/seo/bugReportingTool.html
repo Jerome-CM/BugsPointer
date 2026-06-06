@@ -12,9 +12,14 @@
     <meta property="og:url" content="https://bugspointer.com/outil-remontee-bugs">
     <meta property="og:site_name" content="BugsPointer">
     <meta property="og:locale" content="fr_FR">
-    <meta name="twitter:card" content="summary">
+    <meta property="og:image" content="https://bugspointer.com/social/linkedin-bugspointer.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="627">
+    <meta property="og:image:alt" content="BugsPointer, outil de remontée de bugs pour site web">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Outil de remontée de bugs pour site web | BugsPointer">
     <meta name="twitter:description" content="Un widget simple pour collecter, comprendre et traiter les bugs signalés par vos utilisateurs.">
+    <meta name="twitter:image" content="https://bugspointer.com/social/linkedin-bugspointer.png">
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -77,6 +82,7 @@
     <style>
         .bugspointer-logo{display:none;}
         .landing-hero{min-height:calc(100vh - 72px);}
+        .landing-hero-frame img{height:100%;min-height:360px;object-fit:cover;}
         .landing-proof{contain-intrinsic-size:1px 420px;content-visibility:auto;}
     </style>
 </head>
@@ -87,50 +93,61 @@
     <main>
         <section class="landing-hero relative px-5 pb-12 pt-10 sm:px-8 lg:px-12">
             <div class="home-noise"></div>
-            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-10 lg:flex-row lg:items-center">
-                <div class="w-full lg:w-6/12">
+            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-8">
+                <div class="w-full">
                     <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
                         Outil de remontée de bugs
                     </p>
-                    <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
-                        Vos utilisateurs voient les bugs avant vous. Donnez-leur un bouton pour les signaler.
+                    <h1 class="max-w-6xl font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-7xl">
+                        Vos utilisateurs voient les bugs avant vous.
                     </h1>
-                    <p class="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg">
-                        BugsPointer ajoute un widget de signalement à votre site. Le visiteur décrit le problème, pointe la zone concernée, et votre équipe reçoit un rapport clair pour reproduire et corriger plus vite.
-                    </p>
-                    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                        <a th:href="@{/authentication}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.24)] transition hover:-translate-y-0.5">
-                            Essayer gratuitement
-                        </a>
-                        <a th:href="@{/documentations#integration}" class="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5">
-                            Voir l'installation
-                        </a>
-                    </div>
-                    <div class="mt-8 grid gap-3 sm:grid-cols-3">
-                        <div class="rounded-lg border border-white/10 bg-white/[0.065] p-4">
-                            <strong class="block text-2xl text-pointer-lime">1 script</strong>
-                            <span class="mt-1 block text-sm leading-6 text-white/62">à coller sur le site</span>
-                        </div>
-                        <div class="rounded-lg border border-white/10 bg-white/[0.065] p-4">
-                            <strong class="block text-2xl text-pointer-lime">0 friction</strong>
-                            <span class="mt-1 block text-sm leading-6 text-white/62">pour le visiteur</span>
-                        </div>
-                        <div class="rounded-lg border border-white/10 bg-white/[0.065] p-4">
-                            <strong class="block text-2xl text-pointer-lime">1 dashboard</strong>
-                            <span class="mt-1 block text-sm leading-6 text-white/62">pour prioriser</span>
-                        </div>
-                    </div>
                 </div>
 
-                <div class="w-full lg:w-6/12">
-                    <div class="overflow-hidden rounded-lg border border-pointer-green/25 bg-white/[0.075] p-3 shadow-[0_32px_90px_rgba(0,230,118,0.12)] backdrop-blur">
+                <div class="grid gap-6 lg:grid-cols-2 lg:items-stretch">
+                    <div class="flex h-full flex-col justify-between rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
+                        <div>
+                            <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">
+                                Donnez-leur un bouton pour les signaler.
+                            </h2>
+                            <p class="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg">
+                                BugsPointer ajoute un widget de signalement à votre site. Le visiteur décrit le problème, pointe la zone concernée, et votre équipe reçoit un rapport clair pour reproduire et corriger plus vite.
+                            </p>
+                        </div>
+
+                        <div class="mt-8">
+                            <div class="flex flex-col gap-3 sm:flex-row">
+                                <a th:href="@{/authentication}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.24)] transition hover:-translate-y-0.5">
+                                    Essayer gratuitement
+                                </a>
+                                <a th:href="@{/documentations#integration}" class="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5">
+                                    Voir l'installation
+                                </a>
+                            </div>
+                            <div class="mt-8 grid gap-3 sm:grid-cols-3">
+                                <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                    <strong class="block text-2xl text-pointer-lime">1 script</strong>
+                                    <span class="mt-1 block text-sm leading-6 text-white/62">à coller sur le site</span>
+                                </div>
+                                <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                    <strong class="block text-2xl text-pointer-lime">0 friction</strong>
+                                    <span class="mt-1 block text-sm leading-6 text-white/62">pour le visiteur</span>
+                                </div>
+                                <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                    <strong class="block text-2xl text-pointer-lime">1 dashboard</strong>
+                                    <span class="mt-1 block text-sm leading-6 text-white/62">pour prioriser</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="landing-hero-frame flex h-full flex-col overflow-hidden rounded-lg border border-pointer-green/25 bg-white/[0.075] p-3 shadow-[0_32px_90px_rgba(0,230,118,0.12)] backdrop-blur">
                         <div class="flex items-center gap-2 px-1.5 pb-2.5 pt-1 text-xs font-extrabold text-white/50">
                             <span class="h-2.5 w-2.5 rounded-full bg-pointer-green"></span>
                             <span class="h-2.5 w-2.5 rounded-full bg-white/30"></span>
                             <span class="h-2.5 w-2.5 rounded-full bg-white/30"></span>
                             <p class="ml-auto">signalement utilisateur</p>
                         </div>
-                        <img class="block w-full rounded-md bg-[#eff4ef]" th:src="@{/css/img/motion/guideline.gif}" fetchpriority="high" decoding="async" alt="Parcours de remontée de bug avec BugsPointer">
+                        <img class="block min-h-0 flex-1 rounded-md bg-[#eff4ef]" th:src="@{/css/img/motion/guideline.gif}" fetchpriority="high" decoding="async" alt="Parcours de remontée de bug avec BugsPointer">
                     </div>
                 </div>
             </div>
@@ -138,10 +155,10 @@
 
         <section class="px-5 py-14 sm:px-8 lg:px-12">
             <div class="mx-auto max-w-7xl">
-                <div class="mb-8 max-w-3xl">
+                <div class="mx-auto mb-8 max-w-5xl text-center">
                     <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Pourquoi une page dédiée</p>
                     <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Une remontée de bug utile doit arriver avec du contexte.</h2>
-                    <p class="mt-5 text-base leading-7 text-white/70 sm:text-lg">
+                    <p class="mx-auto mt-5 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
                         Un message vague comme "ça ne marche pas" coûte du temps. BugsPointer structure chaque retour pour aider les équipes produit, support et développement à comprendre le problème sans multiplier les échanges.
                     </p>
                 </div>

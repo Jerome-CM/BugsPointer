@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black" lang="fr">
 <div th:replace="~{include/head.html}"></div>
     <title>Installer BugsPointer - bouton ou lien de signalement</title>
     <meta name="description" content="Installez BugsPointer avec une balise script. Ajoutez un bouton flottant ou un lien de signalement dans votre footer, menu ou contenu.">
@@ -12,9 +12,14 @@
     <meta property="og:url" content="https://bugspointer.com/download">
     <meta property="og:site_name" content="BugsPointer">
     <meta property="og:locale" content="fr_FR">
-    <meta name="twitter:card" content="summary">
+    <meta property="og:image" content="https://bugspointer.com/social/linkedin-bugspointer.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="627">
+    <meta property="og:image:alt" content="Installation du widget BugsPointer">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Installer BugsPointer - bouton ou lien de signalement">
     <meta name="twitter:description" content="Ajoutez BugsPointer à votre site avec une balise script et recevez des rapports de bug exploitables.">
+    <meta name="twitter:image" content="https://bugspointer.com/social/linkedin-bugspointer.png">
     <script th:src="@{/js/tailwindcss-cdn.js}"></script>
     <script>
         tailwind.config = {

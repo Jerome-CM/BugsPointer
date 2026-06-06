@@ -15,6 +15,7 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.HttpStatusRequestRejectedHandler;
 import org.springframework.security.web.firewall.RequestRejectedHandler;
+import java.net.URLEncoder;
 
 
 @Configuration
@@ -47,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity webSecurity) {
         webSecurity.ignoring()
-                .antMatchers("/css/**", "/js/**", "/widget/**", "/favicon.ico");
+                .antMatchers("/css/**", "/js/**", "/social/**", "/widget/**", "/favicon.ico");
     }
 
     @Override
@@ -82,9 +83,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // public url
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
+                .antMatchers("/social/**").permitAll()
                 .antMatchers("/widget/**").permitAll()
                 .antMatchers("/robots.txt").permitAll()
                 .antMatchers("/sitemap.xml").permitAll()
+                .antMatchers("/llms.txt").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/authentication").permitAll()
                 .antMatchers("/testPage").permitAll()
@@ -101,6 +104,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/resetPassword/**").permitAll()
                 .antMatchers("/features").permitAll()
                 .antMatchers("/outil-remontee-bugs").permitAll()
+                .antMatchers("/agences-web").permitAll()
+                .antMatchers("/signalement-bug-site-web").permitAll()
+                .antMatchers("/debuguer-site-web").permitAll()
                 .antMatchers("/documentations").permitAll()
                 .antMatchers("/cgu").permitAll()
                 .antMatchers("/cgv").permitAll()
@@ -118,7 +124,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe().disable()
                 .sessionManagement()
                 .sessionFixation().migrateSession()
-                .invalidSessionUrl("/")
+                .invalidSessionStrategy((request, response) -> {
+                    String redirectPath = getRedirectPath(request);
+                    request.getSession().setAttribute("redirectAfterLogin", redirectPath);
+                    response.sendRedirect("/authentication?status=ERROR&message=Vous%20devez%20vous%20connecter&redirect=" + URLEncoder.encode(redirectPath, "UTF-8"));
+                })
                 .and()
                 .logout()
                 .logoutUrl("/logout")
@@ -136,5 +146,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Add a filter to validate the tokens with every request
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    private String getRedirectPath(javax.servlet.http.HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        String query = request.getQueryString();
+        if (uri == null || uri.trim().isEmpty() || !uri.startsWith("/") || uri.startsWith("//")) {
+            return "/app/private/dashboard";
+        }
+        return query == null || query.trim().isEmpty() ? uri : uri + "?" + query;
     }
 }

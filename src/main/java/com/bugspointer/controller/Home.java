@@ -62,7 +62,13 @@ public class Home {
 
     @GetMapping("download")
     String getDownloadPage(Model model, HttpServletRequest request){
-        return redirectToWidgetInstallation(request);
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        if(userAuthenticationUtil.isUserLoggedIn()){
+            model.addAttribute("publicKey", companyService.getCompanyWithToken(request).getPublicKey());
+        } else {
+            model.addAttribute("publicKey", "pk_xxxxx");
+        }
+        return "public/download";
     }
 
     @GetMapping("installation")
@@ -89,14 +95,37 @@ public class Home {
     @GetMapping("outil-remontee-bugs")
     String getBugReportingLanding(Model model){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        return "public/bugReportingTool";
+        return "seo/bugReportingTool";
+    }
+
+    @GetMapping("agences-web")
+    String getWebAgenciesLanding(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        addTargetPlanPrice(model);
+        return "seo/agencies";
+    }
+
+    @GetMapping("signalement-bug-site-web")
+    String getWebsiteBugReportLanding(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "seo/websiteBugReport";
+    }
+
+    @GetMapping("debuguer-site-web")
+    String getDebugWebsiteLanding(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "seo/debugWebsite";
     }
 
     @GetMapping("documentations")
     String getDocumentations(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         if(userAuthenticationUtil.isUserLoggedIn()){
-            model.addAttribute("publicKey", companyService.getCompanyWithToken(request).getPublicKey());
+            Company company = companyService.getCompanyWithToken(request);
+            model.addAttribute("publicKey", company.getPublicKey());
+            model.addAttribute("planLabel", company.getPlan().name().charAt(0) + company.getPlan().name().substring(1).toLowerCase());
+        } else {
+            model.addAttribute("planLabel", "Free");
         }
         return "public/documentations";
     }

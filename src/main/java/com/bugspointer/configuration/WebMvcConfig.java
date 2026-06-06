@@ -34,6 +34,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/static/js/")
                 .setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS).cachePublic());
 
+        registry.addResourceHandler("/social/**")
+                .addResourceLocations("classpath:/static/social/")
+                .setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS).cachePublic());
+
         registry.addResourceHandler("/widget/**")
                 .addResourceLocations("classpath:/static/widget/")
                 .setCacheControl(CacheControl.maxAge(1, TimeUnit.HOURS).cachePublic());

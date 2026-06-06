@@ -72,17 +72,21 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         company.setLastVisit(new Date());
         companyRepository.save(company);
 
-        if(isAdmin(company.getRole())){
-            response.sendRedirect("app/admin/dashboard");
-        } else if (session.getAttribute("redirectAfterLogin") != null && String.valueOf(session.getAttribute("redirectAfterLogin")).startsWith("/")) {
+        if (session.getAttribute("redirectAfterLogin") != null && isSafeRedirect(String.valueOf(session.getAttribute("redirectAfterLogin")))) {
             String redirectAfterLogin = String.valueOf(session.getAttribute("redirectAfterLogin"));
             session.removeAttribute("redirectAfterLogin");
             response.sendRedirect(redirectAfterLogin);
+        } else if(isAdmin(company.getRole())){
+            response.sendRedirect("/app/admin/dashboard");
         } else if (company.getDomaine() == null || company.getDomaine().trim().isEmpty() || !company.isDomainVerified()) {
             response.sendRedirect("/app/private/onboarding/widget");
         }else{
-            response.sendRedirect("app/private/dashboard");
+            response.sendRedirect("/app/private/dashboard");
         }
+    }
+
+    private boolean isSafeRedirect(String redirect) {
+        return redirect != null && redirect.startsWith("/") && !redirect.startsWith("//");
     }
 
     private boolean isAdmin(String role) {

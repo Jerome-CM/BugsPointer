@@ -25,4 +25,8 @@ public class AuthRegisterCompanyDTO {
 
     @NotBlank(message = "La confirmation du mot de passe est obligatoire")
     private String confirmPassword;
+
+    private String website;
+
+    private String registrationToken;
 }
