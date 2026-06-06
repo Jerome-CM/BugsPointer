@@ -121,7 +121,11 @@ public class Home {
     String getDocumentations(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         if(userAuthenticationUtil.isUserLoggedIn()){
-            model.addAttribute("publicKey", companyService.getCompanyWithToken(request).getPublicKey());
+            Company company = companyService.getCompanyWithToken(request);
+            model.addAttribute("publicKey", company.getPublicKey());
+            model.addAttribute("planLabel", company.getPlan().name().charAt(0) + company.getPlan().name().substring(1).toLowerCase());
+        } else {
+            model.addAttribute("planLabel", "Free");
         }
         return "public/documentations";
     }
