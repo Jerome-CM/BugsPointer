@@ -360,17 +360,17 @@
                     </div>
                     <div class="bp-fields" data-bp-fields>
                         <label>
-                            <span class="bp-label">URL concernee</span>
+                            <span class="bp-label">URL concernée</span>
                             <input class="bp-input" type="text" name="url" data-bp-url readonly>
                         </label>
                         <div>
                             <button class="bp-button" type="button" data-bp-pointer>Pointer le bug</button>
-                            <p class="bp-help" data-bp-help>Selectionnez l'endroit de la page qui contient le probleme.</p>
+                            <p class="bp-help" data-bp-help>Sélectionnez l'endroit de la page qui contient le problème.</p>
                         </div>
                         <textarea class="bp-hidden" name="codeLocation" data-bp-code readonly></textarea>
                         <label>
                             <span class="bp-label">${escapeHtml(cfg.descriptionLabel)}</span>
-                            <textarea class="bp-textarea" name="description" minlength="5" required placeholder="Expliquez le probleme rencontre" data-bp-description></textarea>
+                            <textarea class="bp-textarea" name="description" minlength="5" required placeholder="Expliquez le problème rencontré" data-bp-description></textarea>
                         </label>
                         ${cfg.collectEmail ? `
                         <label>
@@ -387,8 +387,8 @@
                         <input type="hidden" name="screenSize" data-bp-screen>
                         <input type="hidden" name="key" value="${escapeHtml(publicKey)}">
                         <div class="bp-actions">
-                            <a class="bp-help" href="https://www.bugspointer.com">Bugspointer.com</a>
-                            <button class="bp-button" type="submit" data-bp-submit disabled>Selectionnez le bug</button>
+                            <a class="bp-help" href="https://bugspointer.com" target="_blank" rel="noopener">🚀 Powered by bugspointer.com</a>
+                            <button class="bp-button" type="submit" data-bp-submit disabled>Sélectionnez le bug</button>
                         </div>
                     </div>
                 </form>

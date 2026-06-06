@@ -178,12 +178,12 @@
 
         <section class="px-5 py-14 sm:px-8 lg:px-12">
             <div class="mx-auto max-w-7xl">
-                <div class="mb-8 max-w-4xl">
-                    <p class="home-section-label">Le problème agence</p>
+                <div class="mx-auto mb-8 max-w-5xl text-center">
+                    <p class="home-section-label justify-center">Le problème agence</p>
                     <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">
                         Les bugs arrivent toujours avec trop peu d'informations.
                     </h2>
-                    <p class="mt-5 text-base leading-7 text-white/70 sm:text-lg">
+                    <p class="mx-auto mt-5 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
                         Une agence web gère plusieurs sites, plusieurs interlocuteurs et plusieurs urgences. BugsPointer transforme les retours dispersés en rapports exploitables, directement rattachés au bon site.
                     </p>
                 </div>
@@ -258,18 +258,20 @@
                         Proposez BugsPointer comme un avantage concret dans vos forfaits: les utilisateurs signalent mieux, vos développeurs corrigent plus vite, et le client voit que son site reste surveillé après livraison.
                     </p>
                     <div class="mt-7 grid gap-3 sm:grid-cols-2">
-                        <div class="rounded-lg border border-white/10 bg-white/[0.065] p-4">
-                            <h3 class="font-black text-white">Pour la TMA</h3>
+                        <div class="rounded-lg border border-white/10 bg-white/[0.065] p-4 text-center">
+                            <h3 class="font-black text-white">Pour la maintenance</h3>
                             <p class="mt-2 text-sm leading-6 text-white/62">Un flux clair de bugs à traiter par site client.</p>
                         </div>
-                        <div class="rounded-lg border border-white/10 bg-white/[0.065] p-4">
+                        <div class="rounded-lg border border-white/10 bg-white/[0.065] p-4 text-center">
                             <h3 class="font-black text-white">Pour les refontes</h3>
                             <p class="mt-2 text-sm leading-6 text-white/62">Un retour terrain utile dès les premières semaines.</p>
                         </div>
                     </div>
-                    <a th:href="@{/features#targetplan}" class="mt-7 inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5 hover:border-pointer-green/40 hover:text-pointer-lime">
-                        Découvrir le plan Target
-                    </a>
+                    <div class="mt-7 flex justify-center">
+                        <a th:href="@{/features#targetplan}" class="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5 hover:border-pointer-green/40 hover:text-pointer-lime">
+                            Découvrir le plan Target
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
