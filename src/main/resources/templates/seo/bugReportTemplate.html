@@ -1,0 +1,86 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="black" lang="fr">
+<div th:replace="~{include/head.html}"></div>
+    <title>Modèle de rapport de bug gratuit | BugsPointer</title>
+    <meta name="description" content="Copiez un modèle de rapport de bug clair: URL, étapes de reproduction, résultat attendu, résultat observé, navigateur, priorité et capture.">
+    <meta name="keywords" content="modèle rapport bug, template bug report, exemple rapport de bug, signaler un bug, fiche anomalie site web">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bugspointer.com/modele-rapport-bug">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Modèle de rapport de bug gratuit">
+    <meta property="og:description" content="Un modèle copiable pour signaler un bug avec le bon contexte.">
+    <meta property="og:url" content="https://bugspointer.com/modele-rapport-bug">
+    <meta property="og:site_name" content="BugsPointer">
+    <meta property="og:image" content="https://bugspointer.com/social/linkedin-bugspointer.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <script th:src="@{/js/tailwindcss-cdn.js}"></script>
+    <script>
+        tailwind.config={theme:{extend:{colors:{pointer:{green:'#00E676',lime:'#B7FF4A',ink:'#08110D'}},fontFamily:{sans:['Inter','DM-Sans','system-ui','sans-serif'],display:['RalewayBold','Inter','system-ui','sans-serif']}}}};
+    </script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <style>.bugspointer-logo{display:none;}.resource-copy{white-space:pre-wrap;}</style>
+</head>
+<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
+    <div th:replace="~{include/nav.html}"></div>
+    <main>
+        <section class="relative px-5 pb-12 pt-12 sm:px-8 lg:px-12">
+            <div class="home-noise"></div>
+            <div class="relative z-10 mx-auto max-w-7xl">
+                <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-black uppercase tracking-wide text-pointer-lime">Template gratuit</p>
+                <h1 class="max-w-5xl font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">Modèle de rapport de bug à copier pour vos équipes et vos clients.</h1>
+                <p class="mt-6 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">Un bon rapport de bug évite les messages flous. Il donne assez de contexte pour comprendre, reproduire et corriger le problème rapidement.</p>
+            </div>
+        </section>
+
+        <section class="px-5 py-12 sm:px-8 lg:px-12">
+            <div class="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1fr_0.8fr]">
+                <div class="rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur sm:p-7">
+                    <h2 class="font-display text-3xl leading-none text-white">Le modèle</h2>
+                    <textarea class="resource-copy mt-5 min-h-[520px] w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 font-mono text-sm leading-6 text-white outline-none" readonly>Titre du bug :
+
+URL concernée :
+
+Description courte :
+
+Étapes pour reproduire :
+1.
+2.
+3.
+
+Résultat attendu :
+
+Résultat observé :
+
+Zone concernée sur la page :
+
+Navigateur :
+
+Appareil :
+
+Capture ou vidéo :
+
+Impact utilisateur :
+- Bloquant
+- Important
+- Mineur
+
+Priorité proposée :
+
+Notes complémentaires :</textarea>
+                </div>
+                <aside class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-7">
+                    <h2 class="font-display text-3xl leading-none text-white">Pourquoi ce modèle fonctionne</h2>
+                    <div class="mt-6 grid gap-4">
+                        <div class="rounded-lg border border-white/10 bg-black/15 p-4"><h3 class="font-black text-pointer-lime">Il donne l'URL</h3><p class="mt-2 text-sm leading-6 text-white/68">L'équipe sait immédiatement où regarder.</p></div>
+                        <div class="rounded-lg border border-white/10 bg-black/15 p-4"><h3 class="font-black text-pointer-lime">Il explique la reproduction</h3><p class="mt-2 text-sm leading-6 text-white/68">Les développeurs peuvent vérifier le bug sans deviner.</p></div>
+                        <div class="rounded-lg border border-white/10 bg-black/15 p-4"><h3 class="font-black text-pointer-lime">Il qualifie l'impact</h3><p class="mt-2 text-sm leading-6 text-white/68">Le tri devient plus simple et moins subjectif.</p></div>
+                    </div>
+                    <p class="mt-6 leading-7 text-white/70">BugsPointer automatise une partie de ce contexte: URL, environnement, zone pointée et description restent attachés au même rapport.</p>
+                    <a th:href="@{/signalement-bug-site-web}" class="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink transition hover:bg-pointer-lime">Ajouter un bouton de signalement</a>
+                </aside>
+            </div>
+        </section>
+    </main>
+    <div th:replace="~{include/footer.html}"></div>
+</body>
+</html>

@@ -117,6 +117,24 @@ public class Home {
         return "seo/debugWebsite";
     }
 
+    @GetMapping("checklist-recette-site-web")
+    String getWebsiteReleaseChecklist(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "seo/releaseChecklist";
+    }
+
+    @GetMapping("modele-rapport-bug")
+    String getBugReportTemplate(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "seo/bugReportTemplate";
+    }
+
+    @GetMapping("scanner-site-avant-mise-en-production")
+    String getPreProductionScanner(Model model){
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "seo/preProductionScanner";
+    }
+
     @GetMapping("documentations")
     String getDocumentations(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());

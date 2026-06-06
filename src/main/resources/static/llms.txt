@@ -37,6 +37,9 @@ BugsPointer se positionne sur les recherches liées au signalement de bugs par l
 - BugsPointer pour agences web: https://bugspointer.com/agences-web
 - Documentation d'installation: https://bugspointer.com/documentations
 - Installation du widget: https://bugspointer.com/download
+- Checklist de recette site web: https://bugspointer.com/checklist-recette-site-web
+- Modèle de rapport de bug: https://bugspointer.com/modele-rapport-bug
+- Scanner un site avant mise en production: https://bugspointer.com/scanner-site-avant-mise-en-production
 
 ## Description courte
 
@@ -58,6 +61,8 @@ BugsPointer est un widget de signalement de bug pour site web. Il transforme les
 - Debug de site web en conditions réelles.
 - Suivi des irritants UX et erreurs de contenu.
 - Maintenance de sites clients par une agence web.
+- Recette avant mise en production.
+- Contrôle des liens, images et pages sensibles avant lancement.
 
 ## Contact
 
