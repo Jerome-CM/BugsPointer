@@ -62,7 +62,13 @@ public class Home {
 
     @GetMapping("download")
     String getDownloadPage(Model model, HttpServletRequest request){
-        return redirectToWidgetInstallation(request);
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        if(userAuthenticationUtil.isUserLoggedIn()){
+            model.addAttribute("publicKey", companyService.getCompanyWithToken(request).getPublicKey());
+        } else {
+            model.addAttribute("publicKey", "pk_xxxxx");
+        }
+        return "public/download";
     }
 
     @GetMapping("installation")

@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity webSecurity) {
         webSecurity.ignoring()
-                .antMatchers("/css/**", "/js/**", "/widget/**", "/favicon.ico");
+                .antMatchers("/css/**", "/js/**", "/social/**", "/widget/**", "/favicon.ico");
     }
 
     @Override
@@ -83,9 +83,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // public url
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
+                .antMatchers("/social/**").permitAll()
                 .antMatchers("/widget/**").permitAll()
                 .antMatchers("/robots.txt").permitAll()
                 .antMatchers("/sitemap.xml").permitAll()
+                .antMatchers("/llms.txt").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/authentication").permitAll()
                 .antMatchers("/testPage").permitAll()
@@ -102,6 +104,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/resetPassword/**").permitAll()
                 .antMatchers("/features").permitAll()
                 .antMatchers("/outil-remontee-bugs").permitAll()
+                .antMatchers("/agences-web").permitAll()
+                .antMatchers("/signalement-bug-site-web").permitAll()
+                .antMatchers("/debuguer-site-web").permitAll()
                 .antMatchers("/documentations").permitAll()
                 .antMatchers("/cgu").permitAll()
                 .antMatchers("/cgv").permitAll()

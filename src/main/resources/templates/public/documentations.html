@@ -12,9 +12,14 @@
     <meta property="og:url" content="https://bugspointer.com/documentations">
     <meta property="og:site_name" content="BugsPointer">
     <meta property="og:locale" content="fr_FR">
-    <meta name="twitter:card" content="summary">
+    <meta property="og:image" content="https://bugspointer.com/social/linkedin-bugspointer.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="627">
+    <meta property="og:image:alt" content="Documentation d'installation du widget BugsPointer">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Documentation BugsPointer - bouton, lien et personnalisation du widget">
     <meta name="twitter:description" content="Installez le widget BugsPointer avec une balise script et personnalisez votre bouton ou lien de signalement.">
+    <meta name="twitter:image" content="https://bugspointer.com/social/linkedin-bugspointer.png">
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -109,6 +114,7 @@
                                 <a href="#platforms" class="block rounded-lg px-3 py-2 font-black text-white transition hover:bg-white/10">Plateformes</a>
                                 <div class="mt-1 flex flex-col border-l border-white/10 pl-3">
                                     <a href="#cms" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">CMS</a>
+                                    <a href="#wordpress-video" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Vidéo WordPress</a>
                                     <a href="#frameworks" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Frameworks JS</a>
                                     <a href="#ai-prompt" class="rounded-md px-3 py-2 font-bold text-white/60 transition hover:bg-white/10 hover:text-white">Prompt IA</a>
                                 </div>
@@ -205,6 +211,22 @@
                             <div class="mt-4 rounded-lg border border-white/10 bg-white/5 p-5 leading-7 text-white/70">
                                 <p>Ajoutez le script dans la zone de code personnalisé, le footer du thème, un module HTML ou un plugin d’injection de scripts.</p>
                                 <p class="mt-3">Sur certaines plateformes SaaS, l’ajout de JavaScript externe dépend du plan du client.</p>
+                            </div>
+                        </article>
+
+                        <article class="mt-8">
+                            <h3 id="wordpress-video" class="text-2xl font-black text-white">Vidéo : intégrer BugsPointer dans WordPress</h3>
+                            <div class="mt-4 overflow-hidden rounded-lg border border-white/10 bg-white/5">
+                                <div class="border-b border-white/10 p-5 leading-7 text-white/70">
+                                    <p>Exemple d’installation dans WordPress : ouvrir l’éditeur du thème, coller le script BugsPointer avant <code>&lt;/body&gt;</code>, enregistrer, puis tester le bouton de signalement sur le site public.</p>
+                                </div>
+                                <img th:src="@{/css/img/motion/wordpress-integration-demo.gif}" class="block aspect-video w-full bg-[#06100c] object-cover" alt="Démonstration animée de l’intégration du script BugsPointer dans un site WordPress">
+                                <div class="grid gap-3 border-t border-white/10 p-5 text-sm font-bold text-white/62 sm:grid-cols-4">
+                                    <p><span class="text-pointer-lime">1.</span> Ouvrir le thème</p>
+                                    <p><span class="text-pointer-lime">2.</span> Coller le script</p>
+                                    <p><span class="text-pointer-lime">3.</span> Enregistrer</p>
+                                    <p><span class="text-pointer-lime">4.</span> Tester le rapport</p>
+                                </div>
                             </div>
                         </article>
 

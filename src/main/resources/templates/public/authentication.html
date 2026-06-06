@@ -37,6 +37,15 @@
         .bugspointer-logo{display:none;}
         .password-help:hover .password-help-content,
         .password-help:focus-within .password-help-content{display:block;}
+        .bp-registration-trap{
+            position:absolute;
+            left:-10000px;
+            width:1px;
+            height:1px;
+            overflow:hidden;
+            opacity:0;
+            pointer-events:none;
+        }
     </style>
 </head>
 <body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
@@ -83,6 +92,11 @@
                         </div>
 
                         <form class="flex flex-col gap-4" action="#" th:action="@{/register}" th:object="${companyRegister}" method="post">
+                            <input type="hidden" name="registrationToken" th:value="${registrationToken}">
+                            <div class="bp-registration-trap" aria-hidden="true">
+                                <label for="registerWebsite">Site web</label>
+                                <input type="text" th:field="*{website}" id="registerWebsite" tabindex="-1" autocomplete="off">
+                            </div>
                             <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
                                 <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
                             </div>

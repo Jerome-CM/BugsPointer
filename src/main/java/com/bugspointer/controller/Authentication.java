@@ -21,9 +21,26 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Controller
 @Slf4j
 public class Authentication {
+    private static final String REGISTER_TOKEN_SESSION_KEY = "registrationToken";
+    private static final String REGISTER_OPENED_AT_SESSION_KEY = "registrationOpenedAt";
+    private static final long REGISTER_MIN_AGE_MS = 3500L;
+    private static final long REGISTER_MAX_AGE_MS = 2 * 60 * 60 * 1000L;
+    private static final long REGISTER_RATE_WINDOW_MS = 60 * 60 * 1000L;
+    private static final int REGISTER_MAX_ATTEMPTS_PER_IP = 8;
+
+    private final Map<String, List<Long>> registrationAttemptsByIp = new ConcurrentHashMap<>();
+
     private final CompanyService companyService;
 
     private final CompanyTokenService companyTokenService;
@@ -43,6 +60,7 @@ public class Authentication {
     String getAuthenticationPage(Model model, AuthRegisterCompanyDTO dtoRegister, AuthLoginCompanyDTO dtoLogin, HttpServletRequest request){
         model.addAttribute("companyRegister", dtoRegister);
         model.addAttribute("companyLogin", dtoLogin);
+        prepareRegistrationProtection(model, request);
         if (request.getParameter("status") != null) {
             model.addAttribute("status", request.getParameter("status"));
             model.addAttribute("notification", request.getParameter("message"));
@@ -58,10 +76,20 @@ public class Authentication {
     String register(@Valid @ModelAttribute("companyRegister") AuthRegisterCompanyDTO dto,
                     BindingResult result,
                     Model model,
-                    AuthLoginCompanyDTO dtoLogin){
+                    AuthLoginCompanyDTO dtoLogin,
+                    HttpServletRequest request){
         model.addAttribute("companyLogin", dtoLogin);
 
+        if (isRegistrationRejected(dto, request)) {
+            model.addAttribute("status", "ERROR");
+            model.addAttribute("notification", "Inscription refusée. Rechargez la page puis réessayez.");
+            prepareRegistrationProtection(model, request);
+            return "public/authentication";
+        }
+
         if(!result.hasErrors()){
+            consumeRegistrationToken(request);
+            recordRegistrationAttempt(request);
             Response response;
             response = companyService.saveCompany(dto);
             if(response.getStatus() == EnumStatus.OK){
@@ -82,10 +110,12 @@ public class Authentication {
                 model.addAttribute("notification", response.getMessage());
                 model.addAttribute("status", String.valueOf(response.getStatus()));
                 model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+                prepareRegistrationProtection(model, request);
             }
         } else {
             model.addAttribute("status", "ERROR");
             model.addAttribute("notification", "Merci de corriger les champs indiqués.");
+            prepareRegistrationProtection(model, request);
         }
         return "public/authentication";
     }
@@ -96,6 +126,96 @@ public class Authentication {
         model.addAttribute("companyLogin", dtoLogin);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/registerConfirm";
+    }
+
+    private void prepareRegistrationProtection(Model model, HttpServletRequest request) {
+        String token = UUID.randomUUID().toString();
+        HttpSession session = request.getSession();
+        session.setAttribute(REGISTER_TOKEN_SESSION_KEY, token);
+        session.setAttribute(REGISTER_OPENED_AT_SESSION_KEY, System.currentTimeMillis());
+        model.addAttribute("registrationToken", token);
+    }
+
+    private boolean isRegistrationRejected(AuthRegisterCompanyDTO dto, HttpServletRequest request) {
+        String ip = getClientIp(request);
+        if (dto.getWebsite() != null && !dto.getWebsite().trim().isEmpty()) {
+            log.warn("Registration honeypot filled from ip {}", ip);
+            return true;
+        }
+        if (isRateLimited(ip)) {
+            log.warn("Registration rate limited for ip {}", ip);
+            return true;
+        }
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            log.warn("Registration rejected without session from ip {}", ip);
+            return true;
+        }
+        Object expectedToken = session.getAttribute(REGISTER_TOKEN_SESSION_KEY);
+        Object openedAt = session.getAttribute(REGISTER_OPENED_AT_SESSION_KEY);
+        if (!(expectedToken instanceof String) || !expectedToken.equals(dto.getRegistrationToken())) {
+            log.warn("Registration rejected with invalid token from ip {}", ip);
+            return true;
+        }
+        if (!(openedAt instanceof Long)) {
+            log.warn("Registration rejected without form timestamp from ip {}", ip);
+            return true;
+        }
+        long formAgeMs = System.currentTimeMillis() - (Long) openedAt;
+        if (formAgeMs < REGISTER_MIN_AGE_MS || formAgeMs > REGISTER_MAX_AGE_MS) {
+            log.warn("Registration rejected for suspicious form age {} ms from ip {}", formAgeMs, ip);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isRateLimited(String ip) {
+        long now = System.currentTimeMillis();
+        List<Long> attempts = registrationAttemptsByIp.computeIfAbsent(ip, key -> new ArrayList<>());
+        synchronized (attempts) {
+            pruneAttempts(attempts, now);
+            return attempts.size() >= REGISTER_MAX_ATTEMPTS_PER_IP;
+        }
+    }
+
+    private void recordRegistrationAttempt(HttpServletRequest request) {
+        String ip = getClientIp(request);
+        long now = System.currentTimeMillis();
+        List<Long> attempts = registrationAttemptsByIp.computeIfAbsent(ip, key -> new ArrayList<>());
+        synchronized (attempts) {
+            pruneAttempts(attempts, now);
+            attempts.add(now);
+        }
+    }
+
+    private void pruneAttempts(List<Long> attempts, long now) {
+        Iterator<Long> iterator = attempts.iterator();
+        while (iterator.hasNext()) {
+            Long attemptAt = iterator.next();
+            if (attemptAt == null || now - attemptAt > REGISTER_RATE_WINDOW_MS) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private void consumeRegistrationToken(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.removeAttribute(REGISTER_TOKEN_SESSION_KEY);
+            session.removeAttribute(REGISTER_OPENED_AT_SESSION_KEY);
+        }
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String forwardedFor = request.getHeader("X-Forwarded-For");
+        if (forwardedFor != null && !forwardedFor.trim().isEmpty()) {
+            return forwardedFor.split(",")[0].trim();
+        }
+        String realIp = request.getHeader("X-Real-IP");
+        if (realIp != null && !realIp.trim().isEmpty()) {
+            return realIp.trim();
+        }
+        return request.getRemoteAddr();
     }
 
     @GetMapping("newUser/{publicKey}")//TODO: ajouter des variables dans l'url pour identifier la company et sécuriser ?
