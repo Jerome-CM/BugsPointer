@@ -132,7 +132,7 @@
                     <p class="mt-6 max-w-2xl text-base leading-7 text-white/72 sm:text-lg">
                         BugsPointer ajoute un widget discret sur les sites que vous maintenez. Chaque signalement devient un rapport clair pour votre équipe, avec la page concernée et le contexte utile pour corriger avant l'appel client.
                     </p>
-                    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                         <a th:href="${isLoggedIn == true} ? @{/app/private/onboarding/widget} : @{/authentication(redirect='/app/private/onboarding/widget')}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.24)] transition hover:-translate-y-0.5">
                             Équiper un site client
                         </a>
@@ -285,15 +285,15 @@
                     </h2>
                 </div>
                 <div class="grid gap-4 md:grid-cols-3">
-                    <article class="rounded-lg border border-white/10 bg-white/[0.075] p-5">
+                    <article class="rounded-lg border border-white/10 bg-white/[0.075] p-5 text-center">
                         <h3 class="text-xl font-black text-white">Est-ce adapté à plusieurs clients ?</h3>
                         <p class="mt-3 leading-7 text-white/65">Oui, chaque site peut devenir une source de rapports claire pour éviter les retours dispersés.</p>
                     </article>
-                    <article class="rounded-lg border border-white/10 bg-white/[0.075] p-5">
+                    <article class="rounded-lg border border-white/10 bg-white/[0.075] p-5 text-center">
                         <h3 class="text-xl font-black text-white">Est-ce utile après la mise en ligne ?</h3>
                         <p class="mt-3 leading-7 text-white/65">C'est justement là que les vrais irritants apparaissent: supports, tunnels, mobile, contenus et parcours clients.</p>
                     </article>
-                    <article class="rounded-lg border border-white/10 bg-white/[0.075] p-5">
+                    <article class="rounded-lg border border-white/10 bg-white/[0.075] p-5 text-center">
                         <h3 class="text-xl font-black text-white">Faut-il former les clients ?</h3>
                         <p class="mt-3 leading-7 text-white/65">Le widget reste simple: l'utilisateur décrit, pointe le problème et envoie le rapport.</p>
                     </article>
@@ -309,10 +309,10 @@
                     <p class="mt-5 text-base leading-7 text-white/70">Commencez avec un site en maintenance, un client exigeant ou une page à fort enjeu commercial.</p>
                 </div>
                 <div class="mt-7 flex flex-col gap-3 sm:flex-row lg:mt-0">
-                    <a th:href="${isLoggedIn == true} ? @{/app/private/onboarding/widget} : @{/authentication(redirect='/app/private/onboarding/widget')}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.24)] transition hover:-translate-y-0.5">
+                    <a th:href="${isLoggedIn == true} ? @{/app/private/onboarding/widget} : @{/authentication(redirect='/app/private/onboarding/widget')}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 text-center font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.24)] transition hover:-translate-y-0.5">
                         Installer sur un site
                     </a>
-                    <a th:href="@{/documentations}" class="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:-translate-y-0.5">
+                    <a th:href="@{/documentations}" class="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 text-center font-extrabold text-white transition hover:-translate-y-0.5">
                         Lire la documentation
                     </a>
                 </div>

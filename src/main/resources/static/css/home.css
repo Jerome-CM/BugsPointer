@@ -462,6 +462,12 @@ html:has(.home-modern) {
     background: rgba(0, 0, 0, 0.18);
 }
 
+.home-pricing .price-in-card-promo,
+.price-in-card.price-in-card-promo {
+    font-size: clamp(1rem, 1.5vw, 1.18rem);
+    line-height: 1.25;
+}
+
 .home-pricing .pricing-card-action {
     display: flex;
     justify-content: space-around;

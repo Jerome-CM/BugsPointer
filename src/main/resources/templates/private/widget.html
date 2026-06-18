@@ -36,6 +36,14 @@
             padding-right:48px;
         }
         .widget-select option{background:#08110D;color:#fff;}
+        .widget-launcher-preview{
+            background:#00E676;
+            box-shadow:
+                0 0 0 3px rgba(255,255,255,.98),
+                0 0 0 6px #00E676,
+                0 8px 18px rgba(255,255,255,.34),
+                0 18px 42px rgba(0,230,118,.34);
+        }
     </style>
 </head>
 <body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
@@ -175,7 +183,7 @@
 
                             <div class="relative min-h-[560px] overflow-hidden rounded-lg bg-[#eef0f7] p-8 text-[#25243f]">
                                 <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(39,33,95,.08)_1px,transparent_1px),linear-gradient(rgba(39,33,95,.08)_1px,transparent_1px)] bg-[size:44px_44px]"></div>
-                                <button id="widgetPreviewButton" type="button" class="absolute z-30 flex h-14 w-14 items-center justify-center rounded-full text-lg font-black text-white" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}" th:title="${widget.getWidgetButtonText()}">!</button>
+                                <button id="widgetPreviewButton" type="button" class="widget-launcher-preview absolute z-30 flex h-14 w-14 items-center justify-center rounded-full text-3xl font-black text-white" th:title="${widget.getWidgetButtonText()}">!</button>
                                 <div class="absolute inset-0 z-20 flex items-center justify-center bg-[rgba(39,33,95,0.50)] p-12">
                                     <div id="widgetPreviewModal" class="w-full max-w-2xl rounded-[18px] bg-white p-8 shadow-[0_26px_80px_rgba(37,36,63,0.28)]" th:style="'background-color:' + ${widget.getWidgetModalBackgroundColor()} + '; color:' + ${widget.getWidgetModalTextColor()}">
                                         <div class="mb-5 flex items-start justify-between gap-4">
@@ -269,14 +277,16 @@
             }
 
             widgetPreview.button.style.display = 'flex';
-            widgetPreview.button.style.backgroundColor = widgetInputs.color.value;
+            widgetPreview.button.style.backgroundColor = '#00E676';
             widgetPreview.button.style.color = '#ffffff';
-            widgetPreview.button.style.boxShadow = 'none';
+            widgetPreview.button.style.boxShadow = '0 0 0 3px rgba(255,255,255,0.98), 0 0 0 6px #00E676, 0 8px 18px rgba(255,255,255,0.34), 0 18px 42px rgba(0,230,118,0.34)';
             widgetPreview.button.style.width = buttonSize + 'px';
             widgetPreview.button.style.height = buttonSize + 'px';
             widgetPreview.button.style.padding = '0';
             widgetPreview.button.style.borderRadius = '999px';
             widgetPreview.button.style.textDecoration = 'none';
+            widgetPreview.button.style.fontSize = Math.round(buttonSize * 0.55) + 'px';
+            widgetPreview.button.style.fontWeight = '950';
             widgetPreview.button.textContent = '!';
             widgetPreview.button.title = widgetInputs.buttonText.value || 'Signaler un bug';
             if (isCustom) {

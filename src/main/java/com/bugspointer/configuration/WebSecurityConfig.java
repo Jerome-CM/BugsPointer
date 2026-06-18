@@ -30,6 +30,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
     @Autowired
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    @Autowired
+    private CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
 
     @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
@@ -90,6 +94,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/llms.txt").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/authentication").permitAll()
+                .antMatchers("/oauth2/**").permitAll()
+                .antMatchers("/login/oauth2/**").permitAll()
                 .antMatchers("/testPage").permitAll()
                 .antMatchers("/pollUser").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user/modalControl").permitAll()
@@ -121,6 +127,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("mail")
                 .failureHandler(customAuthenticationFailureHandler)
                 .successHandler(customAuthenticationSuccessHandler)
+                .and()
+                .oauth2Login()
+                .loginPage("/authentication")
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService)
+                .and()
+                .successHandler(customOAuth2AuthenticationSuccessHandler)
                 .and()
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
                 .and()

@@ -117,9 +117,9 @@
                     <div class="relative overflow-hidden rounded-lg border border-white/10 bg-white/[0.075] p-2.5 shadow-[0_32px_90px_rgba(0,0,0,0.28)] backdrop-blur sm:p-3">
                         <div class="flex items-center gap-2 px-1.5 pb-2.5 pt-1 text-xs font-extrabold text-white/50">
                             <span class="h-2.5 w-2.5 rounded-full bg-pointer-green"></span><span class="h-2.5 w-2.5 rounded-full bg-white/30"></span><span class="h-2.5 w-2.5 rounded-full bg-white/30"></span>
-                            <p class="ml-auto">bugs-pointer.js</p>
+                            <p class="ml-auto">rapport BugsPointer</p>
                         </div>
-                        <img class="intro block w-full rounded-md bg-[#eff4ef]" th:src="@{/css/img/motion/intro.gif}" width="1500" height="270" fetchpriority="high" decoding="async" alt="Demonstration d'integration et d'utilisation de BugsPointer">
+                        <img class="intro block w-full rounded-md bg-[#06100c] object-cover" th:src="@{/css/img/seo/index-hero-futuriste.png}" width="1536" height="864" fetchpriority="high" decoding="async" alt="Visuel futuriste BugsPointer montrant un bouton de signalement, une zone pointée et un rapport de bug contextualisé">
 <!--                        <img class="intro_mobile w-full rounded-md bg-[#eff4ef]" th:src="@{/css/img/motion/intro_mobile.gif}" width="280" height="600" fetchpriority="high" decoding="async" alt="Demonstration mobile de BugsPointer">-->
                     </div>
                 </div>
@@ -153,9 +153,9 @@
 
         <section class="px-5 py-16 sm:px-8 lg:px-12">
             <div class="mx-auto max-w-7xl">
-                <div class="max-w-5xl">
-                    <p class="home-section-label">Le problème</p>
-                    <h2 class="home-feature-title font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Les retours arrivent partout, rarement avec le bon contexte.</h2>
+                <p class="home-section-label">Le problème</p>
+                <div class="mx-auto max-w-5xl text-center">
+                    <h2 class="home-feature-title font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Les retours arrivent partout, rarement avec le bon contexte</h2>
                 </div>
                 <div class="mt-8 grid gap-4 md:grid-cols-3">
                     <article class="home-card">
@@ -178,54 +178,64 @@
         </section>
 
         <section class="px-5 py-16 sm:px-8 lg:px-12">
-            <div class="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:items-center">
-                <div class="w-full lg:w-5/12">
-                    <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Comment ça fonctionne</p>
-                    <h2 class="max-w-3xl text-left font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Un formulaire de bug simple pour vos utilisateurs, utile pour votre équipe.</h2>
-                    <p class="mt-5 text-base leading-7 text-white/70 sm:text-lg">
-                        Ajoutez le bouton BugsPointer à votre site, laissez l’utilisateur pointer la zone concernée, puis recevez un rapport exploitable avec l’URL, la description et les informations nécessaires au diagnostic.
-                    </p>
-                    <div class="mt-6 grid gap-3">
-                        <div class="home-step"><b>1</b><span>Le widget s'ouvre depuis votre site</span></div>
-                        <div class="home-step"><b>2</b><span>L'utilisateur montre ce qui bloque</span></div>
-                        <div class="home-step"><b>3</b><span>Votre équipe reçoit un rapport actionnable</span></div>
-                    </div>
+            <div class="mx-auto max-w-7xl">
+                <p class="mb-3.5 text-left text-sm font-black uppercase tracking-wider text-pointer-lime">Comment ça fonctionne</p>
+                <div class="mx-auto mb-8 max-w-5xl text-center">
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Un formulaire de bug simple pour vos utilisateurs, utile pour votre équipe</h2>
                 </div>
-                <div id="guidelineMotionDiv" class="home-demo-frame w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.075] p-2 shadow-[0_32px_90px_rgba(0,0,0,0.28)] backdrop-blur sm:p-3 lg:w-7/12">
-                    <img id="guidelineMotion" th:src="@{/css/img/motion/guideline.gif}" loading="lazy" decoding="async" alt="Parcours de signalement d'un bug">
+                <div class="flex flex-col gap-8 lg:flex-row lg:items-stretch">
+                    <div class="flex w-full flex-col justify-center rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.18)] backdrop-blur sm:p-6 lg:w-5/12">
+                        <p class="text-base leading-7 text-white/70 sm:text-lg">
+                            Ajoutez le bouton BugsPointer à votre site, laissez l’utilisateur pointer la zone concernée, puis recevez un rapport exploitable avec l’URL, la description et les informations nécessaires au diagnostic.
+                        </p>
+                        <div class="mt-6 grid gap-3">
+                            <div class="home-step"><b>1</b><span>Le widget s'ouvre depuis votre site</span></div>
+                            <div class="home-step"><b>2</b><span>L'utilisateur montre ce qui bloque</span></div>
+                            <div class="home-step"><b>3</b><span>Votre équipe reçoit un rapport actionnable</span></div>
+                        </div>
+                    </div>
+                    <div id="guidelineMotionDiv" class="home-demo-frame flex w-full items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-[#06100c] p-2 shadow-[0_32px_90px_rgba(0,0,0,0.28)] backdrop-blur sm:p-3 lg:w-7/12">
+                        <img id="guidelineMotion" class="h-full w-full object-contain" th:src="@{/css/img/seo/index-workflow-futuriste.png}" loading="lazy" decoding="async" alt="Parcours BugsPointer en trois étapes: ouvrir le widget, pointer la zone, recevoir le rapport">
+                    </div>
                 </div>
             </div>
         </section>
 
         <section class="px-5 py-16 sm:px-8 lg:px-12">
-            <div class="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:items-center">
-                <div class="w-full lg:w-4/12">
+            <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.42fr_0.58fr] lg:items-center">
+                <div>
                     <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Cas détectés</p>
                     <h2 class="max-w-xl text-left font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Collectez les retours qui dégradent vraiment l’expérience.</h2>
                     <p class="mt-5 text-base leading-7 text-white/70 sm:text-lg">
                         Orthographe, contenu cassé, bouton mal placé ou erreur serveur: chaque signalement aide à repérer les irritants que les tests internes ne voient pas toujours.
                     </p>
-                    <div class="mt-6 flex flex-col gap-3 text-sm font-bold text-white/70">
-                        <span class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Priorisez les irritants visibles.</span>
-                        <span class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Repérez les erreurs de contenu ou d’interface.</span>
-                        <span class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">Traitez les blocages techniques avec plus de contexte.</span>
+                    <div class="mt-6 grid gap-3 sm:grid-cols-2">
+                        <div class="rounded-lg border border-white/10 bg-white/[0.065] px-4 py-3">
+                            <span class="text-xs font-black uppercase tracking-wider text-pointer-lime">Contenu</span>
+                            <p class="mt-2 text-sm font-bold leading-6 text-white/68">Faute, texte cassé ou information incohérente.</p>
+                        </div>
+                        <div class="rounded-lg border border-white/10 bg-white/[0.065] px-4 py-3">
+                            <span class="text-xs font-black uppercase tracking-wider text-pointer-lime">Parcours</span>
+                            <p class="mt-2 text-sm font-bold leading-6 text-white/68">Bouton invisible, lien mort ou étape bloquante.</p>
+                        </div>
+                        <div class="rounded-lg border border-white/10 bg-white/[0.065] px-4 py-3">
+                            <span class="text-xs font-black uppercase tracking-wider text-pointer-lime">Interface</span>
+                            <p class="mt-2 text-sm font-bold leading-6 text-white/68">Décalage, zone illisible ou élément mal placé.</p>
+                        </div>
+                        <div class="rounded-lg border border-white/10 bg-white/[0.065] px-4 py-3">
+                            <span class="text-xs font-black uppercase tracking-wider text-pointer-lime">Technique</span>
+                            <p class="mt-2 text-sm font-bold leading-6 text-white/68">Erreur serveur, fichier manquant ou affichage cassé.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="home-signal-panel flex w-full flex-col gap-4 rounded-lg border border-white/10 bg-white/[0.075] p-4 shadow-[0_24px_70px_rgba(0,0,0,0.24)] backdrop-blur sm:p-5 lg:w-8/12 lg:flex-row">
-                    <ul class="ul-index home-signal-tabs flex flex-col gap-3 p-0 text-base lg:w-3/12">
-                        <li class="li-what-signal active-li rounded-lg border border-white/10 bg-white/5 px-5 py-4 text-left text-white/70 shadow-none">Orthographe</li>
-                        <li class="li-what-signal rounded-lg border border-white/10 bg-white/5 px-5 py-4 text-left text-white/70 shadow-none">Syntaxe</li>
-                        <li class="li-what-signal rounded-lg border border-white/10 bg-white/5 px-5 py-4 text-left text-white/70 shadow-none">Chemin de fichier</li>
-                        <li class="li-what-signal rounded-lg border border-white/10 bg-white/5 px-5 py-4 text-left text-white/70 shadow-none">Design</li>
-                        <li class="li-what-signal rounded-lg border border-white/10 bg-white/5 px-5 py-4 text-left text-white/70 shadow-none">Erreur système</li>
-                    </ul>
-                    <div class="container-slider-index home-signal-preview !static !h-full !min-h-52 !w-full overflow-hidden rounded-lg bg-[#f5f7f4] lg:!min-h-[360px] lg:w-9/12">
-                        <img class="img-slider-index !h-full !min-h-52 !w-full object-contain lg:!min-h-[360px]" th:src="@{/css/img/sliderIndex/Orthographe.jpg}" alt="Erreur d'orthographe">
-                        <img class="img-slider-index !h-full !min-h-52 !w-full object-contain lg:!min-h-[360px]" th:src="@{/css/img/sliderIndex/Indeed - Bugs synthaxe.jpg}" alt="Erreur de syntaxe">
-                        <img class="img-slider-index !h-full !min-h-52 !w-full object-contain lg:!min-h-[360px]" th:src="@{/css/img/sliderIndex/error_path.png}" alt="Erreur de chemin de fichier">
-                        <img class="img-slider-index !h-full !min-h-52 !w-full object-contain lg:!min-h-[360px]" th:src="@{/css/img/sliderIndex/CAF - Bug btn connexion.jpg}" alt="Erreur de design">
-                        <img class="img-slider-index !h-full !min-h-52 !w-full object-contain lg:!min-h-[360px]" th:src="@{/css/img/sliderIndex/error_server.png}" alt="Erreur système">
+                <div class="overflow-hidden rounded-lg border border-pointer-green/25 bg-white/[0.075] p-3 shadow-[0_32px_90px_rgba(0,230,118,0.12)] backdrop-blur">
+                    <div class="flex items-center gap-2 px-1.5 pb-2.5 pt-1 text-xs font-extrabold text-white/50">
+                        <span class="h-2.5 w-2.5 rounded-full bg-pointer-green"></span>
+                        <span class="h-2.5 w-2.5 rounded-full bg-white/30"></span>
+                        <span class="h-2.5 w-2.5 rounded-full bg-white/30"></span>
+                        <p class="ml-auto">cas détectés</p>
                     </div>
+                    <img class="block w-full rounded-md bg-[#06100c] object-cover" th:src="@{/css/img/seo/index-cas-detectes-futuriste.png}" loading="lazy" decoding="async" alt="Visuel futuriste des cas détectés par BugsPointer: contenu, lien, interface, serveur et conversion">
                 </div>
             </div>
         </section>
@@ -233,7 +243,7 @@
         <section class="px-5 py-16 sm:px-8 lg:px-12">
             <div class="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:items-center">
                 <div class="processus home-demo-frame w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.075] p-4 shadow-[0_32px_90px_rgba(0,0,0,0.28)] backdrop-blur sm:p-6 lg:w-7/12">
-                    <img id="processus" th:src="@{/css/img/isometrie/processus.gif}" alt="Processus d'envoi et de traitement des bugs">
+                    <img id="processus" class="w-full rounded-md bg-[#06100c] object-cover" th:src="@{/css/img/seo/index-process-futuriste.png}" loading="lazy" decoding="async" alt="Processus BugsPointer du signalement utilisateur à la priorisation dans le dashboard">
                 </div>
                 <div class="w-full lg:w-5/12">
                     <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Processus unique</p>

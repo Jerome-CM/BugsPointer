@@ -483,7 +483,7 @@ public class Private {
 
     private void addTargetPlanPrice(Model model) {
         String targetPlanPrice = planPricingService.format(planPricingService.getNewSubscriptionAmount(EnumPlan.TARGET));
-        String targetPlanPriceLabel = "0.00".equals(targetPlanPrice) ? "0€ jusqu'au 1er juillet" : targetPlanPrice + "€ / an";
+        String targetPlanPriceLabel = "0.00".equals(targetPlanPrice) ? "0€ jusqu'au 01/09/2026" : targetPlanPrice + "€ / an";
         model.addAttribute("targetPlanPrice", targetPlanPrice);
         model.addAttribute("targetPlanPriceLabel", targetPlanPriceLabel);
     }

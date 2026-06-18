@@ -46,6 +46,23 @@
             opacity:0;
             pointer-events:none;
         }
+        .auth-step-card{
+            border:1px solid rgba(255,255,255,.10);
+            border-radius:8px;
+            background:rgba(255,255,255,.065);
+            padding:16px;
+        }
+        .auth-step-number{
+            display:inline-flex;
+            width:32px;
+            height:32px;
+            align-items:center;
+            justify-content:center;
+            border-radius:999px;
+            background:#00E676;
+            color:#08110D;
+            font-weight:950;
+        }
     </style>
 </head>
 <body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
@@ -53,42 +70,102 @@
     <div th:replace="~{include/nav.html}"></div>
 
     <main>
-        <section class="relative px-5 pb-16 pt-12 sm:px-8 lg:px-12">
+        <section class="relative px-5 pb-16 pt-10 sm:px-8 lg:px-12">
             <div class="home-noise"></div>
-            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-7">
-                <div class="flex w-full flex-col gap-8 rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8 lg:flex-row lg:items-end lg:justify-between">
-                    <div class="w-full lg:w-7/12">
+            <div class="relative z-10 mx-auto grid max-w-[88rem] gap-6 lg:grid-cols-[0.42fr_0.58fr] lg:items-start">
+                <aside class="rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8 lg:sticky lg:top-24">
+                    <div>
                         <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
                             Accès BugsPointer
                         </p>
-                        <h1 class="font-display text-2xl leading-[0.98] text-white sm:text-3xl lg:text-4xl">
-                            Lancez votre espace de suivi des bugs en quelques secondes.
+                        <h1 class="font-display text-3xl leading-[0.98] text-white sm:text-4xl lg:text-5xl">
+                            Connectez-vous ou créez votre compte BugsPointer
                         </h1>
-                        <p class="mt-6 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">
-                            Créez un compte pour recevoir vos premiers signalements, connecter votre site et transformer les retours utilisateurs en corrections actionnables.
+                        <p class="mt-6 text-base leading-7 text-white/70 sm:text-lg">
+                            Accédez à votre dashboard si vous avez déjà un compte. Sinon, créez un compte gratuit pour installer le widget et recevoir vos premiers signalements.
                         </p>
                     </div>
 
-                    <div class="flex w-full flex-col gap-3 lg:w-5/12">
-                        <div class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4">
-                            <span class="h-3 w-3 flex-none rounded-full bg-pointer-green shadow-[0_0_20px_rgba(0,230,118,0.55)]"></span>
-                            <p class="text-sm leading-6 text-white/68"><strong class="text-white">Plan Free disponible.</strong> Testez vos premiers rapports par e-mail avant de passer au plan Target.</p>
+                    <div class="mt-8 grid gap-3">
+                        <div class="auth-step-card">
+                            <span class="auth-step-number">1</span>
+                            <p class="mt-3 text-sm font-black uppercase tracking-wider text-pointer-lime">Connectez-vous</p>
+                            <p class="mt-2 text-sm leading-6 text-white/65">Retrouvez vos rapports, votre widget et vos réglages.</p>
                         </div>
-                        <div class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 p-4">
-                            <span class="h-3 w-3 flex-none rounded-full bg-pointer-lime shadow-[0_0_20px_rgba(183,255,74,0.45)]"></span>
-                            <p class="text-sm leading-6 text-white/68"><strong class="text-white">Installation rapide.</strong> Votre bouton ou lien de signalement s'adapte au design de votre site.</p>
+                        <div class="auth-step-card">
+                            <span class="auth-step-number">2</span>
+                            <p class="mt-3 text-sm font-black uppercase tracking-wider text-pointer-lime">Ou démarrez gratuitement</p>
+                            <p class="mt-2 text-sm leading-6 text-white/65">Recevez vos premiers retours utilisateurs sans carte bancaire.</p>
                         </div>
                     </div>
-                </div>
 
-                <div class="flex w-full flex-col gap-5 xl:flex-row xl:items-start">
-                    <section class="w-full rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:p-7 xl:w-7/12">
+                    <div class="mt-6 rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-5">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Plan Free disponible</p>
+                        <p class="mt-2 text-sm leading-6 text-white/68">Testez BugsPointer avec un rapport par mois et un scan gratuit jusqu'à 30 pages tous les 3 mois.</p>
+                    </div>
+                </aside>
+
+                <div class="grid gap-5">
+                    <section class="rounded-lg border border-pointer-green/30 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:p-7">
+                        <div class="mb-6 flex flex-col gap-2 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
+                            <div>
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Déjà inscrit</p>
+                                <h2 class="mt-2 font-display text-2xl leading-none text-white sm:text-3xl">Se connecter</h2>
+                            </div>
+                            <a class="text-sm font-bold text-pointer-lime transition hover:text-pointer-green" th:href="@{/pwLost}">Mot de passe oublié ?</a>
+                        </div>
+
+                        <form class="grid gap-4 md:grid-cols-[1fr_1fr_auto]" action="#" th:action="@{/login}" th:object="${companyLogin}" method="post">
+                            <div class="form-errors md:col-span-3" th:if="${#fields.hasAnyErrors()}">
+                                <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                            </div>
+                            <label>
+                                <span class="mb-2 block text-sm font-bold text-white/72">E-mail</span>
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{mail}" id="mail" placeholder="vous@entreprise.com" required>
+                            </label>
+                            <label>
+                                <span class="mb-2 block text-sm font-bold text-white/72">Mot de passe</span>
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" id="password" placeholder="Mot de passe" required>
+                            </label>
+                            <div class="flex flex-col justify-end gap-3">
+                                <input class="min-h-12 cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" type="submit" value="Connexion">
+                                <label class="inline-flex cursor-pointer items-center gap-2 text-sm font-bold text-white/68">
+                                    <input class="h-4 w-4 accent-[#00E676]" type="checkbox" name="rememberMe" id="rememberMe">
+                                    Se souvenir
+                                </label>
+                            </div>
+                        </form>
+                        <div class="mt-6 pt-1">
+                            <div class="flex items-center gap-3">
+                                <span class="h-px flex-1 bg-white/10"></span>
+                                <span class="px-3 text-sm font-black uppercase tracking-wider text-white/52">ou</span>
+                                <span class="h-px flex-1 bg-white/10"></span>
+                            </div>
+                            <div class="mt-4 flex items-center justify-center gap-4">
+                                <a th:href="@{/oauth2/authorization/google}" aria-label="Continuer avec Google" title="Continuer avec Google" class="inline-flex h-14 w-14 flex-none items-center justify-center rounded-full border border-white/10 bg-[#0d1117] shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition hover:-translate-y-0.5 hover:border-pointer-green hover:shadow-[0_0_0_3px_rgba(0,230,118,0.28),0_12px_26px_rgba(0,230,118,0.16)]">
+                                    <svg class="h-7 w-7" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                                        <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.6 32.7 29.1 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.5-.4-3.5z"/>
+                                        <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 16.2 4 9.5 8.5 6.3 14.7z"/>
+                                        <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.1 0-9.5-3.2-11.2-7.7l-6.5 5C9.5 39.6 16.2 44 24 44z"/>
+                                        <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.1 5.6l6.2 5.2C36.9 39.2 44 34 44 24c0-1.3-.1-2.5-.4-3.5z"/>
+                                    </svg>
+                                </a>
+                                <a th:href="@{/oauth2/authorization/github}" aria-label="Continuer avec GitHub" title="Continuer avec GitHub" class="inline-flex h-14 w-14 flex-none items-center justify-center rounded-full border border-white/10 bg-[#0d1117] shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition hover:-translate-y-0.5 hover:border-pointer-green hover:shadow-[0_0_0_3px_rgba(0,230,118,0.28),0_12px_26px_rgba(0,230,118,0.16)]">
+                                    <svg class="h-7 w-7 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                                        <path d="M12 .5C5.7.5.6 5.6.6 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 .1.8 2.1 3.3 1.5.1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2.9-.3 1.9-.4 2.9-.4s2 .1 2.9.4c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.4 5.6 18.3.5 12 .5z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="register" class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7">
                         <div class="mb-6 flex flex-col gap-2 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
                             <div>
                                 <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Nouveau compte</p>
-                                <h2 class="mt-2 font-display text-xl leading-none text-white sm:text-2xl lg:text-3xl">S'inscrire</h2>
+                                <h2 class="mt-2 font-display text-2xl leading-none text-white sm:text-3xl">Créer un compte gratuit</h2>
                             </div>
-                            <p class="max-w-md text-sm leading-6 text-white/62">Activez BugsPointer pour votre entreprise et commencez à collecter des retours vraiment exploitables.</p>
+                            <p class="max-w-md text-sm leading-6 text-white/62">Créez votre espace, confirmez votre e-mail puis installez le script sur votre site.</p>
                         </div>
 
                         <form class="flex flex-col gap-4" action="#" th:action="@{/register}" th:object="${companyRegister}" method="post">
@@ -100,24 +177,23 @@
                             <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
                                 <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
                             </div>
-                            <div class="flex flex-col gap-4 md:flex-row">
-                                <label class="w-full md:w-6/12">
+                            <div class="grid gap-4 md:grid-cols-2">
+                                <label>
                                     <span class="mb-2 block text-sm font-bold text-white/72">Entreprise</span>
                                     <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{companyName}" id="companyName" placeholder="Ex: BugsPointer" required>
                                 </label>
-                                <label class="w-full md:w-6/12">
+                                <label>
                                     <span class="mb-2 block text-sm font-bold text-white/72">E-mail professionnel</span>
                                     <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{mail}" id="registerMail" placeholder="vous@entreprise.com" required>
                                 </label>
+                                <label>
+                                    <span class="mb-2 block text-sm font-bold text-white/72">Confirmation de l'e-mail</span>
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmez votre e-mail" required>
+                                </label>
                             </div>
 
-                            <label>
-                                <span class="mb-2 block text-sm font-bold text-white/72">Confirmation de l'e-mail</span>
-                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{confirmMail}" id="confirmMail" placeholder="Confirmez votre e-mail" required>
-                            </label>
-
-                            <div class="flex flex-col gap-4 md:flex-row">
-                                <label class="w-full md:w-6/12">
+                            <div class="grid gap-4 md:grid-cols-2">
+                                <label>
                                     <span class="mb-2 flex items-center gap-2 text-sm font-bold text-white/72">
                                         Mot de passe
                                         <span class="password-help relative inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-white/8 text-xs font-black text-white/80" tabindex="0">?
@@ -128,7 +204,7 @@
                                     </span>
                                     <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" id="registerPassword" placeholder="Mot de passe" required>
                                 </label>
-                                <label class="w-full md:w-6/12">
+                                <label>
                                     <span class="mb-2 block text-sm font-bold text-white/72">Confirmation</span>
                                     <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirmez le mot de passe" required>
                                     <span id="passwordMatchMessage" class="mt-2 hidden text-sm font-bold text-red-200">Les deux mots de passe doivent être identiques.</span>
@@ -136,40 +212,6 @@
                             </div>
 
                             <input class="mt-2 min-h-12 cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" type="submit" value="Créer mon compte gratuit">
-                        </form>
-                    </section>
-
-                    <section class="w-full rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7 xl:w-5/12">
-                        <div class="mb-6 flex flex-col gap-2 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
-                            <div>
-                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Espace connexion</p>
-                                <h2 class="mt-2 font-display text-xl leading-none text-white sm:text-2xl lg:text-3xl">Se connecter</h2>
-                            </div>
-                            <a class="text-sm font-bold text-pointer-lime transition hover:text-pointer-green" th:href="@{/pwLost}">Mot de passe oublié ?</a>
-                        </div>
-
-                        <form class="flex flex-col gap-4" action="#" th:action="@{/login}" th:object="${companyLogin}" method="post">
-                            <div class="form-errors" th:if="${#fields.hasAnyErrors()}">
-                                <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
-                            </div>
-                            <div class="flex flex-col gap-4">
-                                <label class="w-full">
-                                    <span class="mb-2 block text-sm font-bold text-white/72">E-mail</span>
-                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="text" th:field="*{mail}" id="mail" placeholder="vous@entreprise.com" required>
-                                </label>
-                                <label class="w-full">
-                                    <span class="mb-2 block text-sm font-bold text-white/72">Mot de passe</span>
-                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="password" th:field="*{password}" id="password" placeholder="Mot de passe" required>
-                                </label>
-                                <div class="flex w-full items-end">
-                                    <input class="min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-4 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" type="submit" value="Connexion">
-                                </div>
-                            </div>
-
-                            <label class="inline-flex w-fit cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-4 py-3 text-sm font-bold text-white/68">
-                                <input class="h-4 w-4 accent-[#00E676]" type="checkbox" name="rememberMe" id="rememberMe">
-                                Se souvenir de moi
-                            </label>
                         </form>
                     </section>
                 </div>
