@@ -101,8 +101,7 @@ public class CompanyService implements ICompany {
         if (existing.isPresent()) {
             Company company = existing.get();
             if (!company.isEnable()) {
-                company.setEnable(true);
-                company.setMotifEnable(EnumMotif.VALIDATE);
+                throw new IllegalStateException("OAuth login rejected for disabled account");
             }
             company.setLastVisit(new Date());
             return companyRepository.save(company);

@@ -52,6 +52,9 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
         Company company;
         try {
             company = companyService.getOrCreateOAuthCompany(email, displayName);
+        } catch (IllegalStateException e) {
+            response.sendRedirect("/authentication?status=ERROR&message=Compte%20désactivé");
+            return;
         } catch (Exception e) {
             log.error("OAuth login failed for provider {} and email {}", provider, email, e);
             response.sendRedirect("/authentication?status=ERROR&message=Connexion%20OAuth%20impossible");
