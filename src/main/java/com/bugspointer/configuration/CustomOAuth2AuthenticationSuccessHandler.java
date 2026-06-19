@@ -97,7 +97,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 
     private void redirectAfterLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session, Company company) throws IOException {
         Object redirect = session.getAttribute("redirectAfterLogin");
-        if (redirect != null && isSafeRedirect(String.valueOf(redirect))) {
+        if (redirect != null && LoginRedirectUtil.isSafeRedirect(String.valueOf(redirect))) {
             session.removeAttribute("redirectAfterLogin");
             response.sendRedirect(String.valueOf(redirect));
         } else if (isAdmin(company.getRole())) {
@@ -107,10 +107,6 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
         } else {
             response.sendRedirect("/app/private/dashboard");
         }
-    }
-
-    private boolean isSafeRedirect(String redirect) {
-        return redirect != null && redirect.startsWith("/") && !redirect.startsWith("//");
     }
 
     private boolean isAdmin(String role) {

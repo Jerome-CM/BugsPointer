@@ -141,7 +141,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionFixation().migrateSession()
                 .invalidSessionStrategy((request, response) -> {
-                    String redirectPath = getRedirectPath(request);
+                    String redirectPath = LoginRedirectUtil.getSafeRedirectPath(request);
                     request.getSession().setAttribute("redirectAfterLogin", redirectPath);
                     response.sendRedirect("/authentication?status=ERROR&message=Vous%20devez%20vous%20connecter&redirect=" + URLEncoder.encode(redirectPath, "UTF-8"));
                 })
@@ -164,12 +164,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
-    private String getRedirectPath(javax.servlet.http.HttpServletRequest request) {
-        String uri = request.getRequestURI();
-        String query = request.getQueryString();
-        if (uri == null || uri.trim().isEmpty() || !uri.startsWith("/") || uri.startsWith("//")) {
-            return "/app/private/dashboard";
-        }
-        return query == null || query.trim().isEmpty() ? uri : uri + "?" + query;
-    }
 }

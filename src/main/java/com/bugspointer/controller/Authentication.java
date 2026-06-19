@@ -1,6 +1,7 @@
 package com.bugspointer.controller;
 
 import com.bugspointer.configuration.UserAuthenticationUtil;
+import com.bugspointer.configuration.LoginRedirectUtil;
 import com.bugspointer.dto.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,8 +66,10 @@ public class Authentication {
             model.addAttribute("status", request.getParameter("status"));
             model.addAttribute("notification", request.getParameter("message"));
         }
-        if (request.getParameter("redirect") != null && request.getParameter("redirect").startsWith("/") && !request.getParameter("redirect").startsWith("//")) {
+        if (LoginRedirectUtil.isSafeRedirect(request.getParameter("redirect"))) {
             request.getSession().setAttribute("redirectAfterLogin", request.getParameter("redirect"));
+        } else if (request.getParameter("redirect") != null) {
+            request.getSession().removeAttribute("redirectAfterLogin");
         }
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         return "public/authentication";

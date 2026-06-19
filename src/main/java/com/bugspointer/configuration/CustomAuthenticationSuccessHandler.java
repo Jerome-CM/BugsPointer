@@ -72,7 +72,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         company.setLastVisit(new Date());
         companyRepository.save(company);
 
-        if (session.getAttribute("redirectAfterLogin") != null && isSafeRedirect(String.valueOf(session.getAttribute("redirectAfterLogin")))) {
+        if (session.getAttribute("redirectAfterLogin") != null && LoginRedirectUtil.isSafeRedirect(String.valueOf(session.getAttribute("redirectAfterLogin")))) {
             String redirectAfterLogin = String.valueOf(session.getAttribute("redirectAfterLogin"));
             session.removeAttribute("redirectAfterLogin");
             response.sendRedirect(redirectAfterLogin);
@@ -83,10 +83,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         }else{
             response.sendRedirect("/app/private/dashboard");
         }
-    }
-
-    private boolean isSafeRedirect(String redirect) {
-        return redirect != null && redirect.startsWith("/") && !redirect.startsWith("//");
     }
 
     private boolean isAdmin(String role) {
