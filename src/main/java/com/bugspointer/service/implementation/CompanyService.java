@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
@@ -27,6 +28,7 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -86,6 +88,57 @@ public class CompanyService implements ICompany {
 
     public String createPublicKey() {
         return utility.createPublicKey(25);
+    }
+
+    @Transactional
+    public Company getOrCreateOAuthCompany(String mail, String displayName) {
+        String normalizedMail = mail == null ? "" : mail.trim().toLowerCase(Locale.ROOT);
+        if (normalizedMail.isEmpty()) {
+            throw new IllegalArgumentException("OAuth email is required");
+        }
+
+        Optional<Company> existing = companyRepository.findByMail(normalizedMail);
+        if (existing.isPresent()) {
+            Company company = existing.get();
+            if (!company.isEnable()) {
+                throw new IllegalStateException("OAuth login rejected for disabled account");
+            }
+            company.setLastVisit(new Date());
+            return companyRepository.save(company);
+        }
+
+        Company company = new Company();
+        company.setCompanyName(createAvailableCompanyName(displayName, normalizedMail));
+        company.setMail(normalizedMail);
+        company.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
+        company.setPublicKey(createPublicKey());
+        company.setEnable(true);
+        company.setMotifEnable(EnumMotif.VALIDATE);
+        company.setLastVisit(new Date());
+
+        CompanyPreferences preferences = new CompanyPreferences();
+        preferences.setCompany(company);
+        preferences.setMailNewBug(true);
+        preferences.setMailInactivity(true);
+
+        Company savedCompany = companyRepository.save(company);
+        preferencesRepository.save(preferences);
+        Utility.saveLog(savedCompany.getCompanyId(), Action.CREATE, What.ACCOUNT, null, null, null);
+        return savedCompany;
+    }
+
+    private String createAvailableCompanyName(String displayName, String mail) {
+        int atIndex = mail.indexOf("@");
+        String fallbackName = atIndex > 0 ? mail.substring(0, atIndex) : "Compte BugsPointer";
+        String baseName = displayName == null || displayName.trim().isEmpty() ? fallbackName : displayName.trim();
+        baseName = baseName.length() > 80 ? baseName.substring(0, 80) : baseName;
+        String candidate = baseName;
+        int suffix = 2;
+        while (companyRepository.findByCompanyName(candidate).isPresent()) {
+            candidate = baseName + " " + suffix;
+            suffix++;
+        }
+        return candidate;
     }
 
     @Override

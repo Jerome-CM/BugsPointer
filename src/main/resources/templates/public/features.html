@@ -54,9 +54,99 @@
         };
     </script>
     <link th:href="@{/css/home.css}" rel="stylesheet" />
-    <style>.bugspointer-logo{display:none;}</style>
+    <style>
+        .bugspointer-logo{display:none;}
+        body.features-page{
+            overflow-y:visible;
+        }
+        .features-target-sticky{
+            position:-webkit-sticky;
+            position:sticky;
+            top:72px;
+            z-index:1200;
+            isolation:isolate;
+        }
+        .features-target-section,
+        .features-target-section > div{
+            overflow:visible!important;
+        }
+        #targetplan{
+            animation:none;
+            transform:none;
+            overflow:visible;
+        }
+        .target-product-shot{
+            min-height:320px;
+            height:100%;
+            overflow:hidden;
+            border:1px solid rgba(255,255,255,.12);
+            border-radius:8px;
+            background:
+                radial-gradient(circle at 18% 18%, rgba(0,230,118,.18), transparent 16rem),
+                linear-gradient(135deg, #06100c 0%, #0a1410 52%, #101814 100%);
+            box-shadow:0 24px 70px rgba(0,0,0,.28);
+        }
+        .target-browser-bar{
+            display:flex;
+            align-items:center;
+            gap:8px;
+            height:34px;
+            border-bottom:1px solid rgba(255,255,255,.10);
+            background:rgba(255,255,255,.06);
+            padding:0 14px;
+        }
+        .target-browser-bar span{
+            width:8px;
+            height:8px;
+            border-radius:999px;
+            background:#00E676;
+        }
+        .target-browser-bar span:nth-child(2){background:#B7FF4A;}
+        .target-browser-bar span:nth-child(3){background:#dbe5df;}
+        .target-ui-body{display:grid;gap:12px;padding:18px;color:#fff;}
+        .target-code{
+            margin:0;
+            overflow:hidden;
+            border-radius:8px;
+            border:1px solid rgba(0,230,118,.20);
+            background:rgba(0,0,0,.34);
+            color:#dfffea;
+            font-size:12px;
+            line-height:1.65;
+            padding:14px;
+            white-space:pre-wrap;
+        }
+        .target-pill{
+            display:inline-flex;
+            width:max-content;
+            border-radius:999px;
+            border:1px solid rgba(0,230,118,.28);
+            background:rgba(0,230,118,.12);
+            color:#B7FF4A;
+            font-size:12px;
+            font-weight:900;
+            padding:6px 10px;
+        }
+        .target-feature-row{min-height:420px;}
+        .target-screen-panel{
+            border:1px solid rgba(255,255,255,.10);
+            border-radius:8px;
+            background:rgba(255,255,255,.075);
+            box-shadow:0 20px 60px rgba(0,0,0,.26);
+        }
+        .target-screen-line{height:10px;border-radius:999px;background:rgba(255,255,255,.16);}
+        .target-screen-line.is-green{background:#00E676;}
+        .target-screen-line.is-lime{background:#B7FF4A;}
+        .target-status-dot{width:10px;height:10px;border-radius:999px;background:#00E676;box-shadow:0 0 22px rgba(0,230,118,.65);}
+        .target-feature-copy{min-height:320px;}
+        @media (max-width: 767px){
+            .features-target-sticky{top:64px;}
+            .target-feature-row{min-height:auto;}
+            .target-feature-copy{min-height:auto;}
+        }
+    </style>
 </head>
-<body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
+<body class="index home-modern features-page min-h-full bg-[#06100c] font-sans text-white">
     <div th:replace="~{include/nav.html}"></div>
 
     <main>
@@ -68,12 +158,12 @@
                         Fonctionnalités BugsPointer
                     </p>
                     <h1 class="font-display text-4xl leading-[0.98] text-white sm:text-5xl lg:text-6xl">
-                        Un outil complet pour collecter, comprendre et corriger les bugs de votre site.
+                        Un outil complet pour collecter, comprendre et corriger les bugs de votre site
                     </h1>
                     <p class="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg">
                         BugsPointer transforme les retours utilisateurs en rapports exploitables. Du premier signalement reçu par e-mail au dashboard de suivi, chaque fonctionnalité aide votre équipe à protéger l’expérience utilisateur.
                     </p>
-                    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                         <a th:href="@{/authentication}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.24)] transition hover:-translate-y-0.5">
                             Essayer gratuitement
                         </a>
@@ -109,7 +199,7 @@
             <div class="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:items-center">
                 <div class="w-full lg:w-4/12">
                     <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Parcours utilisateur</p>
-                    <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Le signalement reste simple côté visiteur.</h2>
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Le signalement reste simple côté visiteur</h2>
                     <p class="mt-5 text-base leading-7 text-white/70 sm:text-lg">
                         L’utilisateur voit un bug, clique sur le bouton BugsPointer, décrit le problème et envoie son rapport. Vous récupérez une remontée structurée, sans échange interminable.
                     </p>
@@ -140,7 +230,7 @@
             <div class="mx-auto max-w-7xl">
                 <div class="mx-auto mb-9 max-w-5xl text-center">
                     <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Plans</p>
-                    <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Choisissez le niveau de suivi adapté à votre volume de rapports.</h2>
+                    <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Choisissez le niveau de suivi adapté à votre volume de rapports</h2>
                     <p class="mx-auto mt-5 max-w-3xl text-base leading-7 text-white/70 sm:text-lg">Commencez par recevoir un rapport par e-mail, puis passez au dashboard quand les retours deviennent un vrai levier produit.</p>
                 </div>
                 <div class="home-pricing">
@@ -161,97 +251,202 @@
                     </a>
                 </div>
 
-                <div class="flex flex-col gap-5 md:flex-row">
-                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-6/12">
+                <div class="grid gap-5 md:grid-cols-3">
+                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur">
                         <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Rapport essentiel</span>
                         <h3 class="mt-4 text-2xl font-black text-white">URL et description</h3>
                         <p class="mt-3 leading-7 text-white/65 text-center">Recevez l’adresse de la page concernée et une description simple laissée par l’utilisateur.</p>
                     </article>
-                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur md:w-6/12">
+                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur">
                         <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Démarrage</span>
                         <h3 class="mt-4 text-2xl font-black text-white">Un rapport par mois</h3>
                         <p class="mt-3 leading-7 text-white/65 text-center">Validez la valeur du signalement avant de passer à un suivi illimité avec le plan Target.</p>
+                    </article>
+                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Scanner</span>
+                        <h3 class="mt-4 text-2xl font-black text-white">1 scan tous les 3 mois</h3>
+                        <p class="mt-3 leading-7 text-white/65 text-center">Contrôlez jusqu'à 30 pages pour repérer les liens cassés, images manquantes et pages en erreur.</p>
                     </article>
                 </div>
             </div>
         </section>
 
-        <section id="targetplan" class="px-5 py-14 sm:px-8 lg:px-12">
+        <section id="targetplan" class="features-target-section px-5 py-14 sm:px-8 lg:px-12">
             <div class="mx-auto max-w-7xl">
-                <div class="mb-8 flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end md:justify-between">
+                <div class="features-target-sticky mb-8 flex flex-col gap-4 border-b border-pointer-green/25 bg-[#06100c]/92 pb-6 pt-4 shadow-[0_22px_60px_rgba(0,0,0,0.24)] backdrop-blur-xl md:flex-row md:items-end md:justify-between">
                     <div class="w-full md:w-8/12">
                         <p class="mb-3.5 text-sm font-black uppercase tracking-wider text-pointer-lime">Plan Target</p>
                         <h2 class="font-display text-3xl leading-none text-white sm:text-4xl lg:text-5xl">Centralisez et gérez les bugs dans un dashboard</h2>
                     </div>
-                    <a th:href="${isLoggedIn == true} ? @{/app/private/recapPayment(product='TARGET')} : @{/authentication(redirect='/app/private/recapPayment?product=TARGET')}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)]" th:text="${targetPlanPriceLabel != null ? targetPlanPriceLabel : '0€ jusqu''au 1er juillet'}">
-                        0€ jusqu'au 1er juillet
+                    <a th:href="${isLoggedIn == true} ? @{/app/private/recapPayment(product='TARGET')} : @{/authentication(redirect='/app/private/recapPayment?product=TARGET')}" class="inline-flex min-h-12 items-center justify-center rounded-lg bg-pointer-green px-5 py-3 text-sm font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] sm:text-base" th:text="${targetPlanPriceLabel != null ? targetPlanPriceLabel : '0€ jusqu''au 01/09/2026'}">
+                        0€ jusqu'au 01/09/2026
                     </a>
                 </div>
 
-                <div class="flex flex-col gap-6 lg:flex-row">
-                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur lg:w-6/12">
-                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Dashboard</span>
-                        <h3 class="mt-4 text-2xl font-black text-white">Tous vos signalements au même endroit</h3>
-                        <p class="mt-3 leading-7 text-white/65">Scannez, priorisez et traitez les bugs signalés par vos utilisateurs dans une interface claire, avec la zone de la page et l'extrait HTML pointés lors du signalement.</p>
-                        <img class="mt-5 w-full rounded-lg border border-white/10 bg-white/90" th:src="@{/css/img/sliderPlan/dashboard.png}" alt="Aperçu du dashboard BugsPointer">
-                    </article>
-
-                    <article class="w-full rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur lg:w-6/12">
-                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Environnement utilisateur</span>
-                        <h3 class="mt-4 text-2xl font-black text-white">Reproduisez les bugs plus vite</h3>
-                        <p class="mt-3 leading-7 text-white/65">Navigateur, taille du viewport et contexte technique vous donnent de meilleurs indices pour comprendre le problème.</p>
-                        <img class="mt-5 w-full rounded-lg border border-white/10 bg-white/90" th:src="@{/css/img/sliderPlan/userEnv.png}" alt="Aperçu des données d'environnement utilisateur">
-                    </article>
-                </div>
-
-                <article class="mt-6 flex flex-col gap-5 rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,230,118,0.10)] backdrop-blur md:flex-row md:items-center">
-                    <div class="w-full md:w-5/12">
-                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Rapports illimités</span>
-                        <h3 class="mt-4 text-2xl font-black text-white">Ne laissez aucun bug utilisateur hors radar</h3>
+                <div class="mb-8 grid gap-5 lg:grid-cols-[0.72fr_0.28fr] lg:items-stretch">
+                    <div class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-6 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Pourquoi passer à Target</p>
+                        <h3 class="mt-4 max-w-4xl font-display text-3xl leading-none text-white sm:text-4xl">Chaque retour utilisateur devient une fiche exploitable, pas un e-mail à décoder</h3>
+                        <p class="mt-5 max-w-3xl text-base leading-7 text-white/70">Target rassemble les rapports, le contexte technique, l'élément HTML pointé et les scans de contrôle dans un même espace. Votre équipe gagne du temps à comprendre, prioriser et corriger.</p>
                     </div>
-                    <p class="w-full leading-7 text-white/65 md:w-7/12">Target supprime la limite de volume: chaque rapport envoyé par vos visiteurs arrive dans votre dashboard, prêt à être consulté, trié et corrigé.</p>
-                </article>
-
-                <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                    <article class="rounded-lg border border-white/10 bg-white/[0.065] p-5">
-                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Qualification</span>
-                        <h3 class="mt-4 text-xl font-black text-white">Classement par statut</h3>
-                        <p class="mt-3 text-sm leading-6 text-white/62">Suivez chaque retour dans les états nouveau, en cours, résolu ou ignoré pour garder une vision claire du traitement.</p>
-                    </article>
-                    <article class="rounded-lg border border-white/10 bg-white/[0.065] p-5">
-                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Code HTML</span>
-                        <h3 class="mt-4 text-xl font-black text-white">Élément pointé par l'utilisateur</h3>
-                        <p class="mt-3 text-sm leading-6 text-white/62">Récupérez l'extrait HTML lié à la zone signalée pour retrouver rapidement le composant, le bouton ou le bloc responsable.</p>
-                    </article>
-                    <article class="rounded-lg border border-white/10 bg-white/[0.065] p-5">
-                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Alertes</span>
-                        <h3 class="mt-4 text-xl font-black text-white">Notifications de réception</h3>
-                        <p class="mt-3 text-sm leading-6 text-white/62">Activez les alertes pour être prévenu quand un utilisateur signale un nouveau problème sur votre site.</p>
-                    </article>
-                    <article class="rounded-lg border border-white/10 bg-white/[0.065] p-5">
-                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Pilotage</span>
-                        <h3 class="mt-4 text-xl font-black text-white">Vue orientée correction</h3>
-                        <p class="mt-3 text-sm leading-6 text-white/62">Repérez rapidement les pages touchées, le contexte utilisateur et les bugs qui méritent une action immédiate.</p>
-                    </article>
-                </div>
-
-                <article class="mt-6 rounded-lg border border-white/10 bg-white/[0.065] p-5">
-                    <div class="grid gap-5 lg:grid-cols-[0.36fr_0.64fr] lg:items-start">
-                        <div>
-                            <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Ce que Target ajoute</span>
-                            <h3 class="mt-4 text-2xl font-black text-white">Un vrai espace de suivi, pas seulement une boîte de réception.</h3>
+                    <div class="grid gap-3 rounded-lg border border-white/10 bg-black/20 p-5">
+                        <div class="rounded-lg border border-white/10 bg-white/[0.075] px-4 py-3">
+                            <span class="block text-3xl font-black text-pointer-green">Illimité</span>
+                            <span class="mt-1 block text-sm font-bold text-white/60">rapports utilisateurs</span>
                         </div>
-                        <ul class="grid gap-3 text-sm font-bold leading-6 text-white/68 sm:grid-cols-2">
-                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Rapports de bugs illimités</li>
-                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Dashboard de consultation</li>
-                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Statuts de traitement</li>
-                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Données d'environnement utilisateur</li>
-                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Extrait HTML de la zone pointée</li>
-                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Historique des signalements</li>
-                            <li class="rounded-lg border border-white/10 bg-black/15 px-4 py-3">Notifications configurables</li>
-                        </ul>
+                        <div class="rounded-lg border border-white/10 bg-white/[0.075] px-4 py-3">
+                            <span class="block text-3xl font-black text-pointer-green">100</span>
+                            <span class="mt-1 block text-sm font-bold text-white/60">pages par scan</span>
+                        </div>
                     </div>
-                </article>
+                </div>
+
+                <div class="grid gap-6">
+                    <article class="target-feature-row grid gap-5 rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur lg:grid-cols-2 lg:items-stretch">
+                        <div class="target-product-shot">
+                            <div class="target-browser-bar"><span></span><span></span><span></span></div>
+                            <div class="target-ui-body h-[calc(100%-34px)]">
+                                <div class="grid grid-cols-[0.32fr_0.68fr] gap-3">
+                                    <div class="target-screen-panel p-4">
+                                        <div class="mb-4 h-9 rounded-lg bg-pointer-green/90"></div>
+                                        <div class="grid gap-3">
+                                            <div class="target-screen-line is-green w-10/12"></div>
+                                            <div class="target-screen-line w-8/12"></div>
+                                            <div class="target-screen-line w-9/12"></div>
+                                        </div>
+                                    </div>
+                                    <div class="grid gap-3">
+                                        <div class="target-screen-panel p-4">
+                                            <div class="flex items-center justify-between gap-4">
+                                                <div>
+                                                    <p class="text-sm font-black text-white">Rapports à traiter</p>
+                                                    <p class="mt-1 text-xs font-bold text-white/52">Dashboard Target</p>
+                                                </div>
+                                                <span class="rounded-full bg-pointer-green px-3 py-1 text-xs font-black text-pointer-ink">12 actifs</span>
+                                            </div>
+                                        </div>
+                                        <div class="grid gap-2">
+                                            <div class="target-screen-panel flex items-center justify-between p-3"><span class="text-sm font-bold text-white/78">/checkout</span><span class="target-status-dot"></span></div>
+                                            <div class="target-screen-panel flex items-center justify-between p-3"><span class="text-sm font-bold text-white/78">/pricing</span><span class="target-status-dot"></span></div>
+                                            <div class="target-screen-panel flex items-center justify-between p-3"><span class="text-sm font-bold text-white/78">/contact</span><span class="target-status-dot"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="target-feature-copy flex flex-col justify-center">
+                            <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Dashboard</span>
+                            <h3 class="mt-3 text-3xl font-black leading-tight text-white">Tous les bugs au même endroit</h3>
+                            <p class="mt-4 text-base leading-7 text-white/68">Chaque signalement arrive dans une vue claire avec statut, page concernée et priorisation. Plus besoin de fouiller les mails ou messages dispersés.</p>
+                        </div>
+                    </article>
+
+                    <article class="target-feature-row grid gap-5 rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur lg:grid-cols-2 lg:items-stretch">
+                        <div class="target-feature-copy flex flex-col justify-center lg:order-1">
+                            <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Code HTML</span>
+                            <h3 class="mt-3 text-3xl font-black leading-tight text-white">La zone signalée devient actionnable</h3>
+                            <p class="mt-4 text-base leading-7 text-white/68">L'équipe retrouve plus vite le composant en cause grâce à l'extrait HTML capturé au moment du signalement.</p>
+                        </div>
+                        <div class="target-product-shot lg:order-2">
+                            <div class="target-browser-bar"><span></span><span></span><span></span></div>
+                            <div class="target-ui-body">
+                                <span class="target-pill">Extrait HTML pointé</span>
+                                <div class="target-screen-panel p-4">
+                                    <p class="text-sm font-black text-white">Rapport #428 - Bouton non cliquable</p>
+                                    <p class="mt-1 text-xs font-bold text-white/52">/checkout - zone sélectionnée par le visiteur</p>
+                                    <pre class="target-code mt-3"><code>&lt;button class="checkout-submit disabled"&gt;
+  Confirmer ma commande
+&lt;/button&gt;
+
+&lt;div class="error hidden"&gt;
+  Paiement indisponible
+&lt;/div&gt;</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="target-feature-row grid gap-5 rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur lg:grid-cols-2 lg:items-stretch">
+                        <div class="target-product-shot">
+                            <div class="target-browser-bar"><span></span><span></span><span></span></div>
+                            <div class="target-ui-body h-[calc(100%-34px)]">
+                                <div class="target-screen-panel p-4">
+                                    <p class="text-sm font-black text-white">Environnement visiteur</p>
+                                    <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                                        <div class="rounded-lg bg-black/25 p-3">
+                                            <span class="text-xs font-black uppercase text-pointer-lime">Navigateur</span>
+                                            <p class="mt-2 text-lg font-black text-white">Chrome 126</p>
+                                        </div>
+                                        <div class="rounded-lg bg-black/25 p-3">
+                                            <span class="text-xs font-black uppercase text-pointer-lime">Viewport</span>
+                                            <p class="mt-2 text-lg font-black text-white">390 x 844</p>
+                                        </div>
+                                        <div class="rounded-lg bg-black/25 p-3">
+                                            <span class="text-xs font-black uppercase text-pointer-lime">Page</span>
+                                            <p class="mt-2 text-lg font-black text-white">/panier</p>
+                                        </div>
+                                        <div class="rounded-lg bg-black/25 p-3">
+                                            <span class="text-xs font-black uppercase text-pointer-lime">Statut</span>
+                                            <p class="mt-2 text-lg font-black text-white">Nouveau</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="target-feature-copy flex flex-col justify-center">
+                            <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Contexte utilisateur</span>
+                            <h3 class="mt-3 text-3xl font-black leading-tight text-white">Reproduisez les bugs plus vite</h3>
+                            <p class="mt-4 text-base leading-7 text-white/68">Navigateur, taille d'écran et environnement utilisateur donnent les bons indices pour comprendre pourquoi le bug apparaît chez un visiteur précis.</p>
+                        </div>
+                    </article>
+
+                    <article class="target-feature-row grid gap-5 rounded-lg border border-white/10 bg-white/[0.075] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur lg:grid-cols-2 lg:items-stretch">
+                        <div class="target-feature-copy flex flex-col justify-center lg:order-1">
+                            <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Scanner Target</span>
+                            <h3 class="mt-3 text-3xl font-black leading-tight text-white">Contrôlez jusqu'à 100 pages à la demande</h3>
+                            <p class="mt-4 text-base leading-7 text-white/68">Avant une mise en production ou après une grosse modification, le scan repère les liens cassés, images manquantes et pages en erreur.</p>
+                        </div>
+                        <div class="target-product-shot lg:order-2">
+                            <div class="target-browser-bar"><span></span><span></span><span></span></div>
+                            <div class="target-ui-body">
+                                <span class="target-pill">Scan avant mise en production</span>
+                                <div class="grid gap-3">
+                                    <div class="target-screen-panel p-4">
+                                        <div class="flex items-center justify-between gap-3">
+                                            <p class="text-sm font-black text-white">Scan terminé</p>
+                                            <span class="rounded-full bg-[#00E676] px-3 py-1 text-xs font-black text-[#08110D]">100 pages</span>
+                                        </div>
+                                        <div class="mt-4 grid gap-2 text-sm font-bold text-white/76">
+                                            <div class="flex items-center justify-between rounded-lg bg-black/25 px-3 py-2"><span>Liens cassés</span><strong class="text-pointer-lime">3</strong></div>
+                                            <div class="flex items-center justify-between rounded-lg bg-black/25 px-3 py-2"><span>Images manquantes</span><strong class="text-pointer-lime">5</strong></div>
+                                            <div class="flex items-center justify-between rounded-lg bg-black/25 px-3 py-2"><span>Pages en erreur</span><strong class="text-pointer-lime">1</strong></div>
+                                        </div>
+                                    </div>
+                                    <div class="target-screen-panel px-4 py-3 text-sm font-black text-white">/offres/target - image hero introuvable</div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="mt-6 grid gap-4 md:grid-cols-4">
+                    <div class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-5 text-center">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Statuts</span>
+                        <p class="mt-3 text-sm font-bold leading-6 text-white/68">Nouveau, en cours, résolu ou ignoré</p>
+                    </div>
+                    <div class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-5 text-center">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Historique</span>
+                        <p class="mt-3 text-sm font-bold leading-6 text-white/68">Suivi de chaque retour dans le temps</p>
+                    </div>
+                    <div class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-5 text-center">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Notifications</span>
+                        <p class="mt-3 text-sm font-bold leading-6 text-white/68">Votre équipe sait quand agir</p>
+                    </div>
+                    <div class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-5 text-center">
+                        <span class="text-sm font-black uppercase tracking-wider text-pointer-lime">Priorisation</span>
+                        <p class="mt-3 text-sm font-bold leading-6 text-white/68">Les bugs visibles passent devant</p>
+                    </div>
+                </div>
             </div>
         </section>
     </main>

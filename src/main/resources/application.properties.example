@@ -25,6 +25,14 @@ spring.mvc.pathmatch.matching-strategy=ANT_PATH_MATCHER
 
 ################### Security Configuration ##########################
 jwt.secret=${JWT_SECRET}
+spring.security.oauth2.client.registration.google.client-id=${GOOGLE_OAUTH_CLIENT_ID:disabled}
+spring.security.oauth2.client.registration.google.client-secret=${GOOGLE_OAUTH_CLIENT_SECRET:disabled}
+spring.security.oauth2.client.registration.google.scope=openid,email
+spring.security.oauth2.client.registration.google.redirect-uri=${APP_BASE_URL:https://bugspointer.com}/login/oauth2/code/google
+spring.security.oauth2.client.registration.github.client-id=${GITHUB_OAUTH_CLIENT_ID:disabled}
+spring.security.oauth2.client.registration.github.client-secret=${GITHUB_OAUTH_CLIENT_SECRET:disabled}
+spring.security.oauth2.client.registration.github.scope=user:email
+spring.security.oauth2.client.registration.github.redirect-uri=${APP_BASE_URL:https://bugspointer.com}/login/oauth2/code/github
 
 ################### Mail Configuration ##########################
 mail.smtp=${MAIL_SMTP}

@@ -223,19 +223,21 @@ public class PaymentService {
             log.info("Mollie Mandate found : {} - {} - {}", customer.getCompany(), mandat.getSignatureDate(), mandat.getId());
             log.info("\r -------  ");
             if (mandat.getStatus() != MandateStatus.INVALID) {
-                // Si la date de signature est de moins de 4 an par rapport à maintenant
-                if (mandat.getSignatureDate().isBefore(LocalDate.now().minusYears(4))) {
-                    if (customerDTO.getIban().equals(mandat.getDetails().getConsumerAccount().orElse("")) && customerDTO.getBic().equals(mandat.getDetails().getConsumerBic().orElse(""))) {
-                        log.info("Mollie Mandate not modified");
-                        return new Response(EnumStatus.OK, mandat, "Votre mandat a bien été gardé");
-                    } else {
-                        client.mandates().revokeMandate(customer.getCustomerId(), mandat.getId());
-                        log.info("Mollie Mandate is changed, it's revoked");
-                    }
-                } else {
-                    client.mandates().revokeMandate(customer.getCustomerId(), mandat.getId());
-                    log.info("Mollie Mandate is more than 3 years, it's revoked");
+                boolean mandateIsRecent = mandat.getSignatureDate() != null && mandat.getSignatureDate().isAfter(LocalDate.now().minusYears(4));
+                boolean sameBankAccount = sameBankAccount(
+                        mandat.getDetails().getConsumerAccount().orElse(""),
+                        mandat.getDetails().getConsumerBic().orElse(""),
+                        customerDTO.getIban(),
+                        customerDTO.getBic()
+                );
+
+                if (mandateIsRecent && sameBankAccount) {
+                    log.info("Mollie Mandate not modified");
+                    return new Response(EnumStatus.OK, mandat, "Votre mandat a bien été gardé");
                 }
+
+                client.mandates().revokeMandate(customer.getCustomerId(), mandat.getId());
+                log.info("Mollie Mandate revoked before creating a new one. recent={}, sameBankAccount={}", mandateIsRecent, sameBankAccount);
             }
         }
 
@@ -271,6 +273,15 @@ public class PaymentService {
         String customerId = customer.getCustomerId() == null ? "customer" : customer.getCustomerId();
         String shortCustomerId = customerId.length() <= 6 ? customerId : customerId.substring(customerId.length() - 6);
         return "BugsPointer-" + customer.getCompany().getCompanyId() + "-" + shortCustomerId + "-" + LocalDate.now();
+    }
+
+    private boolean sameBankAccount(String existingIban, String existingBic, String requestedIban, String requestedBic) {
+        return normalizeBankValue(existingIban).equals(normalizeBankValue(requestedIban))
+                && normalizeBankValue(existingBic).equals(normalizeBankValue(requestedBic));
+    }
+
+    private String normalizeBankValue(String value) {
+        return value == null ? "" : value.replaceAll("\\s+", "").toUpperCase(Locale.ROOT);
     }
 
 
@@ -672,7 +683,6 @@ public class PaymentService {
         return null;
     }
 }
-
 
 
 

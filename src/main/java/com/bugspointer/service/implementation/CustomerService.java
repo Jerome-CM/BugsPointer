@@ -190,7 +190,7 @@ public class CustomerService implements ICustomer {
                 if (mandateResponse.getStatus().equals(MandateStatus.VALID)) {
                     Optional<String> iban = mandateResponse.getDetails().getConsumerAccount();
                     Optional<String> bic = mandateResponse.getDetails().getConsumerBic();
-                    if (iban.get().equals(customer.getIban()) && bic.get().equals(customer.getBic())) {
+                    if (sameBankAccount(iban.orElse(""), bic.orElse(""), customer.getIban(), customer.getBic())) {
                         return true;
                     }
                 }
@@ -232,6 +232,15 @@ public class CustomerService implements ICustomer {
                     .collect(Collectors.toList());
         }
         return mandatesListDTO;
+    }
+
+    private boolean sameBankAccount(String existingIban, String existingBic, String requestedIban, String requestedBic) {
+        return normalizeBankValue(existingIban).equals(normalizeBankValue(requestedIban))
+                && normalizeBankValue(existingBic).equals(normalizeBankValue(requestedBic));
+    }
+
+    private String normalizeBankValue(String value) {
+        return value == null ? "" : value.replaceAll("\\s+", "").toUpperCase(Locale.ROOT);
     }
 
 }

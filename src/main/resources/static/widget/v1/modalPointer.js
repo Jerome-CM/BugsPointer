@@ -131,6 +131,8 @@
                     --bp-button-size: ${cfg.buttonSize}px;
                     --bp-margin-x: ${cfg.marginX}px;
                     --bp-margin-y: ${cfg.marginY}px;
+                    --bp-launcher-green: #00E676;
+                    --bp-launcher-glow: rgba(0, 230, 118, 0.34);
                     --bp-text: var(--bp-modal-text);
                     --bp-muted: #7b8290;
                     --bp-border: #dfe4ec;
@@ -151,10 +153,30 @@
                     min-height: 48px;
                     width: var(--bp-button-size);
                     height: var(--bp-button-size);
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
                     padding: 0;
-                    background: var(--bp-primary);
+                    background: var(--bp-launcher-green);
                     color: #fff;
-                    box-shadow: 0 18px 42px rgba(24, 22, 58, 0.24);
+                    font-size: calc(var(--bp-button-size) * 0.55);
+                    font-weight: 950;
+                    line-height: 1;
+                    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.44);
+                    box-shadow:
+                        0 0 0 3px rgba(255, 255, 255, 0.98),
+                        0 0 0 6px var(--bp-launcher-green),
+                        0 8px 18px rgba(255, 255, 255, 0.34),
+                        0 18px 42px var(--bp-launcher-glow);
+                    transition: transform 160ms ease, box-shadow 160ms ease;
+                }
+                .bp-launcher.is-button:hover {
+                    transform: translateY(-1px);
+                    box-shadow:
+                        0 0 0 3px rgba(255, 255, 255, 1),
+                        0 0 0 6px var(--bp-launcher-green),
+                        0 9px 22px rgba(255, 255, 255, 0.4),
+                        0 22px 52px rgba(0, 230, 118, 0.42);
                 }
                 .bp-launcher.is-link {
                     min-height: auto;

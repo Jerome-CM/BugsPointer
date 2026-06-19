@@ -92,31 +92,6 @@ public class Home {
         return "public/features";
     }
 
-    @GetMapping("outil-remontee-bugs")
-    String getBugReportingLanding(Model model){
-        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        return "seo/bugReportingTool";
-    }
-
-    @GetMapping("agences-web")
-    String getWebAgenciesLanding(Model model){
-        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        addTargetPlanPrice(model);
-        return "seo/agencies";
-    }
-
-    @GetMapping("signalement-bug-site-web")
-    String getWebsiteBugReportLanding(Model model){
-        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        return "seo/websiteBugReport";
-    }
-
-    @GetMapping("debuguer-site-web")
-    String getDebugWebsiteLanding(Model model){
-        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        return "seo/debugWebsite";
-    }
-
     @GetMapping("documentations")
     String getDocumentations(Model model, HttpServletRequest request){
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
@@ -178,7 +153,7 @@ public class Home {
 
     private void addTargetPlanPrice(Model model) {
         String targetPlanPrice = planPricingService.format(planPricingService.getNewSubscriptionAmount(EnumPlan.TARGET));
-        String targetPlanPriceLabel = "0.00".equals(targetPlanPrice) ? "0€ jusqu'au 1er juillet" : targetPlanPrice + "€ / an";
+        String targetPlanPriceLabel = "0.00".equals(targetPlanPrice) ? "0€ jusqu'au 01/09/2026" : targetPlanPrice + "€ / an";
         model.addAttribute("targetPlanPrice", targetPlanPrice);
         model.addAttribute("targetPlanPriceLabel", targetPlanPriceLabel);
     }

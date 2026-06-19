@@ -6,6 +6,7 @@
         <span class="pricing-label">Inclus</span>
         <ul>
             <li>1 rapport de bug par mois</li>
+            <li>1 scan tous les 3 mois, jusqu'à 30 pages</li>
             <li>Url de la page concernée</li>
             <li>Description simple du problème</li>
             <li>Réception directement par mail</li>
@@ -21,7 +22,7 @@
             <th:block th:replace="~{include/targetPlanContent.html}"></th:block>
         </ul>
         <div class="pricing-card-action">
-            <span class="price-in-card" th:text="${targetPlanPriceLabel != null ? targetPlanPriceLabel : '0€ jusqu''au 1er juillet'}">0€ jusqu'au 1er juillet</span>
+            <span class="price-in-card price-in-card-promo" th:text="${targetPlanPriceLabel != null ? targetPlanPriceLabel : '0€ jusqu''au 01/09/2026'}">0€ jusqu'au 01/09/2026</span>
             <a th:href="@{/features#targetplan}" class="btn-action">Voir le détail</a>
         </div>
     </div>

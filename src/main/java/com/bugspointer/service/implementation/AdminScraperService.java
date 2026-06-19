@@ -30,7 +30,9 @@ import java.util.concurrent.Future;
 @Service
 public class AdminScraperService {
 
-    private static final int MAX_INTERNAL_PAGES = 100;
+    public static final int FREE_INTERNAL_PAGE_LIMIT = 30;
+    public static final int TARGET_INTERNAL_PAGE_LIMIT = 100;
+    private static final int DEFAULT_INTERNAL_PAGE_LIMIT = TARGET_INTERNAL_PAGE_LIMIT;
     private static final int MAX_RESOURCES = 600;
     private static final int TIMEOUT_MS = 8000;
     private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
@@ -43,6 +45,10 @@ public class AdminScraperService {
     private final Map<String, Future<?>> runningTasks = new ConcurrentHashMap<>();
 
     public AdminScraperJobDTO startScan(String rawUrl) {
+        return startScan(rawUrl, DEFAULT_INTERNAL_PAGE_LIMIT);
+    }
+
+    public AdminScraperJobDTO startScan(String rawUrl, int maxInternalPages) {
         cleanOldJobs();
         String jobId = UUID.randomUUID().toString();
         AdminScraperJobDTO job = new AdminScraperJobDTO(jobId, normalizeStartUrl(rawUrl));
@@ -50,7 +56,7 @@ public class AdminScraperService {
 
         Future<?> task = scanExecutor.submit(() -> {
             try {
-                job.complete(scan(rawUrl, job));
+                job.complete(scan(rawUrl, job, maxInternalPages));
             } catch (Exception e) {
                 job.fail(e.getMessage());
             } finally {
@@ -97,13 +103,18 @@ public class AdminScraperService {
     }
 
     public AdminScraperResultDTO scan(String rawUrl) {
-        return scan(rawUrl, null);
+        return scan(rawUrl, DEFAULT_INTERNAL_PAGE_LIMIT);
     }
 
-    private AdminScraperResultDTO scan(String rawUrl, AdminScraperJobDTO job) {
+    public AdminScraperResultDTO scan(String rawUrl, int maxInternalPages) {
+        return scan(rawUrl, null, maxInternalPages);
+    }
+
+    private AdminScraperResultDTO scan(String rawUrl, AdminScraperJobDTO job, int maxInternalPages) {
         AdminScraperResultDTO result = new AdminScraperResultDTO();
         String startUrl = normalizeStartUrl(rawUrl);
         result.setStartUrl(startUrl);
+        int pageLimit = normalizePageLimit(maxInternalPages);
 
         URI startUri;
         try {
@@ -128,7 +139,7 @@ public class AdminScraperService {
         }
         pagesToVisit.add(normalizedStartUri.toString());
 
-        while (!isCancelled(job) && !pagesToVisit.isEmpty() && visitedPages.size() < MAX_INTERNAL_PAGES && checkedLinks.size() + checkedImages.size() < MAX_RESOURCES) {
+        while (!isCancelled(job) && !pagesToVisit.isEmpty() && visitedPages.size() < pageLimit && checkedLinks.size() + checkedImages.size() < MAX_RESOURCES) {
             String pageUrl = pagesToVisit.poll();
             if (!visitedPages.add(pageUrl)) {
                 continue;
@@ -156,8 +167,15 @@ public class AdminScraperService {
         result.setCheckedPageCount(visitedPages.size());
         result.setCheckedLinkCount(checkedLinks.size());
         result.setCheckedImageCount(checkedImages.size());
-        result.setLimitReached(!pagesToVisit.isEmpty() || visitedPages.size() >= MAX_INTERNAL_PAGES || checkedLinks.size() + checkedImages.size() >= MAX_RESOURCES);
+        result.setLimitReached(!pagesToVisit.isEmpty() || visitedPages.size() >= pageLimit || checkedLinks.size() + checkedImages.size() >= MAX_RESOURCES);
         return result;
+    }
+
+    private int normalizePageLimit(int maxInternalPages) {
+        if (maxInternalPages <= 0) {
+            return DEFAULT_INTERNAL_PAGE_LIMIT;
+        }
+        return Math.min(maxInternalPages, TARGET_INTERNAL_PAGE_LIMIT);
     }
 
     private void collectLinks(Document document,
