@@ -27,7 +27,9 @@
     <style>
         .bugspointer-logo{display:none;}
         .install-code{white-space:pre-wrap;word-break:break-word;}
-        .install-preview-button{box-shadow:0 0 0 3px #00E676,0 0 0 7px #fff,0 18px 45px rgba(0,230,118,.28);}
+        .install-preview-button{box-shadow:0 0 0 2px #00E676,0 0 0 5px #fff,0 18px 40px rgba(0,230,118,.26);}
+        .onboarding-content{opacity:0;transform:translateY(18px);animation:onboardingReveal .7s ease .85s forwards;}
+        @keyframes onboardingReveal{to{opacity:1;transform:translateY(0);}}
     </style>
 </head>
 <body class="index home-modern min-h-full bg-[#06100c] font-sans text-white">
@@ -50,9 +52,9 @@
                     </p>
                 </header>
 
-                <section class="grid gap-5 lg:grid-cols-[1fr_380px] lg:items-start">
-                    <div class="flex flex-col gap-5 lg:contents">
-                        <article id="company-name" class="scroll-mt-24 rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:col-span-2 lg:p-7"
+                <section class="onboarding-content grid gap-5 lg:grid-cols-[minmax(0,3fr)_minmax(18rem,1fr)] lg:items-start">
+                    <div class="flex flex-col gap-5">
+                        <article id="company-name" class="scroll-mt-24 rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:p-7"
                                  th:if="${company.getCompanyName() == null || company.getCompanyName() == ''}">
                             <div class="grid gap-5 lg:grid-cols-[1fr_24rem] lg:items-end">
                                 <div>
@@ -93,7 +95,7 @@
                             </form>
                         </article>
 
-                        <article id="step-install" class="scroll-mt-24 rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:col-span-2 lg:p-7"
+                        <article id="step-install" class="scroll-mt-24 rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:p-7"
                                  th:if="${company.getDomaine() != null && company.getDomaine() != ''}">
                             <div class="mb-5 border-b border-white/10 pb-5">
                                 <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 2 : Installation</p>
@@ -102,9 +104,9 @@
                                     Choisissez une installation : bouton flottant automatique ou lien placé dans votre footer, menu ou contenu.
                                 </p>
                             </div>
-                            <div class="grid gap-5 xl:grid-cols-2">
+                            <div class="grid gap-5">
                                 <div class="rounded-lg border border-white/10 bg-black/15 p-4">
-                                    <div class="grid gap-4 lg:grid-cols-[1fr_220px] lg:items-stretch">
+                                    <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-stretch">
                                         <div>
                                             <p class="mb-2 text-xs font-black uppercase tracking-wider text-pointer-lime">Option 1 : bouton flottant</p>
                                             <div class="relative">
@@ -117,17 +119,26 @@
                                                 <textarea class="install-code min-h-36 w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 pr-14 font-mono text-sm leading-6 text-white outline-none" readonly th:text="'&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; defer&gt;&lt;/script&gt;'"></textarea>
                                             </div>
                                         </div>
-                                        <div class="relative min-h-40 overflow-hidden rounded-lg border border-white/10 bg-[#08110D] p-4">
-                                            <div class="h-full rounded-lg border border-white/10 bg-white/[0.055] p-3">
-                                                <div class="h-3 w-24 rounded-full bg-white/12"></div>
-                                                <div class="mt-4 h-16 rounded-lg border border-white/10 bg-black/20"></div>
-                                                <div class="install-preview-button absolute bottom-6 right-6 flex h-14 w-14 items-center justify-center rounded-full bg-pointer-green text-3xl font-black text-white">!</div>
+                                        <div class="relative min-h-44 overflow-hidden rounded-lg border border-white/10 bg-[#08110D] p-3">
+                                            <div class="flex items-center gap-1.5 border-b border-white/10 pb-2">
+                                                <span class="h-2.5 w-2.5 rounded-full bg-red-300/70"></span>
+                                                <span class="h-2.5 w-2.5 rounded-full bg-yellow-200/70"></span>
+                                                <span class="h-2.5 w-2.5 rounded-full bg-pointer-green"></span>
+                                                <span class="ml-2 h-5 flex-1 rounded bg-white/8"></span>
+                                            </div>
+                                            <div class="relative mt-3 h-32 rounded-lg border border-white/10 bg-white/[0.055] p-3">
+                                                <div class="h-3 w-24 rounded-full bg-white/14"></div>
+                                                <div class="mt-4 grid grid-cols-2 gap-3">
+                                                    <div class="h-14 rounded-lg border border-white/10 bg-black/20"></div>
+                                                    <div class="h-14 rounded-lg border border-white/10 bg-black/20"></div>
+                                                </div>
+                                                <div class="install-preview-button absolute bottom-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-pointer-green text-2xl font-black text-white">!</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="rounded-lg border border-white/10 bg-black/15 p-4">
-                                    <div class="grid gap-4 lg:grid-cols-[1fr_220px] lg:items-stretch">
+                                    <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-stretch">
                                         <div>
                                             <p class="mb-2 text-xs font-black uppercase tracking-wider text-pointer-lime">Option 2 : lien sans bouton flottant</p>
                                             <div class="relative">
@@ -184,18 +195,6 @@
                             </form>
                         </article>
 
-                        <article id="install-feedback" class="scroll-mt-24 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7"
-                                 th:if="${company.getDomaine() != null && company.getDomaine() != ''}">
-                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Votre retour</p>
-                            <h2 class="mt-2 font-display text-3xl leading-none text-white">Évaluer l'installation</h2>
-                            <p class="mt-4 text-sm leading-6 text-white/68">
-                                Trois questions suffisent pour nous dire si l'installation, le code et la vérification sont assez clairs.
-                            </p>
-                            <a th:href="@{/pollUser}" class="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-pointer-green/30 bg-pointer-green/10 px-5 py-3 font-extrabold text-pointer-lime transition hover:-translate-y-0.5 hover:bg-pointer-green hover:text-pointer-ink">
-                                Répondre au sondage
-                            </a>
-                        </article>
-
                         <article id="step-personalize" class="scroll-mt-24 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7"
                                  th:if="${company.isDomainVerified()}">
                             <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Dernière étape</p>
@@ -218,8 +217,34 @@
                         </article>
                     </div>
 
-                    <aside class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7">
-                        <div class="mb-5 rounded-lg border border-pointer-green/20 bg-pointer-green/10 p-4">
+                    <aside class="sticky top-24 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Progression</p>
+                        <nav class="mt-5 grid gap-3">
+                            <a href="#company-name" class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                               th:if="${company.getCompanyName() == null || company.getCompanyName() == ''}">
+                                <span class="flex h-8 w-8 items-center justify-center rounded-full border border-pointer-green/35 bg-pointer-green/10 text-xs font-black text-pointer-lime">0</span>
+                                <span>Avant de commencer</span>
+                            </a>
+                            <a href="#step-domain" class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                               th:classappend="${company.getDomaine() == null || company.getDomaine() == '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
+                                <span class="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/8 text-xs font-black">1</span>
+                                <span>Domaine</span>
+                            </a>
+                            <a href="#step-install" class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                               th:classappend="${company.getDomaine() != null && company.getDomaine() != '' && !company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
+                                <span class="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/8 text-xs font-black">2</span>
+                                <span>Installation</span>
+                            </a>
+                            <a href="#step-verify" class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                               th:classappend="${company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
+                                <span class="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/8 text-xs font-black">3</span>
+                                <span>Vérification</span>
+                            </a>
+                        </nav>
+                    </aside>
+
+                    <section class="grid gap-5 lg:col-span-2 lg:grid-cols-3">
+                        <div class="rounded-lg border border-pointer-green/20 bg-pointer-green/10 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
                             <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Besoin d'aide ?</p>
                             <p class="mt-2 text-sm leading-6 text-white/70">
                                 Si l'installation bloque, contactez-nous avec votre domaine et l'URL testée.
@@ -228,11 +253,21 @@
                                 contact@bugspointer.com
                             </a>
                         </div>
-                        <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                        <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
                             <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Clé publique</p>
                             <p class="mt-2 break-all font-mono text-sm font-bold text-white" th:text="${publicKey}">pk_xxxxx</p>
                         </div>
-                    </aside>
+                        <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Votre retour</p>
+                            <h2 class="mt-2 font-display text-2xl leading-none text-white">Évaluer l'installation</h2>
+                            <p class="mt-4 text-sm leading-6 text-white/68">
+                                Trois questions suffisent pour nous dire si le parcours est clair.
+                            </p>
+                            <a th:href="@{/pollUser}" class="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-pointer-green/30 bg-pointer-green/10 px-5 py-3 font-extrabold text-pointer-lime transition hover:-translate-y-0.5 hover:bg-pointer-green hover:text-pointer-ink">
+                                Répondre au sondage
+                            </a>
+                        </div>
+                    </section>
                 </section>
             </div>
         </section>
