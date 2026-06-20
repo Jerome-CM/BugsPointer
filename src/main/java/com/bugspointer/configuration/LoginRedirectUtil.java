@@ -23,6 +23,8 @@ public final class LoginRedirectUtil {
                 && !value.startsWith("/login?")
                 && !value.equals("/authentication")
                 && !value.startsWith("/authentication?")
+                && !value.equals("/favicon.svg")
+                && !value.equals("/favicon.ico")
                 && !value.startsWith("/oauth2/")
                 && !value.startsWith("/login/oauth2/");
     }

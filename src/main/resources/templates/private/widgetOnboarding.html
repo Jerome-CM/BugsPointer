@@ -28,7 +28,10 @@
         .bugspointer-logo{display:none;}
         .install-code{white-space:pre-wrap;word-break:break-word;}
         .install-preview-button{box-shadow:0 0 0 2px #00E676,0 0 0 5px #fff,0 18px 40px rgba(0,230,118,.26);}
+        .install-code-link{min-height:0;height:8.75rem;overflow:hidden;resize:none;}
         .onboarding-content{opacity:0;transform:translateY(18px);animation:onboardingReveal .7s ease .85s forwards;}
+        .progress-link{position:relative;min-width:0;}
+        .progress-link:not(:last-child)::after{content:"";position:absolute;left:1.55rem;top:3.25rem;width:1px;height:1.15rem;background:rgba(255,255,255,.16);}
         @keyframes onboardingReveal{to{opacity:1;transform:translateY(0);}}
     </style>
 </head>
@@ -132,7 +135,7 @@
                                                     <div class="h-14 rounded-lg border border-white/10 bg-black/20"></div>
                                                     <div class="h-14 rounded-lg border border-white/10 bg-black/20"></div>
                                                 </div>
-                                                <div class="install-preview-button absolute bottom-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-pointer-green text-2xl font-black text-white">!</div>
+                                                <div class="install-preview-button absolute bottom-5 right-5 flex h-7 w-7 items-center justify-center rounded-full bg-pointer-green text-base font-black text-white">!</div>
                                             </div>
                                         </div>
                                     </div>
@@ -148,7 +151,7 @@
                                                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                                                     </svg>
                                                 </button>
-                                                <textarea class="install-code min-h-36 w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 pr-14 font-mono text-sm leading-6 text-white outline-none" readonly th:text="'&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; data-button-style=&quot;custom&quot; defer&gt;&lt;/script&gt;&#10;&#10;&lt;a href=&quot;#&quot; data-bugspointer-open data-bugspointer-key=&quot;' + ${publicKey} + '&quot;&gt;Signaler un bug&lt;/a&gt;'"></textarea>
+                                                <textarea class="install-code install-code-link w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 pr-14 font-mono text-xs leading-5 text-white outline-none sm:text-sm" readonly th:text="'&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; data-button-style=&quot;custom&quot; defer&gt;&lt;/script&gt;&#10;&lt;a href=&quot;#&quot; data-bugspointer-open data-bugspointer-key=&quot;' + ${publicKey} + '&quot;&gt;Signaler un bug&lt;/a&gt;'"></textarea>
                                             </div>
                                         </div>
                                         <div class="flex min-h-40 items-center justify-center rounded-lg border border-white/10 bg-[#08110D] p-4">
@@ -189,7 +192,7 @@
                                     <span class="mb-2 block text-sm font-bold text-white/72">URL de vérification</span>
                                     <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="url" name="verificationUrl" th:value="${company.getDomainVerificationUrl() != null ? company.getDomainVerificationUrl() : (company.getDomaine() != null ? 'https://' + company.getDomaine() : '')}" placeholder="https://www.exemple.fr/blog">
                                 </label>
-                                <button class="min-h-12 whitespace-nowrap rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 font-extrabold text-white transition hover:-translate-y-0.5 hover:border-pointer-green/40 hover:text-pointer-lime" type="submit" th:disabled="${company.getDomaine() == null}">
+                                <button class="min-h-12 whitespace-nowrap rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" type="submit" th:disabled="${company.getDomaine() == null}">
                                     Vérifier
                                 </button>
                             </form>
@@ -217,28 +220,34 @@
                         </article>
                     </div>
 
-                    <aside class="sticky top-24 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6">
+                    <aside class="sticky top-24 self-start overflow-hidden rounded-lg border border-white/10 bg-white/[0.055] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-5">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Progression</p>
-                        <nav class="mt-5 grid gap-3">
-                            <a href="#company-name" class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                        <nav class="mt-5 grid gap-2">
+                            <a href="#company-name" class="progress-link flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
                                th:if="${company.getCompanyName() == null || company.getCompanyName() == ''}">
-                                <span class="flex h-8 w-8 items-center justify-center rounded-full border border-pointer-green/35 bg-pointer-green/10 text-xs font-black text-pointer-lime">0</span>
-                                <span>Avant de commencer</span>
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-pointer-green/35 bg-pointer-green/10 text-xs font-black text-pointer-lime">0</span>
+                                <span class="min-w-0 break-words">Avant de commencer</span>
                             </a>
-                            <a href="#step-domain" class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                            <a href="#step-domain" class="progress-link flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
                                th:classappend="${company.getDomaine() == null || company.getDomaine() == '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
-                                <span class="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/8 text-xs font-black">1</span>
-                                <span>Domaine</span>
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-black"
+                                      th:classappend="${company.getDomaine() != null && company.getDomaine() != '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ' border-white/15 bg-white/8'}"
+                                      th:text="${company.getDomaine() != null && company.getDomaine() != '' ? '✓' : '1'}">1</span>
+                                <span class="min-w-0 break-words">Domaine</span>
                             </a>
-                            <a href="#step-install" class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                            <a href="#step-install" class="progress-link flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
                                th:classappend="${company.getDomaine() != null && company.getDomaine() != '' && !company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
-                                <span class="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/8 text-xs font-black">2</span>
-                                <span>Installation</span>
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-black"
+                                      th:classappend="${company.getDomaine() != null && company.getDomaine() != '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ' border-white/15 bg-white/8'}"
+                                      th:text="${company.getDomaine() != null && company.getDomaine() != '' ? '✓' : '2'}">2</span>
+                                <span class="min-w-0 break-words">Installation</span>
                             </a>
-                            <a href="#step-verify" class="flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                            <a href="#step-verify" class="progress-link flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
                                th:classappend="${company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
-                                <span class="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/8 text-xs font-black">3</span>
-                                <span>Vérification</span>
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-black"
+                                      th:classappend="${company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ' border-white/15 bg-white/8'}"
+                                      th:text="${company.isDomainVerified() ? '✓' : '3'}">3</span>
+                                <span class="min-w-0 break-words">Vérification</span>
                             </a>
                         </nav>
                     </aside>
@@ -259,7 +268,6 @@
                         </div>
                         <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
                             <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Votre retour</p>
-                            <h2 class="mt-2 font-display text-2xl leading-none text-white">Évaluer l'installation</h2>
                             <p class="mt-4 text-sm leading-6 text-white/68">
                                 Trois questions suffisent pour nous dire si le parcours est clair.
                             </p>
