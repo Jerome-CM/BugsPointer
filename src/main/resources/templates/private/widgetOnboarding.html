@@ -30,6 +30,7 @@
         .install-preview-button{box-shadow:0 0 0 2px #00E676,0 0 0 5px #fff,0 18px 40px rgba(0,230,118,.26);}
         .install-code-link{min-height:0;height:8.75rem;overflow:hidden;resize:none;}
         .onboarding-content{opacity:0;transform:translateY(18px);animation:onboardingReveal .7s ease 1.5s forwards;}
+        .onboarding-progress{position:sticky;top:6rem;}
         .progress-link{position:relative;min-width:0;}
         .progress-link:not(:last-child)::after{content:"";position:absolute;left:1.55rem;top:3.25rem;width:1px;height:1.15rem;background:rgba(255,255,255,.16);}
         @keyframes onboardingReveal{to{opacity:1;transform:translateY(0);}}
@@ -79,7 +80,8 @@
                             </div>
                         </article>
 
-                        <article id="step-domain" class="scroll-mt-24 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7">
+                        <article id="step-domain" class="scroll-mt-24 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7"
+                                 th:if="${company.getCompanyName() != null && company.getCompanyName() != ''}">
                             <div class="mb-5 border-b border-white/10 pb-5">
                                 <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 1 : Domaine</p>
                                 <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl">Associer le site</h2>
@@ -135,7 +137,7 @@
                                                     <div class="h-14 rounded-lg border border-white/10 bg-black/20"></div>
                                                     <div class="h-14 rounded-lg border border-white/10 bg-black/20"></div>
                                                 </div>
-                                                <div class="install-preview-button absolute bottom-5 right-5 flex h-7 w-7 items-center justify-center rounded-full bg-pointer-green text-base font-black text-white">!</div>
+                                                <div class="install-preview-button absolute bottom-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-pointer-green text-[10px] font-black text-white">!</div>
                                             </div>
                                         </div>
                                     </div>
@@ -151,7 +153,7 @@
                                                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                                                     </svg>
                                                 </button>
-                                                <textarea class="install-code install-code-link w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 pr-14 font-mono text-xs leading-5 text-white outline-none sm:text-sm" readonly th:text="'&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; data-button-style=&quot;custom&quot; defer&gt;&lt;/script&gt;&#10;&lt;a href=&quot;#&quot; data-bugspointer-open data-bugspointer-key=&quot;' + ${publicKey} + '&quot;&gt;Signaler un bug&lt;/a&gt;'"></textarea>
+                                                <textarea class="install-code install-code-link w-full rounded-lg border border-white/10 bg-black/35 px-4 py-3 pr-14 font-mono text-xs leading-5 text-white outline-none sm:text-sm" readonly th:text="'&lt;script src=&quot;https://bugspointer.com/widget/v1/modalPointer.js&quot; data-public-key=&quot;' + ${publicKey} + '&quot; data-button-style=&quot;custom&quot; defer&gt;&lt;/script&gt;&#10;&#10;&lt;a href=&quot;#&quot; data-bugspointer-open data-bugspointer-key=&quot;' + ${publicKey} + '&quot;&gt;Signaler un bug&lt;/a&gt;'"></textarea>
                                             </div>
                                         </div>
                                         <div class="flex min-h-40 items-center justify-center rounded-lg border border-white/10 bg-[#08110D] p-4">
@@ -220,7 +222,7 @@
                         </article>
                     </div>
 
-                    <aside class="sticky top-24 self-start rounded-lg border border-white/10 bg-white/[0.055] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-5">
+                    <aside class="onboarding-progress self-start rounded-lg border border-white/10 bg-white/[0.055] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-5">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Progression</p>
                         <nav class="mt-5 grid gap-2">
                             <a href="#company-name" class="progress-link flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
@@ -283,12 +285,6 @@
 
     <div th:replace="~{include/footer.html}"></div>
     <script th:inline="javascript">
-        const onboardingStepId = /*[[${company.getCompanyName() == null or company.getCompanyName() == '' ? 'company-name' : (company.getDomaine() == null or company.getDomaine() == '' ? 'step-domain' : (!company.isDomainVerified() ? 'step-install' : 'step-personalize'))}]]*/ 'step-domain';
-        const onboardingStep = document.getElementById(onboardingStepId);
-        if (onboardingStep && window.location.hash === '') {
-            window.setTimeout(() => onboardingStep.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
-        }
-
         document.querySelectorAll('.copy-install-code').forEach((button) => {
             button.addEventListener('click', async () => {
                 const textarea = button.parentElement.querySelector('.install-code');
