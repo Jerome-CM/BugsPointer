@@ -200,6 +200,17 @@ public class Private {
         return "private/widgetOnboarding";
     }
 
+    @PostMapping("onboarding/widget/company-name")
+    String updateOnboardingCompanyName(@RequestParam("companyName") String companyName,
+                                       RedirectAttributes redirectAttributes,
+                                       HttpServletRequest request) {
+        Company company = companyService.getCompanyWithToken(request);
+        Response response = companyService.updateCompanyName(company, companyName);
+        redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
+        redirectAttributes.addFlashAttribute("notification", response.getMessage());
+        return "redirect:/app/private/onboarding/widget";
+    }
+
     @PostMapping("onboarding/widget/verify")
     String verifyOnboardingDomain(@RequestParam("verificationUrl") String verificationUrl,
                                   RedirectAttributes redirectAttributes,

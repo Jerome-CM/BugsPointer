@@ -11,6 +11,8 @@ public class CompanyListDTO {
     private Long companyId;
     private String companyName;
 
+    private String registrationProvider;
+
     private int nbrTotalBug;
 
     private int nbrSolved;

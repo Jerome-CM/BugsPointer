@@ -162,6 +162,7 @@ public class AdminService {
             // Basics info
             compDTO.setCompanyId(company.getCompanyId());
             compDTO.setCompanyName(company.getCompanyName());
+            compDTO.setRegistrationProvider(company.getRegistrationProvider() != null ? company.getRegistrationProvider().name() : "FORM");
             compDTO.setDateDownload(Utility.dateFormator(company.getDateDownload(), "dd/MM/yyyy"));
             compDTO.setDomainVerified(company.isDomainVerified());
             compDTO.setCreationDate(Utility.dateFormator(company.getDateCreation(), "dd/MM/yyyy"));

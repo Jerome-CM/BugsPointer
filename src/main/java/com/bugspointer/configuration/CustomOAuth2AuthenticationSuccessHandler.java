@@ -51,7 +51,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 
         Company company;
         try {
-            company = companyService.getOrCreateOAuthCompany(email, displayName);
+            company = companyService.getOrCreateOAuthCompany(email, displayName, provider);
         } catch (IllegalStateException e) {
             response.sendRedirect("/authentication?status=ERROR&message=Compte%20désactivé");
             return;

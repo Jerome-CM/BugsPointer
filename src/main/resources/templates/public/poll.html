@@ -58,21 +58,21 @@
 
                     <form class="flex flex-col gap-3" action="#" th:action="@{/pollUser}" th:object="${pollUser}" method="post">
                         <label class="flex flex-col gap-3 rounded-lg border border-white/10 bg-black/15 p-3 sm:flex-row sm:items-center sm:justify-between">
-                            <span class="text-sm font-bold leading-6 text-white/78 sm:w-8/12">Avez-vous trouvé facilement le lien pour signaler un bug ?</span>
+                            <span class="text-sm font-bold leading-6 text-white/78 sm:w-8/12">L'étape de copie du script ou du lien était-elle simple à comprendre ?</span>
                             <select class="min-h-10 w-full rounded-lg border border-white/10 bg-[#08110D] px-3 py-2 font-bold text-white outline-none focus:border-pointer-green sm:w-4/12" th:field="*{findEasy}">
                                 <option th:each="rank : ${ranks}" th:value="${rank}" th:text="${rank}"></option>
                             </select>
                         </label>
 
                         <label class="flex flex-col gap-3 rounded-lg border border-white/10 bg-black/15 p-3 sm:flex-row sm:items-center sm:justify-between">
-                            <span class="text-sm font-bold leading-6 text-white/78 sm:w-8/12">Les étapes étaient-elles claires ?</span>
+                            <span class="text-sm font-bold leading-6 text-white/78 sm:w-8/12">La vérification du domaine vous a-t-elle semblé claire ?</span>
                             <select class="min-h-10 w-full rounded-lg border border-white/10 bg-[#08110D] px-3 py-2 font-bold text-white outline-none focus:border-pointer-green sm:w-4/12" th:field="*{stepClarity}">
                                 <option th:each="rank : ${ranks}" th:value="${rank}" th:text="${rank}"></option>
                             </select>
                         </label>
 
                         <label class="flex flex-col gap-3 rounded-lg border border-white/10 bg-black/15 p-3 sm:flex-row sm:items-center sm:justify-between">
-                            <span class="text-sm font-bold leading-6 text-white/78 sm:w-8/12">La fonctionnalité de pointage fonctionne-t-elle bien ?</span>
+                            <span class="text-sm font-bold leading-6 text-white/78 sm:w-8/12">Après l'installation, sauriez-vous tester un premier signalement ?</span>
                             <select class="min-h-10 w-full rounded-lg border border-white/10 bg-[#08110D] px-3 py-2 font-bold text-white outline-none focus:border-pointer-green sm:w-4/12" th:field="*{targetFeatureGoodWork}">
                                 <option th:each="rank : ${ranks}" th:value="${rank}" th:text="${rank}"></option>
                             </select>
@@ -80,7 +80,7 @@
 
                         <label>
                             <span class="mb-2 block text-sm font-bold text-white/72">Remarques</span>
-                            <textarea class="min-h-24 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" th:field="*{comment}" placeholder="Vos idées pour améliorer BugsPointer"></textarea>
+                            <textarea class="min-h-24 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" th:field="*{comment}" placeholder="Ce qui a bloqué, manqué ou aidé pendant l'installation"></textarea>
                         </label>
 
                         <input type="submit" th:value="Envoyer" class="min-h-11 cursor-pointer rounded-lg bg-pointer-green px-5 py-2.5 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime">

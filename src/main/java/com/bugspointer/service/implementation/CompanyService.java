@@ -91,7 +91,7 @@ public class CompanyService implements ICompany {
     }
 
     @Transactional
-    public Company getOrCreateOAuthCompany(String mail, String displayName) {
+    public Company getOrCreateOAuthCompany(String mail, String displayName, String provider) {
         String normalizedMail = mail == null ? "" : mail.trim().toLowerCase(Locale.ROOT);
         if (normalizedMail.isEmpty()) {
             throw new IllegalArgumentException("OAuth email is required");
@@ -103,12 +103,16 @@ public class CompanyService implements ICompany {
             if (!company.isEnable()) {
                 throw new IllegalStateException("OAuth login rejected for disabled account");
             }
+            if (company.getRegistrationProvider() == null) {
+                company.setRegistrationProvider(EnumRegistrationProvider.FORM);
+            }
             company.setLastVisit(new Date());
             return companyRepository.save(company);
         }
 
         Company company = new Company();
-        company.setCompanyName(createAvailableCompanyName(displayName, normalizedMail));
+        company.setCompanyName(null);
+        company.setRegistrationProvider(resolveRegistrationProvider(provider));
         company.setMail(normalizedMail);
         company.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
         company.setPublicKey(createPublicKey());
@@ -127,18 +131,18 @@ public class CompanyService implements ICompany {
         return savedCompany;
     }
 
-    private String createAvailableCompanyName(String displayName, String mail) {
-        int atIndex = mail.indexOf("@");
-        String fallbackName = atIndex > 0 ? mail.substring(0, atIndex) : "Compte BugsPointer";
-        String baseName = displayName == null || displayName.trim().isEmpty() ? fallbackName : displayName.trim();
-        baseName = baseName.length() > 80 ? baseName.substring(0, 80) : baseName;
-        String candidate = baseName;
-        int suffix = 2;
-        while (companyRepository.findByCompanyName(candidate).isPresent()) {
-            candidate = baseName + " " + suffix;
-            suffix++;
+    private EnumRegistrationProvider resolveRegistrationProvider(String provider) {
+        if (provider == null) {
+            return EnumRegistrationProvider.FORM;
         }
-        return candidate;
+        String normalized = provider.trim().toUpperCase(Locale.ROOT);
+        if ("GOOGLE".equals(normalized)) {
+            return EnumRegistrationProvider.GOOGLE;
+        }
+        if ("GITHUB".equals(normalized)) {
+            return EnumRegistrationProvider.GITHUB;
+        }
+        return EnumRegistrationProvider.FORM;
     }
 
     @Override
@@ -187,6 +191,7 @@ public class CompanyService implements ICompany {
         if(mail && pw && name){
             Company company = new Company();
             company.setCompanyName(dto.getCompanyName());
+            company.setRegistrationProvider(EnumRegistrationProvider.FORM);
             company.setMail(dto.getMail());
             company.setPassword(passwordEncoder.encode(dto.getPassword()));
             company.setPublicKey(createPublicKey());
@@ -481,6 +486,28 @@ public class CompanyService implements ICompany {
         }
 
         return new Response(EnumStatus.ERROR, null, "Erreur inconnue");
+    }
+
+    public Response updateCompanyName(Company company, String companyName) {
+        if (company == null) {
+            return new Response(EnumStatus.ERROR, null, "Compte introuvable");
+        }
+        if (companyName == null || companyName.trim().isEmpty()) {
+            return new Response(EnumStatus.ERROR, null, "Le nom de l'entreprise est obligatoire");
+        }
+
+        String normalizedName = companyName.trim();
+        if (normalizedName.length() > 80) {
+            normalizedName = normalizedName.substring(0, 80).trim();
+        }
+
+        Optional<Company> existing = companyRepository.findByCompanyName(normalizedName);
+        if (existing.isPresent() && !existing.get().getCompanyId().equals(company.getCompanyId())) {
+            return new Response(EnumStatus.ERROR, null, "Ce nom d'entreprise existe déjà");
+        }
+
+        company.setCompanyName(normalizedName);
+        return companyTryRegistration(company, "Nom d'entreprise enregistré");
     }
 
     public Response verifyDomainInstallation(String publicKey) {

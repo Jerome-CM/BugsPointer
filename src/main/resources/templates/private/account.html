@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="grid gap-5 lg:grid-cols-[320px_1fr] lg:items-start">
-                    <aside class="sticky top-24 hidden min-h-[30rem] rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur lg:block">
+                    <aside class="sticky top-24 hidden rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur lg:block">
                         <p class="px-3 pb-3 text-xs font-black uppercase tracking-wider text-pointer-lime">Sections</p>
                         <nav class="flex flex-col gap-1">
                             <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#identity">Identité</a>
@@ -79,7 +79,6 @@
                             <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
                             <div class="mt-5 flex flex-col gap-3 sm:flex-row">
                                 <button type="submit" class="min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime sm:w-auto" name="action" value="updateMail">Mettre à jour</button>
-                                <a class="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime sm:w-auto" th:href="@{/app/private/notifications}">Notifications</a>
                             </div>
                         </form>
                     </section>
@@ -129,7 +128,7 @@
                             </div>
                             <p class="font-display text-5xl leading-none text-white" th:text="${company.getPlan()}">FREE</p>
                             <div class="mt-5 flex flex-col gap-3 sm:flex-row">
-                                <a class="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" th:href="@{/features}">Changer de plan</a>
+                                <a class="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" th:href="@{/features#targetplan}">Changer de plan</a>
                                 <form class="w-full" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}" th:action="@{/api/user/{idCompany}/{idCustomer}/stopSubscribe(idCompany=${company.getId()}, idCustomer=${company.getCustomerId()})}" method="post" id="confirmationFormClosePlan">
                                     <button type="submit" class="min-h-12 w-full cursor-pointer rounded-lg border border-red-300/30 bg-red-500/12 px-5 py-3 font-extrabold text-red-100 transition hover:border-red-200/60">Stopper l’abonnement</button>
                                 </form>
