@@ -205,7 +205,7 @@ public class CompanyPreferencesService implements ICompanyPreferences {
 
     private Integer safeButtonSize(Integer size) {
         if (size == null) {
-            return 56;
+            return 50;
         }
         if (size < 44) {
             return 44;

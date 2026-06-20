@@ -29,7 +29,7 @@
         .install-code{white-space:pre-wrap;word-break:break-word;}
         .install-preview-button{box-shadow:0 0 0 2px #00E676,0 0 0 5px #fff,0 18px 40px rgba(0,230,118,.26);}
         .install-code-link{min-height:0;height:8.75rem;overflow:hidden;resize:none;}
-        .onboarding-content{opacity:0;transform:translateY(18px);animation:onboardingReveal .7s ease .85s forwards;}
+        .onboarding-content{opacity:0;transform:translateY(18px);animation:onboardingReveal .7s ease 1.5s forwards;}
         .progress-link{position:relative;min-width:0;}
         .progress-link:not(:last-child)::after{content:"";position:absolute;left:1.55rem;top:3.25rem;width:1px;height:1.15rem;background:rgba(255,255,255,.16);}
         @keyframes onboardingReveal{to{opacity:1;transform:translateY(0);}}
@@ -220,7 +220,7 @@
                         </article>
                     </div>
 
-                    <aside class="sticky top-24 self-start overflow-hidden rounded-lg border border-white/10 bg-white/[0.055] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-5">
+                    <aside class="sticky top-24 self-start rounded-lg border border-white/10 bg-white/[0.055] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-5">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Progression</p>
                         <nav class="mt-5 grid gap-2">
                             <a href="#company-name" class="progress-link flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"

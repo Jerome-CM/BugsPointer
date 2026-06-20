@@ -19,7 +19,7 @@
         linkUnderline: true,
         buttonText: "Signaler un bug",
         buttonStyle: "button",
-        buttonSize: 56,
+        buttonSize: 50,
         title: "Signaler un nouveau bug",
         descriptionLabel: "Description du bug",
         collectEmail: false,
