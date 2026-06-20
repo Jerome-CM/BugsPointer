@@ -132,7 +132,7 @@
                             </div>
                             <label data-trigger-option="button">
                                 <span class="mb-2 block text-sm font-bold text-white/72">Taille du bouton</span>
-                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="number" min="44" max="96" step="1" th:field="*{widgetButtonSize}" id="widgetButtonSize" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="number" min="15" max="96" step="1" th:field="*{widgetButtonSize}" id="widgetButtonSize" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
                             </label>
                             <label data-trigger-option="button">
                                 <span class="mb-2 block text-sm font-bold text-white/72">Position</span>
@@ -262,7 +262,7 @@
             const marginY = Math.max(0, Math.min(parseInt(widgetInputs.marginY.value || '15', 10), 120));
             const position = widgetInputs.position.value || 'bottom-right';
             const isCustom = widgetInputs.buttonStyle.value === 'custom';
-            const buttonSize = Math.max(44, Math.min(parseInt(widgetInputs.buttonSize.value || '50', 10), 96));
+            const buttonSize = Math.max(15, Math.min(parseInt(widgetInputs.buttonSize.value || '50', 10), 96));
             const customLink = document.getElementById('widgetPreviewCustomLink');
             const customShell = document.getElementById('widgetPreviewCustomShell');
 

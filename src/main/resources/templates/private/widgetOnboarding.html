@@ -101,7 +101,7 @@
                         </article>
 
                         <article id="step-install" class="scroll-mt-24 rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:p-7"
-                                 th:if="${company.getDomaine() != null && company.getDomaine() != ''}">
+                                 th:if="${company.getCompanyName() != null && company.getCompanyName() != '' && company.getDomaine() != null && company.getDomaine() != ''}">
                             <div class="mb-5 border-b border-white/10 pb-5">
                                 <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Étape 2 : Installation</p>
                                 <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl">Copier le code</h2>
@@ -168,7 +168,7 @@
                         </article>
 
                         <article id="step-verify" class="scroll-mt-24 rounded-lg border bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7"
-                                 th:if="${company.getDomaine() != null && company.getDomaine() != ''}"
+                                 th:if="${company.getCompanyName() != null && company.getCompanyName() != '' && company.getDomaine() != null && company.getDomaine() != ''}"
                                  th:classappend="${company.isDomainVerified() ? ' border-pointer-green/25' : ' border-red-300/25'}">
                             <div class="mb-5 border-b border-white/10 pb-5">
                                 <div class="flex flex-wrap items-center gap-3">
@@ -201,7 +201,7 @@
                         </article>
 
                         <article id="step-personalize" class="scroll-mt-24 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7"
-                                 th:if="${company.isDomainVerified()}">
+                                 th:if="${company.getCompanyName() != null && company.getCompanyName() != '' && company.isDomainVerified()}">
                             <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Dernière étape</p>
                             <h2 class="mt-2 font-display text-3xl leading-none text-white">Personnaliser</h2>
                             <p class="mt-5 text-sm leading-6 text-white/68" th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
@@ -222,29 +222,29 @@
                         </article>
                     </div>
 
-                    <aside class="onboarding-progress self-start rounded-lg border border-white/10 bg-white/[0.055] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-5">
+                    <aside class="onboarding-progress w-full self-start rounded-lg border border-white/10 bg-white/[0.055] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-5">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Progression</p>
-                        <nav class="mt-5 grid gap-2">
-                            <a href="#company-name" class="progress-link flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                        <nav class="mt-5 grid h-auto w-full gap-2">
+                            <a href="#company-name" class="progress-link flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
                                th:if="${company.getCompanyName() == null || company.getCompanyName() == ''}">
                                 <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-pointer-green/35 bg-pointer-green/10 text-xs font-black text-pointer-lime">0</span>
                                 <span class="min-w-0 break-words">Avant de commencer</span>
                             </a>
-                            <a href="#step-domain" class="progress-link flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                            <a href="#step-domain" class="progress-link flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
                                th:classappend="${company.getDomaine() == null || company.getDomaine() == '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
                                 <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-black"
                                       th:classappend="${company.getDomaine() != null && company.getDomaine() != '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ' border-white/15 bg-white/8'}"
                                       th:text="${company.getDomaine() != null && company.getDomaine() != '' ? '✓' : '1'}">1</span>
                                 <span class="min-w-0 break-words">Domaine</span>
                             </a>
-                            <a href="#step-install" class="progress-link flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                            <a href="#step-install" class="progress-link flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
                                th:classappend="${company.getDomaine() != null && company.getDomaine() != '' && !company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
                                 <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-black"
                                       th:classappend="${company.getDomaine() != null && company.getDomaine() != '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ' border-white/15 bg-white/8'}"
                                       th:text="${company.getDomaine() != null && company.getDomaine() != '' ? '✓' : '2'}">2</span>
                                 <span class="min-w-0 break-words">Installation</span>
                             </a>
-                            <a href="#step-verify" class="progress-link flex items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                            <a href="#step-verify" class="progress-link flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
                                th:classappend="${company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
                                 <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-black"
                                       th:classappend="${company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ' border-white/15 bg-white/8'}"
