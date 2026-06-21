@@ -75,6 +75,40 @@
                     </div>
                 </section>
 
+                <section class="rounded-lg border border-pointer-green/20 bg-white/[0.06] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7">
+                    <div class="grid gap-5 lg:grid-cols-[1fr_320px] lg:items-center">
+                        <div>
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Installation</p>
+                            <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl">Vérifier la présence sur mon site</h2>
+                            <p class="mt-4 max-w-3xl text-sm leading-6 text-white/65">
+                                Lancez un scan de votre domaine pour repérer les pages où BugsPointer est installé avec le bouton flottant ou avec un lien de signalement.
+                            </p>
+                        </div>
+                        <form class="flex flex-col gap-3" th:action="@{/app/private/widget-installation-scan}" method="post">
+                            <button type="submit" class="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-pointer-green px-5 py-3 text-center font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime">
+                                Vérifier la présence sur mon site
+                            </button>
+                            <a th:if="${widgetInstallationScan != null}" th:href="@{/app/private/widget-installation-scan}" class="inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-white/15 bg-white/5 px-5 py-2.5 text-center text-sm font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime">
+                                Voir plus de détails
+                            </a>
+                        </form>
+                    </div>
+                    <div th:if="${widgetInstallationScan != null}" class="mt-5 grid gap-4 border-t border-white/10 pt-5 md:grid-cols-3">
+                        <div class="rounded-lg border border-white/10 bg-black/18 p-4 text-center">
+                            <p class="text-xs font-black uppercase tracking-wider text-white/50">Pages scannées</p>
+                            <span class="mt-2 block font-display text-4xl leading-none text-white" th:text="${widgetInstallationScan.checkedPageCount}">0</span>
+                        </div>
+                        <div class="rounded-lg border border-pointer-green/20 bg-pointer-green/10 p-4 text-center">
+                            <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Avec widget</p>
+                            <span class="mt-2 block font-display text-4xl leading-none text-white" th:text="${widgetInstallationScan.widgetPageCount}">0</span>
+                        </div>
+                        <div class="rounded-lg border border-white/10 bg-black/18 p-4 text-center">
+                            <p class="text-xs font-black uppercase tracking-wider text-white/50">Avec lien</p>
+                            <span class="mt-2 block font-display text-4xl leading-none text-white" th:text="${widgetInstallationScan.linkPageCount}">0</span>
+                        </div>
+                    </div>
+                </section>
+
                 <section th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}" class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
                     <a th:href="@{/app/private/bugList(state='new', publicKey=${company.getPublicKey()})}" class="rounded-lg border border-red-400/25 bg-white/[0.065] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur transition hover:-translate-y-0.5 hover:border-red-300/40">
                         <p class="text-sm font-black uppercase tracking-wider text-red-200">New bug</p>

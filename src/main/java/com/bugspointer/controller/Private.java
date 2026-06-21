@@ -43,6 +43,8 @@ public class Private {
 
     private final PlanPricingService planPricingService;
 
+    private final WidgetInstallationScanService widgetInstallationScanService;
+
     @ModelAttribute("plans")
     public EnumPlan[] getFilteredPlans(){
         return Arrays.stream(EnumPlan.values())
@@ -51,7 +53,7 @@ public class Private {
     }
 
 
-    public Private(CompanyService companyService, BugService bugService, CompanyPreferencesService preferencesService, CustomerService customerService, JwtTokenUtil jwtTokenUtil, UserAuthenticationUtil userAuthenticationUtil, PaymentService paymentService, PlanPricingService planPricingService) {
+    public Private(CompanyService companyService, BugService bugService, CompanyPreferencesService preferencesService, CustomerService customerService, JwtTokenUtil jwtTokenUtil, UserAuthenticationUtil userAuthenticationUtil, PaymentService paymentService, PlanPricingService planPricingService, WidgetInstallationScanService widgetInstallationScanService) {
         this.companyService = companyService;
         this.bugService = bugService;
         this.preferencesService = preferencesService;
@@ -60,6 +62,7 @@ public class Private {
         this.userAuthenticationUtil = userAuthenticationUtil;
         this.paymentService = paymentService;
         this.planPricingService = planPricingService;
+        this.widgetInstallationScanService = widgetInstallationScanService;
     }
 
     @GetMapping("invoices")
@@ -327,6 +330,7 @@ public class Private {
                         @RequestParam(value = "message", required = false) String message){
         Company company = companyService.getCompanyWithToken(request);
         model.addAttribute("company", companyService.getDashboardDto(company));
+        model.addAttribute("widgetInstallationScan", request.getSession().getAttribute("widgetInstallationScan"));
         addTargetPlanPrice(model);
         model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
         if (status != null && message != null) {
@@ -334,6 +338,26 @@ public class Private {
             model.addAttribute("notification", message);
         }
         return "private/dashboard";
+    }
+
+    @PostMapping("widget-installation-scan")
+    String scanWidgetInstallation(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        Company company = companyService.getCompanyWithToken(request);
+        WidgetInstallationScanDTO scan = widgetInstallationScanService.scan(company);
+        request.getSession().setAttribute("widgetInstallationScan", scan);
+        redirectAttributes.addFlashAttribute("status", scan.hasResult() ? "OK" : "ERROR");
+        redirectAttributes.addFlashAttribute("notification", scan.hasResult() ? "Scan terminé." : scan.getErrorMessage());
+        return "redirect:/app/private/widget-installation-scan";
+    }
+
+    @GetMapping("widget-installation-scan")
+    String getWidgetInstallationScan(Model model, HttpServletRequest request) {
+        Company company = companyService.getCompanyWithToken(request);
+        Object scan = request.getSession().getAttribute("widgetInstallationScan");
+        model.addAttribute("company", companyService.getDashboardDto(company));
+        model.addAttribute("widgetInstallationScan", scan);
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        return "private/widgetInstallationScan";
     }
 
     @GetMapping("bugReport/{id}")
