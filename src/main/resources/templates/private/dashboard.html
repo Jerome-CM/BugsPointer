@@ -141,29 +141,32 @@
                         </div>
                     </div>
 
-                    <article class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-5 shadow-[0_24px_80px_rgba(0,230,118,0.10)] backdrop-blur sm:p-6">
-                        <div class="grid gap-5 lg:grid-cols-[1fr_1fr_280px] lg:items-center">
-                            <div>
+                    <article class="rounded-lg border border-pointer-green/30 bg-[linear-gradient(135deg,rgba(0,230,118,0.16),rgba(255,255,255,0.055))] p-5 shadow-[0_24px_80px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6">
+                        <div class="grid gap-5 lg:grid-cols-[1fr_1fr_300px] lg:items-stretch">
+                            <div class="rounded-lg border border-white/10 bg-black/18 p-4">
                                 <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Plan Target</p>
+                                <h3 class="mt-2 text-2xl font-black leading-tight text-white">Des rapports vraiment exploitables</h3>
                                 <ul class="mt-4 space-y-2 text-sm font-bold leading-6 text-white/72">
-                                    <li>Url de la page concernée</li>
-                                    <li>Description du problème</li>
-                                    <li>Extrait du code html défaillant</li>
-                                    <li>Nombre de rapports illimités</li>
+                                    <li><span class="text-pointer-lime">✓</span> Url de la page concernée</li>
+                                    <li><span class="text-pointer-lime">✓</span> Description du problème</li>
+                                    <li><span class="text-pointer-lime">✓</span> Extrait du code html défaillant</li>
+                                    <li><span class="text-pointer-lime">✓</span> Nombre de rapports illimités</li>
                                 </ul>
                             </div>
-                            <div>
-                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Inclus</p>
+                            <div class="rounded-lg border border-white/10 bg-black/18 p-4">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Pilotage</p>
+                                <h3 class="mt-2 text-2xl font-black leading-tight text-white">Une vue claire pour prioriser</h3>
                                 <ul class="mt-4 space-y-2 text-sm font-bold leading-6 text-white/72">
-                                    <li>Scans à la demande, jusqu'à 100 pages</li>
-                                    <li>Capture de l'environnement technique</li>
-                                    <li>Un dashboard simple</li>
-                                    <li>Téléchargement de vos factures</li>
+                                    <li><span class="text-pointer-lime">✓</span> Scans à la demande, jusqu'à 100 pages</li>
+                                    <li><span class="text-pointer-lime">✓</span> Capture de l'environnement technique</li>
+                                    <li><span class="text-pointer-lime">✓</span> Un dashboard simple</li>
+                                    <li><span class="text-pointer-lime">✓</span> Téléchargement de vos factures</li>
                                 </ul>
                             </div>
-                            <div class="rounded-lg border border-white/10 bg-black/20 p-4 text-center">
+                            <div class="flex flex-col justify-center rounded-lg border border-pointer-green/25 bg-black/25 p-4 text-center shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]">
                                 <span class="block text-sm font-black uppercase tracking-wider text-pointer-lime">Recommandé</span>
                                 <span class="mt-3 block font-display text-3xl leading-none text-white" th:text="${targetPlanPriceLabel != null ? targetPlanPriceLabel : '0€ jusqu''au 01/09/2026'}">0€ jusqu'au 01/09/2026</span>
+                                <p class="mt-3 text-sm font-bold leading-6 text-white/62">Activez le dashboard complet quand les retours commencent à compter.</p>
                                 <a th:href="@{/features#targetplan}" class="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-pointer-green px-5 py-2.5 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime">Voir Target</a>
                             </div>
                         </div>

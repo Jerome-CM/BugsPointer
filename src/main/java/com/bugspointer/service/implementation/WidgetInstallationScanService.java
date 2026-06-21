@@ -46,10 +46,10 @@ public class WidgetInstallationScanService {
         }
 
         result.setCheckedPageCount(1);
-        if (containsFloatingWidget(document, company.getPublicKey())) {
+        if (containsFloatingWidget(document)) {
             result.getWidgetUrls().add(pageUri.toString());
         }
-        if (containsBugspointerLink(document, company.getPublicKey())) {
+        if (containsBugspointerLink(document)) {
             result.getLinkUrls().add(pageUri.toString());
         }
         return result;
@@ -62,33 +62,31 @@ public class WidgetInstallationScanService {
                 .get();
     }
 
-    private boolean containsFloatingWidget(Document document, String publicKey) {
+    private boolean containsFloatingWidget(Document document) {
         for (Element script : document.select("script[src]")) {
             String src = script.absUrl("src");
             String rawSrc = script.attr("src");
-            String key = script.attr("data-public-key");
             String buttonStyle = script.attr("data-button-style");
             boolean isBugspointerScript = containsIgnoreCase(src, "modalPointer.js") || containsIgnoreCase(rawSrc, "modalPointer.js");
-            boolean hasCurrentKey = publicKey != null && publicKey.equals(key);
             boolean isLinkMode = "custom".equalsIgnoreCase(buttonStyle);
-            if (isBugspointerScript && hasCurrentKey && !isLinkMode) {
+            if (isBugspointerScript && !isLinkMode) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean containsBugspointerLink(Document document, String publicKey) {
-        if (!document.select("[data-bugspointer-open]").isEmpty()) {
-            return true;
-        }
-        for (Element element : document.select("[data-bugspointer-key]")) {
-            String key = element.attr("data-bugspointer-key");
-            if (publicKey != null && publicKey.equals(key.trim())) {
-                return true;
+    private boolean containsBugspointerLink(Document document) {
+        boolean hasBugspointerScript = false;
+        for (Element script : document.select("script[src]")) {
+            String src = script.absUrl("src");
+            String rawSrc = script.attr("src");
+            if (containsIgnoreCase(src, "modalPointer.js") || containsIgnoreCase(rawSrc, "modalPointer.js")) {
+                hasBugspointerScript = true;
+                break;
             }
         }
-        return false;
+        return hasBugspointerScript && !document.select("[data-bugspointer-open]").isEmpty();
     }
 
     private Connection configureRequest(Connection connection) {
