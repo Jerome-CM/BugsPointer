@@ -2,7 +2,6 @@ package com.bugspointer.service.implementation;
 
 import com.bugspointer.dto.WidgetInstallationScanDTO;
 import com.bugspointer.entity.Company;
-import com.bugspointer.entity.EnumPlan;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,71 +11,47 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayDeque;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Queue;
-import java.util.Set;
 
 @Service
 public class WidgetInstallationScanService {
 
     private static final int TIMEOUT_MS = 8000;
-    private static final String USER_AGENT = "Bugspointer installation scanner";
+    private static final String USER_AGENT = "Bugspointer installation checker";
 
-    public WidgetInstallationScanDTO scan(Company company) {
+    public WidgetInstallationScanDTO scan(Company company, String rawPageUrl) {
         WidgetInstallationScanDTO result = new WidgetInstallationScanDTO();
-        if (company == null || company.getDomaine() == null || company.getDomaine().trim().isEmpty()) {
-            result.setErrorMessage("Aucun domaine n'est enregistré pour ce compte.");
+        if (company == null) {
+            result.setErrorMessage("Compte introuvable.");
             return result;
         }
 
-        String startUrl = normalizeStartUrl(company.getDomaine());
-        result.setDomain(startUrl);
+        String pageUrl = normalizeStartUrl(rawPageUrl);
+        result.setDomain(normalizeStartUrl(company.getDomaine()));
+        result.setScannedUrl(pageUrl);
         result.setPublicKey(company.getPublicKey());
 
-        URI startUri = normalizeUrl(startUrl);
-        if (startUri == null || !isHttpUrl(startUri)) {
-            result.setErrorMessage("Le domaine enregistré n'est pas une URL valide.");
+        URI pageUri = normalizeUrl(pageUrl);
+        if (pageUri == null || !isHttpUrl(pageUri)) {
+            result.setErrorMessage("Merci de saisir une URL de page valide.");
             return result;
         }
 
-        int pageLimit = company.getPlan() == EnumPlan.FREE
-                ? AdminScraperService.FREE_INTERNAL_PAGE_LIMIT
-                : AdminScraperService.TARGET_INTERNAL_PAGE_LIMIT;
-
-        Queue<String> pagesToVisit = new ArrayDeque<>();
-        Set<String> visitedPages = new HashSet<>();
-        pagesToVisit.add(startUri.toString());
-
-        while (!pagesToVisit.isEmpty() && visitedPages.size() < pageLimit) {
-            String pageUrl = pagesToVisit.poll();
-            if (!visitedPages.add(pageUrl)) {
-                continue;
-            }
-
-            Document document;
-            try {
-                document = fetchDocument(pageUrl);
-            } catch (IOException | IllegalArgumentException e) {
-                if (visitedPages.size() == 1) {
-                    result.setErrorMessage("Impossible de scanner la page d'accueil: " + e.getMessage());
-                }
-                continue;
-            }
-
-            result.setCheckedPageCount(visitedPages.size());
-            if (containsWidget(document, company.getPublicKey())) {
-                result.getWidgetUrls().add(pageUrl);
-            }
-            if (containsBugspointerLink(document, company.getPublicKey())) {
-                result.getLinkUrls().add(pageUrl);
-            }
-            collectInternalPages(document, startUri, visitedPages, pagesToVisit);
+        Document document;
+        try {
+            document = fetchDocument(pageUri.toString());
+        } catch (IOException | IllegalArgumentException e) {
+            result.setErrorMessage("Impossible de vérifier cette page: " + e.getMessage());
+            return result;
         }
 
-        result.setCheckedPageCount(visitedPages.size());
-        result.setLimitReached(!pagesToVisit.isEmpty() || visitedPages.size() >= pageLimit);
+        result.setCheckedPageCount(1);
+        if (containsFloatingWidget(document, company.getPublicKey())) {
+            result.getWidgetUrls().add(pageUri.toString());
+        }
+        if (containsBugspointerLink(document, company.getPublicKey())) {
+            result.getLinkUrls().add(pageUri.toString());
+        }
         return result;
     }
 
@@ -87,14 +62,16 @@ public class WidgetInstallationScanService {
                 .get();
     }
 
-    private boolean containsWidget(Document document, String publicKey) {
+    private boolean containsFloatingWidget(Document document, String publicKey) {
         for (Element script : document.select("script[src]")) {
             String src = script.absUrl("src");
             String rawSrc = script.attr("src");
             String key = script.attr("data-public-key");
+            String buttonStyle = script.attr("data-button-style");
             boolean isBugspointerScript = containsIgnoreCase(src, "modalPointer.js") || containsIgnoreCase(rawSrc, "modalPointer.js");
             boolean hasCurrentKey = publicKey != null && publicKey.equals(key);
-            if (isBugspointerScript && hasCurrentKey) {
+            boolean isLinkMode = "custom".equalsIgnoreCase(buttonStyle);
+            if (isBugspointerScript && hasCurrentKey && !isLinkMode) {
                 return true;
             }
         }
@@ -109,19 +86,6 @@ public class WidgetInstallationScanService {
             }
         }
         return false;
-    }
-
-    private void collectInternalPages(Document document, URI startUri, Set<String> visitedPages, Queue<String> pagesToVisit) {
-        for (Element link : document.select("a[href]")) {
-            URI uri = normalizeUrl(link.absUrl("href"));
-            if (uri == null || !isHttpUrl(uri) || !isInternal(startUri, uri) || !shouldCrawlAsPage(uri)) {
-                continue;
-            }
-            String normalizedUrl = uri.toString();
-            if (!visitedPages.contains(normalizedUrl) && !pagesToVisit.contains(normalizedUrl)) {
-                pagesToVisit.add(normalizedUrl);
-            }
-        }
     }
 
     private Connection configureRequest(Connection connection) {
@@ -156,39 +120,8 @@ public class WidgetInstallationScanService {
         }
     }
 
-    private boolean shouldCrawlAsPage(URI uri) {
-        String path = uri.getPath();
-        if (path == null || path.isEmpty() || path.endsWith("/")) {
-            return true;
-        }
-        String lowerPath = path.toLowerCase(Locale.ROOT);
-        return !(lowerPath.endsWith(".pdf")
-                || lowerPath.endsWith(".jpg")
-                || lowerPath.endsWith(".jpeg")
-                || lowerPath.endsWith(".png")
-                || lowerPath.endsWith(".gif")
-                || lowerPath.endsWith(".webp")
-                || lowerPath.endsWith(".svg")
-                || lowerPath.endsWith(".zip")
-                || lowerPath.endsWith(".css")
-                || lowerPath.endsWith(".js"));
-    }
-
     private boolean isHttpUrl(URI uri) {
         return "http".equalsIgnoreCase(uri.getScheme()) || "https".equalsIgnoreCase(uri.getScheme());
-    }
-
-    private boolean isInternal(URI startUri, URI uri) {
-        return normalizeHost(startUri).equals(normalizeHost(uri));
-    }
-
-    private String normalizeHost(URI uri) {
-        String host = uri.getHost();
-        if (host == null) {
-            return "";
-        }
-        host = host.toLowerCase(Locale.ROOT);
-        return host.startsWith("www.") ? host.substring(4) : host;
     }
 
     private boolean containsIgnoreCase(String value, String expected) {

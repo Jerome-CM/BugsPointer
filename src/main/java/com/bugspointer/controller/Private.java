@@ -341,12 +341,14 @@ public class Private {
     }
 
     @PostMapping("widget-installation-scan")
-    String scanWidgetInstallation(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    String scanWidgetInstallation(@RequestParam("pageUrl") String pageUrl,
+                                  HttpServletRequest request,
+                                  RedirectAttributes redirectAttributes) {
         Company company = companyService.getCompanyWithToken(request);
-        WidgetInstallationScanDTO scan = widgetInstallationScanService.scan(company);
+        WidgetInstallationScanDTO scan = widgetInstallationScanService.scan(company, pageUrl);
         request.getSession().setAttribute("widgetInstallationScan", scan);
         redirectAttributes.addFlashAttribute("status", scan.hasResult() ? "OK" : "ERROR");
-        redirectAttributes.addFlashAttribute("notification", scan.hasResult() ? "Scan terminé." : scan.getErrorMessage());
+        redirectAttributes.addFlashAttribute("notification", scan.hasResult() ? "Vérification terminée." : scan.getErrorMessage());
         return "redirect:/app/private/widget-installation-scan";
     }
 

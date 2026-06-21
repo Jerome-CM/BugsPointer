@@ -11,11 +11,11 @@ public class WidgetInstallationScanDTO {
 
     private String domain;
 
+    private String scannedUrl;
+
     private String publicKey;
 
     private int checkedPageCount;
-
-    private boolean limitReached;
 
     private String errorMessage;
 
