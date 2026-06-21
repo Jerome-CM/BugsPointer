@@ -28,7 +28,6 @@ public class WidgetInstallationScanService {
 
         String pageUrl = normalizeStartUrl(rawPageUrl);
         result.setDomain(normalizeStartUrl(company.getDomaine()));
-        result.setScannedUrl(pageUrl);
         result.setPublicKey(company.getPublicKey());
 
         URI pageUri = normalizeUrl(pageUrl);
@@ -36,6 +35,7 @@ public class WidgetInstallationScanService {
             result.setErrorMessage("Merci de saisir une URL de page valide.");
             return result;
         }
+        result.setScannedUrl(pageUri.toString());
 
         Document document;
         try {
@@ -123,7 +123,11 @@ public class WidgetInstallationScanService {
         }
         try {
             URI uri = new URI(rawUrl.trim());
-            URI withoutFragment = new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(), uri.getPath(), uri.getQuery(), null);
+            String path = uri.getPath();
+            if (path == null || path.trim().isEmpty()) {
+                path = "/";
+            }
+            URI withoutFragment = new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(), path, uri.getQuery(), null);
             String scheme = withoutFragment.getScheme() == null ? "" : withoutFragment.getScheme().toLowerCase(Locale.ROOT);
             String host = withoutFragment.getHost() == null ? "" : withoutFragment.getHost().toLowerCase(Locale.ROOT);
             return new URI(scheme, withoutFragment.getUserInfo(), host, withoutFragment.getPort(), withoutFragment.getPath(), withoutFragment.getQuery(), null).normalize();
