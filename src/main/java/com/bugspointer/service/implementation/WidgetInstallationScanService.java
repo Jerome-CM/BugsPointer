@@ -56,10 +56,21 @@ public class WidgetInstallationScanService {
     }
 
     private Document fetchDocument(String url) throws IOException {
-        return configureRequest(Jsoup.connect(url))
-                .followRedirects(true)
-                .ignoreHttpErrors(false)
-                .get();
+        Connection.Response response = configureRequest(Jsoup.connect(url))
+                .followRedirects(false)
+                .ignoreHttpErrors(true)
+                .execute();
+        if (response.statusCode() >= 300 && response.statusCode() < 400) {
+            throw new IOException("l'URL répond par une redirection HTTP " + response.statusCode() + ". Merci de vérifier l'URL exacte.");
+        }
+        if (response.statusCode() != 200) {
+            throw new IOException("l'URL répond en HTTP " + response.statusCode() + ".");
+        }
+        String contentType = response.contentType();
+        if (contentType != null && !contentType.toLowerCase(Locale.ROOT).contains("text/html")) {
+            throw new IOException("l'URL ne renvoie pas une page HTML.");
+        }
+        return response.parse();
     }
 
     private boolean containsFloatingWidget(Document document) {
