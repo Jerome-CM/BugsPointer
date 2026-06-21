@@ -166,7 +166,7 @@ public class AdminService {
             compDTO.setDateDownload(Utility.dateFormator(company.getDateDownload(), "dd/MM/yyyy"));
             compDTO.setDomainVerified(company.isDomainVerified());
             compDTO.setCreationDate(Utility.dateFormator(company.getDateCreation(), "dd/MM/yyyy"));
-            compDTO.setMotifEnable(StringUtils.capitalize(String.valueOf(company.getMotifEnable()).toLowerCase()));
+            compDTO.setMotifEnable(company.getMotifEnable() == EnumMotif.ADMIN ? "Locked" : StringUtils.capitalize(String.valueOf(company.getMotifEnable()).toLowerCase()));
             compDTO.setPlan(StringUtils.capitalize(String.valueOf(company.getPlan()).toLowerCase()));
 
             // Total bug

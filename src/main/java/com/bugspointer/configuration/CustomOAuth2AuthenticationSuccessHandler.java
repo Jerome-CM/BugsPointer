@@ -53,7 +53,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
         try {
             company = companyService.getOrCreateOAuthCompany(email, displayName, provider);
         } catch (IllegalStateException e) {
-            response.sendRedirect("/authentication?status=ERROR&message=Compte%20désactivé");
+            response.sendRedirect(errorRedirect("Compte désactivé"));
             return;
         } catch (Exception e) {
             log.error("OAuth login failed for provider {} and email {}", provider, email, e);
@@ -115,5 +115,9 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
         }
         String normalized = role.trim().toUpperCase();
         return "ADMIN".equals(normalized) || "ROLE_ADMIN".equals(normalized);
+    }
+
+    private String errorRedirect(String message) throws IOException {
+        return "/authentication?status=ERROR&message=" + URLEncoder.encode(message, "UTF-8");
     }
 }

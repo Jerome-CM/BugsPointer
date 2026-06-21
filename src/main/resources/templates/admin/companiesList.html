@@ -38,7 +38,7 @@
                                     <td class="border-t border-white/10 px-4 py-3">
                                         <div class="flex items-center justify-center gap-3">
                                             <span class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-black/35 shadow-[0_0_18px_rgba(0,230,118,0.12)]" th:title="${company.getRegistrationProvider()}">
-                                                <img th:if="${company.getRegistrationProvider() == 'FORM'}" th:src="@{/favicon.svg}" alt="BugsPointer" class="h-5 w-5">
+                                                <span th:if="${company.getRegistrationProvider() == 'FORM'}" class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-pointer-green text-[9px] font-black leading-none text-pointer-ink shadow-[0_0_0_2px_rgba(255,255,255,0.88),0_0_14px_rgba(0,230,118,0.35)]">BP</span>
                                                 <svg th:if="${company.getRegistrationProvider() == 'GOOGLE'}" class="h-5 w-5" viewBox="0 0 24 24" aria-label="Google">
                                                     <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.29h6.47c-.28 1.5-1.13 2.77-2.4 3.62v3h3.89c2.27-2.09 3.53-5.17 3.53-8.64z"/>
                                                     <path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.95-2.91l-3.89-3c-1.08.72-2.46 1.15-4.06 1.15-3.13 0-5.78-2.11-6.73-4.96H1.25v3.09C3.23 21.3 7.3 24 12 24z"/>
@@ -57,7 +57,7 @@
                                         <span th:if="${company.motifEnable.equals('Validate')}" class="rounded-full border border-pointer-green/25 bg-pointer-green/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-pointer-lime" th:text="${company.motifEnable}"></span>
                                         <span th:if="${company.motifEnable.equals('Confirmation')}" class="rounded-full border border-yellow-300/25 bg-yellow-300/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-yellow-100" th:text="${company.motifEnable}"></span>
                                         <span th:if="${company.motifEnable.equals('Suppression')}" class="rounded-full border border-red-300/25 bg-red-500/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-red-100" th:text="${company.motifEnable}"></span>
-                                        <span th:if="${company.motifEnable.equals('Admin')}" class="rounded-full border border-sky-300/25 bg-sky-400/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-sky-100" th:text="${company.motifEnable}"></span>
+                                        <span th:if="${company.motifEnable.equals('Locked')}" class="rounded-full border border-sky-300/25 bg-sky-400/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-sky-100" th:text="${company.motifEnable}"></span>
                                     </td>
                                     <td class="border-t border-white/10 px-4 py-3">
                                         <span th:if="${company.isDomainVerified()}" class="rounded-full border border-pointer-green/25 bg-pointer-green/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-pointer-lime">Oui</span>

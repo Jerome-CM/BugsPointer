@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Optional;
 
@@ -50,9 +51,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         if (!company.isEnable()) {
             if (company.getMotifEnable() == EnumMotif.CONFIRMATION){
-                response.sendRedirect("/authentication?status=ERROR&message=Veuillez confirmer votre compte");//TODO: ajouter sur html lien pour renvoyer mail de confirmation
+                response.sendRedirect(errorRedirect("Veuillez confirmer votre compte"));//TODO: ajouter sur html lien pour renvoyer mail de confirmation
             } else {
-                response.sendRedirect("/authentication?status=ERROR&message=Account disabled");
+                response.sendRedirect(errorRedirect("Compte désactivé"));
             }
             return;
         }
@@ -91,5 +92,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         }
         String normalized = role.trim().toUpperCase();
         return "ADMIN".equals(normalized) || "ROLE_ADMIN".equals(normalized);
+    }
+
+    private String errorRedirect(String message) throws IOException {
+        return "/authentication?status=ERROR&message=" + URLEncoder.encode(message, "UTF-8");
     }
 }
