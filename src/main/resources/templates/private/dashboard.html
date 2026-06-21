@@ -40,7 +40,7 @@
     <main>
         <section class="relative px-5 pb-16 pt-1 sm:px-8 sm:pt-2 lg:px-12">
             <div class="home-noise"></div>
-            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-1">
+            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-5">
                 <div class="rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
                     <div class="w-full">
                         <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
@@ -54,26 +54,6 @@
                         </p>
                     </div>
                 </div>
-
-                <section class="mt-7 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7">
-                    <div class="mb-6 flex flex-col gap-3 border-b border-white/10 pb-5 md:flex-row md:items-end md:justify-between">
-                        <div>
-                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Paramètres</p>
-                            <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl">Gérer votre espace</h2>
-                        </div>
-                        <p class="max-w-xl text-sm leading-6 text-white/62">Modifiez vos notifications, votre compte, votre domaine et votre facturation.</p>
-                    </div>
-                    <div class="grid gap-4 md:grid-cols-2">
-                        <a th:href="@{/app/private/notifications}" class="rounded-lg border border-white/10 bg-black/15 p-5 transition hover:-translate-y-0.5 hover:border-pointer-green/35">
-                            <p class="text-xl font-black text-white">Notifications</p>
-                            <p class="mt-2 text-sm leading-6 text-white/62">Choisissez les alertes e-mail et SMS utiles à votre suivi.</p>
-                        </a>
-                        <a th:href="@{/app/private/account}" class="rounded-lg border border-white/10 bg-black/15 p-5 transition hover:-translate-y-0.5 hover:border-pointer-green/35">
-                            <p class="text-xl font-black text-white">Compte</p>
-                            <p class="mt-2 text-sm leading-6 text-white/62">Gérez vos accès, votre domaine, votre plan et vos mandats.</p>
-                        </a>
-                    </div>
-                </section>
 
                 <section class="rounded-lg border border-pointer-green/20 bg-white/[0.06] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7">
                     <div class="grid gap-5 lg:grid-cols-[1fr_320px] lg:items-center">
@@ -141,13 +121,6 @@
                             <p class="mt-2 text-sm leading-6 text-white/65">Recevez vos premiers rapports par e-mail.</p>
                         </div>
 
-                        <div class="flex min-h-44 w-full flex-col justify-center rounded-lg border border-pointer-green/20 bg-white/[0.055] p-4 text-center shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur">
-                            <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Widget</p>
-                            <h2 class="mt-2 text-xl font-black leading-tight text-white">Personnalisation verrouillée</h2>
-                            <p class="mt-2 text-sm leading-6 text-white/65">Passez au plan Target pour modifier la couleur, les textes et la position du widget.</p>
-                            <a th:href="@{/features#targetplan}" class="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime sm:w-auto">Débloquer avec Target</a>
-                        </div>
-
                         <div class="flex min-h-44 w-full flex-col items-center justify-center rounded-lg border border-white/10 bg-white/[0.055] p-4 text-center shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur">
                             <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Rapports reçus</p>
                             <span class="mt-3 block font-display text-5xl leading-none text-white" th:text="${company.getNbReceivedReports()}">0</span>
@@ -159,22 +132,42 @@
                             <span class="mt-3 block font-display text-5xl leading-none text-white" th:text="${company.getNbMissedReports()}">0</span>
                             <p class="mt-2 text-sm leading-6 text-red-100/70">Rapports non vus par e-mail à cause de la limite de l'offre gratuite.</p>
                         </div>
+
+                        <div class="flex min-h-44 w-full flex-col justify-center rounded-lg border border-pointer-green/20 bg-white/[0.055] p-4 text-center shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur">
+                            <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Widget</p>
+                            <h2 class="mt-2 text-xl font-black leading-tight text-white">Personnalisation verrouillée</h2>
+                            <p class="mt-2 text-sm leading-6 text-white/65">Passez au plan Target pour modifier la couleur, les textes et la position du widget.</p>
+                            <a th:href="@{/features#targetplan}" class="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime sm:w-auto">Débloquer avec Target</a>
+                        </div>
                     </div>
 
-                    <div class="home-pricing w-full">
-                        <article class="cards cards_detail halo-green target-card dashboard-target-card w-full">
-                            <span class="pricing-badge">Recommandé</span>
-                            <h3 class="h-in-price-card margin-bottom">Target</h3>
-                            <p class="pricing-note">Pour centraliser les retours utilisateurs et traiter les bugs en continu.</p>
-                            <ul>
-                                <th:block th:replace="~{include/targetPlanContent.html}"></th:block>
-                            </ul>
-                            <div class="pricing-card-action">
-                                <span class="price-in-card price-in-card-promo" th:text="${targetPlanPriceLabel != null ? targetPlanPriceLabel : '0€ jusqu''au 01/09/2026'}">0€ jusqu'au 01/09/2026</span>
-                                <a th:href="@{/features#targetplan}" class="btn-action">Voir le détail</a>
+                    <article class="rounded-lg border border-pointer-green/25 bg-pointer-green/10 p-5 shadow-[0_24px_80px_rgba(0,230,118,0.10)] backdrop-blur sm:p-6">
+                        <div class="grid gap-5 lg:grid-cols-[1fr_1fr_280px] lg:items-center">
+                            <div>
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Plan Target</p>
+                                <ul class="mt-4 space-y-2 text-sm font-bold leading-6 text-white/72">
+                                    <li>Url de la page concernée</li>
+                                    <li>Description du problème</li>
+                                    <li>Extrait du code html défaillant</li>
+                                    <li>Nombre de rapports illimités</li>
+                                </ul>
                             </div>
-                        </article>
-                    </div>
+                            <div>
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Inclus</p>
+                                <ul class="mt-4 space-y-2 text-sm font-bold leading-6 text-white/72">
+                                    <li>Scans à la demande, jusqu'à 100 pages</li>
+                                    <li>Capture de l'environnement technique</li>
+                                    <li>Un dashboard simple</li>
+                                    <li>Téléchargement de vos factures</li>
+                                </ul>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-black/20 p-4 text-center">
+                                <span class="block text-sm font-black uppercase tracking-wider text-pointer-lime">Recommandé</span>
+                                <span class="mt-3 block font-display text-3xl leading-none text-white" th:text="${targetPlanPriceLabel != null ? targetPlanPriceLabel : '0€ jusqu''au 01/09/2026'}">0€ jusqu'au 01/09/2026</span>
+                                <a th:href="@{/features#targetplan}" class="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-pointer-green px-5 py-2.5 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime">Voir Target</a>
+                            </div>
+                        </div>
+                    </article>
                 </section>
 
                 <section th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}" class="rounded-lg border border-pointer-green/25 bg-white/[0.075] p-5 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-6 lg:p-7">
@@ -182,6 +175,26 @@
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Plan actuel</p>
                         <p class="mt-2 font-display text-4xl leading-none text-white" th:text="${company.getPlan()}">TARGET</p>
                         <p class="mt-3 text-sm leading-6 text-white/62">Les rapports détaillés sont actifs sur votre espace.</p>
+                    </div>
+                </section>
+
+                <section class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6 lg:p-7">
+                    <div class="mb-6 flex flex-col gap-3 border-b border-white/10 pb-5 md:flex-row md:items-end md:justify-between">
+                        <div>
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Paramètres</p>
+                            <h2 class="mt-2 font-display text-3xl leading-none text-white sm:text-4xl">Gérer votre espace</h2>
+                        </div>
+                        <p class="max-w-xl text-sm leading-6 text-white/62">Modifiez vos notifications, votre compte, votre domaine et votre facturation.</p>
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <a th:href="@{/app/private/notifications}" class="rounded-lg border border-white/10 bg-black/15 p-5 transition hover:-translate-y-0.5 hover:border-pointer-green/35">
+                            <p class="text-xl font-black text-white">Notifications</p>
+                            <p class="mt-2 text-sm leading-6 text-white/62">Choisissez les alertes e-mail et SMS utiles à votre suivi.</p>
+                        </a>
+                        <a th:href="@{/app/private/account}" class="rounded-lg border border-white/10 bg-black/15 p-5 transition hover:-translate-y-0.5 hover:border-pointer-green/35">
+                            <p class="text-xl font-black text-white">Compte</p>
+                            <p class="mt-2 text-sm leading-6 text-white/62">Gérez vos accès, votre domaine, votre plan et vos mandats.</p>
+                        </a>
                     </div>
                 </section>
             </div>

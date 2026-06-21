@@ -79,9 +79,12 @@ public class WidgetInstallationScanService {
     }
 
     private boolean containsBugspointerLink(Document document, String publicKey) {
-        for (Element element : document.select("[data-bugspointer-open], [data-bugspointer-key]")) {
+        if (!document.select("[data-bugspointer-open]").isEmpty()) {
+            return true;
+        }
+        for (Element element : document.select("[data-bugspointer-key]")) {
             String key = element.attr("data-bugspointer-key");
-            if (key == null || key.trim().isEmpty() || publicKey == null || publicKey.equals(key.trim())) {
+            if (publicKey != null && publicKey.equals(key.trim())) {
                 return true;
             }
         }

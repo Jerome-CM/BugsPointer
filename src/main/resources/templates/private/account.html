@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="grid gap-5 lg:grid-cols-[320px_1fr] lg:items-start">
-                    <aside class="sticky top-24 hidden rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur lg:block">
+                    <aside class="sticky top-24 hidden h-auto self-start rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur lg:block">
                         <p class="px-3 pb-3 text-xs font-black uppercase tracking-wider text-pointer-lime">Sections</p>
                         <nav class="flex flex-col gap-1">
                             <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#identity">Identité</a>
@@ -170,13 +170,13 @@
                     </div>
                 </section>
 
-                <section class="grid gap-5 xl:grid-cols-[1fr_320px] xl:items-start">
-                    <form id="public-key" class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" th:object="${company}" method="get">
+                <section class="grid gap-5 xl:grid-cols-[1fr_320px] xl:items-stretch">
+                    <form id="public-key" class="flex h-full flex-col rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" th:object="${company}" method="get">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Clé publique</p>
                         <h2 class="mt-2 font-display text-3xl leading-none text-white">Public Key</h2>
                         <input class="mt-5 min-h-12 w-full max-w-3xl rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none" type="text" th:field="*{publicKey}" id="publicKey" th:value="${company.getPublicKey()}" readonly>
                     </form>
-                    <form id="key" class="rounded-lg border border-red-300/25 bg-red-500/10 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/account/delete}" th:object="${company}" method="post">
+                    <form id="key" class="flex h-full flex-col justify-between rounded-lg border border-red-300/25 bg-red-500/10 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/account/delete}" th:object="${company}" method="post">
                         <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
                         <p class="text-sm font-black uppercase tracking-wider text-red-100">Zone sensible</p>
                         <button class="mt-4 min-h-12 w-full cursor-pointer rounded-lg border border-red-300/30 bg-red-500/15 px-5 py-3 font-extrabold text-red-100 transition hover:border-red-200/60" type="submit">Clôturer mon compte</button>
