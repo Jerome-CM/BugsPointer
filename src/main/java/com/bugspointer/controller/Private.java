@@ -220,7 +220,7 @@ public class Private {
         redirectAttributes.addFlashAttribute("status", String.valueOf(response.getStatus()));
         redirectAttributes.addFlashAttribute("notification", response.getMessage());
         if (response.getStatus().equals(EnumStatus.OK)) {
-            return "redirect:/app/private/dashboard";
+            return "redirect:/app/private/widget";
         }
         return "redirect:/app/private/onboarding/widget";
     }
