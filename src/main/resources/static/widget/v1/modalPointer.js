@@ -150,9 +150,10 @@
                     cursor: pointer;
                 }
                 .bp-launcher.is-button {
-                    min-height: 48px;
                     width: var(--bp-button-size);
                     height: var(--bp-button-size);
+                    min-width: var(--bp-button-size);
+                    min-height: var(--bp-button-size);
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
