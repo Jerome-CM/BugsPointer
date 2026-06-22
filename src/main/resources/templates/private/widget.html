@@ -75,18 +75,12 @@
                 <section class="grid gap-5 xl:grid-cols-[420px_1fr] xl:items-start">
                     <form class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/widget}" th:object="${widget}" method="post">
                         <div class="mb-5 border-b border-white/10 pb-5">
-                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Réglages</p>
                             <h2 class="mt-2 font-display text-3xl leading-none text-white">Configuration</h2>
                         </div>
 
                         <input type="hidden" th:field="*{companyPublicKey}" th:value="${company.getPublicKey()}" readonly>
 
                         <div class="grid gap-4">
-                            <div class="rounded-lg border border-pointer-green/20 bg-pointer-green/10 p-4">
-                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Réglages gratuits</p>
-                                <p class="mt-2 text-sm leading-6 text-white/62">Disponibles pour tous les comptes.</p>
-                            </div>
-
                             <label>
                                 <span class="mb-2 block text-sm font-bold text-white/72">Couleur principale</span>
                                 <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" type="color" th:field="*{widgetPrimaryColor}" id="widgetPrimaryColor">
@@ -103,40 +97,34 @@
                                 <input class="h-5 w-5 accent-pointer-green" type="checkbox" th:field="*{widgetLinkUnderline}" id="widgetLinkUnderline">
                             </label>
 
-                            <div class="mt-2 rounded-lg border border-yellow-200/25 bg-yellow-300/10 p-4">
-                                <p class="text-sm font-black uppercase tracking-wider text-yellow-100">Réglages Target</p>
-                                <p class="mt-2 text-sm leading-6 text-white/62" th:if="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">Ces options sont visibles pour préparer votre design, mais leur enregistrement nécessite le plan Target.</p>
-                                <p class="mt-2 text-sm leading-6 text-white/62" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}">Personnalisez la modal, les textes, la position et la taille du bouton.</p>
+                            <input type="hidden" th:field="*{widgetButtonStyle}" id="widgetButtonStyle">
+
+                            <div class="rounded-lg border border-pointer-green/20 bg-pointer-green/10 p-4">
+                                <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Réglages Target</p>
+                                <p class="mt-2 text-sm leading-6 text-white/62">Ces options sont visibles pour préparer votre design, mais leur enregistrement nécessite le plan Target.</p>
                             </div>
 
                             <label>
-                                <span class="mb-2 block text-sm font-bold text-white/72">Style du déclencheur</span>
-                                <select class="widget-select min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" th:field="*{widgetButtonStyle}" id="widgetButtonStyle" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
-                                    <option value="button">Bouton</option>
-                                    <option value="custom">Lien placé dans le site</option>
-                                </select>
-                            </label>
-                            <label>
                                 <span class="mb-2 block text-sm font-bold text-white/72">Fond de la modal</span>
-                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="color" th:field="*{widgetModalBackgroundColor}" id="widgetModalBackgroundColor" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="color" th:field="*{widgetModalBackgroundColor}" id="widgetModalBackgroundColor">
                             </label>
                             <div class="grid gap-4 sm:grid-cols-2">
                                 <label>
                                     <span class="mb-2 block text-sm font-bold text-white/72">Texte de la modal</span>
-                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="color" th:field="*{widgetModalTextColor}" id="widgetModalTextColor" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="color" th:field="*{widgetModalTextColor}" id="widgetModalTextColor">
                                 </label>
                                 <label>
                                     <span class="mb-2 block text-sm font-bold text-white/72">Titre principal</span>
-                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="color" th:field="*{widgetTitleColor}" id="widgetTitleColor" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="color" th:field="*{widgetTitleColor}" id="widgetTitleColor">
                                 </label>
                             </div>
                             <label data-trigger-option="button">
                                 <span class="mb-2 block text-sm font-bold text-white/72">Taille du bouton</span>
-                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="number" min="44" max="96" step="1" th:field="*{widgetButtonSize}" id="widgetButtonSize" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="number" min="15" max="96" step="1" th:field="*{widgetButtonSize}" id="widgetButtonSize">
                             </label>
                             <label data-trigger-option="button">
                                 <span class="mb-2 block text-sm font-bold text-white/72">Position</span>
-                                <select class="widget-select min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" th:field="*{widgetPosition}" id="widgetPosition" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                                <select class="widget-select min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" th:field="*{widgetPosition}" id="widgetPosition">
                                     <option value="bottom-right">Bas droite</option>
                                     <option value="bottom-left">Bas gauche</option>
                                     <option value="top-right">Haut droite</option>
@@ -146,24 +134,24 @@
                             <div data-trigger-option="button" class="grid gap-4 sm:grid-cols-2">
                                 <label>
                                     <span class="mb-2 block text-sm font-bold text-white/72">Marge horizontale</span>
-                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="number" min="0" max="120" step="1" th:field="*{widgetMarginX}" id="widgetMarginX" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="number" min="0" max="120" step="1" th:field="*{widgetMarginX}" id="widgetMarginX">
                                 </label>
                                 <label>
                                     <span class="mb-2 block text-sm font-bold text-white/72">Marge verticale</span>
-                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="number" min="0" max="120" step="1" th:field="*{widgetMarginY}" id="widgetMarginY" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                                    <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="number" min="0" max="120" step="1" th:field="*{widgetMarginY}" id="widgetMarginY">
                                 </label>
                             </div>
                             <label data-trigger-option="custom">
                                 <span class="mb-2 block text-sm font-bold text-white/72">Texte du lien</span>
-                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="text" th:field="*{widgetButtonText}" id="widgetButtonText" maxlength="60" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="text" th:field="*{widgetButtonText}" id="widgetButtonText" maxlength="60">
                             </label>
                             <label>
                                 <span class="mb-2 block text-sm font-bold text-white/72">Titre de la modal</span>
-                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="text" th:field="*{widgetTitle}" id="widgetTitle" maxlength="80" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="text" th:field="*{widgetTitle}" id="widgetTitle" maxlength="80">
                             </label>
                             <label>
                                 <span class="mb-2 block text-sm font-bold text-white/72">Libellé description</span>
-                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="text" th:field="*{widgetDescriptionLabel}" id="widgetDescriptionLabel" maxlength="80" th:disabled="${company.getPlan() == T(com.bugspointer.entity.EnumPlan).FREE}">
+                                <input class="min-h-12 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)] disabled:cursor-not-allowed disabled:opacity-50" type="text" th:field="*{widgetDescriptionLabel}" id="widgetDescriptionLabel" maxlength="80">
                             </label>
                         </div>
 
@@ -198,7 +186,7 @@
                                         <label id="widgetPreviewLabel" class="mb-2 block text-sm font-bold opacity-75" th:text="${widget.getWidgetDescriptionLabel()}">Description du bug</label>
                                         <textarea class="min-h-[130px] w-full rounded-lg border border-slate-200 px-4 py-3" placeholder="Expliquez le problème rencontré"></textarea>
                                         <div class="mt-4 flex items-center justify-between gap-4">
-                                            <a href="https://www.bugspointer.com" class="text-sm font-black text-slate-400 no-underline">Bugspointer.com</a>
+                                            <a href="https://www.bugspointer.com" class="text-sm font-black text-slate-400 no-underline">🚀 Powered by Bugspointer.com</a>
                                             <button id="widgetPreviewSubmit" class="min-h-11 rounded-lg px-5 font-black text-white" th:style="'background-color:' + ${widget.getWidgetPrimaryColor()}">Envoyer le rapport</button>
                                         </div>
                                     </div>
@@ -262,7 +250,7 @@
             const marginY = Math.max(0, Math.min(parseInt(widgetInputs.marginY.value || '15', 10), 120));
             const position = widgetInputs.position.value || 'bottom-right';
             const isCustom = widgetInputs.buttonStyle.value === 'custom';
-            const buttonSize = Math.max(44, Math.min(parseInt(widgetInputs.buttonSize.value || '56', 10), 96));
+            const buttonSize = Math.max(15, Math.min(parseInt(widgetInputs.buttonSize.value || '50', 10), 96));
             const customLink = document.getElementById('widgetPreviewCustomLink');
             const customShell = document.getElementById('widgetPreviewCustomShell');
 

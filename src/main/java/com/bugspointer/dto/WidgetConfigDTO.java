@@ -25,7 +25,7 @@ public class WidgetConfigDTO {
 
     private String buttonStyle = "button";
 
-    private Integer buttonSize = 56;
+    private Integer buttonSize = 50;
 
     private String title = "Signaler un nouveau bug";
 

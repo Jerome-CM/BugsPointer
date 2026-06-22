@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity webSecurity) {
         webSecurity.ignoring()
-                .antMatchers("/css/**", "/js/**", "/social/**", "/widget/**", "/favicon.ico");
+                .antMatchers("/css/**", "/js/**", "/social/**", "/widget/**", "/favicon.ico", "/favicon.svg");
     }
 
     @Override
@@ -92,6 +92,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/robots.txt").permitAll()
                 .antMatchers("/sitemap.xml").permitAll()
                 .antMatchers("/llms.txt").permitAll()
+                .antMatchers("/favicon.svg").permitAll()
+                .antMatchers("/favicon.ico").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/authentication").permitAll()
                 .antMatchers("/oauth2/**").permitAll()

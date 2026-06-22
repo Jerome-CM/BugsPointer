@@ -19,7 +19,7 @@
         linkUnderline: true,
         buttonText: "Signaler un bug",
         buttonStyle: "button",
-        buttonSize: 56,
+        buttonSize: 50,
         title: "Signaler un nouveau bug",
         descriptionLabel: "Description du bug",
         collectEmail: false,
@@ -159,7 +159,7 @@
                     padding: 0;
                     background: var(--bp-launcher-green);
                     color: #fff;
-                    font-size: calc(var(--bp-button-size) * 0.55);
+                    font-size: max(10px, calc(var(--bp-button-size) * 0.55));
                     font-weight: 950;
                     line-height: 1;
                     text-shadow: 0 2px 10px rgba(255, 255, 255, 0.44);
@@ -722,7 +722,7 @@
         if (Number.isNaN(parsed)) {
             return defaults.buttonSize;
         }
-        return Math.min(Math.max(parsed, 44), 96);
+        return Math.min(Math.max(parsed, 15), 96);
     }
 
     function escapeHtml(value) {

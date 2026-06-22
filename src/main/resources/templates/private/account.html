@@ -33,7 +33,7 @@
     <main>
         <section class="relative px-5 pb-16 pt-12 sm:px-8 lg:px-12">
             <div class="home-noise"></div>
-            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-1">
+            <div class="relative z-10 mx-auto flex max-w-[88rem] flex-col gap-6">
                 <div class="rounded-lg border border-white/10 bg-white/[0.065] p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur md:p-8">
                     <p class="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-pointer-lime shadow-[0_0_40px_rgba(0,230,118,0.14)]">
                         Mon compte
@@ -44,15 +44,15 @@
                 </div>
 
                 <div class="grid gap-5 lg:grid-cols-[320px_1fr] lg:items-start">
-                    <aside class="sticky top-24 hidden min-h-[30rem] rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur lg:block">
-                        <p class="px-3 pb-3 text-xs font-black uppercase tracking-wider text-pointer-lime">Sections</p>
-                        <nav class="flex flex-col gap-1">
-                            <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#identity">Identité</a>
-                            <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#security">Sécurité</a>
-                            <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#domain">Domaine</a>
-                            <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#plan">Plan</a>
-                            <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#mandates">Mandats</a>
-                            <a class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#public-key">Public Key</a>
+                    <aside class="hidden self-start rounded-lg border border-white/10 bg-white/[0.055] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur lg:block" style="position: sticky; top: 6rem;">
+                        <p class="px-3 pb-5 text-xs font-black uppercase tracking-wider text-pointer-lime">Sections</p>
+                        <nav class="flex flex-col gap-3">
+                            <a class="whitespace-nowrap rounded-lg px-3 py-3 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#identity">Identité</a>
+                            <a class="whitespace-nowrap rounded-lg px-3 py-3 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#security">Sécurité</a>
+                            <a class="whitespace-nowrap rounded-lg px-3 py-3 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#domain">Domaine</a>
+                            <a class="whitespace-nowrap rounded-lg px-3 py-3 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#plan">Plan</a>
+                            <a class="whitespace-nowrap rounded-lg px-3 py-3 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#mandates">Mandats</a>
+                            <a class="whitespace-nowrap rounded-lg px-3 py-3 text-sm font-bold text-white/68 transition hover:bg-white/8 hover:text-pointer-lime" href="#public-key">Public Key</a>
                         </nav>
                     </aside>
 
@@ -79,7 +79,6 @@
                             <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
                             <div class="mt-5 flex flex-col gap-3 sm:flex-row">
                                 <button type="submit" class="min-h-12 w-full cursor-pointer rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime sm:w-auto" name="action" value="updateMail">Mettre à jour</button>
-                                <a class="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 font-extrabold text-white transition hover:border-pointer-green/40 hover:text-pointer-lime sm:w-auto" th:href="@{/app/private/notifications}">Notifications</a>
                             </div>
                         </form>
                     </section>
@@ -129,7 +128,7 @@
                             </div>
                             <p class="font-display text-5xl leading-none text-white" th:text="${company.getPlan()}">FREE</p>
                             <div class="mt-5 flex flex-col gap-3 sm:flex-row">
-                                <a class="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" th:href="@{/features}">Changer de plan</a>
+                                <a class="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-pointer-green px-5 py-3 font-extrabold text-pointer-ink shadow-[0_18px_45px_rgba(0,230,118,0.18)] transition hover:-translate-y-0.5 hover:bg-pointer-lime" th:href="@{/features#targetplan}">Changer de plan</a>
                                 <form class="w-full" th:if="${company.getPlan() != T(com.bugspointer.entity.EnumPlan).FREE}" th:action="@{/api/user/{idCompany}/{idCustomer}/stopSubscribe(idCompany=${company.getId()}, idCustomer=${company.getCustomerId()})}" method="post" id="confirmationFormClosePlan">
                                     <button type="submit" class="min-h-12 w-full cursor-pointer rounded-lg border border-red-300/30 bg-red-500/12 px-5 py-3 font-extrabold text-red-100 transition hover:border-red-200/60">Stopper l’abonnement</button>
                                 </form>
@@ -171,13 +170,13 @@
                     </div>
                 </section>
 
-                <section class="grid gap-5 xl:grid-cols-[1fr_320px] xl:items-start">
-                    <form id="public-key" class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" th:object="${company}" method="get">
+                <section class="grid gap-5 xl:grid-cols-[1fr_320px] xl:items-stretch">
+                    <form id="public-key" class="flex h-full flex-col rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" th:object="${company}" method="get">
                         <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Clé publique</p>
                         <h2 class="mt-2 font-display text-3xl leading-none text-white">Public Key</h2>
                         <input class="mt-5 min-h-12 w-full max-w-3xl rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none" type="text" th:field="*{publicKey}" id="publicKey" th:value="${company.getPublicKey()}" readonly>
                     </form>
-                    <form id="key" class="rounded-lg border border-red-300/25 bg-red-500/10 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/account/delete}" th:object="${company}" method="post">
+                    <form id="key" class="flex h-full flex-col justify-between rounded-lg border border-red-300/25 bg-red-500/10 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-6" action="#" th:action="@{/app/private/account/delete}" th:object="${company}" method="post">
                         <input type="hidden" th:field="*{publicKey}" name="publicKey" th:value="${company.getPublicKey()}" readonly>
                         <p class="text-sm font-black uppercase tracking-wider text-red-100">Zone sensible</p>
                         <button class="mt-4 min-h-12 w-full cursor-pointer rounded-lg border border-red-300/30 bg-red-500/15 px-5 py-3 font-extrabold text-red-100 transition hover:border-red-200/60" type="submit">Clôturer mon compte</button>

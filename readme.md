@@ -1,37 +1,44 @@
-# Bienvenue
+# BugsPointer
 
-## Obtenez un rapport de Bug sur votre site facilement
+![Java](https://img.shields.io/badge/Java-8-00E676?style=for-the-badge)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-2.7-6DB33F?style=for-the-badge)
+![Thymeleaf](https://img.shields.io/badge/Thymeleaf-templates-005F0F?style=for-the-badge)
+![MySQL](https://img.shields.io/badge/MySQL-database-4479A1?style=for-the-badge)
 
-BugsPointer est une solution simple de laisser vos utilisateurs signaler des problèmes sur votre site lors de leur navigation : 
+BugsPointer ajoute un bouton ou un lien de signalement sur un site web pour transformer les retours flous des utilisateurs en rapports de bug exploitables.
 
-    - Problème de synthaxe
-    - Chemin de fichier erroné
-    - Soucis de design
-    - Erreur système
+Le visiteur décrit le problème, pointe la zone concernée, et l'équipe reçoit le contexte utile pour comprendre et corriger plus vite.
 
-Le projet est encore en cours de développement
+## Introduction
 
-## Configuration des e-mails OVH MX Plan
+Un message comme "ça ne marche pas" ne suffit presque jamais.
 
-L'application envoie les e-mails transactionnels avec l'adresse `noreply@bugspointer.com` et ajoute `contact@bugspointer.com` en adresse de réponse.
+BugsPointer capture le retour au bon moment, directement sur la page où le problème arrive. Le rapport peut contenir l'URL, la description, le contexte navigateur, la taille d'écran et la zone pointée par l'utilisateur.
 
-Variables d'environnement à configurer sur le serveur :
+## Fonctionnalités
 
-```env
-MAIL_SMTP=ssl0.ovh.net
-MAIL_PORT=587
-MAIL_USER=noreply@bugspointer.com
-MAIL_PASSWORD=mot_de_passe_de_la_boite_noreply
-MAIL_FROM_NOREPLY=noreply@bugspointer.com
-MAIL_FROM_CONTACT=contact@bugspointer.com
-MAIL_FROM_NAME=BugsPointer
+- Signalement de bug depuis le site client.
+- Widget installable avec un script.
+- Bouton flottant ou lien personnalisé.
+- Rapport structuré pour comprendre et reproduire.
+- Dashboard pour centraliser et prioriser les retours.
+- Vérification d'installation pendant l'onboarding.
+
+## Installation Du Widget
+
+### Option 1 : bouton flottant
+
+```html
+<script src="https://bugspointer.com/widget/v1/modalPointer.js" data-public-key="pk_xxxxx" defer></script>
 ```
 
-Pour limiter l'arrivée en spam, vérifier aussi la zone DNS `bugspointer.com` chez OVH :
+Cette option affiche automatiquement le bouton BugsPointer sur le site.
 
-- MX : conserver les entrées MX Plan OVH.
-- SPF : autoriser les serveurs OVH à envoyer pour le domaine.
-- DKIM : activer DKIM dans l'espace client OVH si disponible pour le MX Plan.
-- DMARC : ajouter une politique DMARC progressive, par exemple en surveillance au départ.
+### Option 2 : lien personnalisé
 
-Après modification DNS, attendre la propagation puis tester un envoi vers Gmail, Outlook et une adresse externe. Le `From` doit être `noreply@bugspointer.com` et le `Reply-To` doit être `contact@bugspointer.com`.
+```html
+<script src="https://bugspointer.com/widget/v1/modalPointer.js" data-public-key="pk_xxxxx" data-button-style="custom" defer></script>
+<a href="#" data-bugspointer-open data-bugspointer-key="pk_xxxxx">Signaler un bug</a>
+```
+
+Cette option laisse le site décider où placer le lien : menu, footer, centre d'aide ou page support.

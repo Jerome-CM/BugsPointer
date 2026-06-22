@@ -162,10 +162,11 @@ public class AdminService {
             // Basics info
             compDTO.setCompanyId(company.getCompanyId());
             compDTO.setCompanyName(company.getCompanyName());
+            compDTO.setRegistrationProvider(company.getRegistrationProvider() != null ? company.getRegistrationProvider().name() : "FORM");
             compDTO.setDateDownload(Utility.dateFormator(company.getDateDownload(), "dd/MM/yyyy"));
             compDTO.setDomainVerified(company.isDomainVerified());
             compDTO.setCreationDate(Utility.dateFormator(company.getDateCreation(), "dd/MM/yyyy"));
-            compDTO.setMotifEnable(StringUtils.capitalize(String.valueOf(company.getMotifEnable()).toLowerCase()));
+            compDTO.setMotifEnable(company.getMotifEnable() == EnumMotif.ADMIN ? "Locked" : StringUtils.capitalize(String.valueOf(company.getMotifEnable()).toLowerCase()));
             compDTO.setPlan(StringUtils.capitalize(String.valueOf(company.getPlan()).toLowerCase()));
 
             // Total bug

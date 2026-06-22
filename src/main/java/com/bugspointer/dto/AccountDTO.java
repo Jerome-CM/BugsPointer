@@ -22,6 +22,8 @@ public class AccountDTO {
 
     private String customerId;
 
+    private String companyName;
+
     @NotBlank(message = "L'e-mail est obligatoire", groups = PasswordLost.class)
     @Email(message = "L'e-mail n'est pas valide")
     private String mail;

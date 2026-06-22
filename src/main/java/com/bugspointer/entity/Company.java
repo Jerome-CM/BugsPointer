@@ -18,6 +18,9 @@ public class Company {
 
     private String companyName;
 
+    @Enumerated(EnumType.STRING)
+    private EnumRegistrationProvider registrationProvider = EnumRegistrationProvider.FORM;
+
     private String mail;
 
     private String password;
@@ -70,6 +73,7 @@ public class Company {
             return "Company{" +
                     "companyId=" + companyId +
                     ", companyName='" + companyName + '\'' +
+                    ", registrationProvider=" + registrationProvider +
                     ", mail='" + mail + '\'' +
                     ", password='" + password + '\'' +
                     ", indicatif=" + indicatif +
@@ -92,6 +96,7 @@ public class Company {
             return "Company{" +
                     "companyId=" + companyId +
                     ", companyName='" + companyName + '\'' +
+                    ", registrationProvider=" + registrationProvider +
                     ", mail='" + mail + '\'' +
                     ", password='" + password + '\'' +
                     ", indicatif=" + indicatif +
