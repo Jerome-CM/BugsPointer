@@ -349,17 +349,7 @@ public class Private {
         request.getSession().setAttribute("widgetInstallationScan", scan);
         redirectAttributes.addFlashAttribute("status", scan.hasResult() ? "OK" : "ERROR");
         redirectAttributes.addFlashAttribute("notification", scan.hasResult() ? "Vérification terminée." : scan.getErrorMessage());
-        return "redirect:/app/private/widget-installation-scan";
-    }
-
-    @GetMapping("widget-installation-scan")
-    String getWidgetInstallationScan(Model model, HttpServletRequest request) {
-        Company company = companyService.getCompanyWithToken(request);
-        Object scan = request.getSession().getAttribute("widgetInstallationScan");
-        model.addAttribute("company", companyService.getDashboardDto(company));
-        model.addAttribute("widgetInstallationScan", scan);
-        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        return "private/widgetInstallationScan";
+        return "redirect:/app/private/dashboard";
     }
 
     @GetMapping("bugReport/{id}")
