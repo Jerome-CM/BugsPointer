@@ -10,6 +10,9 @@ import java.util.Date;
 @Entity
 public class Poll extends PollUser{
 
+    public static final String CONTEXT_PRODUCT = "PRODUCT";
+    public static final String CONTEXT_INSTALLATION = "INSTALLATION";
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
@@ -19,6 +22,8 @@ public class Poll extends PollUser{
 
     @Column(columnDefinition = "TEXT")
     private String comment;
+
+    private String pollContext = CONTEXT_PRODUCT;
 
     private Date dateSend = new Date();
 

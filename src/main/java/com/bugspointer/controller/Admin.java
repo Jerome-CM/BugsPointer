@@ -14,6 +14,7 @@ import com.bugspointer.service.implementation.AdminScraperService;
 import com.bugspointer.service.implementation.ChartService;
 import com.bugspointer.service.implementation.FirstReportService;
 import com.bugspointer.service.implementation.PlanPricingService;
+import com.bugspointer.service.implementation.PollService;
 import com.bugspointer.service.implementation.ViewCounterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -50,12 +51,15 @@ public class Admin {
 
     private final AdminScraperService adminScraperService;
 
-    public Admin(AdminService adminService, FirstReportService firstReportService, ChartService chartService, PlanPricingService planPricingService, AdminScraperService adminScraperService) {
+    private final PollService pollService;
+
+    public Admin(AdminService adminService, FirstReportService firstReportService, ChartService chartService, PlanPricingService planPricingService, AdminScraperService adminScraperService, PollService pollService) {
         this.adminService = adminService;
         this.firstReportService = firstReportService;
         this.chartService = chartService;
         this.planPricingService = planPricingService;
         this.adminScraperService = adminScraperService;
+        this.pollService = pollService;
     }
 
     @GetMapping("dashboard")
@@ -115,6 +119,7 @@ public class Admin {
         model.addAttribute("pendingBugCount", adminService.getBugCount(EnumEtatBug.PENDING));
         model.addAttribute("solvedBugCount", adminService.getBugCount(EnumEtatBug.SOLVED));
         model.addAttribute("planPrices", planPricingService.getPlanPrices());
+        model.addAttribute("pollSummaries", pollService.getPollSummariesForAdmin());
     }
 
     private void addScraperJobAttributes(Model model, String scraperJobId) {

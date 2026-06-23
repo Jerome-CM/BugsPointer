@@ -229,39 +229,58 @@
                         </article>
                     </div>
 
-                    <aside class="onboarding-progress w-full self-start rounded-lg border border-white/10 bg-white/[0.055] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-5">
-                        <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Progression</p>
-                        <nav class="mt-5 grid h-auto w-full gap-2">
-                            <a href="#company-name" class="progress-link flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
-                               th:if="${company.getCompanyName() == null || company.getCompanyName() == ''}">
-                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-pointer-green/35 bg-pointer-green/10 text-xs font-black text-pointer-lime">0</span>
-                                <span class="min-w-0 break-words">Avant de commencer</span>
-                            </a>
-                            <a href="#step-domain" class="progress-link flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
-                               th:classappend="${company.getDomaine() == null || company.getDomaine() == '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
-                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-black"
-                                      th:classappend="${company.getDomaine() != null && company.getDomaine() != '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ' border-white/15 bg-white/8'}"
-                                      th:text="${company.getDomaine() != null && company.getDomaine() != '' ? '✓' : '1'}">1</span>
-                                <span class="min-w-0 break-words">Domaine</span>
-                            </a>
-                            <a href="#step-install" class="progress-link flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
-                               th:classappend="${company.getDomaine() != null && company.getDomaine() != '' && !company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
-                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-black"
-                                      th:classappend="${company.getDomaine() != null && company.getDomaine() != '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ' border-white/15 bg-white/8'}"
-                                      th:text="${company.getDomaine() != null && company.getDomaine() != '' ? '✓' : '2'}">2</span>
-                                <span class="min-w-0 break-words">Installation</span>
-                            </a>
-                            <a href="#step-verify" class="progress-link flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
-                               th:classappend="${company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
-                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-black"
-                                      th:classappend="${company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ' border-white/15 bg-white/8'}"
-                                      th:text="${company.isDomainVerified() ? '✓' : '3'}">3</span>
-                                <span class="min-w-0 break-words">Vérification</span>
-                            </a>
-                        </nav>
-                    </aside>
+                    <aside class="onboarding-progress grid w-full gap-4 self-start">
+                        <div class="rounded-lg border border-white/10 bg-white/[0.055] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur sm:p-5">
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Progression</p>
+                            <nav class="mt-5 grid h-auto w-full gap-2">
+                                <a href="#company-name" class="progress-link flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                                   th:if="${company.getCompanyName() == null || company.getCompanyName() == ''}">
+                                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-pointer-green/35 bg-pointer-green/10 text-xs font-black text-pointer-lime">0</span>
+                                    <span class="min-w-0 break-words">Avant de commencer</span>
+                                </a>
+                                <a href="#step-domain" class="progress-link flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                                   th:classappend="${company.getDomaine() == null || company.getDomaine() == '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
+                                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-black"
+                                          th:classappend="${company.getDomaine() != null && company.getDomaine() != '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ' border-white/15 bg-white/8'}"
+                                          th:text="${company.getDomaine() != null && company.getDomaine() != '' ? '✓' : '1'}">1</span>
+                                    <span class="min-w-0 break-words">Domaine</span>
+                                </a>
+                                <a href="#step-install" class="progress-link flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                                   th:classappend="${company.getDomaine() != null && company.getDomaine() != '' && !company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
+                                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-black"
+                                          th:classappend="${company.getDomaine() != null && company.getDomaine() != '' ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ' border-white/15 bg-white/8'}"
+                                          th:text="${company.getDomaine() != null && company.getDomaine() != '' ? '✓' : '2'}">2</span>
+                                    <span class="min-w-0 break-words">Installation</span>
+                                </a>
+                                <a href="#step-verify" class="progress-link flex w-full items-center gap-3 rounded-lg border border-white/10 bg-black/15 px-3 py-3 text-sm font-bold text-white/68 transition hover:border-pointer-green/35 hover:text-pointer-lime"
+                                   th:classappend="${company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ''}">
+                                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-black"
+                                          th:classappend="${company.isDomainVerified() ? ' border-pointer-green/35 bg-pointer-green/10 text-pointer-lime' : ' border-white/15 bg-white/8'}"
+                                          th:text="${company.isDomainVerified() ? '✓' : '3'}">3</span>
+                                    <span class="min-w-0 break-words">Vérification</span>
+                                </a>
+                            </nav>
+                        </div>
 
-                    <section class="grid gap-5 lg:col-span-2 lg:grid-cols-3">
+                        <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
+                            <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Clé publique</p>
+                            <p class="mt-2 break-all font-mono text-sm font-bold text-white" th:text="${publicKey}">pk_xxxxx</p>
+                        </div>
+
+                        <a th:href="@{/documentations#integration}" class="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/10 bg-white/[0.055] px-5 py-3 text-sm font-extrabold text-white/78 shadow-[0_24px_80px_rgba(0,0,0,0.16)] transition hover:border-pointer-green/35 hover:text-pointer-lime">
+                            Lire la documentation
+                        </a>
+
+                        <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
+                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Votre retour</p>
+                            <p class="mt-4 text-sm leading-6 text-white/68">
+                                Trois questions suffisent pour nous dire si le parcours d'installation est clair.
+                            </p>
+                            <a th:href="@{/pollInstallation}" class="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-pointer-green/30 bg-pointer-green/10 px-5 py-3 font-extrabold text-pointer-lime transition hover:-translate-y-0.5 hover:bg-pointer-green hover:text-pointer-ink">
+                                Répondre au sondage
+                            </a>
+                        </div>
+
                         <div class="rounded-lg border border-pointer-green/20 bg-pointer-green/10 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
                             <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Besoin d'aide ?</p>
                             <p class="mt-2 text-sm leading-6 text-white/70">
@@ -271,20 +290,7 @@
                                 contact@bugspointer.com
                             </a>
                         </div>
-                        <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
-                            <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Clé publique</p>
-                            <p class="mt-2 break-all font-mono text-sm font-bold text-white" th:text="${publicKey}">pk_xxxxx</p>
-                        </div>
-                        <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur">
-                            <p class="text-sm font-black uppercase tracking-wider text-pointer-lime">Votre retour</p>
-                            <p class="mt-4 text-sm leading-6 text-white/68">
-                                Trois questions suffisent pour nous dire si le parcours est clair.
-                            </p>
-                            <a th:href="@{/pollUser}" class="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-pointer-green/30 bg-pointer-green/10 px-5 py-3 font-extrabold text-pointer-lime transition hover:-translate-y-0.5 hover:bg-pointer-green hover:text-pointer-ink">
-                                Répondre au sondage
-                            </a>
-                        </div>
-                    </section>
+                    </aside>
                 </section>
             </div>
         </section>
