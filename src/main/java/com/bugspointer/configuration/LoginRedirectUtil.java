@@ -25,11 +25,17 @@ public final class LoginRedirectUtil {
                 && !value.startsWith("/authentication?")
                 && !value.equals("/favicon.svg")
                 && !value.equals("/favicon.ico")
+                && !value.equals("/app/private/widget-installation-scan")
+                && !value.startsWith("/app/private/widget-installation-scan?")
                 && !value.startsWith("/oauth2/")
                 && !value.startsWith("/login/oauth2/");
     }
 
     public static String getSafeRedirectPath(HttpServletRequest request) {
+        if (!"GET".equalsIgnoreCase(request.getMethod())) {
+            return DEFAULT_REDIRECT;
+        }
+
         String uri = request.getRequestURI();
         String query = request.getQueryString();
         String redirect = query == null || query.trim().isEmpty() ? uri : uri + "?" + query;
