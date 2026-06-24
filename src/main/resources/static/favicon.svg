@@ -1,9 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="BugsPointer">
   <rect width="64" height="64" rx="16" fill="#06100C"/>
-  <path d="M17 16h21c7.2 0 13 5.8 13 13s-5.8 13-13 13H27v7H17V16Z" fill="#00E676"/>
-  <path d="M17 16h21c7.2 0 13 5.8 13 13s-5.8 13-13 13H27v7H17V16Z" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="round"/>
-  <circle cx="38" cy="29" r="8" fill="#06100C"/>
-  <path d="M38 21v10" stroke="#B7FF4A" stroke-width="5" stroke-linecap="round"/>
-  <circle cx="38" cy="37" r="2.8" fill="#B7FF4A"/>
-  <path d="M16 50 28 38" stroke="#B7FF4A" stroke-width="6" stroke-linecap="round"/>
+  <text x="8" y="46" fill="#FFFFFF" font-family="Arial Black, Inter, sans-serif" font-size="34" font-weight="900">B</text>
+  <text x="31" y="46" fill="#00E676" font-family="Arial Black, Inter, sans-serif" font-size="34" font-weight="900">P</text>
+  <rect x="9" y="51" width="46" height="5" rx="2.5" fill="#B7FF4A"/>
 </svg>
