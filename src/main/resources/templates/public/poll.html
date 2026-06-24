@@ -42,37 +42,38 @@
                             Sondage BugsPointer
                         </p>
                         <h1 class="font-display text-3xl leading-none text-white sm:text-4xl">
-                            Votre avis sur BugsPointer
+                            <span th:text="${pollTitle}">Votre avis sur BugsPointer</span>
                         </h1>
                     </div>
-                    <p class="mt-4 text-sm leading-6 text-white/70">
+                    <p class="mt-4 text-sm leading-6 text-white/70" th:text="${pollIntro}">
                         Quelques réponses suffisent pour améliorer le signalement de bug et l'expérience utilisateur.
                     </p>
                 </div>
 
                 <section th:if="${user == 'yes'}" class="w-full rounded-lg border border-pointer-green/25 bg-white/[0.075] p-4 shadow-[0_30px_100px_rgba(0,230,118,0.12)] backdrop-blur sm:p-5 lg:w-8/12">
                     <div class="mb-4 border-b border-white/10 pb-4">
-                        <p class="text-xs font-black uppercase tracking-wider text-pointer-lime">Votre expérience</p>
-                        <h2 class="mt-1 text-2xl font-black leading-none text-white">Notez le parcours</h2>
+                        <p class="text-xs font-black uppercase tracking-wider text-pointer-lime" th:text="${pollEyebrow}">Votre expérience</p>
+                        <h2 class="mt-1 text-2xl font-black leading-none text-white" th:text="${pollSectionTitle}">Notez le parcours</h2>
                     </div>
 
-                    <form class="flex flex-col gap-3" action="#" th:action="@{/pollUser}" th:object="${pollUser}" method="post">
+                    <form class="flex flex-col gap-3" action="#" th:action="${pollAction}" th:object="${pollUser}" method="post">
+                        <input type="hidden" th:field="*{pollContext}" th:value="${pollContext}">
                         <label class="flex flex-col gap-3 rounded-lg border border-white/10 bg-black/15 p-3 sm:flex-row sm:items-center sm:justify-between">
-                            <span class="text-sm font-bold leading-6 text-white/78 sm:w-8/12">L'étape de copie du script ou du lien était-elle simple à comprendre ?</span>
+                            <span class="text-sm font-bold leading-6 text-white/78 sm:w-8/12" th:text="${pollQuestionFindEasy}">Le bouton ou le lien de signalement était-il facile à trouver ?</span>
                             <select class="min-h-10 w-full rounded-lg border border-white/10 bg-[#08110D] px-3 py-2 font-bold text-white outline-none focus:border-pointer-green sm:w-4/12" th:field="*{findEasy}">
                                 <option th:each="rank : ${ranks}" th:value="${rank}" th:text="${rank}"></option>
                             </select>
                         </label>
 
                         <label class="flex flex-col gap-3 rounded-lg border border-white/10 bg-black/15 p-3 sm:flex-row sm:items-center sm:justify-between">
-                            <span class="text-sm font-bold leading-6 text-white/78 sm:w-8/12">La vérification du domaine vous a-t-elle semblé claire ?</span>
+                            <span class="text-sm font-bold leading-6 text-white/78 sm:w-8/12" th:text="${pollQuestionStepClarity}">La modal vous a-t-elle semblé claire pour décrire le problème ?</span>
                             <select class="min-h-10 w-full rounded-lg border border-white/10 bg-[#08110D] px-3 py-2 font-bold text-white outline-none focus:border-pointer-green sm:w-4/12" th:field="*{stepClarity}">
                                 <option th:each="rank : ${ranks}" th:value="${rank}" th:text="${rank}"></option>
                             </select>
                         </label>
 
                         <label class="flex flex-col gap-3 rounded-lg border border-white/10 bg-black/15 p-3 sm:flex-row sm:items-center sm:justify-between">
-                            <span class="text-sm font-bold leading-6 text-white/78 sm:w-8/12">Après l'installation, sauriez-vous tester un premier signalement ?</span>
+                            <span class="text-sm font-bold leading-6 text-white/78 sm:w-8/12" th:text="${pollQuestionTargetFeature}">Le rapport envoyé à l'équipe vous semble-t-il utile pour corriger plus vite ?</span>
                             <select class="min-h-10 w-full rounded-lg border border-white/10 bg-[#08110D] px-3 py-2 font-bold text-white outline-none focus:border-pointer-green sm:w-4/12" th:field="*{targetFeatureGoodWork}">
                                 <option th:each="rank : ${ranks}" th:value="${rank}" th:text="${rank}"></option>
                             </select>
@@ -80,7 +81,7 @@
 
                         <label>
                             <span class="mb-2 block text-sm font-bold text-white/72">Remarques</span>
-                            <textarea class="min-h-24 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" th:field="*{comment}" placeholder="Ce qui a bloqué, manqué ou aidé pendant l'installation"></textarea>
+                            <textarea class="min-h-24 w-full rounded-lg border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition placeholder:text-white/38 focus:border-pointer-green focus:bg-black/35 focus:shadow-[0_0_0_3px_rgba(0,230,118,0.14)]" th:field="*{comment}" th:placeholder="${pollCommentPlaceholder}"></textarea>
                         </label>
 
                         <input type="submit" th:value="Envoyer" class="min-h-11 cursor-pointer rounded-lg bg-pointer-green px-5 py-2.5 font-extrabold text-pointer-ink shadow-[0_20px_60px_rgba(0,230,118,0.22)] transition hover:-translate-y-0.5 hover:bg-pointer-lime">

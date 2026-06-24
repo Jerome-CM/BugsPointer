@@ -100,6 +100,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login/oauth2/**").permitAll()
                 .antMatchers("/testPage").permitAll()
                 .antMatchers("/pollUser").permitAll()
+                .antMatchers("/pollInstallation").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user/modalControl").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/widget/config").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()

@@ -132,17 +132,22 @@ public class Home {
 
     @GetMapping("pollUser")
     String getPullUser(Model model, HttpServletRequest request){
-        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
-        int[] ranks = new int[] { 0,1,2,3,4,5,6,7,8,9,10 };
-        model.addAttribute("ranks", ranks);
-        model.addAttribute("user", "yes");
-        model.addAttribute("pollUser", new Poll());
+        addPollAttributes(model, new Poll(), Poll.CONTEXT_PRODUCT, "/pollUser",
+                "Votre avis sur BugsPointer",
+                "Quelques réponses suffisent pour améliorer la modal de signalement et l'expérience utilisateur.",
+                "Votre expérience",
+                "Notez le signalement",
+                "Le bouton ou le lien de signalement était-il facile à trouver ?",
+                "La modal vous a-t-elle semblé claire pour décrire le problème ?",
+                "Le rapport envoyé à l'équipe vous semble-t-il utile pour corriger plus vite ?",
+                "Ce qui a aidé, manqué ou gêné pendant le signalement");
         viewCounterService.addVisit(EnumViewCounterPage.POLLUSER, request);
         return "public/poll";
     }
 
     @PostMapping("pollUser")
     String savePoll(Poll poll, Model model){
+        poll.setPollContext(Poll.CONTEXT_PRODUCT);
         Response response = pollService.savePoll(poll);
         if(response.getStatus().equals(EnumStatus.OK)){
             model.addAttribute("title", "Merci beaucoup pour votre participation au sondage");
@@ -151,11 +156,56 @@ public class Home {
         return "redirect:/pollUser";
     }
 
+    @GetMapping("pollInstallation")
+    String getPollInstallation(Model model){
+        Poll poll = new Poll();
+        poll.setPollContext(Poll.CONTEXT_INSTALLATION);
+        addPollAttributes(model, poll, Poll.CONTEXT_INSTALLATION, "/pollInstallation",
+                "Votre avis sur l'installation",
+                "Trois réponses suffisent pour savoir si le parcours d'installation est clair.",
+                "Installation du widget",
+                "Notez le parcours",
+                "L'étape de copie du script ou du lien était-elle simple à comprendre ?",
+                "La vérification du domaine vous a-t-elle semblé claire ?",
+                "Après l'installation, sauriez-vous tester un premier signalement ?",
+                "Ce qui a bloqué, manqué ou aidé pendant l'installation");
+        return "public/poll";
+    }
+
+    @PostMapping("pollInstallation")
+    String saveInstallationPoll(Poll poll, Model model){
+        poll.setPollContext(Poll.CONTEXT_INSTALLATION);
+        Response response = pollService.savePoll(poll);
+        if(response.getStatus().equals(EnumStatus.OK)){
+            model.addAttribute("title", "Merci beaucoup pour votre participation au sondage");
+            return "private/thanks";
+        }
+        return "redirect:/pollInstallation";
+    }
+
     private void addTargetPlanPrice(Model model) {
         String targetPlanPrice = planPricingService.format(planPricingService.getNewSubscriptionAmount(EnumPlan.TARGET));
         String targetPlanPriceLabel = "0.00".equals(targetPlanPrice) ? "0€ jusqu'au 01/09/2026" : targetPlanPrice + "€ / an";
         model.addAttribute("targetPlanPrice", targetPlanPrice);
         model.addAttribute("targetPlanPriceLabel", targetPlanPriceLabel);
+    }
+
+    private void addPollAttributes(Model model, Poll poll, String pollContext, String pollAction, String pollTitle, String pollIntro, String pollEyebrow, String pollSectionTitle, String pollQuestionFindEasy, String pollQuestionStepClarity, String pollQuestionTargetFeature, String pollCommentPlaceholder) {
+        model.addAttribute("isLoggedIn", userAuthenticationUtil.isUserLoggedIn());
+        int[] ranks = new int[] { 0,1,2,3,4,5,6,7,8,9,10 };
+        model.addAttribute("ranks", ranks);
+        model.addAttribute("user", "yes");
+        model.addAttribute("pollUser", poll);
+        model.addAttribute("pollContext", pollContext);
+        model.addAttribute("pollAction", pollAction);
+        model.addAttribute("pollTitle", pollTitle);
+        model.addAttribute("pollIntro", pollIntro);
+        model.addAttribute("pollEyebrow", pollEyebrow);
+        model.addAttribute("pollSectionTitle", pollSectionTitle);
+        model.addAttribute("pollQuestionFindEasy", pollQuestionFindEasy);
+        model.addAttribute("pollQuestionStepClarity", pollQuestionStepClarity);
+        model.addAttribute("pollQuestionTargetFeature", pollQuestionTargetFeature);
+        model.addAttribute("pollCommentPlaceholder", pollCommentPlaceholder);
     }
 
 }
