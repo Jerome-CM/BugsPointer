@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="627" viewBox="0 0 1200 627" role="img" aria-labelledby="title desc">
+  <title id="title">Vendredi avant mise en ligne</title>
+  <desc id="desc">Visuel social BugsPointer pour rappeler de tester les retours utilisateurs avant une mise en ligne.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#040A08"/>
+      <stop offset=".55" stop-color="#06100C"/>
+      <stop offset="1" stop-color="#101814"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00E676"/>
+      <stop offset="1" stop-color="#B7FF4A"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="28" stdDeviation="28" flood-color="#000" flood-opacity=".38"/>
+    </filter>
+    <pattern id="grid" width="66" height="66" patternUnits="userSpaceOnUse">
+      <path d="M66 0H0V66" fill="none" stroke="#00E676" stroke-opacity=".08" stroke-width="1"/>
+    </pattern>
+    <style>
+      .sans{font-family:Inter,Arial,Helvetica,sans-serif}
+      .display{font-family:Raleway,Inter,Arial,Helvetica,sans-serif;font-weight:900}
+      .white{fill:#fff}
+      .muted{fill:rgba(255,255,255,.66)}
+      .lime{fill:#B7FF4A}
+      .ink{fill:#08110D}
+    </style>
+  </defs>
+  <rect width="1200" height="627" fill="url(#bg)"/>
+  <rect width="1200" height="627" fill="url(#grid)"/>
+  <circle cx="98" cy="78" r="300" fill="#00E676" opacity=".10"/>
+  <circle cx="1080" cy="60" r="260" fill="#B7FF4A" opacity=".08"/>
+  <circle cx="1040" cy="575" r="230" fill="#00E676" opacity=".07"/>
+
+  <g transform="translate(72 58)">
+    <rect width="213" height="50" rx="25" fill="#fff" opacity=".08"/>
+    <rect x="18" y="14" width="22" height="22" rx="6" fill="#06100C" stroke="#00E676" stroke-width="2"/>
+    <text x="52" y="32" class="sans white" font-size="20" font-weight="850">BugsPointer</text>
+  </g>
+
+  <g transform="translate(72 146)">
+    <text class="sans lime" font-size="18" font-weight="900">VENDREDI 16H</text>
+    <text y="82" class="display white" font-size="66">
+      <tspan x="0">Votre site est</tspan>
+      <tspan x="0" dy="74">vraiment prêt ?</tspan>
+    </text>
+    <text y="260" class="sans muted" font-size="25" font-weight="650">
+      <tspan x="0">Avant de publier, vérifiez aussi</tspan>
+      <tspan x="0" dy="38">comment vos utilisateurs vont signaler</tspan>
+      <tspan x="0" dy="38">ce qui bloque leur parcours.</tspan>
+    </text>
+  </g>
+
+  <g transform="translate(72 520)">
+    <rect width="462" height="52" rx="16" fill="url(#green)"/>
+    <text x="28" y="34" class="sans ink" font-size="17" font-weight="900">Un retour clair vaut mieux qu'un mail flou</text>
+  </g>
+
+  <g transform="translate(644 92)" filter="url(#shadow)">
+    <rect width="470" height="404" rx="30" fill="#08110D" stroke="#00E676" stroke-opacity=".22"/>
+    <rect x="30" y="28" width="410" height="60" rx="18" fill="#fff" opacity=".08"/>
+    <circle cx="62" cy="58" r="8" fill="#00E676"/>
+    <rect x="92" y="49" width="176" height="18" rx="9" fill="#fff" opacity=".25"/>
+    <rect x="318" y="43" width="88" height="28" rx="14" fill="#00E676" opacity=".22"/>
+
+    <rect x="36" y="126" width="398" height="116" rx="22" fill="#00E676" opacity=".16"/>
+    <text x="62" y="164" class="sans lime" font-size="16" font-weight="900">RAPPORT RECU</text>
+    <text x="62" y="194" class="sans white" font-size="20" font-weight="850">Bouton panier invisible</text>
+    <text x="62" y="218" class="sans white" font-size="20" font-weight="850">sur mobile</text>
+
+    <rect x="36" y="260" width="188" height="104" rx="22" fill="#fff" opacity=".08"/>
+    <text x="60" y="298" class="display lime" font-size="42">URL</text>
+    <text x="60" y="332" class="sans muted" font-size="17" font-weight="750">/checkout</text>
+
+    <rect x="248" y="260" width="186" height="104" rx="22" fill="#fff" opacity=".08"/>
+    <text x="272" y="298" class="display white" font-size="42">CTX</text>
+    <text x="272" y="332" class="sans muted" font-size="17" font-weight="750">iPhone • Safari</text>
+
+    <rect x="36" y="386" width="300" height="12" rx="6" fill="#B7FF4A" opacity=".62"/>
+    <rect x="36" y="408" width="220" height="12" rx="6" fill="#00E676" opacity=".42"/>
+  </g>
+
+  <text x="72" y="606" class="sans muted" font-size="18" font-weight="800">bugspointer.com • signalement de bugs avec contexte</text>
+</svg>
