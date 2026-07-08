@@ -1,85 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="627" viewBox="0 0 1200 627" role="img" aria-labelledby="title desc">
-  <title id="title">Vendredi avant mise en ligne</title>
-  <desc id="desc">Visuel social BugsPointer pour rappeler de tester les retours utilisateurs avant une mise en ligne.</desc>
+  <title id="title">Contexte automatique BugsPointer</title>
+  <desc id="desc">Visuel social minimaliste BugsPointer sur la feature de contexte automatique dans les rapports de bug.</desc>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#040A08"/>
-      <stop offset=".55" stop-color="#06100C"/>
-      <stop offset="1" stop-color="#101814"/>
-    </linearGradient>
     <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#00E676"/>
       <stop offset="1" stop-color="#B7FF4A"/>
     </linearGradient>
-    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="28" stdDeviation="28" flood-color="#000" flood-opacity=".38"/>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="26" flood-color="#06100C" flood-opacity=".14"/>
     </filter>
-    <pattern id="grid" width="66" height="66" patternUnits="userSpaceOnUse">
-      <path d="M66 0H0V66" fill="none" stroke="#00E676" stroke-opacity=".08" stroke-width="1"/>
-    </pattern>
     <style>
       .sans{font-family:Inter,Arial,Helvetica,sans-serif}
       .display{font-family:Raleway,Inter,Arial,Helvetica,sans-serif;font-weight:900}
-      .white{fill:#fff}
-      .muted{fill:rgba(255,255,255,.66)}
-      .lime{fill:#B7FF4A}
-      .ink{fill:#08110D}
+      .ink{fill:#06100C}
+      .muted{fill:#58665F}
+      .green{fill:#00E676}
+      .lime{fill:#8EEA2D}
     </style>
   </defs>
-  <rect width="1200" height="627" fill="url(#bg)"/>
-  <rect width="1200" height="627" fill="url(#grid)"/>
-  <circle cx="98" cy="78" r="300" fill="#00E676" opacity=".10"/>
-  <circle cx="1080" cy="60" r="260" fill="#B7FF4A" opacity=".08"/>
-  <circle cx="1040" cy="575" r="230" fill="#00E676" opacity=".07"/>
+  <rect width="1200" height="627" fill="#F4FAF6"/>
+  <circle cx="1120" cy="78" r="260" fill="#00E676" opacity=".12"/>
+  <circle cx="88" cy="575" r="240" fill="#B7FF4A" opacity=".18"/>
 
   <g transform="translate(72 58)">
-    <rect width="213" height="50" rx="25" fill="#fff" opacity=".08"/>
-    <rect x="18" y="14" width="22" height="22" rx="6" fill="#06100C" stroke="#00E676" stroke-width="2"/>
-    <text x="52" y="32" class="sans white" font-size="20" font-weight="850">BugsPointer</text>
+    <rect width="196" height="46" rx="23" fill="#06100C"/>
+    <text x="24" y="30" class="sans" font-size="18" font-weight="850" fill="#FFFFFF">BugsPointer</text>
+    <circle cx="166" cy="23" r="8" fill="#00E676"/>
   </g>
 
-  <g transform="translate(72 146)">
-    <text class="sans lime" font-size="18" font-weight="900">VENDREDI 16H</text>
-    <text y="82" class="display white" font-size="66">
-      <tspan x="0">Votre site est</tspan>
-      <tspan x="0" dy="74">vraiment prêt ?</tspan>
-    </text>
-    <text y="260" class="sans muted" font-size="25" font-weight="650">
-      <tspan x="0">Avant de publier, vérifiez aussi</tspan>
-      <tspan x="0" dy="38">comment vos utilisateurs vont signaler</tspan>
-      <tspan x="0" dy="38">ce qui bloque leur parcours.</tspan>
+  <g transform="translate(72 166)">
+    <text class="sans green" font-size="17" font-weight="900">FEATURE</text>
+    <text y="78" class="display ink" font-size="70">Contexte</text>
+    <text y="150" class="display ink" font-size="70">automatique</text>
+    <text y="222" class="sans muted" font-size="25" font-weight="650">
+      <tspan x="0">Chaque signalement arrive avec les infos</tspan>
+      <tspan x="0" dy="36">qui aident vraiment à reproduire.</tspan>
     </text>
   </g>
 
-  <g transform="translate(72 520)">
-    <rect width="462" height="52" rx="16" fill="url(#green)"/>
-    <text x="28" y="34" class="sans ink" font-size="17" font-weight="900">Un retour clair vaut mieux qu'un mail flou</text>
+  <g transform="translate(72 500)">
+    <rect width="340" height="54" rx="16" fill="#06100C"/>
+    <text x="26" y="35" class="sans" font-size="18" font-weight="900" fill="#FFFFFF">Moins d'allers-retours support</text>
   </g>
 
-  <g transform="translate(644 92)" filter="url(#shadow)">
-    <rect width="470" height="404" rx="30" fill="#08110D" stroke="#00E676" stroke-opacity=".22"/>
-    <rect x="30" y="28" width="410" height="60" rx="18" fill="#fff" opacity=".08"/>
-    <circle cx="62" cy="58" r="8" fill="#00E676"/>
-    <rect x="92" y="49" width="176" height="18" rx="9" fill="#fff" opacity=".25"/>
-    <rect x="318" y="43" width="88" height="28" rx="14" fill="#00E676" opacity=".22"/>
+  <g transform="translate(590 90)" filter="url(#softShadow)">
+    <rect width="520" height="438" rx="34" fill="#FFFFFF"/>
+    <rect x="34" y="32" width="452" height="64" rx="20" fill="#F3F7F4"/>
+    <circle cx="66" cy="64" r="9" fill="#00E676"/>
+    <rect x="94" y="54" width="168" height="20" rx="10" fill="#DCE8E1"/>
+    <rect x="350" y="48" width="98" height="32" rx="16" fill="url(#green)"/>
 
-    <rect x="36" y="126" width="398" height="116" rx="22" fill="#00E676" opacity=".16"/>
-    <text x="62" y="164" class="sans lime" font-size="16" font-weight="900">RAPPORT RECU</text>
-    <text x="62" y="194" class="sans white" font-size="20" font-weight="850">Bouton panier invisible</text>
-    <text x="62" y="218" class="sans white" font-size="20" font-weight="850">sur mobile</text>
+    <text x="42" y="150" class="sans green" font-size="15" font-weight="900">RAPPORT DE BUG</text>
+    <text x="42" y="188" class="display ink" font-size="34">Le bouton panier</text>
+    <text x="42" y="226" class="display ink" font-size="34">disparait sur mobile</text>
 
-    <rect x="36" y="260" width="188" height="104" rx="22" fill="#fff" opacity=".08"/>
-    <text x="60" y="298" class="display lime" font-size="42">URL</text>
-    <text x="60" y="332" class="sans muted" font-size="17" font-weight="750">/checkout</text>
+    <rect x="42" y="266" width="436" height="1" fill="#E5EEE9"/>
 
-    <rect x="248" y="260" width="186" height="104" rx="22" fill="#fff" opacity=".08"/>
-    <text x="272" y="298" class="display white" font-size="42">CTX</text>
-    <text x="272" y="332" class="sans muted" font-size="17" font-weight="750">iPhone • Safari</text>
-
-    <rect x="36" y="386" width="300" height="12" rx="6" fill="#B7FF4A" opacity=".62"/>
-    <rect x="36" y="408" width="220" height="12" rx="6" fill="#00E676" opacity=".42"/>
+    <g transform="translate(42 296)">
+      <rect width="200" height="54" rx="16" fill="#F4FAF6"/>
+      <text x="18" y="24" class="sans muted" font-size="13" font-weight="850">URL</text>
+      <text x="18" y="43" class="sans ink" font-size="16" font-weight="900">/checkout</text>
+    </g>
+    <g transform="translate(278 296)">
+      <rect width="200" height="54" rx="16" fill="#F4FAF6"/>
+      <text x="18" y="24" class="sans muted" font-size="13" font-weight="850">NAVIGATEUR</text>
+      <text x="18" y="43" class="sans ink" font-size="16" font-weight="900">Safari 18</text>
+    </g>
+    <g transform="translate(42 366)">
+      <rect width="200" height="54" rx="16" fill="#F4FAF6"/>
+      <text x="18" y="24" class="sans muted" font-size="13" font-weight="850">APPAREIL</text>
+      <text x="18" y="43" class="sans ink" font-size="16" font-weight="900">iPhone</text>
+    </g>
+    <g transform="translate(278 366)">
+      <rect width="200" height="54" rx="16" fill="#E9FFF2"/>
+      <text x="18" y="24" class="sans muted" font-size="13" font-weight="850">ZONE POINTEE</text>
+      <text x="18" y="43" class="sans ink" font-size="16" font-weight="900">CTA panier</text>
+    </g>
   </g>
 
-  <text x="72" y="606" class="sans muted" font-size="18" font-weight="800">bugspointer.com • signalement de bugs avec contexte</text>
+  <text x="72" y="594" class="sans muted" font-size="17" font-weight="800">bugspointer.com</text>
 </svg>
