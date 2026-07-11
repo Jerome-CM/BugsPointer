@@ -12,6 +12,8 @@ Visuel:
 
 `src/main/resources/static/social/social-bugspointer-cta-01-tester-sans-compte.png`
 
+Format: image individuelle 1200x1200 prête à publier.
+
 Lien:
 
 `https://bugspointer.com/testPage?utm_source=linkedin&utm_medium=social&utm_campaign=cta_series&utm_content=tester_sans_compte`
@@ -47,6 +49,8 @@ Jeudi 16 juillet 2026 à 15h30, heure de Paris.
 Visuel:
 
 `src/main/resources/static/social/social-bugspointer-cta-02-retour-clair.png`
+
+Format: image individuelle 1200x1200 prête à publier.
 
 Lien:
 
@@ -84,6 +88,8 @@ Vendredi 17 juillet 2026 à 11h00, heure de Paris.
 Visuel:
 
 `src/main/resources/static/social/social-bugspointer-cta-03-installer-bouton.png`
+
+Format: image individuelle 1200x1200 prête à publier.
 
 Lien:
 
